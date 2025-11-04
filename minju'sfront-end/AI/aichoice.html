@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI추천</title>
+    <link rel="stylesheet" href="AIStyle.css" />
+    <style>
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1><a href="/main/index.html">SmartFarm</a></h1>
+        <nav id="navMenu">
+            <a href="/post/free-board.html">자유게시판</a>
+            <a href="/main/class.html">강의</a>
+            <a href="/main/aichoice.html">AI 추천</a>
+            <a href="/main/game.html">게임</a>
+        </nav>
+    </header>
+    <div id="container">
+        <h1>사용자 정보</h1>
+        <div id="userInfo">
+            <p>test1 : </p><input th:field="*{content}" rows="12">
+            <p>test2 : </p><input th:field="*{content}" rows="12">
+            <p>test3 : </p><input th:field="*{content}" rows="12">
+            <p>test4 : </p><input th:field="*{content}" rows="12">
+            <p>test5 : </p><input th:field="*{content}" rows="12">
+            <p>test6 : </p><input th:field="*{content}" rows="12">
+        </div>
+        <h2>전체 요약</h2>
+        <div id="Allsummary">
+            <p>나중에 사라질 것들</p>
+            <p>공간 채우기용</p>
+            <p>백엔드 개발자에게 화면 넘기기용</p>
+        </div>
+        <h2>그래프</h2>
+        <div id="Graph">
+            <p>나중에 수정할 거지만</p>
+            <p>우선 공간 채우기용</p>
+            <p>백엔드 개발자에게 화면 넘기기용</p>
+        </div>
+        <h2>결론</h2>
+        <div id="result">
+            <p>나중에 사라질 것들</p>
+            <p>우선 공간 채우기용</p>
+            <p>백엔드 개발자에게 화면 넘기기용</p>
+        </div>
+    </div>
+    <!-- 
+  <main id="container">
+    <h2>사용자 정보</h2>
+    <label for="provincial">행정도</label>
+    <select id="provincial" name="provincial" required autocomplete="address-level1">
+      <option value="" disabled selected hidden>거주하는 도를 선택하세요</option>
+      <option value="Gyeonggi">경기도</option>
+      <option value="Gangwon">강원도</option>
+      <option value="Chungcheongnam">충청남도</option>
+      <option value="Chungcheongbuk">충청북도</option>
+      <option value="Gyeongsangnam">경상남도</option>
+      <option value="Gyeongsangbuk">경상북도</option>
+      <option value="Jeollabuk">전라북도</option>
+      <option value="Jeollanam">전라남도</option>
+      <option value="Jeju">제주도</option>
+      <option value="Other">기타</option>
+    </select>
+        <label for="city">행정 시 or 위치</label>
+    <select id="city" name="city" required autocomplete="address-level1">
+      <option value="" disabled selected hidden>거주하는 행정구역을 선택하세요</option>
+      <option value="Seoul">서울특별시</option>
+      <option value="Incheon">인천광역시</option>
+      <option value="Ulsan">울산광역시</option>
+      <option value="Gwangju">광주광역시</option>
+      <option value="Busan">부산광역시</option>
+      <option value="Daegu">대구광역시</option>
+      <option value="Gyeonggi-North">경기 북부</option>
+      <option value="Gyeonggi-South">경기 남부</option>
+      <option value=""></option>
+      <option value=""></option>
+    </select>
+  </main> -->
+</body>
+
+</html>
