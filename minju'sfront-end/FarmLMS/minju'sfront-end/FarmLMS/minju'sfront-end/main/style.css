@@ -229,3 +229,29 @@ main{
     text-decoration: none;
 
 }
+/* 회원가입 */
+.signup h2{
+    margin-bottom: 50px;
+}
+.signup{
+    width: 520px;
+    font-size: 1.2rem;
+    margin: 100px 0px 0px 1000px;
+}
+.upform{
+    width: 520px;
+    border: 8px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+}
+.upform input{
+    border-radius: 5px;
+    margin: 5px;
+    padding: 0.8rem;
+    width: 60%;
+}
+.upform button{
+    border-radius: 8px;
+    padding: 0.3rem;
+}
