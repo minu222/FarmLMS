@@ -6,18 +6,571 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>마이페이지</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+         
+
+        .mypage {
+        display: flex;
+        min-height: 100vh;
+        background-color: #eef2f6;
+        font-family: 'Pretendard', sans-serif;
+        }
+
+        /* 사이드바 */
+        .mypage aside {
+        width: 260px;
+        background: linear-gradient(180deg, #2d3e50, #1a2634);
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 25px 15px;
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 3px 0 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .mypage .profile img {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        margin-bottom: 10px;
+        border: 3px solid #fff;
+        }
+
+        .mypage .profile h2 {
+        font-size: 18px;
+        margin-bottom: 4px;
+        }
+
+        .mypage .profile p {
+        font-size: 13px;
+        color: #b8c6d8;
+        }
+
+        .mypage .menu {
+        width: 100%;
+        margin-top: 30px;
+        }
+
+        .mypage .menu button {
+        width: 100%;
+        background: none;
+        border: none;
+        color: #fff;
+        text-align: left;
+        padding: 12px 20px;
+        cursor: pointer;
+        font-size: 15px;
+        border-left: 4px solid transparent;
+        transition: all 0.25s ease;
+        }
+
+        .mypage .menu button:hover,
+        .mypage .menu button.active {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-left: 4px solid #3fa9f5;
+        }
+
+        /* 메인 영역 */
+        .mypage main {
+        flex: 1;
+        padding: 40px 50px;
+        background-color: #fff;
+        border-radius: 16px 0 0 16px;
+        margin: 20px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .mypage .content {
+        width: 100%;
+        display: none;
+        }
+
+        .mypage .content.active {
+        display: block;
+        animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 내 소개 폼 스타일 */
+        .mypage .intro-form {
+        max-width: 700px;
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        }
+
+        .mypage .intro-form .form-group {
+        display: flex;
+        flex-direction: column;
+        }
+
+        .mypage .intro-form label {
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #2b3a55;
+        }
+
+        .mypage .intro-form input[type="text"],
+        .mypage .intro-form textarea {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 16px;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .mypage .intro-form input:focus,
+        .mypage .intro-form textarea:focus {
+        border-color: #3fa9f5;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(63, 169, 245, 0.2);
+        }
+
+        .mypage .intro-form textarea {
+        height: 300px;
+        resize: vertical;
+        line-height: 1.6;
+        }
+
+        .mypage .btn-group {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        }
+
+        .mypage .save-btn,
+        .mypage .cancel-btn {
+        padding: 10px 25px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.25s;
+        }
+
+        .mypage .save-btn {
+        background-color: #2d3e50;
+        color: white;
+        }
+
+        .mypage .save-btn:hover {
+        background-color: #2d3e50;
+        }
+
+        .mypage .cancel-btn {
+        background-color: #ccc;
+        color: #333;
+        }
+
+        .mypage .cancel-btn:hover {
+        background-color: #bbb;
+        }
+
+
+
+        /* 정보 수정 폼 스타일 */
+        .mypage .edit-form {
+        max-width: 500px;
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        }
+
+        .mypage .form-group {
+        display: flex;
+        flex-direction: column;
+        }
+
+        .mypage .form-group label {
+        font-weight: 600;
+        margin-bottom: 6px;
+        color: #2b3a55;
+        }
+
+        .mypage .form-group input {
+        padding: 10px 12px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 15px;
+        transition: border-color 0.2s;
+        }
+
+        .mypage .form-group input:focus {
+        border-color: #3fa9f5;
+        outline: none;
+        }
+
+        .mypage .form-group .hint {
+        font-size: 13px;
+        color: #888;
+        margin-top: 4px;
+        }
+
+        .mypage .btn-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+        }
+
+        .mypage .save-btn,
+        .mypage .cancel-btn {
+        flex: 1;
+        padding: 10px 0;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.25s;
+        }
+
+        .mypage .save-btn {
+        background-color: #2d3e50;
+        color: white;
+        }
+
+        .mypage .save-btn:hover {
+        background-color: #2d3e50;
+        }
+
+        .mypage .cancel-btn {
+        background-color: #ccc;
+        color: #333;
+        }
+
+        .mypage .cancel-btn:hover {
+        background-color: #bbb;
+        }
+
+
+        /* --------------------------
+        내가 구독한 강의
+        --------------------------- */
+        .mypage .course-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 0.9fr));
+        gap: 25px;
+        margin-top: 20px;
+        }
+
+        .mypage .course-card {
+        background: #cbd3ca;
+        border-radius: 12px;
+        box-shadow: 10px 13px 30px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .mypage .course-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .mypage .course-card img {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+        }
+
+        .mypage .course-info {
+        text-align: center;
+        padding: 15px 18px;
+        }
+
+        .mypage .course-info h3 {
+        font-size: 17px;
+        color: #2b3a55;
+        margin-bottom: 6px;
+        }
+
+        .mypage .course-info p {
+        font-size: 14px;
+        color: #6b7a99;
+        margin-bottom: 10px;
+        }
+
+        .mypage .course-btn {
+        background-color: #2d3e50;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 8px 14px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.25s;
+        }
+
+        .mypage .course-btn:hover {
+        background-color: #2d3e50;
+        }
+
+        .mypage .course-cancel-btn {
+        background-color: #547496;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 8px 14px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.25s;
+        }
+
+        /* --------------------------
+        내 게시글 보기
+        --------------------------- */
+        .mypage .post-actions {
+        width: 100%;
+        margin: 10px 0;
+        text-align: right;
+        }
+
+        .mypage .delete-btn {
+        background-color: #eec1c1;
+        color: rgb(17, 16, 16);
+        border: none;
+        padding: 8px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.25s;
+        }
+
+        .mypage .post-table {
+        width: 100%;
+        border-collapse: collapse;
+        border:5px solid rgba(0, 0, 0, 0.05);
+        margin-top: 20px;
+        background: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 3px 10px rgba(139, 153, 184, 0.05);
+        }
+
+        .mypage .post-table th,
+        .mypage .post-table td {
+        padding: 14px 18px;
+        text-align: center;
+        }
+
+        .mypage .post-table th {
+        background-color: #f4f7fb;
+        color: #2b3a55;
+        font-weight: 600;
+        }
+
+        .mypage .post-table tr:hover td {
+        background-color: #f8fbff;
+        }
+
+        .mypage .post-table td {
+        color: #555;
+        font-size: 15px;
+        }
+
+        .mypage .post-table td:nth-child(2) {
+        text-align: left;
+        color: #2b3a55;
+        cursor: pointer;
+        transition: color 0.2s;
+        }
+
+        .mypage .post-table td:nth-child(2):hover {
+        color: #3fa9f5;
+        }
+
+        
+
+
+    </style>
 </head>
 
 <body>
+
     <header>
         <h1><a href="index.html">SmartFarm</a></h1>
         <nav id="navMenu">
-            <a href="free-board.html">자유게시판</a>
+            <a href="/post/free-board.html">자유게시판</a>
             <a href="class.html">강의</a>
             <a href="/AI/aichoice.html">AI 추천</a>
             <a href="game.html">게임</a>
         </nav>
     </header>
+  <div class="mypage">
+    <aside>
+      <div class="profile">
+        <!-- <img src="https://via.placeholder.com/80" alt="프로필 이미지" /> -->
+        <h2>nickname</h2>
+        <p>id</p>
+      </div>
+      <div class="menu">
+        <button class="tab-btn active" data-target="intro">내 소개</button>
+        <button class="tab-btn" data-target="edit">정보 수정</button>
+        <button class="tab-btn" data-target="courses">구독한 강의</button>
+        <button class="tab-btn" data-target="posts">내 게시글 보기</button>
+      </div>
+    </aside>
+
+    <main>
+      <section id="intro" class="content active">
+        <h2>내 소개</h2>
+        <form class="intro-form">
+            <div class="form-group">
+            <label for="introTitle">제목</label>
+            <input type="text" id="introTitle" name="introTitle" placeholder="예: 안녕하세요! 저를 소개합니다 😄" required />
+            </div>
+
+            <div class="form-group">
+            <label for="introContent">내용</label>
+            <textarea id="introContent" name="introContent" placeholder="자기소개 내용을 자유롭게 작성하세요." required></textarea>
+            </div>
+
+            <div class="btn-group">
+            <button type="submit" class="save-btn">저장하기</button>
+            <button type="reset" class="cancel-btn">취소</button>
+            </div>
+        </form>
+      </section>
+
+      <section id="edit" class="content">
+        <h2>정보 수정</h2>
+        <form class="edit-form">
+            <div class="form-group">
+            <label for="nickname">닉네임</label>
+            <input type="text" id="nickname" name="nickname" placeholder="닉네임을 입력하세요" required />
+            </div>
+
+            <div class="form-group">
+            <label for="name">이름</label>
+            <input type="text" id="name" name="name" placeholder="이름을 입력하세요" required />
+            </div>
+
+            <div class="form-group">
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" name="password" placeholder="새 비밀번호를 입력하세요" />
+            <p class="hint">비밀번호를 변경하지 않으려면 비워두세요.</p>
+            </div>
+
+            <div class="form-group">
+            <label for="birth_day">생년월일</label>
+            <input type="date" id="birth_day" name="birth_day" required />
+            </div>
+
+            <div class="btn-group">
+            <button type="submit" class="save-btn">저장하기</button>
+            <button type="reset" class="cancel-btn">취소</button>
+            </div>
+        </form>
+      </section>
+
+
+     <section id="courses" class="content">
+        <h2>내가 구독한 강의</h2>
+
+        <div class="course-list">
+            <!-- 강의 카드 -->
+            <div class="course-card">
+            <img src="https://via.placeholder.com/300x160" alt="강의 썸네일" />
+            <div class="course-info">
+                <h3>강의명</h3>
+                <p>강사명 | 강의설명란</p>
+                <button class="course-btn">강의 보러가기</button>
+                <button class="course-cancel-btn">구독 해제</button>
+            </div>
+            </div>
+
+            <div class="course-card">
+            <img src="https://via.placeholder.com/300x160" alt="강의 썸네일" />
+            <div class="course-info">
+                <h3>강의명2</h3>
+                <p>강사명 | 강의설명란</p>
+                <button class="course-btn">강의 보러가기</button>
+                <button class="course-cancel-btn">구독 해제</button>
+            </div>
+            </div>
+
+            <div class="course-card">
+            <img src="https://via.placeholder.com/300x160" alt="강의 썸네일" />
+            <div class="course-info">
+                <h3>강의명3</h3>
+                <p>강사명 | 강의설명란</p>
+                <button class="course-btn">강의 보러가기</button>
+                <button class="course-cancel-btn">구독 해제</button>
+            </div>
+            </div>
+        </div>
+     </section>
+
+
+     <section id="posts" class="content">
+        <h2>내 게시글 보기</h2>
+
+        <!-- 삭제 버튼 -->
+        <div class="post-actions">
+            <button id="deleteSelected" class="delete-btn">선택 삭제</button>
+        </div>
+
+        <table class="post-table">
+            <thead>
+            <tr>
+                <th><input type="checkbox" id="selectAll"></th>
+                <th>번호</th>
+                <th>제목</th>
+                <th>작성일</th>
+                <th>조회수</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><input type="checkbox" class="select-post"></td>
+                <td>3</td>
+                <td class="clickable" onclick="openPostDetail(3)">Spring Boot 설정 팁 공유합니다</td>
+                <td>2025-10-12</td>
+                <td>124</td>
+            </tr>
+            <tr>
+                <td><input type="checkbox" class="select-post"></td>
+                <td>2</td>
+                <td class="clickable" onclick="openPostDetail(2)">HTML 반응형 레이아웃 만들기</td>
+                <td>2025-09-05</td>
+                <td>210</td>
+            </tr>
+            <tr>
+                <td><input type="checkbox" class="select-post"></td>
+                <td>1</td>
+                <td class="clickable" onclick="openPostDetail(1)">처음으로 올리는 게시글입니다!</td>
+                <td>2025-08-29</td>
+                <td>88</td>
+            </tr>
+            </tbody>
+        </table>
+        </section>
+
+
+
+    </main>
+  </div>
+
+  <script>
+    const buttons = document.querySelectorAll('.mypage .tab-btn');
+    const contents = document.querySelectorAll('.mypage .content');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        contents.forEach(c => c.classList.remove('active'));
+
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.target).classList.add('active');
+      });
+    });
+  </script>
 </body>
+
 
 </html>
