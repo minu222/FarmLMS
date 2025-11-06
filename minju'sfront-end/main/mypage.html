@@ -17,16 +17,46 @@
         }
 
         /* 사이드바 */
-        .mypage aside {
-        width: 260px;
-        background: linear-gradient(180deg, #2d3e50, #1a2634);
-        color: #fff;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 25px 15px;
-        border-right: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: 3px 0 8px rgba(0, 0, 0, 0.1);
+        .mypage-sidebar {
+          width: 220px;
+          background: #2d3e50;
+          padding: 20px;
+          box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .mypage-sidebar h3 {
+          font-size: 18px;
+          color: #9a9ca0;
+          margin-bottom: 15px;
+        }
+
+        .mypage-sidebar ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+        }
+
+        .mypage-sidebar li {
+          margin-bottom: 10px;
+        }
+
+        .mypage-sidebar a {
+          text-decoration: none;
+          color: #ece7e7;
+          font-size: 15px;
+          display: block;
+          padding: 8px 10px;
+          border-radius: 6px;
+          transition: 0.2s;
+        }
+
+        .mypage-sidebar a:hover {
+          background-color: #3fa9f5;
+          color: #fff;
+        }
+
+        .mypage-main {
+          flex: 1;
         }
 
         .mypage .profile img {
@@ -96,82 +126,105 @@
         to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 내 소개 폼 스타일 */
-        .mypage .intro-form {
-        max-width: 700px;
-        margin-top: 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
+        /* -----------------------
+         내 프로필 페이지
+        ----------------------- */
+        .mypage .profile-card {
+          display: flex;
+          align-items: flex-start;
+          background: #fff;
+          padding: 25px;
+          border-radius: 14px;
+          box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+          gap: 25px;
+          margin-top: 20px;
         }
 
-        .mypage .intro-form .form-group {
-        display: flex;
-        flex-direction: column;
+        .mypage .profile-img {
+          width: 120px;
+          height: 120px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 3px solid #3fa9f5;
+        }
+
+        .mypage .profile-info h3 {
+          font-size: 22px;
+          margin-bottom: 10px;
+          color: #2b3a55;
+        }
+
+        .mypage .profile-info p {
+          font-size: 15px;
+          color: #555;
+          line-height: 1.6;
+          margin: 6px 0;
+        }
+
+        /* -----------------------
+          내소개 수정 페이지
+        ----------------------- */
+        .mypage .intro-form {
+          background: #fff;
+          padding: 25px;
+          border-radius: 12px;
+          box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+          margin-top: 20px;
+          display: flex;
+          flex-direction: column;
         }
 
         .mypage .intro-form label {
-        font-weight: 600;
-        margin-bottom: 8px;
-        color: #2b3a55;
+          font-weight: 600;
+          margin-top: 12px;
+          color: #2b3a55;
         }
 
-        .mypage .intro-form input[type="text"],
+        .mypage .intro-form input,
         .mypage .intro-form textarea {
-        width: 100%;
-        padding: 12px 14px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        font-size: 16px;
-        transition: border-color 0.2s, box-shadow 0.2s;
+          margin-top: 8px;
+          padding: 10px 12px;
+          border: 1px solid #ccd3e0;
+          border-radius: 6px;
+          font-size: 15px;
+          resize: none;
         }
 
-        .mypage .intro-form input:focus,
-        .mypage .intro-form textarea:focus {
-        border-color: #3fa9f5;
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(63, 169, 245, 0.2);
-        }
-
-        .mypage .intro-form textarea {
-        height: 300px;
-        resize: vertical;
-        line-height: 1.6;
-        }
-
-        .mypage .btn-group {
-        display: flex;
-        gap: 10px;
-        justify-content: flex-end;
-        }
-
-        .mypage .save-btn,
-        .mypage .cancel-btn {
-        padding: 10px 25px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 16px;
-        transition: background-color 0.25s;
+        .mypage .intro-buttons {
+          display: flex;
+          justify-content: flex-end;
+          gap: 10px;
+          margin-top: 18px;
         }
 
         .mypage .save-btn {
-        background-color: #2d3e50;
-        color: white;
+          background-color: #3fa9f5;
+          color: white;
+          border: none;
+          padding: 8px 16px;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: background-color 0.25s;
         }
 
         .mypage .save-btn:hover {
-        background-color: #2d3e50;
+          background-color: #3498db;
         }
 
         .mypage .cancel-btn {
-        background-color: #ccc;
-        color: #333;
+          background-color: #9aaec7;
+          color: white;
+          border: none;
+          padding: 8px 16px;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: background-color 0.25s;
         }
 
         .mypage .cancel-btn:hover {
-        background-color: #bbb;
+          background-color: #7f93ab;
         }
+
 
 
 
@@ -402,40 +455,54 @@
         </nav>
     </header>
   <div class="mypage">
-    <aside>
-      <div class="profile">
-        <!-- <img src="https://via.placeholder.com/80" alt="프로필 이미지" /> -->
-        <h2>nickname</h2>
-        <p>id</p>
+      <aside class="mypage-sidebar">
+        <h3>마이페이지</h3>
+        <ul>
+          <li><a href="#" onclick="showPage('profile')">내 프로필</a></li>
+          <li><a href="#" onclick="showPage('introduction')">내 소개 수정</a></li>
+          <li><a href="#" onclick="showPage('edit')">정보 수정</a></li>
+          <li><a href="#" onclick="showPage('courses')">내가 구독한 강의</a></li>
+          <li><a href="#" onclick="showPage('posts')">내 게시글 보기</a></li>
+        </ul>
+      </aside>
+
+     <!-- 오른쪽 본문 영역 -->
+  <main class="mypage-main">
+    
+    <!-- ✅ 내 프로필 페이지 (기본으로 표시) -->
+    <section id="profile" class="content" style="display:block;">
+      <h2>내 프로필</h2>
+      <div class="profile-card">
+        <img src="https://via.placeholder.com/120" alt="프로필 사진" class="profile-img">
+        <div class="profile-info">
+          <h3>이민우</h3>
+          <p><strong>나이:</strong> 25세</p>
+          <p><strong>이메일:</strong> minwoo@example.com</p>
+          <p><strong>내 소개:</strong><br>
+            프론트엔드와 백엔드를 공부하며 개발자로 성장 중입니다.<br>
+            UI 디자인과 사용자 경험에도 관심이 많습니다.
+          </p>
+        </div>
       </div>
-      <div class="menu">
-        <button class="tab-btn active" data-target="intro">내 소개</button>
-        <button class="tab-btn" data-target="edit">정보 수정</button>
-        <button class="tab-btn" data-target="courses">구독한 강의</button>
-        <button class="tab-btn" data-target="posts">내 게시글 보기</button>
-      </div>
-    </aside>
+    </section>
 
-    <main>
-      <section id="intro" class="content active">
-        <h2>내 소개</h2>
-        <form class="intro-form">
-            <div class="form-group">
-            <label for="introTitle">제목</label>
-            <input type="text" id="introTitle" name="introTitle" placeholder="예: 안녕하세요! 저를 소개합니다 😄" required />
-            </div>
+    <!-- ✅ 내소개 수정 페이지 -->
+    <section id="introduction" class="content" style="display:none;">
+      <h2>내 소개 수정</h2>
+      <form class="intro-form">
+        <label for="intro-title">제목</label>
+        <input type="text" id="intro-title" placeholder="예: 나의 개발 여정" />
 
-            <div class="form-group">
-            <label for="introContent">내용</label>
-            <textarea id="introContent" name="introContent" placeholder="자기소개 내용을 자유롭게 작성하세요." required></textarea>
-            </div>
+        <label for="intro-content">내용</label>
+        <textarea id="intro-content" rows="8" placeholder="자기소개를 입력하세요..."></textarea>
 
-            <div class="btn-group">
-            <button type="submit" class="save-btn">저장하기</button>
-            <button type="reset" class="cancel-btn">취소</button>
-            </div>
-        </form>
-      </section>
+        <div class="intro-buttons">
+          <button type="submit" class="save-btn">저장</button>
+          <button type="button" class="cancel-btn" onclick="showPage('profile')">취소</button>
+        </div>
+      </form>
+    </section>
+
 
       <section id="edit" class="content">
         <h2>정보 수정</h2>
@@ -557,6 +624,27 @@
   </div>
 
   <script>
+
+    function showPage(pageId) {
+      // 모든 content 섹션 숨기기
+      document.querySelectorAll(".content").forEach(sec => sec.style.display = "none");
+      // 선택된 섹션만 보이게
+      document.getElementById(pageId).style.display = "block";
+    }
+
+    // 내소개 폼 저장 예시
+    document.querySelector(".intro-form")?.addEventListener("submit", (e) => {
+      e.preventDefault();
+      alert("내 소개가 저장되었습니다!");
+      showPage("profile"); // 저장 후 프로필 화면으로 돌아가기
+    });
+
+    // 취소 버튼 클릭 시
+    document.querySelector(".cancel-btn")?.addEventListener("click", () => {
+      showPage("profile");
+    });
+
+
     const buttons = document.querySelectorAll('.mypage .tab-btn');
     const contents = document.querySelectorAll('.mypage .content');
 
