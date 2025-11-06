@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>비밀번호 찾기-아이디 입력</title>
+    <link rel="stylesheet" href="accountStyle.css">
+</head>
+
+<body>
+    <header>
+        <h1><a href="/main/UrbanGreen.html">UrbanGreen</a></h1>
+        <nav id="navMenu">
+            <a href="/post/free-board.html">자유게시판</a>
+            <a href="/main/class.html">강의</a>
+            <a href="/AI/aichoice.html">AI 추천</a>
+            <a href="/main/game.html">게임</a>
+        </nav>
+    </header>
+    <div id="findpw_body">
+        <div id="helpPw">
+            <h2>비밀번호를 찾고자하는 아이디를 입력해주세요.</h2>
+            <input type="text" id="findpw" placeholder="아이디를 입력하세요." aria-describedby="findpwError"
+                aria-invalid="false">
+            <!-- ⬇︎ 에러 메시지 표시 영역 -->
+            <p id="findpwError" class="error" aria-live="polite"></p>
+            <button id="nextpw" type="button">다음</button>
+        </div>
+    </div>
+</body>
+<script>
+    const $idInput = document.getElementById('findpw');
+    const $error = document.getElementById('findpwError');
+    const $nextBtn = document.getElementById('nextpw');
+
+    function showError(msg) {
+        $error.textContent = msg;
+        $error.classList.add('show');
+        $idInput.setAttribute('aria-invalid', 'true');
+    }
+
+    function clearError() {
+        $error.textContent = '';
+        $error.classList.remove('show');
+        $idInput.setAttribute('aria-invalid', 'false');
+    }
+
+    $nextBtn.addEventListener('click', async () => {
+        const username = $idInput.value.trim();
+
+        // 1) 빈값 체크
+        if (!username) {
+            showError('아이디를 입력하세요.');
+            $idInput.focus();
+            return;
+        }
+
+        // 2) 서버에 존재 여부 확인
+        try {
+            const res = await fetch(`/api/users/exists?username=${encodeURIComponent(username)}`, {
+                method: 'GET',
+                headers: { 'Accept': 'application/json' }
+            });
+
+            if (!res.ok) throw new Error('network');
+
+            const data = await res.json(); // { exists: true/false }
+
+            if (!data.exists) {
+                showError('유효한 아이디를 입력해주세요.');
+                $idInput.focus();
+                return;
+            }
+
+            // 3) 존재할 때: 에러 지우고 다음 단계로
+            clearError();
+            // 다음 화면으로 이동 (프로젝트 동선에 맞게 수정)
+            location.href = '/account/findPasswordStep2.html';
+
+        } catch (e) {
+            // 네트워크/서버 오류 시 사용자 메시지
+            showError('잠시 후 다시 시도해주세요.');
+        }
+    });
+
+    // 입력 도중 에러 문구 자동 해제(선택)
+    $idInput.addEventListener('input', () => {
+        if ($error.textContent) clearError();
+    });
+</script>
+
+</html>
