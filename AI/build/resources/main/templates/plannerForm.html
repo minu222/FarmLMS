@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>주말농장 AI 플래너 입력</title>
+  <meta charset="UTF-8">
+  <style>
+    body { font-family: 'Arial', sans-serif; line-height: 1.6; padding: 20px; max-width: 600px; margin: 0 auto; background-color: #f4fcf4; }
+    h1 { color: #38761d; text-align: center; }
+    .form-container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+    .form-group { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+    .form-group label { display: block; font-weight: bold; margin-bottom: 8px; color: #555; }
+    .form-group select, .form-group input[type="text"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+    .form-group .radio-group { display: flex; flex-wrap: wrap; gap: 10px; }
+    .form-group .radio-group label { font-weight: normal; margin-right: 15px; display: flex; align-items: center; }
+    .form-group .radio-group input[type="radio"] { margin-right: 5px; }
+    .submit-button { display: block; width: 100%; padding: 15px; background-color: #5cb85c; color: white; border: none; border-radius: 5px; font-size: 18px; cursor: pointer; transition: background-color 0.3s; }
+    .submit-button:hover { background-color: #449d44; }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .spinner {
+      display: inline-block;
+      animation: spin 2s linear infinite;
+    }
+  </style>
+</head>
+<body>
+<h1>🌱 주말농장 성공 플래너 AI</h1>
+<div class="form-container">
+  <p>몇 가지 정보를 입력해 주시면, AI가 사용자님께 가장 적합한 텃밭 모델과 초기 재배 계획을 세워드립니다!</p>
+
+  <form th:action="@{/planner/generate}" method="post" id="plannerForm">
+
+    <div class="form-group">
+      <label for="residenceType">1. 현재 거주 형태는 무엇인가요?</label>
+      <select id="residenceType" name="residenceType" required>
+        <option value="아파트">아파트/오피스텔</option>
+        <option value="단독주택">단독주택</option>
+        <option value="빌라/다세대">빌라/다세대</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>2. 텃밭을 만들 공간은 어디인가요?</label>
+      <div class="radio-group">
+        <label><input type="radio" name="space" value="베란다/발코니" checked> 베란다/발코니</label>
+        <label><input type="radio" name="space" value="옥상"> 옥상</label>
+        <label><input type="radio" name="space" value="마당"> 마당</label>
+        <label><input type="radio" name="space" value="공동 텃밭"> 공동 텃밭</label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>3. 텃밭 공간의 평균 일조량은 어느 정도인가요?</label>
+      <div class="radio-group">
+        <label><input type="radio" name="sunlight" value="오전 3시간 미만"> 오전 3시간 미만 (저광량)</label>
+        <label><input type="radio" name="sunlight" value="오전/오후 3~6시간" checked> 오전/오후 3~6시간 (중광량)</label>
+        <label><input type="radio" name="sunlight" value="하루 종일(6시간 이상)"> 하루 종일(6시간 이상) (고광량)</label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="purpose">4. 텃밭을 가꾸는 주된 목적은 무엇인가요?</label>
+      <select id="purpose" name="purpose" required>
+        <option value="식용(쌈채소/열매)">식용 (직접 키워 먹기)</option>
+        <option value="관상용(허브/꽃)">관상용 및 치유</option>
+        <option value="교육용">자녀 교육 및 관찰</option>
+        <option value="취미/힐링">취미/힐링</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="preference">5. 키우고 싶은 작물이 있다면 입력해주세요. (선택 사항)</label>
+      <input type="text" id="preference" name="preference" placeholder="예: 상추, 방울토마토, 바질">
+    </div>
+
+    <div class="form-group">
+      <label for="budget">6. 초기 투자 예산(도구, 흙, 씨앗 등)은 얼마인가요?</label>
+      <select id="budget" name="budget" required>
+        <option value="5만원 이하">5만원 이하</option>
+        <option value="5~10만원">5만원 ~ 10만원</option>
+        <option value="10만원 초과">10만원 초과</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>7. 텃밭 재배 경험 수준은 어느 정도인가요?</label>
+      <div class="radio-group">
+        <label><input type="radio" name="experienceLevel" value="초보(처음)" checked> 초보 (거의 처음)</label>
+        <label><input type="radio" name="experienceLevel" value="중급(1년 이하)"> 중급 (1년 이하 경험)</label>
+        <label><input type="radio" name="experienceLevel" value="숙련(1년 이상)"> 숙련 (1년 이상 경험)</label>
+      </div>
+    </div>
+
+    <button type="submit" class="submit-button" id="submitButton">✨ AI 플래너에게 계획 받기</button>
+
+    <div id="loadingArea" style="display:none; text-align:center; margin-top: 20px;">
+      <p style="font-size: 1.2em; color: #5cb85c; font-weight: bold;">
+        <span class="spinner">⏳</span> AI가 사용자님을 위한 맞춤형 계획을 **분석 및 생성 중입니다**... (최대 20초 소요)
+      </p>
+    </div>
+
+  </form>
+</div>
+</body>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('plannerForm');
+    const submitButton = document.getElementById('submitButton');
+    const loadingArea = document.getElementById('loadingArea');
+
+    // 폼 제출 이벤트 리스너 추가
+    form.addEventListener('submit', function(event) {
+      // 1. 버튼 비활성화 (중복 제출 방지)
+      submitButton.disabled = true;
+      submitButton.textContent = '계획 요청 중...';
+      submitButton.style.backgroundColor = '#aaa';
+
+      // 2. 대기 화면 메시지 표시
+      loadingArea.style.display = 'block';
+
+      // 3. (선택 사항) 로딩 중 애니메이션 추가
+      const spinner = loadingArea.querySelector('.spinner');
+      if (spinner) {
+        // 실제 스피너 CSS 애니메이션이 있다면 여기에 적용
+        spinner.style.animation = 'spin 2s linear infinite';
+      }
+    });
+  });
+</script>
+
+</html>
