@@ -62,7 +62,7 @@ nav a {
     padding: 40px;
 }
 
-/* 썸네일 */
+/* 강의 썸네일 */
 .lecture-thumbnail {
     flex: 1;
     background-color: #a5f89b;
@@ -121,34 +121,6 @@ nav a {
 
 /* 빈공간 채우기*/
 
-.tab_obj {
-    width: 230px;
-    padding: 30px;
-    background-color: #0f5700;
-    border-radius: 24px;
-    margin-top: 20px;
-    font-size: 22px;
-    border: 3px solid #73AD21;
-    /* position: fixed;
-    bottom: 0;
-    left: 0; */
-}
-
-.tab_obj h2 {
-    color: white;
-}
-
-
-#tab_list li {
-    list-style-type: none;
-    margin-top: 20px;
-}
-
-#tab_list a {
-    text-decoration: none;
-    color: white;
-}
-
 #Empty {
     display: flex;
     margin: 20px;
@@ -169,17 +141,11 @@ nav a {
     height: 300px;
 }
 
-#notice {
-    border: 1px solid #ccc;
-    width: 30%;
-    height: 300px;
-}
-
 /* 로그인 박스*/
 
 .login,
 .welcom {
-    max-width: 400px;
+    max-width: 350px;
     padding: 50px;
     margin-top: 20px;
     margin-left: auto;
@@ -240,18 +206,17 @@ nav a {
 }
 
 #newInfo {
-    margin: 10px;
-    padding: 15px;
+    margin: 16px;
+    padding: 10px;
 }
 
 #newInfo a {
-    margin: 5px;
+    margin: 16px;
 }
 
-main {
+main{
     flex: 1;
 }
-
 #footer {
     background-color: #50c304;
     color: white;
@@ -259,8 +224,7 @@ main {
     padding: 10px 0;
     width: 100%;
 }
-
-#footer a {
+#footer a{
     color: white;
     text-decoration: none;
 

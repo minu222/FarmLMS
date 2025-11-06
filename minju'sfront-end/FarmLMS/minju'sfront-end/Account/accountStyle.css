@@ -246,7 +246,6 @@ nav a {
     margin: 30px;
 }
 
-
 #nextpw {
     width: 90%;
     border-radius: 8px;
@@ -255,8 +254,7 @@ nav a {
     margin-left: 20px;
     background-color: #50c304;
     color: white;
-    font-size: 1.18rem;
-    text-decoration: none;
+    font-size: 1.15rem;
 }
 
 #nextpw:hover {
@@ -283,122 +281,8 @@ input[aria-invalid="true"] {
     outline: none;
 }
 
-/* findpassword*/
-.page {
-    flex: 1 1 auto;
-    display: flex;
-    justify-content: center;
-    /* 가로 중앙 */
-    align-items: flex-start;
-    /* 세로 중앙 */
-    padding: 24px;
-}
+/* fingpassword*/
 
-.content_All {
-    flex-direction: row;
-    justify-content: center;
-}
+.loadingsitu {
 
-.content_All h2,
-#loadingsitu {
-    margin-top: 0;
-    padding: 0;
-}
-
-.content_All h2 {
-    margin-top: 100px;
-}
-
-#nextbtn {
-    width: 80px;
-    margin: 30px auto;
-    border: 1px solid #ccc;
-    padding: 0.3rem;
-    justify-items: center;
-    text-align: center;
-    font-size: 1.2rem;
-    border-radius: 8px;
-    text-decoration: none;
-    color: white;
-    background-color: #50c304;
-    
-}
-
-/* (선택) ol이 너무 붙어 보이면 간격만 살짝 */
-#loadingsitu {
-    display: flex;
-    gap: 32px;
-    margin: 0;
-    padding-left: 20px;
-    /* 숫자 들여쓰기 유지 */
-    list-style: decimal;
-}
-
-#choiceway {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    width: 600px;
-    max-height: 180px;
-    overflow: hidden;
-    transition: max-height .35s ease;
-    display: flex;
-    flex-direction: column;
-}
-
-#choiceway div {
-    margin: 30px;
-    margin-bottom: 50px;
-}
-
-.input_txt {
-    line-height: 23px;
-    height: 23px;
-    padding-left: 3px;
-    vertical-align: top;
-    border: 1px solid #ccc;
-}
-
-#etcInfo {
-    margin-left: 50px;
-}
-
-#etcInfo dd {
-    display: inline;
-    margin-bottom: 10px;
-}
-
-#etcInfo dt {
-    display: inline;
-    margin-bottom: 10px;
-}
-
-#etcInfo dd {
-    display: inline;
-    margin-bottom: 10px;
-}
-
-#etcInfo2 {
-    margin-left: 50px;
-}
-
-#etcInfo2 dd {
-    display: inline;
-    margin-bottom: 10px;
-}
-
-#etcInfo2 dt {
-    display: inline;
-    margin-bottom: 10px;
-}
-
-#etcInfo2 dd {
-    display: inline;
-    margin-bottom: 10px;
-}
-
-.btn_ct {
-    width: 97px;
-    height: 25px;
-    margin-left: 1px;
-    background-position: 0 -210px;
 }

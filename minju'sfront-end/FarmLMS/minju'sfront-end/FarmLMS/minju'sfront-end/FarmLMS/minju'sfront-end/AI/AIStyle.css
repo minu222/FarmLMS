@@ -1,0 +1,121 @@
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f6f7f9;
+    display: flex;
+    flex-direction: column;
+    min-width: 100vh;
+}
+
+/* 헤더 */
+header {
+    background: #50c304;
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+header h1 a {
+    text-decoration: none;
+    color: white;
+}
+
+header h1 a:visited,
+header h1 a:hover,
+header h1 a:active {
+    text-decoration: none;
+    color: white;
+}
+
+nav {
+    display: flex;
+    gap: 1rem;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+#footer a {
+    color: white;
+    text-decoration: none;
+}
+
+#container {
+    border: 1px none;
+    margin: 50px;
+    padding: 10px;
+}
+
+#userInfo {
+    margin: 50px;
+    display: flex;
+    width: 80%;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 10px;
+    gap: 10px;
+    align-items: center;
+}
+
+#userInfo input {
+    padding: 15px;
+    border-radius: 10px;
+}
+
+#Allsummary {
+    margin: 50px;
+    width: 80%;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 10px;
+    gap: 10px;
+    align-items: center;
+}
+
+#Graph {
+    margin: 50px;
+    width: 80%;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 10px;
+    gap: 10px;
+    align-items: center;
+}
+
+#result {
+    margin: 50px;
+    width: 80%;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 10px;
+    gap: 10px;
+    align-items: center;
+}
+
+/* select{
+  width: 100%;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid #dcdfe3;
+  border-radius: 10px;
+  font-size: 16px;
+  appearance: none;   
+  background: #fff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5" fill="none" stroke="%23333" stroke-width="2"/></svg>') no-repeat right 12px center;
+}
+select:focus{ outline: 3px solid rgba(80,195,4,.25); border-color:#50c304; } */
