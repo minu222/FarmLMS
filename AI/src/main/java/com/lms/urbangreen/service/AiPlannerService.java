@@ -2,11 +2,16 @@ package com.lms.urbangreen.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vladsch.flexmark.util.ast.Node;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import com.vladsch.flexmark.html.HtmlRenderer;
+import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.util.data.MutableDataSet;
+import com.vladsch.flexmark.ext.tables.TablesExtension;
 
 import java.util.Map;
 
@@ -20,16 +25,22 @@ public class AiPlannerService {
     private final WebClient webClient;
     private final ObjectMapper objectMapper;
 
-    /**
-     * 생성자 주입을 통해 WebClient.Builder와 ObjectMapper를 받습니다.
-     * WebClient 인스턴스는 여기서 생성하며, API URL 변수인 this.apiUrl이
-     * @Value에 의해 주입될 때까지 기다릴 필요 없도록 로직을 수정했습니다.
-     */
+    // 마크다운 변환을 위한 변수 추가
+    private final Parser parser;
+    private final HtmlRenderer renderer;
+
     public AiPlannerService(WebClient.Builder webClientBuilder, ObjectMapper objectMapper) {
-        // apiUrl은 @Value를 통해 나중에 주입되므로, baseUrl은 설정하지 않고 build()만 호출합니다.
-        // API 호출 시점에 this.apiUrl을 사용하여 처리합니다.
         this.webClient = webClientBuilder.build();
         this.objectMapper = objectMapper;
+
+        MutableDataSet options = new MutableDataSet();
+
+        // Flexmark에게 마크다운 테이블 구문을 파싱하도록 명시적으로 지시
+        //  TablesExtension을 추가하는 핵심 로직
+        options.set(Parser.EXTENSIONS, java.util.Arrays.asList(TablesExtension.create()));
+
+        this.parser = Parser.builder(options).build();
+        this.renderer = HtmlRenderer.builder(options).build();
     }
 
     // ⭐ 시스템 프롬프트 템플릿 - 사용자님의 상세 요구사항을 반영
@@ -117,21 +128,20 @@ public class AiPlannerService {
             return "AI 요청 본문 생성 오류 발생: " + e.getMessage();
         }
 
-        // 3. WebClient를 사용하여 API 호출
-        // this.apiUrl 변수는 Spring이 주입해 준 전체 URL (Key 포함)입니다.
+        // 3. WebClient를 사용하여 API 호출 및 마크다운 결과 수신
+        String aiResultMarkdown;
         try {
-            return webClient.post()
-                    .uri(this.apiUrl) // 전체 URL 사용
+            aiResultMarkdown = webClient.post() //  aiResultMarkdown 변수에 결과 할당
+                    .uri(this.apiUrl)
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(BodyInserters.fromValue(requestBody))
                     .retrieve()
-                    // API 응답 코드가 4xx, 5xx일 경우 예외 발생
                     .onStatus(status -> status.is4xxClientError() || status.is5xxServerError(),
                             clientResponse -> clientResponse.bodyToMono(String.class)
                                     .map(errorBody -> new RuntimeException("API 응답 오류: " + clientResponse.statusCode() + ", Body: " + errorBody)))
-                    .bodyToMono(JsonNode.class) // 응답을 JsonNode로 받음
+                    .bodyToMono(JsonNode.class)
                     .map(jsonResponse -> {
-                        // 4. API 응답에서 최종 텍스트 추출 (JSON 구조를 파싱)
+                        // 4. API 응답에서 최종 텍스트 추출 (마크다운)
                         try {
                             return jsonResponse.get("candidates")
                                     .get(0).get("content").get("parts")
@@ -141,10 +151,21 @@ public class AiPlannerService {
                             return "AI 결과 파싱 오류 발생. 원본 응답을 확인하세요.";
                         }
                     })
-                    .block(); // 동기적으로 결과를 기다립니다.
+                    .block();
         } catch (RuntimeException e) {
             System.err.println("API 통신 중 심각한 오류 발생: " + e.getMessage());
             return "API 통신 오류: " + e.getMessage();
         }
+
+        // 🚨 5. 수신된 마크다운을 HTML로 변환하여 반환
+        if (aiResultMarkdown == null || aiResultMarkdown.contains("오류 발생")) {
+            return aiResultMarkdown; // 오류 메시지인 경우 그대로 반환
+        }
+
+        // aiResultMarkdown 변수를 사용하여 파싱 및 렌더링
+        Node document = parser.parse(aiResultMarkdown);
+        String aiResultHtml = renderer.render(document);
+
+        return aiResultHtml; // 최종 HTML 문자열 반환
     }
 }

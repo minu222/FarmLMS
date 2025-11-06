@@ -37,6 +37,8 @@ dependencies {
     implementation 'com.google.cloud:google-cloud-aiplatform:3.79.0'
     implementation 'com.google.cloud:google-cloud-vertexai:1.38.0'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    implementation 'com.vladsch.flexmark:flexmark-all:0.64.8'
 }
 
 tasks.named('test') {

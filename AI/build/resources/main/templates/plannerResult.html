@@ -1,48 +1,21 @@
-<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-  <title>주말농장 성공 플래너 결과</title>
-  <meta charset="UTF-8">
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <style>
-    body { font-family: 'Arial', sans-serif; line-height: 1.6; padding: 20px; }
-    #ai-output { border: 1px solid #ddd; padding: 20px; border-radius: 8px; background-color: #f9f9f9; }
-    /* 마크다운 스타일링 (예: h2 태그 크기, 테이블 스타일) */
-    #ai-output h2 { color: #38761d; border-bottom: 2px solid #8fbc8f; padding-bottom: 5px; margin-top: 30px; }
-    #ai-output table { border-collapse: collapse; width: 100%; margin: 15px 0; }
-    #ai-output th, #ai-output td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-    #ai-output th { background-color: #e6ffe6; }
-  </style>
-</head>
+<head></head>
 <body>
-<h1>🌱 주말농장 성공 플래너 AI 결과입니다!</h1>
-<hr/>
 
-<textarea id="markdown-source" style="display: none;" th:text="${aiResult}"></textarea>
+<div th:fragment="result-content" class="result-container">
+  <h2>🎉 **AI 텃밭 플래너 결과입니다!**</h2>
 
-<div id="ai-output">
-  <p>AI가 계획을 분석 중입니다...</p>
+  <p style="font-style: italic; color: #777;">
+    (입력 조건: <span th:text="${formData.residenceType}"></span> / <span th:text="${formData.space}"></span> / <span th:text="${formData.experienceLevel}"></span>)
+  </p>
+
+  <div class="ai-output" th:utext="${aiResult}">
+  </div>
+
+  <hr style="margin: 20px 0;">
+  <button onclick="location.reload()" class="back-button">다른 조건으로 다시 계획하기</button>
+
 </div>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const markdownSource = document.getElementById('markdown-source');
-    const aiOutputDiv = document.getElementById('ai-output');
-
-    if (markdownSource && aiOutputDiv) {
-      const markdownText = markdownSource.value;
-
-      // marked.js를 사용하여 마크다운을 HTML로 변환
-      // 주의: XSS 공격 방지를 위해 marked.js의 sanitize 옵션을 사용하거나 서버에서 변환하는 것이 더 안전합니다.
-      aiOutputDiv.innerHTML = marked.parse(markdownText);
-
-    } else {
-      aiOutputDiv.innerHTML = "<p>결과를 불러오는 데 실패했습니다.</p>";
-    }
-  });
-</script>
-
-<a href="/planner">다시 계획하기</a>
 
 </body>
 </html>
