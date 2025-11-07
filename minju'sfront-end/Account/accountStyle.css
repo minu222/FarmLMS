@@ -283,7 +283,7 @@ input[aria-invalid="true"] {
     outline: none;
 }
 
-/* identification */
+/* findpassword*/
 .page {
     flex: 1 1 auto;
     display: flex;
@@ -321,7 +321,7 @@ input[aria-invalid="true"] {
     text-decoration: none;
     color: white;
     background-color: #50c304;
-
+    
 }
 
 /* (선택) ol이 너무 붙어 보이면 간격만 살짝 */
@@ -401,79 +401,4 @@ input[aria-invalid="true"] {
     height: 25px;
     margin-left: 1px;
     background-position: 0 -210px;
-}
-
-/* changepw */
-
-.content_All2 {
-    flex-direction: row;
-    justify-content: center;
-}
-
-.content_All2 h2,
-#loadingsitu {
-    margin-top: 0;
-    padding: 0;
-}
-
-.content_All2 h2 {
-    margin-top: 100px;
-}
-
-#changePw {
-    flex-direction: column;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    width: 600px;
-    height: 300px;
-    padding: 20px;
-    margin: 20px auto;
-
-}
-
-#newpw {
-    padding: 10px;
-    padding-top: 40px;
-}
-
-#newpw label {
-    margin-right: 34px;
-}
-
-#newpw input {
-    padding: 0.8rem;
-    border-radius: 10px;
-    width: 250px;
-    margin-left: 20px;
-}
-
-#oneMorepw {
-    padding: 10px;
-    padding-top: 20px;
-}
-
-#oneMorepw input {
-    padding: 0.8rem;
-    border-radius: 10px;
-    width: 250px;
-    margin-left: 20px;
-}
-
-#pwTip {
-    padding: 20px;
-    margin-top: 20px;
-    color: #646464;
-}
-
-#toNext {
-    text-align: center;
-}
-
-#toNextBtn {
-    background-color: #50c304;
-    border-radius: 10px;
-    padding: 12px;
-    text-decoration: none;
-    color: white;
-    border: 1px solid #ccc;
 }
