@@ -122,7 +122,7 @@ nav a {
 /* 빈공간 채우기*/
 
 .tab_obj {
-    width: 230px;
+    width: 200px;
     padding: 30px;
     height: 100%;
     background-color: #0f5700;
@@ -156,22 +156,26 @@ nav a {
     gap: 20px;
 }
 
+.emptyBox {
+    width: 20%;
+}
+.emptyBox h1{
+    margin-bottom: 12px;
+}
+
 #post {
     border: 1px solid #ccc;
-    width: 30%;
     height: 300px;
     flex-direction: column;
 }
 
 #co {
     border: 1px solid #ccc;
-    width: 30%;
     height: 300px;
 }
 
 #notice {
     border: 1px solid #ccc;
-    width: 30%;
     height: 300px;
 }
 
@@ -179,8 +183,8 @@ nav a {
 
 .login,
 .welcom {
-    max-width: 350px;
-    padding: 50px;
+    max-width: 320px;
+    padding: 40px;
     margin-top: 20px;
     margin-left: auto;
     margin-right: 20px;
@@ -241,12 +245,30 @@ nav a {
 
 #newInfo {
     margin: 16px;
-    padding: 10px;
+    padding: 2px;
+}
+#newInfo a{
+    margin: 10px;
+}
+#newInfo a:visited {
+    text-decoration: none;
+    color: #0f5700;
+}
+#newInfo a:link{
+    text-decoration: none;
+    color: #0f5700;
 }
 
-#newInfo a {
-    margin: 16px;
+#newInfo a:hover{
+    text-decoration: none;
+    color: #0400ff;
 }
+
+#newInfo a:active{
+    text-decoration: none;
+    color: red;
+}
+
 
 main {
     flex: 1;

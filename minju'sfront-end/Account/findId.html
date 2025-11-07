@@ -10,7 +10,7 @@
 
 <body>
     <header>
-        <h1><a href="/main/UrbanGreen.html">UrbanGreen</a></h1>
+        <h1><a href="/main/urbangreen.html">UrbanGreen</a></h1>
         <nav id="navMenu">
             <a href="/post/free-board.html">자유게시판</a>
             <a href="/main/class.html">강의</a>
@@ -18,6 +18,111 @@
             <a href="/main/game.html">게임</a>
         </nav>
     </header>
+    <div class="page">
+        <div class="content_All">
+            <h2>아이디 찾기</h2>
+            <div class="choicewayId">
+                <div id="searchId">
+                    <h3>찾기 수단을 선택해주세요.</h3>
+                </div>
+                <div>
+                    <input type="radio" id="phonenum" name="certification" value="PhoneNumber">
+                    <label for="phonenum">휴대폰 번호로 인증하기</label>
+                </div>
+                <dl class="info hidden" id="etcInfo">
+                    <div>
+                        <dt>
+                            <label for="name" style="margin-left: 20px; margin-right: 10px;">이름</label>
+                        </dt>
+                        <dd>
+                            <input type="text" id="phoneName" name="phoneName" maxlength="40" class="input_txt"
+                                style="width: 217px;">
+                        </dd>
+                    </div>
+                    <div>
+                        <dt>
+                            <label for="phoneNum">휴대전화</label>
+                        </dt>
+                        <dd>
+                            <input type="text" id="phoneNumber" name="phoneNumber" class="input_txt"
+                                style="width: 147px;" onfocus="toggle('on');" onblur="toggle('off');"
+                                onkeydown="check_num('phoneNumber','1')" maxlength="11">
+                            <button type="button" id="phoneCertification" name="phoneCertification"
+                                class="btn_ct">인증하기</a>
+                        </dd>
+                    </div>
+                    <div>
+                        <dt>
+                            <label for="ct_result" class="blind">인증번호</label>
+                        </dt>
+                        <dd>
+                            <input type="text" id="ct_num" name="ct_num" maxlength="6"
+                                onkeydown="check_num('phoneNumber','1')" onfocus="hiddenObj('span_phoneNumber')"
+                                class="input_txt" style="width: 217px;" disabled>
+                        </dd>
+                </dl>
+                <div>
+                    <input type="radio" id="email" name="certification" value="email">
+                    <label for="email">이메일로 인증</label>
+                </div>
+                <dl class="info2 hidden" id="etcInfo2">
+                    <div>
+                        <dt>
+                            <label for="name" style="margin-left: 20px; margin-right: 10px;">이름</label>
+                        </dt>
+                        <dd>
+                            <input type="text" id="phoneName" name="phoneName" maxlength="40" class="input_txt"
+                                style="width: 217px;">
+                        </dd>
+                    </div>
+                    <div>
+                        <dt>
+                            <label for="phoneNum"  style="margin-left: 10px; margin-right: 8px;">이메일</label>
+                        </dt>
+                        <dd>
+                            <input type="text" id="mailaddress" name="mailaddress" class="input_txt"
+                                style="width: 147px;" onfocus="toggle('on');" onblur="toggle('off');"
+                                onkeydown="check_num('mailaddress','1')" maxlength="11">
+                            <a href="#" id="phoneCertification" name="phoneCertification" class="btn_ct">인증하기</a>
+                        </dd>
+                    </div>
+                    <div>
+                        <dt>
+                            <label for="ct_result" class="blind">인증번호</label>
+                        </dt>
+                        <dd>
+                            <input type="text" id="ct_num" name="ct_num" maxlength="6"
+                                onkeydown="check_num('phoneNumber','1')" onfocus="hiddenObj('span_phoneNumber')"
+                                class="input_txt" style="width: 217px;" disabled>
+                        </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    </div>
+    <a id="findIdBtn" href="foundId.html">다음</a>
+    </div>
+    </div>
 </body>
+<script>
+    const box = document.getElementById('choicewayId');
+    const rPhone = document.getElementById('phonenum');
+    const rEmail = document.getElementById('email');
+    const phoneInfo = document.getElementById('etcInfo');
+    const emailInfo = document.getElementById('etcInfo2');
+
+    function updateBox() {
+        // 각 섹션 표시/숨김
+        phoneInfo.classList.toggle('hidden', !rPhone.checked);
+        emailInfo.classList.toggle('hidden', !rEmail.checked);
+
+        // 박스 높이 애니메이션 (내용 크기만큼)
+        // 1) 일단 max-height를 크게 만들어 열기 애니메이션 유도
+        box.style.maxHeight = rPhone.checked || rEmail.checked ? '480px' : '200px';
+    }
+    [rPhone, rEmail].forEach(r => r.addEventListener('change', updateBox));
+    updateBox(); // 초기 상태 반영
+
+</script>
 
 </html>

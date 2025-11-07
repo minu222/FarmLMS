@@ -52,6 +52,7 @@ nav a {
 }
 
 /* 회원가입 */
+
 .signup h2 {
     margin-bottom: 50px;
 }
@@ -59,7 +60,7 @@ nav a {
 .signup {
     width: 520px;
     font-size: 1.2rem;
-    margin: 75px 0px 0px 1000px;
+    /* margin: 75px 0px 0px 800px; */
 }
 
 .upform input {
@@ -73,6 +74,9 @@ nav a {
 .upform button {
     border-radius: 8px;
     padding: 0.3rem;
+    background-color: #50c304;
+    border: 1px solid #ccc;
+    color: white;
 }
 
 .inner {
@@ -87,6 +91,8 @@ nav a {
     width: 500px;
     position: relative;
     height: 100%;
+    align-items: flex-start;
+    margin: 50px 0 0 650px;
 }
 
 .btn_primary {
@@ -157,6 +163,9 @@ nav a {
     flex: 0 0 auto;
     padding: 0.55rem 0.8rem;
     border-radius: 8px;
+    background-color: #50c304;
+    border: 1px solid #ccc;
+    color: white;
 }
 
 /* 힌트/도움말은 해당 줄 내부에 두고 스타일만 */
@@ -283,7 +292,7 @@ input[aria-invalid="true"] {
     outline: none;
 }
 
-/* findpassword*/
+/* identification */
 .page {
     flex: 1 1 auto;
     display: flex;
@@ -307,6 +316,7 @@ input[aria-invalid="true"] {
 
 .content_All h2 {
     margin-top: 100px;
+    margin-bottom: 20px;
 }
 
 #nextbtn {
@@ -321,7 +331,7 @@ input[aria-invalid="true"] {
     text-decoration: none;
     color: white;
     background-color: #50c304;
-    
+
 }
 
 /* (선택) ol이 너무 붙어 보이면 간격만 살짝 */
@@ -334,18 +344,18 @@ input[aria-invalid="true"] {
     list-style: decimal;
 }
 
-#choiceway {
+.choiceway {
     border: 1px solid #ccc;
     border-radius: 8px;
-    width: 600px;
-    max-height: 180px;
+    width: 500px;
+    max-height: 720px;
     overflow: hidden;
     transition: max-height .35s ease;
     display: flex;
     flex-direction: column;
 }
 
-#choiceway div {
+.choiceway div {
     margin: 30px;
     margin-bottom: 50px;
 }
@@ -360,6 +370,8 @@ input[aria-invalid="true"] {
 
 #etcInfo {
     margin-left: 50px;
+    font-weight: bold;
+    color: #333;
 }
 
 #etcInfo dd {
@@ -377,13 +389,25 @@ input[aria-invalid="true"] {
     margin-bottom: 10px;
 }
 
+#etcInfo dd input {
+    border-radius: 10px;
+    padding: 10px;
+}
+
 #etcInfo2 {
     margin-left: 50px;
+    font-weight: bold;
+    color: #333;
 }
 
 #etcInfo2 dd {
     display: inline;
     margin-bottom: 10px;
+}
+
+#etcInfo2 dd input {
+    border-radius: 10px;
+    padding: 10px;
 }
 
 #etcInfo2 dt {
@@ -398,7 +422,132 @@ input[aria-invalid="true"] {
 
 .btn_ct {
     width: 97px;
-    height: 25px;
+    height: 40px;
     margin-left: 1px;
     background-position: 0 -210px;
+    text-decoration: none;
+    background-color: #50c304;
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
+    border: 1px solid #ccc;
+    font-weight: lighter;
+    font-size: 12px;
+
+}
+
+/* changepw */
+
+.content_All2 {
+    flex-direction: row;
+    justify-content: center;
+}
+
+.content_All2 h2 {
+    margin-top: 0;
+    padding: 0;
+}
+
+.content_All2 h2 {
+    margin-top: 100px;
+}
+
+#changePw {
+    flex-direction: column;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 600px;
+    height: 300px;
+    padding: 20px;
+    margin: 20px auto;
+
+}
+
+#newpw {
+    padding: 10px;
+    padding-top: 40px;
+}
+
+#newpw label {
+    margin-right: 34px;
+}
+
+#newpw input {
+    padding: 0.8rem;
+    border-radius: 10px;
+    width: 250px;
+    margin-left: 20px;
+}
+
+#oneMorepw {
+    padding: 10px;
+    padding-top: 20px;
+}
+
+#oneMorepw input {
+    padding: 0.8rem;
+    border-radius: 10px;
+    width: 250px;
+    margin-left: 20px;
+}
+
+#pwTip {
+    padding: 20px;
+    margin-top: 20px;
+    color: #646464;
+}
+
+#toNext {
+    text-align: center;
+}
+
+#toNextBtn {
+    background-color: #50c304;
+    border-radius: 10px;
+    padding: 12px;
+    text-decoration: none;
+    color: white;
+    border: 1px solid #ccc;
+}
+
+/* findid */
+
+#searchId ul {
+    margin-bottom: 0;
+}
+
+#searchId ul li {
+    margin-bottom: 10px;
+    list-style-type: none;
+
+}
+
+#searchId h3 {
+    margin-bottom: 10px;
+}
+
+#searchId ul li button {
+    letter-spacing: -.5px;
+    padding: 10px;
+    width: 300px;
+    color: white;
+    background-color: #50c304;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+.choicewayId {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 500px;
+    max-height: 720px;
+    overflow: hidden;
+    transition: max-height .35s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.choicewayId div {
+    margin: 20px;
+    margin-left: 50px;
 }

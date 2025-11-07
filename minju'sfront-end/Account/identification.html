@@ -10,7 +10,7 @@
 
 <body>
     <header>
-        <h1><a href="/main/UrbanGreen.html">UrbanGreen</a></h1>
+        <h1><a href="/main/urbangreen.html">UrbanGreen</a></h1>
         <nav id="navMenu">
             <a href="/post/free-board.html">자유게시판</a>
             <a href="/main/class.html">강의</a>
@@ -21,6 +21,8 @@
     <div class="page">
         <div class="content_All">
             <h2>비밀번호 찾기</h2>
+
+            
             <div>
                 <ol id="loadingsitu" style="margin-top: 30px;">
                     <li>아이디 입력</li>
@@ -29,7 +31,7 @@
                 </ol>
                 <p style="font-size: 0.99rem; margin: 10px; margin-top: 30px;">비밀번호를 찾을 방법을 선택해주세요.</p>
             </div>
-            <div id="choiceway">
+            <div class="choiceway">
                 <div>
                     <input type="radio" id="phonenum" name="certification" value="PhoneNumber">
                     <label for="phonenum">휴대폰 번호로 인증하기</label>
@@ -37,7 +39,7 @@
                 <dl class="info hidden" id="etcInfo">
                     <div>
                         <dt>
-                            <label for="name">이름</label>
+                            <label for="name" style="margin-left: 20px; margin-right: 10px;">이름</label>
                         </dt>
                         <dd>
                             <input type="text" id="phoneName" name="phoneName" maxlength="40" class="input_txt"
@@ -52,7 +54,8 @@
                             <input type="text" id="phoneNumber" name="phoneNumber" class="input_txt"
                                 style="width: 147px;" onfocus="toggle('on');" onblur="toggle('off');"
                                 onkeydown="check_num('phoneNumber','1')" maxlength="11">
-                            <a href="#" id="phoneCertification" name="phoneCertification" class="btn_ct"></a>
+                            <button type="button" id="phoneCertification" name="phoneCertification"
+                                class="btn_ct">인증하기</a>
                         </dd>
                     </div>
                     <div>
@@ -72,7 +75,7 @@
                 <dl class="info2 hidden" id="etcInfo2">
                     <div>
                         <dt>
-                            <label for="name">이름</label>
+                            <label for="name" style="margin-left: 20px; margin-right: 10px;">이름</label>
                         </dt>
                         <dd>
                             <input type="text" id="phoneName" name="phoneName" maxlength="40" class="input_txt"
@@ -87,7 +90,7 @@
                             <input type="text" id="mailaddress" name="mailaddress" class="input_txt"
                                 style="width: 147px;" onfocus="toggle('on');" onblur="toggle('off');"
                                 onkeydown="check_num('mailaddress','1')" maxlength="11">
-                            <a href="#" id="phoneCertification" name="phoneCertification" class="btn_ct"></a>
+                            <a href="#" id="phoneCertification" name="phoneCertification" class="btn_ct">인증하기</a>
                         </dd>
                     </div>
                     <div>
