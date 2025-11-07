@@ -2,6 +2,51 @@
 body { font-family: 'Arial', sans-serif; line-height: 1.6; padding: 20px; max-width: 1000px; margin: 0 auto; background-color: #f4fcf4; }
 h1 { color: #38761d; text-align: center; }
 .form-container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+
+/* 헤더 */
+header {
+    background: #50c304;
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+header h1 a {
+    text-decoration: none;
+    color: white;
+}
+
+header h1 a:visited,
+header h1 a:hover,
+header h1 a:active {
+    text-decoration: none;
+    color: white;
+}
+
+nav {
+    display: flex;
+    gap: 1rem;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+#footer a {
+    color: white;
+    text-decoration: none;
+}
+
 /* 폼 입력 영역 스타일 */
 .form-group { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
 .form-group label { display: block; font-weight: bold; margin-bottom: 8px; color: #555; }
@@ -114,4 +159,8 @@ h1 { color: #38761d; text-align: center; }
     border-left: 5px solid #5cb85c;
     font-weight: 500;
     color: #333;
+}
+
+#planner-intro-text {
+    text-align: center;
 }

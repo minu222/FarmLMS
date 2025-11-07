@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>진단 결과</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .result-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        .suggestion-box {
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .probability {
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .alert-warning {
+            background-color: #fff3cd;
+            border-color: #ffeeba;
+            color: #856404;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+
+        .detail-item {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+
+        .detail-item strong {
+            display: inline-block;
+            width: 120px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="result-container">
+    <h1>🌱 식물 진단 결과</h1>
+
+    <div th:if="${isResultEmpty}" class="alert alert-warning">
+        <p>❌ **진단 결과가 없거나, 식물 식별에 실패**했습니다.</p>
+        <p>✅ **참고:** 건강한 식물일 경우에도 질병 진단 결과(Disease Suggestions)는 비어 있을 수 있습니다.</p>
+        <p>✅ **확인:** 이미지에 식물이 명확하게 담겨 있는지 확인하고 다시 시도해 주세요.</p>
+    </div>
+
+    <div th:if="${hasClassification}">
+        <h2>🔍 식물 식별 결과</h2>
+        <div th:if="${base64Image != null}" style="text-align: center; margin-bottom: 30px;">
+            <h2>📷 업로드된 사진</h2>
+            <img th:src="'data:image/jpeg;base64,' + ${base64Image}" alt="Uploaded Plant Image"
+                 style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 5px;"/>
+        </div>
+
+        <div th:each="suggestion, stat : ${result.result.classification.suggestions}" class="suggestion-box">
+            <div th:if="${suggestion.similar_images != null and !#lists.isEmpty(suggestion.similar_images)}"
+                 style="margin-top: 15px; text-align: center;">
+
+                <h4>식물 대표 이미지</h4>
+                <img th:src="${suggestion.similar_images[0].url}"
+                     alt="식물 이미지"
+                     style="max-width: 300px; height: auto; border: 1px solid #ddd; border-radius: 5px;"/>
+
+                <p style="font-size: small; color: #888;">
+                    출처: <span th:text="${suggestion.similar_images[0].license_name}"></span>
+                </p>
+            </div>
+            <h3 th:text="${stat.index + 1} + '. ' + ${suggestion.name}">1. 식물 이름</h3>
+            <p><strong>확률:</strong> <span class="probability"
+                                          th:text="${#numbers.formatDecimal(suggestion.probability * 100, 1, 'POINT', 2, 'COMMA')} + '%'">80.50%</span>
+            </p>
+
+            <div th:with="details=${suggestion.details}">
+                <div th:if="${details != null}">
+                    <h4>상세 정보</h4>
+
+                    <p th:if="${details.commonNames != null and !#lists.isEmpty(details.commonNames)}"
+                       class="detail-item">
+                        <strong>일반 이름:</strong> <span
+                            th:text="${#strings.listJoin(details.commonNames, ', ')}">장미, 로즈</span>
+                    </p>
+
+                    <p th:if="${details.description != null}" class="detail-item">
+                        <strong>설명:</strong> <span th:text="${details.description}">간단한 식물 설명</span>
+                    </p>
+
+                    <div th:if="${details.taxonomy != null}" class="detail-item">
+                        <strong>분류:</strong>
+                        <ul>
+                            <li th:if="${details.taxonomy.genus != null}">**속 (Genus):** <span
+                                    th:text="${details.taxonomy.genus}"></span></li>
+                            <li th:if="${details.taxonomy.species != null}">**종 (Species):** <span
+                                    th:text="${details.taxonomy.species}"></span></li>
+                            <li th:if="${details.taxonomy.family != null}">**과 (Family):** <span
+                                    th:text="${details.taxonomy.family}"></span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${hasDisease}">
+        <h2>⚠️ 건강 진단 결과 (질병/해충)</h2>
+
+        <div th:each="suggestion, stat : ${result.result.disease.suggestions}" class="suggestion-box">
+            <h3 th:text="${stat.index + 1} + '. ' + ${suggestion.name}">1. 질병 이름</h3>
+            <p><strong>확률:</strong> <span class="probability"
+                                          th:text="${#numbers.formatDecimal(suggestion.probability * 100, 1, 'POINT', 2, 'COMMA')} + '%'">80.50%</span>
+            </p>
+
+            <div th:with="details=${suggestion.details}">
+                <div th:if="${details != null}">
+                    <h4>상세 정보</h4>
+
+                    <p th:if="${details.description != null}" class="detail-item">
+                        <strong>설명:</strong> <span th:text="${details.description}">간단한 질병 설명</span>
+                    </p>
+
+                    <div th:if="${details.treatment != null}" class="detail-item">
+                        <strong>치료 및 예방:</strong>
+                        <ul th:if="${details.treatment.prevention != null and !#lists.isEmpty(details.treatment.prevention)}">
+                            <li>**예방:** <span th:text="${#strings.listJoin(details.treatment.prevention, ', ')}"></span>
+                            </li>
+                        </ul>
+                        <ul th:if="${details.treatment.biological != null and !#lists.isEmpty(details.treatment.biological)}">
+                            <li>**생물학적 처리:** <span
+                                    th:text="${#strings.listJoin(details.treatment.biological, ', ')}"></span></li>
+                        </ul>
+                        <ul th:if="${details.treatment.chemical != null and !#lists.isEmpty(details.treatment.chemical)}">
+                            <li>**화학적 처리:** <span
+                                    th:text="${#strings.listJoin(details.treatment.chemical, ', ')}"></span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${hasClassification and !hasDisease}" class="alert alert-success">
+        <p>👍 식물은 **성공적으로 식별**되었으나, **주요 질병이나 해충은 발견되지 않았습니다.**</p>
+    </div>
+
+
+    <p style="margin-top: 30px;"><a href="/" class="btn btn-primary">다시 진단하기</a></p>
+</div>
+
+</body>
+</html>
