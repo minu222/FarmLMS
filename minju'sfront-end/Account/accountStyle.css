@@ -475,4 +475,5 @@ input[aria-invalid="true"] {
     padding: 12px;
     text-decoration: none;
     color: white;
+    border: 1px solid #ccc;
 }

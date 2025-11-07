@@ -10,13 +10,14 @@
 
 <body>
     <header>
-        <h1><a href="/main/urbangreen.html">UrbanGreen</a></h1>
+        <h1><a href="/minju'sfront-end/main/urbangreen.html">UrbanGreen</a></h1>
         <nav id="navMenu">
-            <a href="/post/free-board.html">자유게시판</a>
-            <a href="/main/class.html">강의</a>
-            <a href="/AI/aichoice.html">AI 추천</a>
-            <a href="/main/game.html">게임</a>
+            <a href="/minju'sfront-end/post/free-board.html">자유게시판</a>
+            <a href="/minju'sfront-end/main/class.html">강의</a>
+            <a href="/minju'sfront-end/AI/aichoice.html">AI 추천</a>
+            <a href="/minju'sfront-end/main/game.html">게임</a>
         </nav>
+    </header>
     </header>
     <div class="page">
         <div class="content_All2">
@@ -37,13 +38,16 @@
                     <label for="newpw">새 비밀번호 확인</label>
                     <input type="text" placeholder="새로운 비밀번호를 한 번 더 입력해주세요.">
                 </div>
+                <div class="distinction hidden" id="checkPw">
+                    <p>비밀번호가 일치하지 않습니다.</p>
+                </div>
                 <div id="pwTip">
                     <li>영문/숫자/특수문자 2종 이상 포함 8–20자로 설정해야 합니다.</li>
                     <li>다른 사이트와 동일하게 설정할 경우 보안에 취약할 수 있습니다.</li>
                 </div>
             </div>
             <div id="toNext">
-                <a id="toNextBtn" href="">다음</a>
+                <button type="button" id="toNextBtn" onclick="alert('비밀번호가 변경되었습니다.')">확인</button>
             </div>
         </div>
     </div>
