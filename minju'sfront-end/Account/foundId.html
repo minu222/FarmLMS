@@ -7,6 +7,7 @@
     <title>아이디 정보</title>
     <link rel="stylesheet" href="accountStyle.css">
 </head>
+
 <body>
     <header>
         <h1><a href="/main/urbangreen.html">UrbanGreen</a></h1>
@@ -17,6 +18,33 @@
             <a href="/main/game.html">게임</a>
         </nav>
     </header>
+    <div id="foundIdContainer">
+        <div>
+            <h2 class="page-title">아이디 찾기</h2>
+            <p class="page-desc">고객님의 정보와 일치하는 아이디는 아래와 같습니다.</p>
+
+            <section class="result-card" role="group" aria-labelledby="resultTitle">
+                <h3 id="resultTitle" class="sr-only">아이디 선택</h3>
+                <ul class="id-list">
+                    <li class="id-item">
+                        <label class="id-left">
+                            <input type="radio" name="pickId" value="{{username}}">
+                            <span class="id-text">{{username}}</span>
+                        </label>
+                        <!-- ISO 값은 선택, 표시용은 사람이 읽기 좋게 -->
+                        <time class="join-date" datetime="{{joinedAtISO}}">가입 : {{joinedAtDisplay}}</time>
+                    </li>
+                </ul>
+            </section>
+            <div class="nextpage">
+                <a id href="login.html">로그인 하기</a>
+                <a id href="/account/findPw.html">비밀번호 찾기</a>
+            </div>
+            <!-- 결과 없음 처리(선택) -->
+            <!-- 서버에서 rows 비어있을 때만 렌더 -->
+            <p class="no-results hidden">일치하는 아이디가 없습니다.</p>
+        </div>
+    </div>
 </body>
 
 </html>

@@ -255,7 +255,6 @@ nav a {
     margin: 30px;
 }
 
-
 #nextpw {
     width: 90%;
     border-radius: 8px;
@@ -550,4 +549,307 @@ input[aria-invalid="true"] {
 .choicewayId div {
     margin: 20px;
     margin-left: 50px;
+}
+
+/* foundId */
+
+#foundIdContainer {
+    display: flex;
+    justify-content: center;
+    padding: 24px;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px;
+    border: 5px solid #ccc;
+    margin-top: 7rem;
+    height: 270px;
+    /* align-content: center; */
+    /* flex-direction: column; */
+}
+
+.page-title {
+    margin: 16px 0 8px;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.page-desc {
+    margin-bottom: 16px;
+    color: #666;
+}
+
+#foundIdContainer div h2 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* 
+#yourId {
+    border: 1px solid #ccc;
+    width: 500px;
+    height: 100px;
+    margin-top: 15px;
+    border-radius: 10px;
+} */
+
+/* 사진처럼 얇은 보더 카드 */
+.result-card {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+    padding: 24px 32px;
+    margin-bottom: 20px;
+}
+
+/* 목록 영역 */
+.id-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* 각 행을 2열 그리드로: 왼쪽(라디오+아이디)=가변, 오른쪽(가입일)=고정폭 */
+.id-item {
+    display: grid;
+    grid-template-columns: 1fr 180px;
+    /* 오른쪽 폭을 고정해 날짜가 깔끔히 정렬 */
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.id-item:last-child {
+    border-bottom: 0;
+}
+
+.id-left {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.id-text {
+    letter-spacing: -.2px;
+}
+
+.join-date {
+    color: #666;
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* 버튼 줄 */
+.actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    margin-left: 80px;
+    text-decoration: none;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #f8f8f8;
+    text-decoration: none;
+    color: #222;
+}
+
+/* .btn.primary {
+    background: #50c304;
+    border-color: #50c304;
+    color: #fff;
+    font-weight: 600;
+} */
+
+/* 결과 없음 문구(선택) */
+.no-results {
+    margin-top: 12px;
+    color: #555;
+}
+
+/* 스크린리더 전용 타이틀 */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.nextpage a {
+    text-decoration: none;
+    padding: 6px;
+    margin-left: 60px;
+    background-color: #50c304;
+    color: white;
+    border-radius: 10px;
+}
+
+/* 로그인 박스*/
+
+#loginbox {
+    margin: 0 auto;
+    margin-top: 70px;
+}
+
+#loginbox h2 {
+    margin-bottom: 15px;
+}
+
+
+.login {
+    max-width: 360px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    text-align: center;
+    background: white;
+}
+
+.login p {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+/* 왼쪽 텍스트: 고정 폭으로 맞추기 */
+.login p span {
+    display: inline-block;
+    width: 80px;
+    /* ← 두 줄의 텍스트 길이 차이를 없애줌 */
+    font-weight: bold;
+    color: #333;
+}
+
+/* input: 동일한 크기 + 정렬 */
+.login p input {
+    flex: 1;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+#loginBtn {
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #50c304;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#loginBtn:hover,
+.welcome button:hover {
+    background-color: #3e9802;
+}
+
+/* input 스타일 */
+.login input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+#newInfo {
+    margin: 16px;
+    padding: 2px;
+}
+
+#newInfo a {
+    margin: 10px;
+}
+
+#newInfo a:visited {
+    text-decoration: none;
+    color: #0f5700;
+}
+
+#newInfo a:link {
+    text-decoration: none;
+    color: #0f5700;
+}
+
+#newInfo a:hover {
+    text-decoration: none;
+    color: #0400ff;
+}
+
+#newInfo a:active {
+    text-decoration: none;
+    color: red;
+}
+
+
+main {
+    flex: 1;
+}
+
+/* 반응형(좁은 화면에서 세로 스택) */
+/* @media (max-width: 520px) {
+    .result-card {
+        padding: 20px;
+    }
+
+    .id-item {
+        grid-template-columns: 1fr;
+    }
+
+    .join-date {
+        text-align: left;
+        margin-left: 28px;
+    }
+} */
+/* 
+.form-container {
+  max-width: 400px;
+  margin: 3rem auto;
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.form-container .closeBtn {
+  all: unset; 
+  position: absolute;
+  top: 8px;      
+  right: 8px;   
+  background: none; 
+  border: none;    
+  font-size: 22px;  
+  font-weight: bold;
+  color: #555;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+} */
+
+#footer {
+    background-color: #50c304;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    width: 100%;
+}
+
+#footer a {
+    color: white;
+    text-decoration: none;
+
 }

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 페이지</title>
+    <link rel="stylesheet" href="accountStyle.css">
+</head>
+
+<body>
+    <header>
+        <h1><a href="/main/urbangreen.html">UrbanGreen</a></h1>
+        <nav id="navMenu">
+            <a href="/post/free-board.html">자유게시판</a>
+            <a href="/main/class.html">강의</a>
+            <a href="/AI/aichoice.html">AI 추천</a>
+            <a href="/main/game.html">게임</a>
+        </nav>
+    </header>
+
+    <body>
+        <div id="loginbox">
+            <h2>로그인</h2>
+            <div class="login" id="loginBox">
+                <p style="padding: 5px;">
+                    <span>아이디</span>
+                    <input type="text" id="userId" style="width: 70%;" placeholder="아이디를 입력하세요." required>
+                </p>
+                <p style="padding: 5px;">
+                    <span>비밀번호</span>
+                    <input type="text" id="userPw" style="width: 70%;" placeholder="비밀번호를 입력하세요." required>
+                </p>
+                <button type="loginBtn" id="loginBtn">LogIn</button>
+                <div id="newInfo">
+                    <a href="/Account/sign-up.html">회원가입</a>
+                    <a href="/Account/findId.html">id찾기</a>
+                    <a href="/Account/findPw.html">pw찾기</a>
+                </div>
+            </div>
+        </div>
+    </body>
+    <!-- <main class="form-container" style="text-align: center;">
+    <h2 style="align-self: flex-start; color: black; text-align: start;">로그인</h2>
+    <button class="closeBtn" type="button" onclick="confirmExit()">X</button>
+
+    <form id="loginForm">
+        <input type="text" name="username" style="width: 80%;" placeholder="아이디를 입력하세요." required>
+        <input type="password" name="password" style="width: 80%;" placeholder="비밀번호를 입력하세요." required><br>
+        <a th:href="@{/user/joinUser}">회원가입</a>
+        <button type="submit" style="width: 250px;">
+            Login
+        </button>
+    </form>
+</main>
+</body>
+<script>
+    // 나가기 버튼
+    function confirmExit() {
+        if (confirm("정말로 나가시겠습니까?")) {
+            window.location.href = "/";
+        }
+    }
+
+    // 로그인 폼 처리
+    const form = document.getElementById('loginForm');
+
+    if (form) {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const data = {
+                username: formData.get('username'),
+                password: formData.get('password')
+            };
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                console.log(result);
+
+                if (result.success) {
+                    alert('로그인 성공!');
+
+                    // role에 따라 페이지 이동
+                    switch (result.role) {
+                        case "ADMIN":
+                            window.location.href = "/admin/indexmg";
+                            break;
+                        case "USER":
+                            window.location.href = "/user/index";
+                            break;
+                        case "INSTRUCTOR":
+                            window.location.href = "/instructor/homeT";
+                            break;
+                        default:
+                            window.location.href = "/";
+                    }
+                } else {
+                    alert(result.message || '아이디 또는 비밀번호가 올바르지 않습니다.');
+                }
+
+            } catch (err) {
+                console.error(err);
+                alert('서버 오류가 발생했습니다.');
+            }
+        });
+    }
+</script> -->
+
+</html>

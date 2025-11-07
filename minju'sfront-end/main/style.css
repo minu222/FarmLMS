@@ -159,7 +159,8 @@ nav a {
 .emptyBox {
     width: 20%;
 }
-.emptyBox h1{
+
+.emptyBox h1 {
     margin-bottom: 12px;
 }
 
@@ -181,97 +182,32 @@ nav a {
 
 /* 로그인 박스*/
 
-.login,
-.welcom {
-    max-width: 320px;
-    padding: 40px;
-    margin-top: 20px;
-    margin-left: auto;
-    margin-right: 20px;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    text-align: center;
-    background: white;
+.login {
+    width: 300px;
+    border: 1.2px solid #ccc;
+    padding: 50px 20px 50px 50px;
+    margin-top: 60px;
+    border-radius: 10px;
 }
 
-.login p {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-    text-align: left;
+.login h2{
+    padding-top: 50px;
+    padding-bottom: 50px;
+    padding-left: 20px;
+    color: #1a1a1a;
 }
+/* #tologinform{
+    width: 300px;
+} */
 
-/* 왼쪽 텍스트: 고정 폭으로 맞추기 */
-.login p span {
-    display: inline-block;
-    width: 80px;
-    /* ← 두 줄의 텍스트 길이 차이를 없애줌 */
-    font-weight: bold;
-    color: #333;
-}
-
-/* input: 동일한 크기 + 정렬 */
-.login p input {
-    flex: 1;
-    padding: 8px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-}
-
-#loginBtn {
-    padding: 10px;
-    border-radius: 8px;
+.login a {
+    padding: 20px 60px 20px 60px;
+    text-decoration: none;
     background-color: #50c304;
+    border-radius: 10px;
     color: white;
-    border: none;
-    cursor: pointer;
-}
-
-#loginBtn:hover,
-.welcome button:hover {
-    background-color: #3e9802;
-}
-
-/* input 스타일 */
-.login input {
-    width: 100%;
-    padding: 8px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-}
-
-#newInfo {
-    margin: 16px;
-    padding: 2px;
-}
-#newInfo a{
-    margin: 10px;
-}
-#newInfo a:visited {
-    text-decoration: none;
-    color: #0f5700;
-}
-#newInfo a:link{
-    text-decoration: none;
-    color: #0f5700;
-}
-
-#newInfo a:hover{
-    text-decoration: none;
-    color: #0400ff;
-}
-
-#newInfo a:active{
-    text-decoration: none;
-    color: red;
-}
-
-
-main {
-    flex: 1;
+    width: 300px;
+    margin: 50px 50px 50px 50px;
 }
 
 #footer {
