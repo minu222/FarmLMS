@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UrbanGreen - 구독권 선택</title>
+    <style>
+        :root {
+            --primary: #5cb85f;
+            --primary-dark: #4caf50;
+            --primary-light: #70c373;
+            --gray: #757575;
+            --light-gray: #f5f3ed;
+            --text: #212121;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #faf9f6 0%, #f5f3ed 100%);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(92, 184, 95, 0.1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 3rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        nav {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 8rem 3rem 5rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: var(--gray);
+        }
+
+        /* 구독 토글 */
+        .billing-toggle {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 4rem;
+        }
+
+        .billing-toggle span {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 32px;
+            background: var(--light-gray);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: var(--primary);
+        }
+
+        .toggle-knob {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle-switch.active .toggle-knob {
+            left: 32px;
+        }
+
+        .discount-badge {
+            background: linear-gradient(135deg, #ff9800 0%, #ff5722 100%);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* 플랜 카드 */
+        .plans-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .plan-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 2.5rem;
+            border: 2px solid rgba(92, 184, 95, 0.1);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .plan-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .plan-card.featured {
+            border-color: var(--primary);
+            box-shadow: 0 10px 40px rgba(92, 184, 95, 0.2);
+        }
+
+        .plan-badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            box-shadow: 0 4px 16px rgba(92, 184, 95, 0.3);
+        }
+
+        .plan-name {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .plan-price {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .price-amount {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .price-period {
+            color: var(--gray);
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: var(--gray);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .plan-features li {
+            padding: 0.8rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .plan-features li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-icon {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .plan-button {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 16px rgba(92, 184, 95, 0.3);
+        }
+
+        .plan-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(92, 184, 95, 0.4);
+        }
+
+        .plan-card.featured .plan-button {
+            background: linear-gradient(135deg, #ff9800 0%, #ff5722 100%);
+            box-shadow: 0 4px 16px rgba(255, 152, 0, 0.3);
+        }
+
+        /* FAQ 섹션 */
+        .faq-section {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-top: 4rem;
+        }
+
+        .faq-section h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--light-gray);
+            padding: 1.5rem 0;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.8rem;
+            color: var(--primary);
+        }
+
+        .faq-answer {
+            color: var(--gray);
+            line-height: 1.8;
+        }
+
+        footer {
+            background: var(--text);
+            color: white;
+            padding: 3rem;
+            text-align: center;
+            margin-top: 5rem;
+        }
+
+        footer p {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        @media (max-width: 1024px) {
+            .plans-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+            }
+
+            .main-container {
+                padding: 6rem 2rem 3rem;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .plan-card {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="/main/urbangreen.html" class="logo">UrbanGreen</a>
+            <nav>
+                <a href="/main/class.html">강의</a>
+                <a href="/post/free-board.html">커뮤니티</a>
+                <a href="/AI/aichoice.html">AI 추천</a>
+                <a href="/main/game.html">게임</a>
+                <a href="/Account/login.html">로그인</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="page-header">
+            <h1>🌱 구독권 선택</h1>
+            <p>모든 강의를 무제한으로 수강하세요</p>
+        </div>
+
+        <div class="billing-toggle">
+            <span>월간</span>
+            <div class="toggle-switch" id="billingToggle" onclick="toggleBilling()">
+                <div class="toggle-knob"></div>
+            </div>
+            <span>연간</span>
+            <span class="discount-badge">20% 할인</span>
+        </div>
+
+        <div class="plans-container">
+            <!-- 베이직 플랜 -->
+            <div class="plan-card">
+                <h3 class="plan-name">베이직</h3>
+                <div class="plan-price">
+                    <div class="price-amount" id="basic-price">₩9,900</div>
+                    <div class="price-period" id="basic-period">/월</div>
+                </div>
+                <ul class="plan-features">
+                    <li><span class="feature-icon">✓</span> 기본 강의 무제한 수강</li>
+                    <li><span class="feature-icon">✓</span> 커뮤니티 이용</li>
+                    <li><span class="feature-icon">✓</span> 학습 진도 관리</li>
+                    <li><span class="feature-icon">✓</span> 모바일 앱 지원</li>
+                </ul>
+                <button class="plan-button" onclick="selectPlan('basic', 'monthly')">선택하기</button>
+            </div>
+
+            <!-- 프리미엄 플랜 (추천) -->
+            <div class="plan-card featured">
+                <div class="plan-badge">가장 인기있는</div>
+                <h3 class="plan-name">프리미엄</h3>
+                <div class="plan-price">
+                    <div class="price-amount" id="premium-price">₩19,900</div>
+                    <div class="price-period" id="premium-period">/월</div>
+                </div>
+                <ul class="plan-features">
+                    <li><span class="feature-icon">✓</span> <strong>모든 강의 무제한 수강</strong></li>
+                    <li><span class="feature-icon">✓</span> 커뮤니티 이용</li>
+                    <li><span class="feature-icon">✓</span> 학습 진도 관리</li>
+                    <li><span class="feature-icon">✓</span> 모바일 앱 지원</li>
+                    <li><span class="feature-icon">✓</span> <strong>1:1 질의응답</strong></li>
+                    <li><span class="feature-icon">✓</span> <strong>강의 자료 다운로드</strong></li>
+                    <li><span class="feature-icon">✓</span> <strong>수료증 발급</strong></li>
+                </ul>
+                <button class="plan-button" onclick="selectPlan('premium', 'monthly')">선택하기</button>
+            </div>
+
+            <!-- 프로 플랜 -->
+            <div class="plan-card">
+                <h3 class="plan-name">프로</h3>
+                <div class="plan-price">
+                    <div class="price-amount" id="pro-price">₩29,900</div>
+                    <div class="price-period" id="pro-period">/월</div>
+                </div>
+                <ul class="plan-features">
+                    <li><span class="feature-icon">✓</span> <strong>프리미엄 모든 혜택</strong></li>
+                    <li><span class="feature-icon">✓</span> <strong>오프라인 워크샵 참여</strong></li>
+                    <li><span class="feature-icon">✓</span> <strong>전문가 멘토링</strong></li>
+                    <li><span class="feature-icon">✓</span> <strong>맞춤형 학습 플랜</strong></li>
+                    <li><span class="feature-icon">✓</span> <strong>작물 재배 키트 증정</strong></li>
+                </ul>
+                <button class="plan-button" onclick="selectPlan('pro', 'monthly')">선택하기</button>
+            </div>
+        </div>
+
+        <!-- FAQ -->
+        <div class="faq-section">
+            <h2>자주 묻는 질문</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">Q. 구독권은 언제든 해지할 수 있나요?</div>
+                <div class="faq-answer">
+                    네, 구독권은 언제든지 해지 가능합니다. 해지 후에도 남은 기간 동안은 계속 이용하실 수 있습니다.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Q. 연간 구독 시 할인은 어떻게 적용되나요?</div>
+                <div class="faq-answer">
+                    연간 구독 선택 시 월 구독료 대비 20% 할인된 금액으로 1년간 이용하실 수 있습니다.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Q. 플랜 변경은 어떻게 하나요?</div>
+                <div class="faq-answer">
+                    마이페이지에서 언제든지 플랜을 업그레이드 또는 다운그레이드 할 수 있습니다. 
+                    차액은 다음 결제일에 자동으로 정산됩니다.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Q. 환불 정책은 어떻게 되나요?</div>
+                <div class="faq-answer">
+                    구독 시작 후 7일 이내, 강의 수강 전이라면 100% 환불 가능합니다.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>
+            대전광역시 중구 선화동 중앙로121번길 20 방산빌딩 3층 | 
+            연락처: 0507-1422-2402 | 
+            © 2025 UrbanGreen. All rights reserved.
+        </p>
+    </footer>
+
+    <script>
+        let isYearly = false;
+
+        const prices = {
+            monthly: {
+                basic: '₩9,900',
+                premium: '₩19,900',
+                pro: '₩29,900'
+            },
+            yearly: {
+                basic: '₩95,040',
+                premium: '₩190,080',
+                pro: '₩285,120'
+            }
+        };
+
+        function toggleBilling() {
+            isYearly = !isYearly;
+            const toggle = document.getElementById('billingToggle');
+            toggle.classList.toggle('active');
+
+            const period = isYearly ? 'yearly' : 'monthly';
+            const periodText = isYearly ? '/년' : '/월';
+
+            document.getElementById('basic-price').textContent = prices[period].basic;
+            document.getElementById('premium-price').textContent = prices[period].premium;
+            document.getElementById('pro-price').textContent = prices[period].pro;
+
+            document.getElementById('basic-period').textContent = periodText;
+            document.getElementById('premium-period').textContent = periodText;
+            document.getElementById('pro-period').textContent = periodText;
+        }
+
+        function selectPlan(plan, billing) {
+            const billingType = isYearly ? 'yearly' : 'monthly';
+            // 결제 페이지로 이동
+            window.location.href = `payment.html?plan=${plan}&billing=${billingType}`;
+        }
+    </script>
+</body>
+</html>

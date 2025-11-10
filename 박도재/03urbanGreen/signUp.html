@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UrbanGreen - 회원가입</title>
+    <style>
+        :root {
+            --primary: #5cb85f;
+            --primary-dark: #4caf50;
+            --primary-light: #70c373;
+            --gray: #757575;
+            --light-gray: #f5f3ed;
+            --cream: #fcfbf8;
+            --text: #212121;
+            --error: #d32f2f;
+            --success: #4caf50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #faf9f6 0%, #f5f3ed 100%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 로고 헤더 */
+        .logo-header {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+            text-decoration: none;
+        }
+
+        /* 메인 컨테이너 */
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .signup-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 550px;
+            border: 1px solid rgba(92, 184, 95, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+
+        .signup-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .signup-header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .signup-header p {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        /* 폼 그룹 */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .form-group label .required {
+            color: var(--error);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: var(--light-gray);
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(92, 184, 95, 0.1);
+            outline: none;
+            background: white;
+        }
+
+        /* 중복확인 버튼 */
+        .input-with-btn {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .input-with-btn input {
+            flex: 1;
+        }
+
+        .check-btn {
+            padding: 0 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .check-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        /* 유효성 메시지 */
+        .validation-msg {
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .validation-msg.error {
+            color: var(--error);
+            display: block;
+        }
+
+        .validation-msg.success {
+            color: var(--success);
+            display: block;
+        }
+
+        /* 비밀번호 강도 표시 */
+        .password-strength {
+            margin-top: 0.5rem;
+            height: 4px;
+            background: var(--light-gray);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0;
+            transition: all 0.3s;
+        }
+
+        .password-strength-bar.weak {
+            width: 33%;
+            background: #ff6b6b;
+        }
+
+        .password-strength-bar.medium {
+            width: 66%;
+            background: #ffd93d;
+        }
+
+        .password-strength-bar.strong {
+            width: 100%;
+            background: var(--success);
+        }
+
+        /* 약관 동의 */
+        .terms-section {
+            background: var(--light-gray);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .terms-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .terms-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .terms-item input[type="checkbox"] {
+            width: auto;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .terms-item label {
+            font-size: 0.95rem;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .terms-item.all {
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 0.8rem;
+        }
+
+        .terms-item.all label {
+            font-weight: 600;
+        }
+
+        .terms-link {
+            color: var(--primary);
+            text-decoration: none;
+            margin-left: auto;
+        }
+
+        .terms-link:hover {
+            text-decoration: underline;
+        }
+
+        /* 회원가입 버튼 */
+        .signup-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(92, 184, 95, 0.3);
+            margin-bottom: 1rem;
+        }
+
+        .signup-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(92, 184, 95, 0.4);
+        }
+
+        .signup-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* 로그인 링크 */
+        .login-link {
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        .login-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 0.3rem;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* 푸터 */
+        footer {
+            background: var(--text);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        footer p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: var(--primary);
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .signup-card {
+                padding: 2rem;
+            }
+
+            .logo-header {
+                padding: 1rem;
+            }
+
+            .logo {
+                font-size: 2rem;
+            }
+
+            .input-with-btn {
+                flex-direction: column;
+            }
+
+            .check-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 로고 헤더 -->
+    <div class="logo-header">
+        <a href="/main/urbangreen.html" class="logo">UrbanGreen</a>
+    </div>
+
+    <!-- 메인 컨테이너 -->
+    <div class="main-container">
+        <div class="signup-card">
+            <div class="signup-header">
+                <h1>회원가입</h1>
+                <p>청년 귀농의 첫 걸음을 시작하세요</p>
+            </div>
+
+            <form id="signupForm">
+                <!-- 아이디 -->
+                <div class="form-group">
+                    <label for="userId">아이디 <span class="required">*</span></label>
+                    <div class="input-with-btn">
+                        <input type="text" id="userId" placeholder="영문, 숫자 4-12자" required>
+                        <button type="button" class="check-btn" onclick="checkUserId()">중복확인</button>
+                    </div>
+                    <div class="validation-msg" id="userIdMsg"></div>
+                </div>
+
+                <!-- 비밀번호 -->
+                <div class="form-group">
+                    <label for="password">비밀번호 <span class="required">*</span></label>
+                    <input type="password" id="password" placeholder="영문, 숫자, 특수문자 포함 8자 이상" required oninput="checkPasswordStrength()">
+                    <div class="password-strength">
+                        <div class="password-strength-bar" id="strengthBar"></div>
+                    </div>
+                    <div class="validation-msg" id="passwordMsg"></div>
+                </div>
+
+                <!-- 비밀번호 확인 -->
+                <div class="form-group">
+                    <label for="passwordConfirm">비밀번호 확인 <span class="required">*</span></label>
+                    <input type="password" id="passwordConfirm" placeholder="비밀번호를 다시 입력하세요" required oninput="checkPasswordMatch()">
+                    <div class="validation-msg" id="passwordConfirmMsg"></div>
+                </div>
+
+                <!-- 이름 -->
+                <div class="form-group">
+                    <label for="name">이름 <span class="required">*</span></label>
+                    <input type="text" id="name" placeholder="이름을 입력하세요" required>
+                </div>
+
+                <!-- 닉네임 -->
+                <div class="form-group">
+                    <label for="nickname">닉네임 <span class="required">*</span></label>
+                    <div class="input-with-btn">
+                        <input type="text" id="nickname" placeholder="한글, 영문 2-10자" required>
+                        <button type="button" class="check-btn" onclick="checkNickname()">중복확인</button>
+                    </div>
+                    <div class="validation-msg" id="nicknameMsg"></div>
+                </div>
+
+                <!-- 이메일 -->
+                <div class="form-group">
+                    <label for="email">이메일 <span class="required">*</span></label>
+                    <input type="email" id="email" placeholder="example@email.com" required>
+                </div>
+
+                <!-- 생년월일 -->
+                <div class="form-group">
+                    <label for="birth">생년월일</label>
+                    <input type="date" id="birth">
+                </div>
+
+                <button type="submit" class="signup-btn" id="submitBtn" disabled>회원가입</button>
+            </form>
+
+            <div class="login-link">
+                이미 계정이 있으신가요?
+                <a href="login.html">로그인</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 푸터 -->
+    <footer>
+        <p>
+            대전광역시 중구 선화동 중앙로121번길 20 방산빌딩 3층 | 
+            연락처: 0507-1422-2402 | 
+            © 2025 UrbanGreen. All rights reserved.
+        </p>
+    </footer>
+
+    <script>
+        let userIdChecked = false;
+        let nicknameChecked = false;
+
+        // 아이디 중복확인
+        function checkUserId() {
+            const userId = document.getElementById('userId').value;
+            const msg = document.getElementById('userIdMsg');
+
+            if (!userId) {
+                msg.textContent = '아이디를 입력해주세요.';
+                msg.className = 'validation-msg error';
+                return;
+            }
+
+            // 아이디 유효성 검사
+            const idRegex = /^[a-zA-Z0-9]{4,12}$/;
+            if (!idRegex.test(userId)) {
+                msg.textContent = '영문, 숫자 4-12자로 입력해주세요.';
+                msg.className = 'validation-msg error';
+                return;
+            }
+
+            // 실제로는 서버 API 호출
+            msg.textContent = '사용 가능한 아이디입니다.';
+            msg.className = 'validation-msg success';
+            userIdChecked = true;
+            checkFormValid();
+        }
+
+        // 닉네임 중복확인
+        function checkNickname() {
+            const nickname = document.getElementById('nickname').value;
+            const msg = document.getElementById('nicknameMsg');
+
+            if (!nickname) {
+                msg.textContent = '닉네임을 입력해주세요.';
+                msg.className = 'validation-msg error';
+                return;
+            }
+
+            // 닉네임 유효성 검사 (한글, 영문 2-10자)
+            const nicknameRegex = /^[가-힣a-zA-Z]{2,10}$/;
+            if (!nicknameRegex.test(nickname)) {
+                msg.textContent = '한글, 영문 2-10자로 입력해주세요.';
+                msg.className = 'validation-msg error';
+                return;
+            }
+
+            // 실제로는 서버 API 호출
+            msg.textContent = '사용 가능한 닉네임입니다.';
+            msg.className = 'validation-msg success';
+            nicknameChecked = true;
+            checkFormValid();
+        }
+
+        // 비밀번호 강도 체크
+        function checkPasswordStrength() {
+            const password = document.getElementById('password').value;
+            const strengthBar = document.getElementById('strengthBar');
+            const msg = document.getElementById('passwordMsg');
+
+            if (!password) {
+                strengthBar.className = 'password-strength-bar';
+                msg.style.display = 'none';
+                return;
+            }
+
+            let strength = 0;
+            if (password.length >= 8) strength++;
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+            if (/\d/.test(password)) strength++;
+            if (/[!@#$%^&*]/.test(password)) strength++;
+
+            strengthBar.className = 'password-strength-bar';
+            if (strength <= 2) {
+                strengthBar.classList.add('weak');
+                msg.textContent = '약한 비밀번호입니다.';
+                msg.className = 'validation-msg error';
+            } else if (strength === 3) {
+                strengthBar.classList.add('medium');
+                msg.textContent = '보통 비밀번호입니다.';
+                msg.className = 'validation-msg';
+                msg.style.display = 'block';
+                msg.style.color = '#ffd93d';
+            } else {
+                strengthBar.classList.add('strong');
+                msg.textContent = '강력한 비밀번호입니다.';
+                msg.className = 'validation-msg success';
+            }
+
+            checkPasswordMatch();
+        }
+
+        // 비밀번호 확인
+        function checkPasswordMatch() {
+            const password = document.getElementById('password').value;
+            const passwordConfirm = document.getElementById('passwordConfirm').value;
+            const msg = document.getElementById('passwordConfirmMsg');
+
+            if (!passwordConfirm) {
+                msg.style.display = 'none';
+                return;
+            }
+
+            if (password === passwordConfirm) {
+                msg.textContent = '비밀번호가 일치합니다.';
+                msg.className = 'validation-msg success';
+            } else {
+                msg.textContent = '비밀번호가 일치하지 않습니다.';
+                msg.className = 'validation-msg error';
+            }
+        }
+
+        // 폼 유효성 검사
+        function checkFormValid() {
+            const term1 = document.getElementById('term1').checked;
+            const term2 = document.getElementById('term2').checked;
+            const submitBtn = document.getElementById('submitBtn');
+
+            if (userIdChecked && nicknameChecked && term1 && term2) {
+                submitBtn.disabled = false;
+            } else {
+                submitBtn.disabled = true;
+            }
+        }
+
+        // 폼 제출
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('회원가입이 완료되었습니다!');
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>
