@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UrbanGreen - 스마트팜 교육 플랫폼</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #faf9f6 0%, #f5f3ed 100%);
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        /* 헤더 - 연한 초록색 */
+        header {
+            background: linear-gradient(135deg, #5cb85f 0%, #70c373 100%);
+            color: #fefefe;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 20px rgba(92, 184, 95, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 a {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: #fefefe;
+            letter-spacing: -0.5px;
+            transition: opacity 0.3s ease;
+        }
+
+        header h1 a:hover {
+            opacity: 0.9;
+        }
+
+        nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            color: #fefefe;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: #fefefe;
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 80%;
+        }
+
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* 메인 컨테이너 */
+        .main-wrapper {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+        }
+
+        /* 사이드바 - 연한 초록색 */
+        .sidebar {
+            background: linear-gradient(135deg, #4caf50 0%, #5cb85f 100%);
+            color: #fefefe;
+            width: 250px;
+            flex-shrink: 0;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(76, 175, 80, 0.25);
+            position: -webkit-sticky;
+            position: sticky;
+            top: 80px;
+            align-self: flex-start;
+            max-height: calc(100vh - 100px);
+        }
+
+        .sidebar h2 {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 1rem;
+        }
+
+        .sidebar a {
+            color: #fefefe;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .sidebar a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        /* 메인 콘텐츠 영역 */
+        .content-area {
+            flex: 1;
+            min-width: 0;
+        }
+
+        /* 히어로 섹션 (슬라이드) - 크림색 배경 */
+        .hero-section {
+            background: #fcfbf8;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+            margin-bottom: 3rem;
+            position: relative;
+            height: 500px;
+            border: 1px solid rgba(92, 184, 95, 0.15);
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 슬라이드 네비게이션 */
+        .dots {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: white;
+            width: 32px;
+            border-radius: 6px;
+        }
+
+        /* 메인 콘텐츠 그리드 */
+        .main-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        /* 카드 스타일 - 크림색 배경 */
+        .content-card {
+            background: #fcfbf8;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(92, 184, 95, 0.15);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-card h2 {
+            font-size: 1.3rem;
+            color: #4caf50;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0;
+        }
+
+        .content-card h2::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(135deg, #5cb85f 0%, #70c373 100%);
+            border-radius: 2px;
+        }
+
+        /* 더보기 버튼 - 연한 초록색 */
+        .more-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: #5cb85f;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background: rgba(92, 184, 95, 0.08);
+        }
+
+        .more-btn:hover {
+            background: rgba(92, 184, 95, 0.18);
+            transform: translateX(3px);
+        }
+
+        .more-btn::after {
+            content: '+';
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .content-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            flex: 1;
+        }
+
+        .content-list a {
+            color: #546e7a;
+            text-decoration: none;
+            padding: 1rem;
+            background: #f5f3ed;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .content-list a:hover {
+            background: linear-gradient(135deg, #e8f5e9 0%, #d8ead9 100%);
+            color: #4caf50;
+            transform: translateX(5px);
+        }
+
+        /* 로그인 카드 - 크림색 배경 */
+        .login-card {
+            background: linear-gradient(135deg, #fcfbf8 0%, #f8f6ef 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(92, 184, 95, 0.12);
+            text-align: center;
+            border: 2px solid rgba(92, 184, 95, 0.15);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100%;
+        }
+
+        .login-card h2 {
+            color: #4caf50;
+            margin-bottom: 2rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .login-card h2::before {
+            display: none;
+        }
+
+        .login-card a {
+            display: inline-block;
+            padding: 1rem 3rem;
+            background: linear-gradient(135deg, #5cb85f 0%, #70c373 100%);
+            color: #fefefe;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(92, 184, 95, 0.3);
+        }
+
+        .login-card a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(92, 184, 95, 0.4);
+        }
+
+        /* 환영 메시지 - 크림색 배경 */
+        .welcome-card {
+            background: #fcfbf8;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100%;
+        }
+
+        .welcome-card p {
+            font-size: 1.2rem;
+            color: #4caf50;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .welcome-card button {
+            padding: 0.8rem 2rem;
+            margin: 0.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .welcome-card button:first-of-type {
+            background: linear-gradient(135deg, #5cb85f 0%, #70c373 100%);
+            color: #fefefe;
+        }
+
+        .welcome-card button:last-of-type {
+            background: #f5f3ed;
+            color: #546e7a;
+        }
+
+        .welcome-card button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .welcome-card button a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* 푸터 - 연한 초록색 */
+        footer {
+            background: linear-gradient(135deg, #4caf50 0%, #5cb85f 100%);
+            color: #fefefe;
+            text-align: center;
+            padding: 1.5rem 2rem;
+            margin-top: 4rem;
+            box-shadow: 0 -4px 20px rgba(76, 175, 80, 0.2);
+        }
+
+        footer p {
+            max-width: 1200px;
+            margin: 0 auto;
+            line-height: 1.6;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #fefefe;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            transition: border-color 0.3s ease;
+        }
+
+        footer a:hover {
+            border-bottom-color: white;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 1024px) {
+            .main-wrapper {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                position: static;
+                width: 100%;
+            }
+
+            nav {
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 0.8rem 1.5rem;
+            }
+
+            .header-container {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+
+            header h1 a {
+                font-size: 1.3rem;
+            }
+
+            nav {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            nav a {
+                font-size: 0.85rem;
+                padding: 0.3rem 0.6rem;
+            }
+
+            .hero-section {
+                height: 300px;
+                border-radius: 16px;
+            }
+
+            .main-wrapper {
+                padding: 2rem 1rem;
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            footer {
+                padding: 1.2rem 1.5rem;
+            }
+
+            footer p {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="header-container">
+            <h1><a href="UrbanGreen.html">UrbanGreen</a></h1>
+            <nav>
+                <a href="/post/free-board.html">자유게시판</a>
+                <a href="class.html">강의</a>
+                <a href="/AI/aichoice.html">AI 추천</a>
+                <a href="game.html">게임</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <!-- 사이드바 -->
+        <aside class="sidebar">
+            <h2>주요 콘텐츠</h2>
+            <ul>
+                <li><a href="mypage.html">🏠 마이페이지</a></li>
+                <li><a href="class.html">📚 강의</a></li>
+                <li><a href="/AI/aichoice.html">🤖 AI 추천관</a></li>
+                <li><a href="game.html">🎮 게임</a></li>
+            </ul>
+        </aside>
+
+        <!-- 메인 콘텐츠 영역 -->
+        <div class="content-area">
+            <!-- 히어로 슬라이드 섹션 -->
+            <section class="hero-section">
+                <div class="slide active">
+                    <img src="/img/mainimg1.png" alt="스마트팜 교육 메인">
+                </div>
+                <div class="slide">
+                    <img src="/img/KakaoTalk_20251105_165944812.png" alt="강의 소개">
+                </div>
+                <div class="slide">
+                    <img src="/img/KakaoTalk_20251105_165817438.png" alt="커뮤니티">
+                </div>
+                <div class="dots">
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </section>
+
+            <!-- 메인 콘텐츠 그리드 -->
+            <div class="main-content">
+                <!-- 자유게시판 -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <h2>자유게시판</h2>
+                        <a href="/post/free-board.html" class="more-btn">더보기</a>
+                    </div>
+                    <div class="content-list">
+                        <a href="#">스마트팜 시작하기 좋은 작물은?</a>
+                        <a href="#">도심 농업 성공 사례 공유</a>
+                        <a href="#">초보자를 위한 재배 팁</a>
+                    </div>
+                </div>
+
+                <!-- 강의 -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <h2>인기 강의</h2>
+                        <a href="class.html" class="more-btn">더보기</a>
+                    </div>
+                    <div class="content-list">
+                        <a href="#">스마트팜 기초 입문</a>
+                        <a href="#">IoT 센서 활용하기</a>
+                        <a href="#">수경재배 완전 정복</a>
+                    </div>
+                </div>
+
+                <!-- 로그인 영역 -->
+                <div class="login-card" id="loginBox">
+                    <div>
+                        <h2>로그인 후 이용해주세요</h2>
+                        <a href="/Account/login.html">로그인</a>
+                    </div>
+                </div>
+
+                <!-- 환영 메시지 -->
+                <div class="welcome-card hidden" id="welcomeBox">
+                    <div>
+                        <p><span id="nickName">홍길동</span>님, 환영합니다!</p>
+                        <button><a href="mypage.html">마이페이지</a></button>
+                        <button id="logoutBtn"><a href="index.html">로그아웃</a></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>
+            주소: <a href="https://naver.me/5LHhFcBI">대전광역시 중구 선화동 중앙로121번길 20 방산빌딩 3층</a> | 
+            연락처: 0507-1422-2402 | 
+            회사명: <a href="index.html">URBANGREEN</a>
+        </p>
+    </footer>
+
+    <script>
+        // 슬라이드 기능
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        setInterval(nextSlide, 5000);
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => showSlide(index));
+        });
+
+        // 로그인/로그아웃 기능
+        const loginBox = document.getElementById("loginBox");
+        const welcomeBox = document.getElementById("welcomeBox");
+        const logoutBtn = document.getElementById("logoutBtn");
+
+        logoutBtn?.addEventListener("click", function () {
+            welcomeBox.classList.add("hidden");
+            loginBox.classList.remove("hidden");
+        });
+    </script>
+</body>
+</html>

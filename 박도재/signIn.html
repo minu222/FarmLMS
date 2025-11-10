@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UrbanGreen - 회원가입</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #5cb85f;
+            --primary-dark: #4caf50;
+            --primary-light: #70c373;
+            --gray: #757575;
+            --light-gray: #f5f3ed;
+            --cream: #fcfbf8;
+            --text: #212121;
+            --error: #d32f2f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #faf9f6 0%, #f5f3ed 100%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 메인 컨테이너 */
+        .signup-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            padding: 3rem 2rem;
+        }
+
+        .signup-form {
+            background: var(--cream);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(76, 175, 80, 0.15);
+            width: 100%;
+            max-width: 600px;
+            animation: fadeIn 0.5s ease;
+            border: 1px solid rgba(92, 184, 95, 0.15);
+        }
+
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(-30px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .signup-form h2 {
+            color: var(--primary);
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--gray);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.9rem 1rem 0.9rem 2.8rem;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: var(--light-gray);
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(92, 184, 95, 0.1);
+            outline: none;
+            background: var(--cream);
+        }
+
+        /* 중복확인 버튼이 있는 필드 */
+        .field-with-button {
+            display: flex;
+            gap: 0.5rem;
+            align-items: flex-start;
+        }
+
+        .field-with-button .input-container {
+            flex: 1;
+        }
+
+        .check-btn {
+            padding: 0.9rem 1.2rem;
+            background: var(--primary);
+            color: #fefefe;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .check-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* 도움말 텍스트 */
+        .help-text {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-top: 0.3rem;
+            margin-left: 2.8rem;
+        }
+
+        /* 에러 메시지 */
+        .error {
+            display: none;
+            color: var(--error);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            margin-left: 2.8rem;
+        }
+
+        .error.show {
+            display: block;
+        }
+
+        input[aria-invalid="true"] {
+            border-color: var(--error);
+        }
+
+        /* 제출 버튼 */
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: #fefefe;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 2rem;
+            box-shadow: 0 4px 16px rgba(92, 184, 95, 0.3);
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(92, 184, 95, 0.4);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .divider {
+            margin: 2rem 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background: #ddd;
+        }
+
+        .divider span {
+            background: var(--cream);
+            padding: 0 1rem;
+            position: relative;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        .login-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .login-link a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        /* 홈으로 버튼 */
+        .back-home {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: var(--cream);
+            color: var(--primary);
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .back-home:hover {
+            background: var(--primary);
+            color: #fefefe;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(92, 184, 95, 0.25);
+        }
+
+        /* 푸터 */
+        footer {
+            background: linear-gradient(135deg, #4caf50 0%, #5cb85f 100%);
+            color: #fefefe;
+            text-align: center;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 -4px 20px rgba(76, 175, 80, 0.2);
+            margin-top: auto;
+        }
+
+        footer p {
+            max-width: 1200px;
+            margin: 0 auto;
+            line-height: 1.6;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #fefefe;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            transition: border-color 0.3s ease;
+        }
+
+        footer a:hover {
+            border-bottom-color: white;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .signup-container {
+                padding: 2rem 1rem;
+            }
+
+            .signup-form {
+                padding: 2rem 1.5rem;
+            }
+
+            .logo h1 {
+                font-size: 1.5rem;
+            }
+
+            .logo i {
+                font-size: 2rem;
+            }
+
+            .signup-form h2 {
+                font-size: 1.5rem;
+            }
+
+            .field-with-button {
+                flex-direction: column;
+            }
+
+            .check-btn {
+                width: 100%;
+            }
+
+            .back-home {
+                top: 1rem;
+                left: 1rem;
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            footer {
+                padding: 1.2rem 1.5rem;
+            }
+
+            footer p {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <a href="/main/urbangreen.html" class="back-home">
+        <i class="fas fa-arrow-left"></i>
+        홈으로
+    </a>
+
+    <div class="signup-container">
+        <form class="signup-form" novalidate>
+            <div class="logo">
+                <i class="fas fa-leaf"></i>
+                <h1>UrbanGreen</h1>
+            </div>
+            <h2>회원가입</h2>
+
+            <!-- 성명 -->
+            <div class="form-group">
+                <label for="name">성명</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-user"></i>
+                    <input 
+                        id="name" 
+                        name="name" 
+                        type="text" 
+                        autocomplete="name" 
+                        placeholder="예) 홍길동" 
+                        required
+                    >
+                </div>
+            </div>
+
+            <!-- 아이디 -->
+            <div class="form-group">
+                <label for="userId">아이디</label>
+                <div class="field-with-button">
+                    <div class="input-container">
+                        <div class="input-wrapper">
+                            <i class="fas fa-id-card"></i>
+                            <input 
+                                id="userId" 
+                                name="username" 
+                                type="text" 
+                                autocomplete="username" 
+                                required
+                            >
+                        </div>
+                        <p class="help-text">영문 소문자+숫자 6–20자</p>
+                    </div>
+                    <button type="button" class="check-btn">중복 확인</button>
+                </div>
+            </div>
+
+            <!-- 닉네임 -->
+            <div class="form-group">
+                <label for="nickname">닉네임</label>
+                <div class="field-with-button">
+                    <div class="input-container">
+                        <div class="input-wrapper">
+                            <i class="fas fa-smile"></i>
+                            <input 
+                                id="nickname" 
+                                name="nickname" 
+                                type="text" 
+                                autocomplete="nickname"
+                            >
+                        </div>
+                        <p class="help-text">영문 소문자+숫자 6–20자</p>
+                    </div>
+                    <button type="button" class="check-btn">중복 확인</button>
+                </div>
+            </div>
+
+            <!-- 비밀번호 -->
+            <div class="form-group">
+                <label for="userpw">비밀번호</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-lock"></i>
+                    <input 
+                        id="userpw" 
+                        name="userpw" 
+                        type="password" 
+                        autocomplete="new-password"
+                        required
+                    >
+                </div>
+                <p class="help-text">영문/숫자/특수문자 2종 이상 포함 8–20자</p>
+            </div>
+
+            <!-- 비밀번호 확인 -->
+            <div class="form-group">
+                <label for="password2">비밀번호 확인</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-lock"></i>
+                    <input 
+                        id="password2" 
+                        name="password2" 
+                        type="password" 
+                        autocomplete="new-password"
+                        required
+                    >
+                </div>
+                <p id="checkPw" class="error" aria-live="polite">비밀번호가 일치하지 않습니다.</p>
+            </div>
+
+            <!-- 생년월일 -->
+            <div class="form-group">
+                <label for="birth">생년월일</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-calendar"></i>
+                    <input 
+                        id="birth" 
+                        name="birth" 
+                        type="date" 
+                        autocomplete="bday"
+                    >
+                </div>
+            </div>
+
+            <!-- 이메일 -->
+            <div class="form-group">
+                <label for="email">이메일</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-envelope"></i>
+                    <input 
+                        id="email" 
+                        name="email" 
+                        type="email" 
+                        autocomplete="email" 
+                        placeholder="example@email.com"
+                    >
+                </div>
+            </div>
+
+            <button class="submit-btn" type="submit" disabled>회원가입</button>
+
+            <div class="divider">
+                <span>또는</span>
+            </div>
+
+            <p class="login-link">
+                이미 계정이 있으신가요? <a href="/Account/login.html">로그인</a>
+            </p>
+        </form>
+    </div>
+
+    <footer>
+        <p>
+            주소: <a href="https://naver.me/5LHhFcBI">대전광역시 중구 선화동 중앙로121번길 20 방산빌딩 3층</a> | 
+            연락처: 0507-1422-2402 | 
+            회사명: <a href="/main/urbangreen.html">URBANGREEN</a>
+        </p>
+    </footer>
+
+    <script>
+        const $password = document.getElementById('userpw');
+        const $password2 = document.getElementById('password2');
+        const $checkPw = document.getElementById('checkPw');
+        const $submitBtn = document.querySelector('.submit-btn');
+
+        // 비밀번호 일치 확인
+        function checkPasswordMatch() {
+            if ($password2.value === '') {
+                $checkPw.classList.remove('show');
+                return;
+            }
+
+            if ($password.value !== $password2.value) {
+                $checkPw.classList.add('show');
+                $password2.setAttribute('aria-invalid', 'true');
+            } else {
+                $checkPw.classList.remove('show');
+                $password2.setAttribute('aria-invalid', 'false');
+            }
+        }
+
+        $password.addEventListener('input', checkPasswordMatch);
+        $password2.addEventListener('input', checkPasswordMatch);
+
+        // 폼 유효성 검사
+        const $form = document.querySelector('.signup-form');
+        $form.addEventListener('input', () => {
+            const allFilled = $form.checkValidity() && 
+                            $password.value === $password2.value;
+            $submitBtn.disabled = !allFilled;
+        });
+
+        // 제출 처리
+        $form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            // 여기에 실제 회원가입 로직 추가
+            console.log('회원가입 제출');
+        });
+    </script>
+</body>
+</html>
