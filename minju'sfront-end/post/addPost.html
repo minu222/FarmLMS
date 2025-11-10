@@ -1,72 +1,599 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
 
 <head>
-    <meta charset="UTF-8">
-    <title>게시글 등록</title>
-    <link rel="stylesheet" href="postStyle.css">
-    <style>
-        textarea {
-            padding: 1em;
-            margin-top: 8px;
-            width: 97%;
-            height: 400px;
-            resize: none;
-            border-radius: 10px;
-            font-family: inherit;
-            font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UrbanGreen - 공지사항 작성</title>
+  <style>
+    :root {
+      --primary: #5cb85f;
+      --primary-dark: #4caf50;
+      --primary-light: #70c373;
+      --gray: #757575;
+      --light-gray: #f5f3ed;
+      --cream: #fcfbf8;
+      --text: #212121;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #faf9f6 0%, #f5f3ed 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* 헤더 */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(92, 184, 95, 0.1);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    }
+
+    .header-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 3rem;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -1px;
+      text-decoration: none;
+    }
+
+    nav {
+      display: flex;
+      gap: 2.5rem;
+    }
+
+    nav a {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+
+    nav a:hover {
+      color: var(--primary);
+    }
+
+    /* 메인 컨테이너 */
+    .main-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 8rem 3rem 5rem;
+    }
+
+    /* 페이지 헤더 */
+    .page-header {
+      margin-bottom: 2rem;
+    }
+
+    .page-header h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    .page-header p {
+      color: var(--gray);
+      font-size: 1rem;
+    }
+
+    /* 작성 폼 */
+    .write-form {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 3rem;
+      border: 1px solid rgba(92, 184, 95, 0.1);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-group {
+      margin-bottom: 2rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-family: inherit;
+      background: var(--light-gray);
+      transition: all 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(92, 184, 95, 0.1);
+      outline: none;
+      background: white;
+    }
+
+    .form-group textarea {
+      min-height: 400px;
+      resize: vertical;
+      line-height: 1.8;
+    }
+
+    /* 파일 업로드 */
+    .file-upload-wrapper {
+      position: relative;
+    }
+
+    .file-upload-input {
+      display: none;
+    }
+
+    .file-upload-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1.5rem;
+      background: var(--light-gray);
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 500;
+    }
+
+    .file-upload-btn:hover {
+      background: rgba(92, 184, 95, 0.1);
+      border-color: var(--primary);
+    }
+
+    .file-list {
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.8rem 1rem;
+      background: var(--light-gray);
+      border-radius: 10px;
+    }
+
+    .file-name {
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+
+    .file-remove {
+      background: none;
+      border: none;
+      color: #d32f2f;
+      cursor: pointer;
+      font-size: 1.2rem;
+      padding: 0.2rem 0.5rem;
+      transition: all 0.3s;
+    }
+
+    .file-remove:hover {
+      color: #b71c1c;
+    }
+
+    /* 버튼 영역 */
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      margin-top: 2rem;
+    }
+
+    .btn {
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: none;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      box-shadow: 0 10px 30px rgba(92, 184, 95, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(92, 184, 95, 0.4);
+    }
+
+    .btn-secondary {
+      background: var(--light-gray);
+      color: var(--text);
+      border: 1px solid #ddd;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(92, 184, 95, 0.1);
+      border-color: var(--primary);
+    }
+
+    /* 푸터 */
+    footer {
+      background: var(--text);
+      color: white;
+      padding: 3rem 3rem 2rem;
+      margin-top: 5rem;
+    }
+
+    .footer-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer-about h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .footer-links h4 {
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .footer-links ul {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover {
+      color: var(--primary);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 2rem;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    /* 반응형 */
+    @media (max-width: 1024px) {
+      .main-container {
+        padding: 6rem 2rem 3rem;
+      }
+
+      .footer-container {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        display: none;
+      }
+
+      .write-form {
+        padding: 2rem;
+      }
+
+      .button-group {
+        flex-direction: column-reverse;
+      }
+
+      .btn {
+        width: 100%;
+        text-align: center;
+      }
+
+      .footer-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 
 <body>
-    <header>
-        <h1><a href="/main/UrbanGreen.html">UrbanGreen</a></h1>
-        <nav id="navMenu">
-            <a href="free-board.html">자유게시판</a>
-            <a href="/main/class.html">강의</a>
-            <a href="/AI/aichoice.html">AI 추천</a>
-            <a href="/main/game.html">게임</a>
-        </nav>
-    </header>
-    <main class="addPost-detail-container">
+  <!-- 헤더 -->
+  <header>
+    <div class="header-container">
+      <a href="/main/urbangreen.html" class="logo">UrbanGreen</a>
+      <nav>
+        <a href="/main/class.html">강의</a>
+        <a href="/post/free-board.html">커뮤니티</a>
+        <a href="/AI/aichoice.html">AI 추천</a>
+        <a href="/main/game.html">게임</a>
+        <a href="/Account/login.html">로그인</a>
+      </nav>
+    </div>
+  </header>
 
-        <div class="addPost-card">
-            <h2>게시글 등록</h2>
+  <!-- 메인 컨테이너 -->
+  <main class="main-container">
+    <!-- 페이지 헤더 -->
+    <div class="page-header">
+      <h1>공지사항 작성</h1>
+      <p>공지할 내용을 작성해주세요</p>
+    </div>
 
-            <form th:action="@{/post/add}" th:object="${post}" method="post">
+    <!-- 작성 폼 -->
+    <form class="write-form" id="writeForm" enctype="multipart/form-data">
+      <!-- 카테고리 -->
+      <div class="form-group">
+        <label for="category">카테고리</label>
+        <select id="category" required>
+          <option value="">선택하세요</option>
+          <option value="fixedNotice">고정 공지</option>
+          <option value="freeNotice">자유 공지</option>
+        </select>
+      </div>
 
-                <div class="control">
-                    <div class="category">
-                        <select th:field="*{fixed}">
-                            <option value="0">일반 게시글</option>
-                            <option value="1">고정 게시글</option>
-                        </select>
-                    </div>
+      <!-- 제목 -->
+      <div class="form-group">
+        <label for="title">제목</label>
+        <input type="text" id="title" placeholder="제목을 입력하세요" required maxlength="100">
+      </div>
 
-                    <div class="category">
-                        <select th:field="*{category}">
-                            <option value="FREEBOARD">자유</option>
-                            <option value="NOTICE">공지사항</option>
-                        </select>
-                    </div>
-                </div>
+      <!-- 내용 -->
+      <div class="form-group">
+        <label for="content">내용</label>
+        <textarea id="content" placeholder="내용을 입력하세요" required></textarea>
+      </div>
 
-                <p style="color:#4caf50; font-weight: 600; margin-right: 6px;">
-                    제목 : <input type="text" id="addTitle" th:field="*{title}" /></p>
-                <hr>
-                <p style="color:#4caf50; font-weight: 600; margin-right: 6px;">
-                    내용 : </p><textarea th:field="*{content}" rows="12"></textarea>
-
-                <div class="addPostBtn">
-                    <button type="submit" onclick="location.href='/'">등록</button>
-                    <button type="button" onclick="location.href='/post/list'">취소</button>
-                </div>
-            </form>
+      <!-- 파일 첨부 -->
+      <div class="form-group">
+        <label>파일 첨부</label>
+        <div class="file-upload-wrapper">
+          <label for="fileUpload" class="file-upload-btn">📎 파일 선택</label>
+          <input type="file" id="fileUpload" class="file-upload-input" multiple accept="image/*,.pdf,.doc,.docx">
+          <div class="file-list" id="fileList" aria-live="polite"></div>
         </div>
+      </div>
 
+      <!-- 버튼 -->
+      <div class="button-group">
+        <a href="/post/free-board.html" class="btn btn-secondary">취소</a>
+        <button type="submit" class="btn btn-primary">작성완료</button>
+      </div>
+    </form>
+  </main>
 
-    </main>
+  <!-- 푸터 -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-about">
+        <h3>UrbanGreen</h3>
+        <p>청년 귀농인을 위한 작물재배 교육 플랫폼</p>
+      </div>
+
+      <div class="footer-links">
+        <h4>서비스</h4>
+        <ul>
+          <li><a href="/main/class.html">강의</a></li>
+          <li><a href="/post/free-board.html">커뮤니티</a></li>
+          <li><a href="/AI/aichoice.html">AI 추천</a></li>
+          <li><a href="/main/game.html">게임</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links">
+        <h4>회사</h4>
+        <ul>
+          <li><a href="#">회사 소개</a></li>
+          <li><a href="#">채용</a></li>
+          <li><a href="#">파트너십</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links">
+        <h4>지원</h4>
+        <ul>
+          <li><a href="#">고객센터</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">이용약관</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>
+        대전광역시 중구 선화동 중앙로121번길 20 방산빌딩 3층 |
+        연락처: 0507-1422-2402 |
+        © 2025 UrbanGreen. All rights reserved.
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // ===== 업로드 제한 설정 =====
+    const MAX_FILES = 10;     // 최대 업로드 개수
+    const MAX_TOTAL_MB = 50;  // 총 업로드 용량 제한
+    const MAX_FILE_MB = 10;   // 개별 파일 제한 (기존 유지)
+
+    // ===== 상태 & 엘리먼트 =====
+    let filesState = []; // { id, file }
+    let seq = 0;         // 고유 id 발급용
+
+    const fileInput = document.getElementById('fileUpload');
+    const fileListEl = document.getElementById('fileList');
+
+    // ===== 유틸 =====
+    function formatKB(bytes) {
+      return (bytes / 1024).toFixed(1) + 'KB';
+    }
+    function totalBytes() {
+      return filesState.reduce((sum, f) => sum + f.file.size, 0);
+    }
+
+    // ===== 파일 목록 렌더링 (안전하게 생성) =====
+    function renderFileList() {
+      fileListEl.innerHTML = '';
+      const frag = document.createDocumentFragment();
+
+      filesState.forEach(({ id, file }) => {
+        const item = document.createElement('div');
+        item.className = 'file-item';
+        item.dataset.id = id;
+
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'file-name';
+        nameSpan.textContent = `📄 ${file.name} (${formatKB(file.size)})`;
+
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'file-remove';
+        removeBtn.dataset.id = id;
+        removeBtn.setAttribute('aria-label', `${file.name} 삭제`);
+        removeBtn.textContent = '✕';
+
+        item.appendChild(nameSpan);
+        item.appendChild(removeBtn);
+        frag.appendChild(item);
+      });
+
+      fileListEl.appendChild(frag);
+    }
+
+    // ===== 업로드 핸들러 =====
+    fileInput.addEventListener('change', (e) => {
+      const incoming = Array.from(e.target.files);
+
+      // 1) 개별 파일 크기 제한
+      const tooBig = incoming.find(f => f.size > MAX_FILE_MB * 1024 * 1024);
+      if (tooBig) {
+        alert(`${tooBig.name}은(는) ${MAX_FILE_MB}MB를 초과합니다.`);
+        e.target.value = '';
+        return;
+      }
+
+      // 2) 개수 제한
+      if (filesState.length + incoming.length > MAX_FILES) {
+        alert(`최대 ${MAX_FILES}개까지만 첨부할 수 있습니다.`);
+        e.target.value = '';
+        return;
+      }
+
+      // 3) 총 용량 제한
+      const incomingBytes = incoming.reduce((sum, f) => sum + f.size, 0);
+      if (totalBytes() + incomingBytes > MAX_TOTAL_MB * 1024 * 1024) {
+        alert(`총 첨부 용량은 ${MAX_TOTAL_MB}MB를 초과할 수 없습니다.`);
+        e.target.value = '';
+        return;
+      }
+
+      // 4) 상태에 추가(고유 id 부여)
+      incoming.forEach(file => {
+        filesState.push({ id: String(++seq), file });
+      });
+
+      renderFileList();
+      e.target.value = ''; // 동일 파일 다시 선택 가능하도록 초기화
+    });
+
+    // ===== 삭제(이벤트 위임으로 정확 식별) =====
+    fileListEl.addEventListener('click', (e) => {
+      const btn = e.target.closest('.file-remove');
+      if (!btn) return;
+      const id = btn.dataset.id;
+      filesState = filesState.filter(f => f.id !== id);
+      renderFileList();
+    });
+
+    // ===== 폼 제출 =====
+    document.getElementById('writeForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const category = document.getElementById('category').value.trim();
+      const title = document.getElementById('title').value.trim();
+      const content = document.getElementById('content').value.trim();
+
+      if (!category || !title || !content) {
+        alert('모든 필수 항목을 입력해주세요.');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('category', category);
+      formData.append('title', title);
+      formData.append('content', content);
+      filesState.forEach(({ file }) => formData.append('files', file));
+
+      // 실제 서버 연동 예시:
+      // fetch('/api/notices', { method: 'POST', body: formData })
+      //   .then(res => {
+      //     if (!res.ok) throw new Error('등록 실패');
+      //     return res.json();
+      //   })
+      //   .then(() => {
+      //     alert('게시글이 작성되었습니다!');
+      //     window.location.href = '/post/free-board.html';
+      //   })
+      //   .catch(err => alert(err.message));
+
+      // 데모 동작
+      alert('게시글이 작성되었습니다!');
+      window.location.href = '/post/free-board.html';
+    });
+  </script>
 </body>
 
 </html>
