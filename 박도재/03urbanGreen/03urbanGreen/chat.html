@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>채팅 - UrbanGreen</title>
+<style>
+  :root{
+    --primary:#5cb85f; --primary-dark:#4caf50; --primary-light:#70c373;
+    --gray:#757575; --light-gray:#f5f3ed; --text:#212121; --border:#e9ecef; --panel:#ffffff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:#f8f9fa;color:var(--text);line-height:1.6}
+  
+  /* 헤더 */
+  header{position:sticky;top:0;z-index:1000;background:rgba(255,255,255,0.98);border-bottom:1px solid var(--border);transition:all 0.3s ease}
+  header.scrolled{box-shadow:0 2px 10px rgba(0,0,0,0.08)}
+  .header-container{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 2rem}
+  .logo{font-size:1.6rem;font-weight:700;color:var(--primary);letter-spacing:-0.5px;text-decoration:none}
+  nav{display:flex;gap:2rem}
+  nav a{color:var(--text);text-decoration:none;font-weight:500;font-size:0.95rem;transition:all 0.3s}
+  nav a:hover,nav a.active{color:var(--primary)}
+
+  /* 3컬럼 레이아웃 */
+  .layout{max-width:1400px;margin:0 auto;padding:2rem;display:grid;grid-template-columns:320px 1fr 280px;gap:1.5rem;min-height:calc(100vh - 180px)}
+  .col{background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+  .col.left{align-self:start}
+  .col-head{padding:12px 14px;border-bottom:1px solid var(--border);font-weight:700;display:flex;align-items:center;gap:8px}
+  .section{display:flex;flex-direction:column}
+  .section-head{padding:10px 14px;font-size:0.9rem;font-weight:700;color:var(--gray);background:#fafafa;border-top:1px solid var(--border)}
+  
+  /* 최대 3개 아이템 높이로 제한 */
+  .list{overflow-y:auto;max-height:calc(3 * 80px)}
+  .list::-webkit-scrollbar{width:6px}
+  .list::-webkit-scrollbar-track{background:#f1f1f1;border-radius:10px}
+  .list::-webkit-scrollbar-thumb{background:#c1c1c1;border-radius:10px}
+  .list::-webkit-scrollbar-thumb:hover{background:#a8a8a8}
+
+  /* 좌측: 참여/미참여 방 목록 */
+  .room-item{padding:12px 14px;border-bottom:1px solid var(--border);cursor:pointer;display:flex;gap:10px;align-items:center;transition:all .2s;min-height:80px}
+  .room-item:hover{background:#fafafa}
+  .room-item:last-child{border-bottom:none}
+  .room-avatar{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(--primary-light),var(--primary-dark));color:white;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.95rem;flex-shrink:0}
+  .room-body{flex:1;min-width:0}
+  .room-title{font-weight:700;font-size:0.95rem;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .badge-joined{background:var(--primary);color:#fff;border-radius:12px;padding:2px 8px;font-size:0.7rem;font-weight:800}
+  .room-meta{margin-top:4px;color:var(--gray);font-size:0.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .room-item.active{outline:2px solid var(--primary);outline-offset:-2px;background:#f0fdf4}
+
+  /* 채팅방 만들기 버튼 */
+  .create-room-container{padding:14px;border-top:1px solid var(--border);background:#fafafa}
+  .create-room-btn{width:100%;background:var(--primary);color:#fff;border:none;border-radius:8px;padding:0.8rem;font-size:0.9rem;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
+  .create-room-btn:hover{background:var(--primary-dark);transform:translateY(-1px);box-shadow:0 2px 8px rgba(92,184,95,0.3)}
+
+  /* 가운데: 채팅창 */
+  .chat-head{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+  .chat-room-name{font-weight:800;flex:1}
+  .leave-btn{background:#ef4444;color:#fff;border:none;border-radius:8px;padding:0.5rem 1rem;font-size:0.85rem;font-weight:600;cursor:pointer;transition:all .2s}
+  .leave-btn:hover{background:#dc2626}
+  .chat-view{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:12px;background:#f5f7f9}
+  .msg{max-width:70%;padding:10px 12px;border-radius:12px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+  .msg.me{align-self:flex-end;background:#dff5e1;border:1px solid #ccebd1}
+  .msg.other{align-self:flex-start;background:#fff;border:1px solid var(--border)}
+  .msg .author{font-size:0.78rem;color:var(--gray);margin-bottom:3px;font-weight:600}
+  .chat-input-wrap{padding:10px;border-top:1px solid var(--border);display:flex;gap:8px;background:#fff}
+  .chat-input{flex:1;resize:none;min-height:42px;max-height:120px;border:1px solid var(--border);border-radius:10px;padding:10px;outline:none;font-size:0.95rem;font-family:inherit}
+  .chat-input:focus{border-color:var(--primary)}
+  .send-btn{background:var(--primary);color:#fff;border:none;border-radius:10px;padding:0 20px;font-weight:700;cursor:pointer;transition:all .2s}
+  .send-btn:hover{background:var(--primary-dark)}
+  .send-btn:disabled{opacity:.5;cursor:not-allowed}
+
+  /* 우측: 온라인/오프라인 */
+  .user-item{padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+  .dot{width:8px;height:8px;border-radius:50%}
+  .dot.online{background:#22c55e}
+  .dot.offline{background:#cbd5e1}
+  .user-name{flex:1;font-size:0.9rem}
+  .pill{font-size:0.72rem;border:1px solid var(--border);border-radius:999px;padding:2px 8px;color:var(--gray);background:#fafafa}
+
+  /* 모달 */
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:2000}
+  .modal.active{display:flex}
+  .modal-card{background:#fff;border-radius:16px;width:min(450px,92vw);padding:2rem;box-shadow:0 10px 40px rgba(0,0,0,0.2);animation:slideIn 0.3s ease}
+  @keyframes slideIn{from{transform:translateY(-50px);opacity:0}to{transform:translateY(0);opacity:1}}
+  .modal-title{font-size:1.5rem;font-weight:700;margin-bottom:0.5rem}
+  .modal-desc{color:var(--gray);font-size:0.95rem;margin-bottom:1.5rem}
+  .modal-room-info{background:var(--light-gray);padding:1rem;border-radius:8px;margin-bottom:1.5rem}
+  .modal-room-name{font-weight:600;font-size:1.1rem;color:var(--text);margin-bottom:0.5rem}
+  .modal-room-desc{font-size:0.9rem;color:var(--gray)}
+  .modal-actions{display:flex;gap:10px;justify-content:flex-end}
+  .btn{padding:0.9rem 1.5rem;border-radius:8px;border:none;cursor:pointer;font-size:0.9rem;font-weight:600;transition:all .2s}
+  .btn.cancel{background:#e9ecef;color:var(--text)}
+  .btn.cancel:hover{background:#dee2e6}
+  .btn.primary{background:var(--primary);color:#fff}
+  .btn.primary:hover{background:var(--primary-dark)}
+
+  /* 채팅방 생성 모달 */
+  .form-group{margin-bottom:1.2rem}
+  .form-label{display:block;font-weight:600;margin-bottom:0.5rem;color:var(--text);font-size:0.9rem}
+  .form-input,.form-textarea{width:100%;padding:0.7rem;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;font-family:inherit;outline:none}
+  .form-input:focus,.form-textarea:focus{border-color:var(--primary)}
+  .form-textarea{resize:vertical;min-height:80px}
+
+  /* 푸터 */
+  footer{background:#2d3436;color:white;padding:3rem 2rem 2rem;margin-top:3rem}
+  .footer-container{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:3rem;margin-bottom:2rem}
+  .footer-about h3{font-size:1.3rem;margin-bottom:1rem;color:var(--primary)}
+  .footer-about p{color:rgba(255,255,255,0.7);line-height:1.6}
+  .footer-links h4{margin-bottom:1rem;font-weight:600}
+  .footer-links ul{list-style:none}
+  .footer-links li{margin-bottom:0.5rem}
+  .footer-links a{color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.3s}
+  .footer-links a:hover{color:var(--primary)}
+  .footer-bottom{border-top:1px solid rgba(255,255,255,0.1);padding-top:2rem;text-align:center;color:rgba(255,255,255,0.6);font-size:0.9rem}
+
+  /* 반응형 */
+  @media (max-width:1200px){.layout{grid-template-columns:280px 1fr 240px}}
+  @media (max-width:960px){
+    nav{display:none}
+    .layout{grid-template-columns:1fr;gap:12px}
+    .col.right{order:3}
+    .col.left{order:1}
+    .col.center{order:2;min-height:60vh}
+    .footer-container{grid-template-columns:1fr}
+  }
+  @media (max-width:640px){
+    .header-container{padding:1rem}
+  }
+</style>
+</head>
+<body>
+
+<!-- 헤더 -->
+<header id="header">
+  <div class="header-container">
+    <a href="/index.html" class="logo">UrbanGreen</a>
+    <nav>
+      <a href="/main/class.html">강의</a>
+      <a href="/post/free-board.html">공지사항</a>
+      <a href="/chat/chat-board.html" class="active">채팅</a>
+      <a href="/AI/aichoice.html">AI 추천</a>
+      <a href="/main/game.html">게임</a>
+      <a href="/Account/login.html">로그인</a>
+    </nav>
+  </div>
+</header>
+
+<main class="layout">
+  <!-- 좌: 참여/미참여 채팅방 -->
+  <aside class="col left">
+    <div class="col-head">참여 채팅방</div>
+    <div id="joinedList" class="list section"></div>
+    <div class="section-head">미참여 채팅방</div>
+    <div id="otherList" class="list section"></div>
+    
+    <!-- 채팅방 만들기 버튼 -->
+    <div class="create-room-container">
+      <button class="create-room-btn" onclick="openCreateModal()">
+        <span style="font-size:1.2rem">+</span>
+        <span>새 채팅방 만들기</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- 가운데: 채팅 -->
+  <section class="col center">
+    <div class="chat-head">
+      <div class="chat-room-name" id="activeRoomName">채팅방을 선택하세요</div>
+      <button id="leaveBtn" class="leave-btn" style="display:none" onclick="leaveRoom()">나가기</button>
+    </div>
+    <div class="chat-view" id="chatView"></div>
+    <div class="chat-input-wrap">
+      <textarea id="chatInput" class="chat-input" placeholder="메시지를 입력하세요..." disabled></textarea>
+      <button id="sendBtn" class="send-btn" disabled>전송</button>
+    </div>
+  </section>
+
+  <!-- 우: 온라인/오프라인 사용자 -->
+  <aside class="col right">
+    <div class="col-head">온라인 사용자</div>
+    <div id="onlineList" class="list"></div>
+    <div class="section-head">오프라인 사용자</div>
+    <div id="offlineList" class="list"></div>
+  </aside>
+</main>
+
+<!-- 입장 확인 모달 -->
+<div id="joinModal" class="modal">
+  <div class="modal-card">
+    <div class="modal-title">채팅방 입장</div>
+    <div class="modal-desc">채팅방에 입장하시겠습니까?</div>
+    <div class="modal-room-info" id="modalRoomInfo">
+      <div class="modal-room-name"></div>
+      <div class="modal-room-desc"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn cancel" onclick="closeModal()">취소</button>
+      <button class="btn primary" onclick="confirmJoin()">입장하기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 채팅방 생성 모달 -->
+<div id="createModal" class="modal">
+  <div class="modal-card">
+    <div class="modal-title">새 채팅방 만들기</div>
+    <div class="modal-desc">채팅방 정보를 입력해주세요</div>
+    
+    <div class="form-group">
+      <label class="form-label">채팅방 이름 *</label>
+      <input type="text" id="newRoomName" class="form-input" placeholder="예: 딸기 재배 연구" maxlength="30">
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">채팅방 설명 *</label>
+      <textarea id="newRoomDesc" class="form-textarea" placeholder="채팅방에 대한 간단한 설명을 입력하세요" maxlength="100"></textarea>
+    </div>
+    
+    <div class="modal-actions">
+      <button class="btn cancel" onclick="closeCreateModal()">취소</button>
+      <button class="btn primary" onclick="confirmCreate()">생성하기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 푸터 -->
+<footer>
+  <div class="footer-container">
+    <div class="footer-about">
+      <h3>UrbanGreen</h3>
+      <p>청년 귀농인을 위한 작물재배 교육 플랫폼입니다. 스마트팜 기술과 전통 농법을 결합하여 지속 가능한 농업의 미래를 만들어갑니다.</p>
+    </div>
+    
+    <div class="footer-links">
+      <h4>서비스</h4>
+      <ul>
+        <li><a href="/main/class.html">강의</a></li>
+        <li><a href="/post/free-board.html">공지사항</a></li>
+        <li><a href="/chat/chat-board.html">채팅</a></li>
+        <li><a href="/AI/aichoice.html">AI 추천</a></li>
+        <li><a href="/main/game.html">게임</a></li>
+      </ul>
+    </div>
+    
+    <div class="footer-links">
+      <h4>고객지원</h4>
+      <ul>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">이용약관</a></li>
+        <li><a href="#">개인정보처리방침</a></li>
+        <li><a href="#">문의하기</a></li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <p>
+      대전광역시 중구 선화동 중앙로121번길 20 방산빌딩 3층 | 
+      연락처: 0507-1422-2402 | 
+      © 2025 UrbanGreen. All rights reserved.
+    </p>
+  </div>
+</footer>
+
+<script>
+  // 헤더 스크롤 효과
+  window.addEventListener('scroll',()=>{
+    const header=document.getElementById('header');
+    header.classList.toggle('scrolled',window.scrollY>50);
+  });
+
+  const myJoinedRoomIds=[1,4,7];
+  let nextRoomId=9; // 새 채팅방 ID
+  
+  const rooms=[
+    {id:1,name:'벼농사 초보자 모임',desc:'초보의 질문 환영',members:45},
+    {id:2,name:'스마트팜 기술 공유',desc:'IoT/자동화 노하우',members:67},
+    {id:3,name:'토마토 재배 노하우',desc:'품종/양액/환경',members:32},
+    {id:4,name:'귀농 준비 모임',desc:'정책/정착 이야기',members:89},
+    {id:5,name:'과수원 운영 꿀팁',desc:'사과/배/포도',members:51},
+    {id:6,name:'버섯 재배 연구소',desc:'표고/느타리',members:28},
+    {id:7,name:'친환경 농업 실천',desc:'유기자재/인증',members:73},
+    {id:8,name:'농기계 정보 교환',desc:'구매/수리/팁',members:41}
+  ];
+
+  const sampleMessages={
+    1:[
+      {me:false,author:'김농부',text:'어서오세요! 벼 파종은 어디서부터 시작했나요?'},
+      {me:true,author:'나',text:'육묘부터 준비 중이에요.'}
+    ],
+    4:[{me:false,author:'관리자',text:'11월 청년 귀농 설명회 공지 확인해주세요.'}],
+    7:[
+      {me:false,author:'그린',text:'퇴비 살포 시기 공유합니다.'},
+      {me:true,author:'나',text:'자료 감사합니다!'}
+    ]
+  };
+
+  const users=[
+    {name:'김농부',online:true},
+    {name:'UrbanBot',online:true},
+    {name:'그린',online:true},
+    {name:'수확왕',online:false},
+    {name:'버섯장인',online:false}
+  ];
+
+  let selectedRoom=null,pendingJoinRoom=null;
+
+  renderRoomLists();
+  renderUsers();
+
+  function renderRoomLists(){
+    const joinedList=document.getElementById('joinedList'),otherList=document.getElementById('otherList');
+    joinedList.innerHTML=otherList.innerHTML='';
+    rooms.forEach(r=>{
+      const joined=myJoinedRoomIds.includes(r.id),isActive=selectedRoom&&selectedRoom.id===r.id;
+      const el=document.createElement('div');
+      el.className=`room-item ${isActive?'active':''}`;
+      el.dataset.roomId=r.id;
+      el.innerHTML=`
+        <div class="room-avatar">${r.name.slice(0,1)}</div>
+        <div class="room-body">
+          <div class="room-title">
+            <span>${r.name}</span>
+            ${joined?'<span class="badge-joined">참여중</span>':''}
+          </div>
+          <div class="room-meta">${r.desc} · ${r.members}명</div>
+        </div>
+      `;
+      el.addEventListener('click',()=>joined?openRoom(r.id):openJoinModal(r.id));
+      (joined?joinedList:otherList).appendChild(el);
+    });
+  }
+
+  function openRoom(roomId){
+    selectedRoom=rooms.find(r=>r.id===roomId);
+    document.querySelectorAll('.room-item').forEach(el=>el.classList.remove('active'));
+    const activeItem=document.querySelector(`.room-item[data-room-id="${roomId}"]`);
+    if(activeItem)activeItem.classList.add('active');
+    
+    document.getElementById('activeRoomName').textContent=selectedRoom.name;
+    const leaveBtn=document.getElementById('leaveBtn'),isJoined=myJoinedRoomIds.includes(roomId);
+    leaveBtn.style.display=isJoined?'block':'none';
+
+    const view=document.getElementById('chatView');
+    view.innerHTML='';
+    (sampleMessages[roomId]||[]).forEach(m=>{
+      const div=document.createElement('div');
+      div.className=`msg ${m.me?'me':'other'}`;
+      div.innerHTML=`${m.me?'':'<div class="author">'+m.author+'</div>'}${m.text}`;
+      view.appendChild(div);
+    });
+
+    const input=document.getElementById('chatInput'),send=document.getElementById('sendBtn');
+    input.disabled=send.disabled=!isJoined;
+    input.value='';
+    view.scrollTop=view.scrollHeight;
+  }
+
+  function leaveRoom(){
+    if(!selectedRoom||!confirm(`"${selectedRoom.name}" 채팅방에서 나가시겠습니까?`))return;
+    
+    const index=myJoinedRoomIds.indexOf(selectedRoom.id);
+    if(index>-1)myJoinedRoomIds.splice(index,1);
+    
+    selectedRoom=null;
+    document.getElementById('activeRoomName').textContent='채팅방을 선택하세요';
+    document.getElementById('leaveBtn').style.display='none';
+    document.getElementById('chatView').innerHTML='';
+    document.getElementById('chatInput').disabled=true;
+    document.getElementById('sendBtn').disabled=true;
+    
+    renderRoomLists();
+    alert('채팅방에서 나갔습니다.');
+  }
+
+  document.getElementById('sendBtn').addEventListener('click',sendMessage);
+  document.getElementById('chatInput').addEventListener('keydown',e=>{
+    if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage()}
+  });
+
+  function sendMessage(){
+    if(!selectedRoom||!myJoinedRoomIds.includes(selectedRoom.id))return;
+    const input=document.getElementById('chatInput'),text=input.value.trim();
+    if(!text)return;
+    const view=document.getElementById('chatView'),div=document.createElement('div');
+    div.className='msg me';
+    div.textContent=text;
+    view.appendChild(div);
+    input.value='';
+    view.scrollTop=view.scrollHeight;
+  }
+
+  function openJoinModal(roomId){
+    pendingJoinRoom=rooms.find(r=>r.id===roomId);
+    document.querySelector('.modal-room-name').textContent=pendingJoinRoom.name;
+    document.querySelector('.modal-room-desc').textContent=pendingJoinRoom.desc;
+    document.getElementById('joinModal').classList.add('active');
+  }
+
+  function closeModal(){
+    pendingJoinRoom=null;
+    document.getElementById('joinModal').classList.remove('active');
+  }
+
+  function confirmJoin(){
+    if(!pendingJoinRoom)return;
+    if(!myJoinedRoomIds.includes(pendingJoinRoom.id))myJoinedRoomIds.push(pendingJoinRoom.id);
+    closeModal();
+    renderRoomLists();
+    openRoom(pendingJoinRoom.id);
+  }
+
+  // 채팅방 생성 모달
+  function openCreateModal(){
+    document.getElementById('newRoomName').value='';
+    document.getElementById('newRoomDesc').value='';
+    document.getElementById('createModal').classList.add('active');
+  }
+
+  function closeCreateModal(){
+    document.getElementById('createModal').classList.remove('active');
+  }
+
+  function confirmCreate(){
+    const name=document.getElementById('newRoomName').value.trim();
+    const desc=document.getElementById('newRoomDesc').value.trim();
+    
+    if(!name){
+      alert('채팅방 이름을 입력해주세요.');
+      return;
+    }
+    if(!desc){
+      alert('채팅방 설명을 입력해주세요.');
+      return;
+    }
+    
+    // 새 채팅방 생성
+    const newRoom={
+      id:nextRoomId++,
+      name:name,
+      desc:desc,
+      members:1
+    };
+    
+    rooms.push(newRoom);
+    myJoinedRoomIds.push(newRoom.id);
+    sampleMessages[newRoom.id]=[];
+    
+    closeCreateModal();
+    renderRoomLists();
+    openRoom(newRoom.id);
+    
+    alert('채팅방이 생성되었습니다!');
+  }
+
+  function renderUsers(){
+    const online=document.getElementById('onlineList'),offline=document.getElementById('offlineList');
+    online.innerHTML=offline.innerHTML='';
+    users.forEach(u=>{
+      const row=document.createElement('div');
+      row.className='user-item';
+      row.innerHTML=`<span class="dot ${u.online?'online':'offline'}"></span>
+                     <div class="user-name">${u.name}</div>
+                     <span class="pill">${u.online?'온라인':'오프라인'}</span>`;
+      (u.online?online:offline).appendChild(row);
+    });
+  }
+</script>
+</body>
+</html>
