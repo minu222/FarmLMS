@@ -177,9 +177,9 @@
 
   <!-- 우: 온라인/오프라인 사용자 -->
   <aside class="col right">
-    <div class="col-head">온라인 사용자</div>
+    <div class="col-head">온라인</div>
     <div id="onlineList" class="list"></div>
-    <div class="section-head">오프라인 사용자</div>
+    <div class="section-head">오프라인</div>
     <div id="offlineList" class="list"></div>
   </aside>
 </main>
@@ -321,7 +321,6 @@
         <div class="room-body">
           <div class="room-title">
             <span>${r.name}</span>
-            ${joined?'<span class="badge-joined">참여중</span>':''}
           </div>
           <div class="room-meta">${r.desc} · ${r.members}명</div>
         </div>
@@ -453,18 +452,20 @@
     alert('채팅방이 생성되었습니다!');
   }
 
-  function renderUsers(){
-    const online=document.getElementById('onlineList'),offline=document.getElementById('offlineList');
-    online.innerHTML=offline.innerHTML='';
-    users.forEach(u=>{
-      const row=document.createElement('div');
-      row.className='user-item';
-      row.innerHTML=`<span class="dot ${u.online?'online':'offline'}"></span>
-                     <div class="user-name">${u.name}</div>
-                     <span class="pill">${u.online?'온라인':'오프라인'}</span>`;
-      (u.online?online:offline).appendChild(row);
-    });
-  }
+function renderUsers(){
+  const online=document.getElementById('onlineList'),offline=document.getElementById('offlineList');
+  online.innerHTML=offline.innerHTML='';
+  users.forEach(u=>{
+    const row=document.createElement('div');
+    row.className='user-item';
+    row.innerHTML=`
+      <span class="dot ${u.online?'online':'offline'}"></span>
+      <div class="user-name">${u.name}</div>
+      <!-- 온라인/오프라인 텍스트 제거 -->
+    `;
+    (u.online?online:offline).appendChild(row);
+  });
+}
 </script>
 </body>
 </html>
