@@ -3,130 +3,23 @@
 <head>
     <title>주말농장 AI 플래너 입력</title>
     <meta charset="UTF-8">
-    <style>
-        /* --- 공통 및 폼 스타일 --- */
-        body { font-family: 'Arial', sans-serif; line-height: 1.6; padding: 20px; max-width: 1000px; margin: 0 auto; background-color: #f4fcf4; }
-        h1 { color: #38761d; text-align: center; }
-        .form-container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
-        /* 폼 입력 영역 스타일 */
-        .form-group { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
-        .form-group label { display: block; font-weight: bold; margin-bottom: 8px; color: #555; }
-        .form-group select, .form-group input[type="text"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        .form-group .radio-group { display: flex; flex-wrap: wrap; gap: 10px; }
-        .form-group .radio-group label { font-weight: normal; margin-right: 15px; display: flex; align-items: center; }
-        .form-group .radio-group input[type="radio"] { margin-right: 5px; }
-        .submit-button { display: block; width: 100%; padding: 15px; background-color: #5cb85c; color: white; border: none; border-radius: 5px; font-size: 18px; cursor: pointer; transition: background-color 0.3s; }
-        .submit-button:hover { background-color: #449d44; }
-        /* 로딩 애니메이션 스타일 */
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .spinner {
-            display: inline-block;
-            animation: spin 2s linear infinite;
-        }
-
-        /* --- 결과 페이지 스타일 통합 --- */
-        #resultArea { /* .result-container이 삽입될 영역 */
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #f9fff9;
-        }
-        .result-container {
-            padding: 0; /* resultArea에서 이미 패딩을 줬으므로 여기서는 0 */
-            border: none;
-            background-color: transparent;
-        }
-
-        /* 돌아가기 버튼 */
-        .result-container .back-button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 15px;
-        }
-
-        /* AI 결과 영역 (.ai-output) 디자인 개선 */
-        .ai-output {
-            padding: 10px 0;
-            line-height: 1.7; /* 줄 간격 넓혀 가독성 향상 */
-        }
-
-        .ai-output h2 {
-            border-bottom: 2px solid #5cb85c;
-            padding-bottom: 5px;
-            color: #38761d;
-            margin-top: 25px;
-            font-size: 1.6em; /* 제목 폰트 크기 조정 */
-        }
-
-        .ai-output p, .ai-output li {
-            font-size: 1.05em;
-        }
-
-        .ai-output ul, .ai-output ol {
-            margin: 10px 0 20px 20px;
-            padding: 0;
-            list-style-type: disc;
-        }
-
-        .ai-output li {
-            margin-bottom: 8px;
-            font-size: 1.05em;
-            color: #333;
-        }
-
-        /* 표 스타일 (투자 재료 리스트) 최종 개선 */
-        .ai-output table {
-            width: 100%;
-            border-collapse: collapse;
-            border-spacing: 0;
-            margin: 20px 0;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        }
-
-        .ai-output th, .ai-output td {
-            border: 1px solid #e0e0e0;
-            padding: 12px 15px;
-            text-align: left;
-            font-size: 0.95em;
-        }
-
-        /* 테이블 헤더 (th) 스타일 */
-        .ai-output th {
-            background-color: #f0f7f0;
-            color: #38761d;
-            font-weight: bold;
-            text-align: center;
-            border-bottom: 2px solid #5cb85c;
-        }
-
-        /* 테이블 본문 (td) 스타일 */
-        .ai-output tr:nth-child(even) td {
-            background-color: #fcfcfc;
-        }
-
-        /* Tip과 같은 마지막 줄의 레이아웃이 깨지지 않도록 처리 */
-        .ai-output p:last-of-type {
-            margin-top: 25px;
-            padding: 12px;
-            background-color: #e6f2e6;
-            border-radius: 5px;
-            border-left: 5px solid #5cb85c;
-            font-weight: 500;
-            color: #333;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/AIStyle.css">
 </head>
 <body>
-<h1>🌱 주말농장 성공 플래너 AI</h1>
-<p id="planner-intro-text">몇 가지 정보를 입력해 주시면, AI가 사용자님께 가장 적합한 텃밭 모델과 초기 재배 계획을 세워드립니다!</p>
 
+<header>
+    <h1><a href="/main/uvangreen.html">어반그린</a></h1>
+    <nav id="navMenu">
+        <a href="/post/free-board.html">자유게시판</a>
+        <a href="/main/class.html">강의</a>
+        <a href="/planner">AI 추천</a>
+        <a href="/diagnosisPlant">AI 진단</a>
+        <a href="/main/game.html">게임</a>
+    </nav>
+</header>
+
+<h1>🌱 주말농장 성공 플래너 AI</h1>
+<h3 id="planner-intro-text">몇 가지 정보를 입력해 주시면, AI가 사용자님께 가장 적합한 텃밭 모델과 초기 재배 계획을 세워드립니다!</h3>
 <div class="form-container">
 
     <div id="inputFormArea">
@@ -219,9 +112,8 @@
         const loadingArea = document.getElementById('loadingArea');
         const resultArea = document.getElementById('resultArea');
 
-        // 🚨 상단 안내 텍스트 요소와 h1 요소 선택
+        // 상단 안내 텍스트 요소와 h1 요소 선택
         const introText = document.getElementById('planner-intro-text');
-        const mainTitle = document.querySelector('h1');
 
         form.addEventListener('submit', function(event) {
             // 폼의 기본 제출 동작(페이지 이동)을 막습니다.
@@ -229,7 +121,6 @@
 
             // 1. UI 전환: 입력 폼, 상단 텍스트 및 로딩 화면 표시
             if (introText) introText.style.display = 'none'; // 상단 안내 텍스트 숨김
-            if (mainTitle) mainTitle.style.display = 'none'; // h1 제목도 숨김
 
             inputFormArea.style.display = 'none'; // 폼 양식 전체 숨김
             loadingArea.style.display = 'block';   // 로딩 화면 표시
@@ -256,7 +147,7 @@
                 })
                 .then(htmlFragment => {
                     // 3. 성공 시: 결과 영역에 HTML 삽입 및 UI 전환
-                    // 🚨 결과가 삽입될 때는 제목과 안내 텍스트는 계속 숨김 상태 유지
+                    // 결과가 삽입될 때는 제목과 안내 텍스트는 계속 숨김 상태 유지
                     resultArea.innerHTML = htmlFragment; // 받은 HTML 조각 삽입
                     loadingArea.style.display = 'none';
                     resultArea.style.display = 'block';
@@ -265,9 +156,8 @@
                     // 4. 실패 시: 오류 메시지 표시 및 UI 복구
                     console.error('AJAX Error:', error);
 
-                    // 🚨 오류 발생 시 제목과 안내 텍스트를 다시 표시
+                    // 오류 발생 시 제목과 안내 텍스트를 다시 표시
                     if (introText) introText.style.display = 'block';
-                    if (mainTitle) mainTitle.style.display = 'block';
 
                     // 오류 메시지를 결과 영역에 표시
                     resultArea.innerHTML = `<h2>⚠️ 요청 처리 중 오류가 발생했습니다.</h2><p>오류 내용: ${error.message}</p><button onclick="location.reload()" class="back-button">다시 시도하기</button>`;
