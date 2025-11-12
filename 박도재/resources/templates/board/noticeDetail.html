@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UrbanGreen - 게시글 보기</title>
+    <link rel="stylesheet" href="/css/noticeDetail.css">
+</head>
+
+<body>
+<!-- 헤더 -->
+<header id="header">
+    <div class="header-container">
+        <a href="http://127.0.0.1:5500/main/main.html" class="logo">UrbanGreen</a>
+        <nav>
+            <a href="http://127.0.0.1:5500/board/class.html">강의</a>
+            <a href="http://127.0.0.1:5500/board//notice.htmll" class="active">공지사항</a>
+            <a href="http://127.0.0.1:5500/board/chat.html" >채팅</a>
+            <a href="/AI/aichoice.html">AI</a>
+            <a href="/main/game.html">게임</a>
+            <a href="http://127.0.0.1:5500/account/login.html">로그인</a>
+        </nav>
+    </div>
+</header>
+
+<!-- 메인 컨테이너 -->
+<div class="main-container">
+    <!-- 브레드크럼 -->
+    <div class="breadcrumb">
+        <span>게시글</span>
+    </div>
+
+    <!-- 게시글 카드 -->
+    <article class="post-card">
+        <!-- 보기 모드 -->
+        <div class="view-mode" id="viewMode">
+            <div class="post-header">
+                <h1 class="post-title" id="postTitleView">베란다에서 상추 키우기 성공했어요!</h1>
+                <div class="post-meta">
+                    <span class="post-author" id="postAuthorView">👤 —</span>
+                    <span id="postDateView">📅 —</span>
+                    <span id="postViewsView">👁️ 0</span>
+                </div>
+            </div>
+
+            <div class="post-content" id="postContentView"></div>
+
+            <div class="post-actions">
+                <div class="action-left">
+                </div>
+                <div class="action-right">
+                    <button class="btn btn-secondary" onclick="toggleEditMode()">수정</button>
+                    <button class="btn btn-secondary btn-danger" onclick="deletePost()">삭제</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 편집 모드 -->
+        <div class="edit-mode" id="editMode">
+            <form id="editForm">
+                <div class="form-group">
+                    <label for="postTitle">제목</label>
+                    <input type="text" id="postTitle" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="postContent">내용</label>
+                    <textarea id="postContent" required></textarea>
+                </div>
+
+                <div class="post-actions">
+                    <div class="action-left"></div>
+                    <div class="action-right">
+                        <button type="button" class="btn btn-secondary" onclick="toggleEditMode()">취소</button>
+                        <button type="submit" class="btn btn-primary">저장</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </article>
+
+    <!-- 게시글 네비게이션 -->
+    <nav class="post-navigation">
+        <a href="#" class="nav-item" id="prevPostLink">
+            <div class="nav-label">이전글</div>
+            <div class="nav-title" id="prevPostTitle">—</div>
+        </a>
+        <a href="/post/free-board.html" class="list-btn">목록</a>
+        <a href="#" class="nav-item" id="nextPostLink" style="text-align: right;">
+            <div class="nav-label">다음글</div>
+            <div class="nav-title" id="nextPostTitle">—</div>
+        </a>
+    </nav>
+
+</div>
+
+<!-- 푸터 -->
+<footer>
+    <div class="footer-container">
+        <div class="footer-about">
+            <h3>UrbanGreen</h3>
+            <p>청년 귀농인을 위한 작물재배 교육 플랫폼입니다.</p>
+        </div>
+
+        <div class="footer-links">
+            <h4>서비스</h4>
+            <ul>
+                <li><a href="http://127.0.0.1:5500/board/class.html">강의</a></li>
+                <li><a href="http://127.0.0.1:5500/board//notice.html">공지사항</a></li>
+                <li><a href="http://127.0.0.1:5500/board/chat.html">채팅</a></li>
+                <li><a href="/AI/aichoice.html">AI</a></li>
+                <li><a href="/main/game.html">게임</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-links">
+            <h4>고객지원</h4>
+            <ul>
+                <li><a href="http://127.0.0.1:5500/main/faq.html">FAQ</a></li>
+                <li><a href="http://127.0.0.1:5500/main/terms.html">이용약관</a></li>
+                <li><a href="http://127.0.0.1:5500/main/privacy.html">개인정보처리방침</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>
+            대전광역시 중구 선화동 중앙로121번길 20 방산빌딩 3층 |
+            연락처: 0507-1422-2402 |
+            © 2025 UrbanGreen. All rights reserved.
+        </p>
+    </div>
+</footer>
+
+<script>
+    /** =========================
+     *  0) 공통 유틸
+     *  ========================= */
+    const KR_TIME = new Intl.DateTimeFormat('ko-KR', {
+        dateStyle: 'medium', timeStyle: 'short'
+    });
+    const $ = (sel) => document.querySelector(sel);
+
+    function fmtDate(isoString) {
+        try { return KR_TIME.format(new Date(isoString)); }
+        catch { return isoString || '—'; }
+    }
+    function text(el, value) {
+        if (!el) return;
+        el.textContent = value ?? '';
+    }
+
+    /** URL에서 postId 읽기 (?id=123 형태 가정) */
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get('id') || '1'; // 기본값 1 (테스트용)
+
+    /** API 엔드포인트(예시) */
+    const API = {
+        post: (id) => `/api/posts/${encodeURIComponent(id)}`,
+        comments: (id, p) => `/api/posts/${encodeURIComponent(id)}/comments?page=${p - 1}&size=5`,
+        like: (id) => `/api/posts/${encodeURIComponent(id)}/like`,
+        prevNext: (id) => `/api/posts/${encodeURIComponent(id)}/neighbors`
+    };
+
+    /** 상태 */
+    let postData = null;
+    let likeState = { liked: false, count: 0 };
+
+    let currentPage = 1;
+    const commentsPerPage = 5; // 서버 size와 일치
+
+    /** 안전 렌더(본문이 순수 텍스트일 경우) */
+    function renderPlainContent(id, content) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.textContent = content ?? '';
+    }
+
+    /** HTML 컨텐츠를 허용할 경우(관리자 마크다운→서버 sanitize 후 html 전달) */
+    function renderHtmlContent(id, html) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        // 서버에서 sanitize된 HTML이라고 가정
+        el.innerHTML = html ?? '';
+    }
+
+    /** =========================
+     *  1) 초기 로딩
+     *  ========================= */
+    document.addEventListener('DOMContentLoaded', async () => {
+        setLoadingUI(true);
+        try {
+            await Promise.all([loadPost(), loadPrevNext(), loadComments()]);
+            setLoadingUI(false);
+        } catch (err) {
+            console.error(err);
+            alert('게시글을 불러올 수 없습니다. 잠시 후 다시 시도해 주세요.');
+        }
+
+        // 이벤트 연결
+        $('#editForm')?.addEventListener('submit', onSubmitEdit);
+    });
+
+    /** 로딩 UI 간단 처리 */
+    function setLoadingUI(loading) {
+        if (loading) {
+            text($('#postTitleView'), '불러오는 중…');
+            text($('#postAuthorView'), '👤 —');
+            text($('#postDateView'), '📅 —');
+            text($('#postViewsView'), '👁️ —');
+            text($('#commentCountHeader'), '0');
+        }
+    }
+
+    /** =========================
+     *  2) 게시글 데이터 불러오기
+     *  GET /api/posts/{id}
+     *  응답 예시:
+     *  {
+     *    "id": 123,
+     *    "title": "제목",
+     *    "author": "김청년",
+     *    "content": "<p>본문 HTML</p>"  // 또는 "contentText": "...",
+     *    "createdAt": "2025-01-10T14:30:00Z",
+     *    "views": 156,
+     *    "likes": 42,
+     *    "liked": false
+     *  }
+     *  ========================= */
+    async function loadPost() {
+        const res = await fetch(API.post(postId), { headers: { 'Accept': 'application/json' } });
+        if (!res.ok) throw new Error('post load failed');
+        postData = await res.json();
+
+        // 제목/메타
+        text($('#postTitleView'), postData.title);
+        text($('#postAuthorView'), `👤 ${postData.author ?? '—'}`);
+        text($('#postDateView'), `📅 ${fmtDate(postData.createdAt)}`);
+        text($('#postViewsView'), `👁️ ${postData.views ?? 0}`);
+
+        // 본문: 서버가 sanitize된 HTML을 내려준다고 가정
+        renderHtmlContent('postContentView', postData.content);
+
+        // 좋아요 표시
+        likeState.liked = !!postData.liked;
+        likeState.count = Number(postData.likes ?? 0);
+        renderLikeButton();
+
+        // 편집 폼 초기값
+        $('#postTitle').value = postData.title || '';
+        $('#postContent').value = stripHtml(postData.content || ''); // contentText를 내려주면 그걸 사용
+    }
+
+    function stripHtml(html) {
+        const tmp = document.createElement('div');
+        tmp.innerHTML = html;
+        return tmp.textContent || tmp.innerText || '';
+    }
+
+    /** =========================
+     *  3) 이전/다음글 로딩
+     *  GET /api/posts/{id}/neighbors
+     *  응답 예시:
+     *  {
+     *    "prev": {"id":122,"title":"이전글 제목"} | null,
+     *    "next": {"id":124,"title":"다음글 제목"} | null
+     *  }
+     *  ========================= */
+    async function loadPrevNext() {
+        const res = await fetch(API.prevNext(postId));
+        if (!res.ok) return;
+
+        const data = await res.json();
+        const prev = data.prev || null;
+        const next = data.next || null;
+
+        const prevLink = $('#prevPostLink');
+        const nextLink = $('#nextPostLink');
+
+        if (prev) {
+            prevLink.href = `/post/view.html?id=${prev.id}`;
+            text($('#prevPostTitle'), prev.title);
+        } else {
+            prevLink.href = '#';
+            text($('#prevPostTitle'), '이전글이 없습니다');
+        }
+
+        if (next) {
+            nextLink.href = `/post/view.html?id=${next.id}`;
+            text($('#nextPostTitle'), next.title);
+        } else {
+            nextLink.href = '#';
+            text($('#nextPostTitle'), '다음글이 없습니다');
+        }
+    }
+
+    /** =========================
+     *  4) 댓글 로딩/페이징
+     *  GET /api/posts/{id}/comments?page=0&size=5
+     *  응답 예시:
+     *  {
+     *    "content":[{"author":"이귀농","createdAt":"...","content":"텍스트"}],
+     *    "page":0, "size":5, "totalElements":24, "totalPages":5
+     *  }
+     *  ========================= */
+    async function loadComments() {
+        const res = await fetch(API.comments(postId, currentPage), { headers: { 'Accept': 'application/json' } });
+        if (!res.ok) throw new Error('comments load failed');
+        const page = await res.json();
+
+        const list = $('#commentList');
+        list.innerHTML = '';
+
+        (page.content || []).forEach(c => {
+            const li = document.createElement('li');
+            li.className = 'comment-item';
+            li.innerHTML = `
+      <div class="comment-header">
+        <span class="comment-author">👤 ${escapeHtml(c.author ?? '익명')}</span>
+        <span class="comment-date">${fmtDate(c.createdAt)}</span>
+      </div>
+      <div class="comment-content">${escapeHtml(c.content ?? '')}</div>
+      <div class="comment-actions">
+        <button class="comment-action-btn">답글</button>
+        <button class="comment-action-btn">수정</button>
+        <button class="comment-action-btn">삭제</button>
+      </div>
+    `;
+            list.appendChild(li);
+        });
+
+        renderPagination(page.totalPages || 1);
+    }
+
+    function renderPagination(totalPages) {
+        const pagination = $('#commentPagination');
+        pagination.innerHTML = '';
+
+        // Prev
+        const prevBtn = document.createElement('button');
+        prevBtn.textContent = '◀';
+        prevBtn.disabled = currentPage === 1;
+        prevBtn.onclick = () => goPage(currentPage - 1);
+        pagination.appendChild(prevBtn);
+
+        // window of 5
+        let start = Math.max(1, currentPage - 2);
+        let end = Math.min(totalPages, start + 4);
+        if (end - start < 4) start = Math.max(1, end - 4);
+
+        for (let i = start; i <= end; i++) {
+            const btn = document.createElement('button');
+            btn.textContent = i;
+            if (i === currentPage) btn.classList.add('active');
+            btn.onclick = () => goPage(i);
+            pagination.appendChild(btn);
+        }
+
+        // Next
+        const nextBtn = document.createElement('button');
+        nextBtn.textContent = '▶';
+        nextBtn.disabled = currentPage === totalPages;
+        nextBtn.onclick = () => goPage(currentPage + 1);
+        pagination.appendChild(nextBtn);
+    }
+
+    async function goPage(page) {
+        currentPage = page;
+        await loadComments();
+        document.querySelector('.comments-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    /** 댓글 작성 (POST /api/posts/{id}/comments) */
+    async function addComment() {
+        const textarea = $('#commentInput');
+        const content = textarea.value.trim();
+        if (!content) return alert('댓글 내용을 입력해주세요.');
+
+        const res = await fetch(`/api/posts/${postId}/comments`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content })
+        });
+        if (!res.ok) return alert('댓글 등록에 실패했습니다.');
+
+        textarea.value = '';
+        currentPage = 1; // 최신이 첫 페이지에 보이도록
+        await loadComments();
+        alert('댓글이 작성되었습니다!');
+    }
+    window.addComment = addComment;
+    /** =========================
+     *  6) 편집 저장 (샘플)
+     *  PUT /api/posts/{id}
+     *  ========================= */
+    async function onSubmitEdit(e) {
+        e.preventDefault();
+        const newTitle = $('#postTitle').value.trim();
+        const newContent = $('#postContent').value.trim();
+        if (!newTitle || !newContent) return alert('제목/내용을 입력해주세요.');
+
+        const res = await fetch(API.post(postId), {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title: newTitle, content: newContent })
+        });
+        if (!res.ok) return alert('수정에 실패했습니다.');
+
+        // 성공 시 화면 갱신
+        await loadPost();
+        alert('게시글이 수정되었습니다!');
+        toggleEditMode();
+    }
+
+    /** =========================
+     *  7) 보조: HTML 이스케이프
+     *  ========================= */
+    function escapeHtml(str) {
+        return String(str ?? '')
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
+    }
+
+    /** 기존 toggleEditMode/deletePost는 그대로 사용해도 OK
+     *  단, 삭제는 DELETE /api/posts/{id} 를 호출하도록 변경 권장
+     */
+</script>
+</body>
+
+</html>

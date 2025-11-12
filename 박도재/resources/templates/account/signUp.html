@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UrbanGreen - 회원가입</title>
+    <link rel="stylesheet" href="/css/signUp.css">
+</head>
+
+<body>
+<!-- 로고 헤더 -->
+<div class="logo-header">
+    <a href="/main/urbangreen.html" class="logo">UrbanGreen</a>
+</div>
+
+<!-- 메인 컨테이너 -->
+<div class="main-container">
+    <div class="signup-card">
+        <div class="signup-header">
+            <h1>회원가입</h1>
+            <p>청년 귀농의 첫 걸음을 시작하세요</p>
+        </div>
+
+        <form id="signupForm">
+            <!-- 아이디 -->
+            <div class="form-group">
+                <label for="userId">아이디 <span class="required">*</span></label>
+                <div class="input-with-btn">
+                    <input type="text" id="userId" placeholder="영문, 숫자 4-12자" required>
+                    <button type="button" class="check-btn" onclick="checkUserId()">중복확인</button>
+                </div>
+                <div class="validation-msg" id="userIdMsg"></div>
+            </div>
+
+            <!-- 비밀번호 -->
+            <div class="form-group">
+                <label for="password">비밀번호 <span class="required">*</span></label>
+                <input type="password" id="password" placeholder="영문, 숫자, 특수문자 포함 8자 이상" required
+                       oninput="checkPasswordStrength()">
+                <div class="password-strength">
+                    <div class="password-strength-bar" id="strengthBar"></div>
+                </div>
+                <div class="validation-msg" id="passwordMsg"></div>
+            </div>
+
+            <!-- 비밀번호 확인 -->
+            <div class="form-group">
+                <label for="passwordConfirm">비밀번호 확인 <span class="required">*</span></label>
+                <input type="password" id="passwordConfirm" placeholder="비밀번호를 다시 입력하세요" required
+                       oninput="checkPasswordMatch()">
+                <div class="validation-msg" id="passwordConfirmMsg"></div>
+            </div>
+
+            <!-- 이름 -->
+            <div class="form-group">
+                <label for="name">이름 <span class="required">*</span></label>
+                <input type="text" id="name" placeholder="이름을 입력하세요" required>
+            </div>
+
+            <!-- 닉네임 -->
+            <div class="form-group">
+                <label for="nickname">닉네임 <span class="required">*</span></label>
+                <div class="input-with-btn">
+                    <input type="text" id="nickname" placeholder="한글, 영문 2-10자" required>
+                    <button type="button" class="check-btn" onclick="checkNickname()">중복확인</button>
+                </div>
+                <div class="validation-msg" id="nicknameMsg"></div>
+            </div>
+
+            <!-- 이메일 -->
+            <div class="form-group">
+                <label for="email">이메일 <span class="required">*</span></label>
+                <input type="email" id="email" placeholder="example@email.com" required>
+            </div>
+
+            <!-- 생년월일 -->
+            <div class="form-group">
+                <label for="birth">생년월일</label>
+                <input type="date" id="birth">
+            </div>
+
+            <button type="submit" class="signup-btn" id="submitBtn" disabled>회원가입</button>
+        </form>
+
+        <div class="login-link">
+            이미 계정이 있으신가요?
+            <a href="login.html">로그인</a>
+        </div>
+    </div>
+</div>
+
+<!-- 푸터 -->
+<footer>
+    <p>
+        대전광역시 중구 선화동 중앙로121번길 20 방산빌딩 3층 |
+        연락처: 0507-1422-2402 |
+        © 2025 UrbanGreen. All rights reserved.
+    </p>
+</footer>
+
+<script>
+    let userIdChecked = false;
+    let nicknameChecked = false;
+
+    // 아이디 중복확인
+    function checkUserId() {
+        const userId = document.getElementById('userId').value;
+        const msg = document.getElementById('userIdMsg');
+
+        if (!userId) {
+            msg.textContent = '아이디를 입력해주세요.';
+            msg.className = 'validation-msg error';
+            return;
+        }
+
+        // 아이디 유효성 검사
+        const idRegex = /^[a-zA-Z0-9]{4,12}$/;
+        if (!idRegex.test(userId)) {
+            msg.textContent = '영문, 숫자 4-12자로 입력해주세요.';
+            msg.className = 'validation-msg error';
+            return;
+        }
+
+        // 실제로는 서버 API 호출
+        msg.textContent = '사용 가능한 아이디입니다.';
+        msg.className = 'validation-msg success';
+        userIdChecked = true;
+        checkFormValid();
+    }
+
+    // 닉네임 중복확인
+    function checkNickname() {
+        const nickname = document.getElementById('nickname').value;
+        const msg = document.getElementById('nicknameMsg');
+
+        if (!nickname) {
+            msg.textContent = '닉네임을 입력해주세요.';
+            msg.className = 'validation-msg error';
+            return;
+        }
+
+        // 닉네임 유효성 검사 (한글, 영문 2-10자)
+        const nicknameRegex = /^[가-힣a-zA-Z]{2,10}$/;
+        if (!nicknameRegex.test(nickname)) {
+            msg.textContent = '한글, 영문 2-10자로 입력해주세요.';
+            msg.className = 'validation-msg error';
+            return;
+        }
+
+        // 실제로는 서버 API 호출
+        msg.textContent = '사용 가능한 닉네임입니다.';
+        msg.className = 'validation-msg success';
+        nicknameChecked = true;
+        checkFormValid();
+    }
+
+    // 비밀번호 강도 체크
+    function checkPasswordStrength() {
+        const password = document.getElementById('password').value;
+        const strengthBar = document.getElementById('strengthBar');
+        const msg = document.getElementById('passwordMsg');
+
+        if (!password) {
+            strengthBar.className = 'password-strength-bar';
+            msg.style.display = 'none';
+            return;
+        }
+
+        let strength = 0;
+        if (password.length >= 8) strength++;
+        if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+        if (/\d/.test(password)) strength++;
+        if (/[!@#$%^&*]/.test(password)) strength++;
+
+        strengthBar.className = 'password-strength-bar';
+        if (strength <= 2) {
+            strengthBar.classList.add('weak');
+            msg.textContent = '약한 비밀번호입니다.';
+            msg.className = 'validation-msg error';
+        } else if (strength === 3) {
+            strengthBar.classList.add('medium');
+            msg.textContent = '보통 비밀번호입니다.';
+            msg.className = 'validation-msg';
+            msg.style.display = 'block';
+            msg.style.color = '#ffd93d';
+        } else {
+            strengthBar.classList.add('strong');
+            msg.textContent = '강력한 비밀번호입니다.';
+            msg.className = 'validation-msg success';
+        }
+
+        checkPasswordMatch();
+    }
+
+    // 비밀번호 확인
+    function checkPasswordMatch() {
+        const password = document.getElementById('password').value;
+        const passwordConfirm = document.getElementById('passwordConfirm').value;
+        const msg = document.getElementById('passwordConfirmMsg');
+
+        if (!passwordConfirm) {
+            msg.style.display = 'none';
+            return;
+        }
+
+        if (password === passwordConfirm) {
+            msg.textContent = '비밀번호가 일치합니다.';
+            msg.className = 'validation-msg success';
+        } else {
+            msg.textContent = '비밀번호가 일치하지 않습니다.';
+            msg.className = 'validation-msg error';
+        }
+    }
+
+    // 폼 유효성 검사
+    function checkFormValid() {
+        const term1 = document.getElementById('term1').checked;
+        const term2 = document.getElementById('term2').checked;
+        const submitBtn = document.getElementById('submitBtn');
+
+        if (userIdChecked && nicknameChecked && term1 && term2) {
+            submitBtn.disabled = false;
+        } else {
+            submitBtn.disabled = true;
+        }
+    }
+
+    // 폼 제출
+    document.getElementById('signupForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        alert('회원가입이 완료되었습니다!');
+        window.location.href = 'login.html';
+    });
+</script>
+</body>
+
+</html>
