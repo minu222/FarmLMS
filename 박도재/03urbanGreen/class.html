@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전체 강의 - UrbanGreen</title>
+    <style>
+        :root {
+            --primary: #5cb85f;
+            --primary-dark: #4caf50;
+            --primary-light: #70c373;
+            --gray: #757575;
+            --light-gray: #f5f3ed;
+            --cream: #fcfbf8;
+            --text: #212121;
+            --bg-white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f8f9fa;
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ========== 헤더 ========== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.98);
+            border-bottom: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        header.scrolled {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+            text-decoration: none;
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: var(--primary);
+        }
+
+        nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        /* ========== 페이지 헤더 ========== */
+        .page-header {
+            background: white;
+            padding: 8rem 2rem 3rem;
+            margin-top: 60px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .page-header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-header h1 {
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            color: var(--gray);
+        }
+
+        /* ========== 필터 섹션 ========== */
+        .filter-section {
+            background: white;
+            padding: 2rem 2rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .filter-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .search-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.8rem 1rem 0.8rem 3rem;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(92, 184, 95, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-tag {
+            padding: 0.6rem 1.2rem;
+            background: var(--light-gray);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--text);
+            border: none;
+        }
+
+        .filter-tag:hover {
+            background: var(--primary-light);
+            color: white;
+        }
+
+        .filter-tag.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .filter-divider {
+            width: 1px;
+            height: 24px;
+            background: #e9ecef;
+            margin: 0 0.5rem;
+        }
+
+        /* ========== 강의 목록 ========== */
+        .courses-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .courses-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .courses-count {
+            font-size: 0.95rem;
+            color: var(--gray);
+        }
+
+        .sort-select {
+            padding: 0.6rem 1rem;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            background: white;
+            cursor: pointer;
+            color: var(--text);
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            min-height: 400px;
+        }
+
+        .course-card {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .course-thumbnail {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+        }
+
+        .course-info {
+            padding: 1.5rem;
+        }
+
+        .course-category {
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .course-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .course-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text);
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        .course-instructor-inline {
+            font-size: 0.8rem;
+            color: var(--gray);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .course-description {
+            font-size: 0.9rem;
+            color: var(--gray);
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .course-progress {
+            margin-bottom: 1rem;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .progress-text {
+            color: var(--gray);
+        }
+
+        .progress-percent {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .course-meta-logged-in {
+            padding-top: 1rem;
+            border-top: 1px solid #e9ecef;
+            text-align: center;
+        }
+
+        .course-meta-logged-out {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .course-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .course-price-free {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .subscribe-btn {
+            padding: 0.6rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .subscribe-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* ========== 페이지네이션 ========== */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 3rem;
+        }
+
+        .pagination-btn {
+            min-width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e9ecef;
+            background: white;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--text);
+        }
+
+        .pagination-btn:hover:not(.active):not(.disabled) {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .pagination-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .pagination-btn.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .pagination-ellipsis {
+            min-width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+        }
+
+        /* ========== 푸터 ========== */
+        footer {
+            background: #2d3436;
+            color: white;
+            padding: 3rem 2rem 2rem;
+            margin-top: 5rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-about h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .footer-about p {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+        }
+
+        .footer-links h4 {
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- ========== 헤더 ========== -->
+    <header id="header">
+        <div class="header-container">
+            <a href="/main/main.html" class="logo">UrbanGreen</a>
+            <nav>
+                <a href="/main/class.html" class="active">강의</a>
+                <a href="/post/notice.html">공지사항</a>
+                <a href="/chat/chat.html">채팅</a>
+                <a href="/AI/ai.html">AI</a>
+                <a href="/main/game.html">게임</a>
+                <a href="/Account/login.html">로그인</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ========== 페이지 헤더 ========== -->
+    <section class="page-header">
+        <div class="page-header-content">
+            <h1>전체 강의</h1>
+            <p>귀농을 위한 다양한 작물재배 강의를 만나보세요</p>
+        </div>
+    </section>
+
+    <!-- ========== 필터 섹션 ========== -->
+    <section class="filter-section">
+        <div class="filter-container">
+            <div class="search-row">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" placeholder="강의 검색..." id="searchInput">
+                </div>
+            </div>
+
+            <div class="filter-row">
+                <!-- 난이도 필터 -->
+                <button class="filter-tag active" data-level="all">전체</button>
+                <button class="filter-tag" data-level="beginner">초급</button>
+                <button class="filter-tag" data-level="intermediate">중급</button>
+                <button class="filter-tag" data-level="advanced">고급</button>
+
+                <!-- 구분선 -->
+                <div class="filter-divider"></div>
+
+                <!-- 카테고리 필터 -->
+                <button class="filter-tag active" data-category="all">전체</button>
+                <button class="filter-tag" data-category="grain">곡물</button>
+                <button class="filter-tag" data-category="vegetable">채소</button>
+                <button class="filter-tag" data-category="fruit">과일</button>
+                <button class="filter-tag" data-category="herb">약초</button>
+                <button class="filter-tag" data-category="smartfarm">스마트팜</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 강의 목록 ========== -->
+    <section class="courses-content">
+        <div class="courses-header">
+            <div class="courses-count">
+                총 <strong id="courseCount">18</strong>개의 강의
+            </div>
+            <select class="sort-select" id="sortSelect">
+                <option value="newest">최신순</option>
+                <option value="price-low">가격 낮은순</option>
+                <option value="price-high">가격 높은순</option>
+            </select>
+        </div>
+
+        <div class="courses-grid" id="coursesGrid">
+            <!-- JavaScript로 동적 생성 -->
+        </div>
+
+        <!-- ========== 페이지네이션 ========== -->
+        <div class="pagination" id="pagination">
+            <!-- JavaScript로 동적 생성 -->
+        </div>
+    </section>
+
+    <!-- ========== 푸터 ========== -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-about">
+                <h3>UrbanGreen</h3>
+                <p>청년 귀농인을 위한 작물재배 교육 플랫폼입니다.</p>
+            </div>
+
+            <div class="footer-links">
+                <h4>서비스</h4>
+                <ul>
+                    <li><a href="/main/class.html">강의</a></li>
+                    <li><a href="/post/notice.html">공지사항</a></li>
+                    <li><a href="/chat/chat.html">채팅</a></li>
+                    <li><a href="/AI/ai.html">AI</a></li>
+                    <li><a href="/main/game.html">게임</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h4>고객지원</h4>
+                <ul>
+                    <li><a href="/support/faq.html">FAQ</a></li>
+                    <li><a href="/policy/terms.html">이용약관</a></li>
+                    <li><a href="/policy/privacy.html">개인정보처리방침</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>
+                대전광역시 중구 선화동 중앙로121번길 20 방산빌딩 3층 | 
+                연락처: 0507-1422-2402 | 
+                © 2025 UrbanGreen. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // 헤더 스크롤 효과
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // 로그인 상태 (true: 로그인, false: 비로그인)
+        const isLoggedIn = false; // true/false로 변경
+
+        // 전체 강의 데이터
+        const allCourses = [
+            { id: 1, level: 'beginner', category: 'grain', icon: '🌾', title: '벼농사 시작하기', desc: '벼농사의 기초부터 수확까지', instructor: '김농부', price: 49000, progress: 65 },
+            { id: 2, level: 'beginner', category: 'vegetable', icon: '🥬', title: '상추 재배 입문', desc: '베란다에서 쉽게 키우는 상추', instructor: '이채소', price: 0, progress: 100 },
+            { id: 3, level: 'intermediate', category: 'fruit', icon: '🍓', title: '딸기 재배 중급', desc: '수확량을 늘리는 노하우', instructor: '박딸기', price: 89000, progress: 30 },
+            { id: 4, level: 'intermediate', category: 'herb', icon: '🌿', title: '약초 재배 가이드', desc: '건강한 약초 키우기', instructor: '최약초', price: 69000, progress: 0 },
+            { id: 5, level: 'advanced', category: 'smartfarm', icon: '🚜', title: '스마트팜 구축', desc: 'IoT를 활용한 농장 자동화', instructor: '정스마트', price: 129000, progress: 45 },
+            { id: 6, level: 'beginner', category: 'grain', icon: '🌽', title: '옥수수 재배', desc: '초보자를 위한 옥수수 농사', instructor: '강옥수', price: 39000, progress: 80 },
+            { id: 7, level: 'intermediate', category: 'vegetable', icon: '🍅', title: '토마토 재배 실전', desc: '맛있는 토마토 키우기', instructor: '윤토마', price: 59000, progress: 20 },
+            { id: 8, level: 'beginner', category: 'fruit', icon: '🍇', title: '포도 재배 기초', desc: '포도나무 관리의 시작', instructor: '임포도', price: 0, progress: 55 },
+            { id: 9, level: 'advanced', category: 'vegetable', icon: '🥒', title: '오이 대량 재배', desc: '상업용 오이 재배 노하우', instructor: '한오이', price: 99000, progress: 0 },
+            { id: 10, level: 'beginner', category: 'herb', icon: '🍃', title: '허브 가드닝', desc: '실내에서 키우는 허브', instructor: '조허브', price: 45000, progress: 90 },
+            { id: 11, level: 'intermediate', category: 'fruit', icon: '🍑', title: '복숭아 과수원', desc: '복숭아 나무 관리 6개월 코스', instructor: '서복숭', price: 79000, progress: 15 },
+            { id: 12, level: 'advanced', category: 'smartfarm', icon: '💡', title: '데이터 기반 농업', desc: '센서와 데이터로 최적화하기', instructor: '홍데이터', price: 149000, progress: 0 },
+            { id: 13, level: 'beginner', category: 'vegetable', icon: '🥕', title: '당근 재배 입문', desc: '뿌리채소의 기본', instructor: '신당근', price: 35000, progress: 70 },
+            { id: 14, level: 'intermediate', category: 'grain', icon: '🌾', title: '밀 재배 실습', desc: '밀농사의 모든 것', instructor: '민밀알', price: 69000, progress: 0 },
+            { id: 15, level: 'advanced', category: 'fruit', icon: '🍎', title: '사과 과수원 경영', desc: '사과농장 수익 극대화', instructor: '오사과', price: 119000, progress: 35 },
+            { id: 16, level: 'beginner', category: 'herb', icon: '🌱', title: '쑥과 민들레', desc: '자생 약초 채취와 재배', instructor: '황약초', price: 0, progress: 100 },
+            { id: 17, level: 'intermediate', category: 'smartfarm', icon: '🤖', title: '자동화 시스템', desc: '관개부터 수확까지 자동화', instructor: '송시스템', price: 95000, progress: 50 },
+            { id: 18, level: 'advanced', category: 'herb', icon: '🌼', title: '한약재 재배', desc: '인삼, 당귀 등 고급 약재', instructor: '전한약', price: 109000, progress: 0 }
+        ];
+
+        const ITEMS_PER_PAGE = 6;
+        let currentPage = 1;
+        let filteredCourses = [...allCourses];
+        let currentLevel = 'all';
+        let currentCategory = 'all';
+        let currentSearch = '';
+
+        // DOM 요소
+        const levelTags = document.querySelectorAll('[data-level]');
+        const categoryTags = document.querySelectorAll('[data-category]');
+        const searchInput = document.getElementById('searchInput');
+        const sortSelect = document.getElementById('sortSelect');
+        const courseCount = document.getElementById('courseCount');
+
+        // 이벤트 리스너
+        levelTags.forEach(tag => {
+            tag.addEventListener('click', () => {
+                levelTags.forEach(t => t.classList.remove('active'));
+                tag.classList.add('active');
+                currentLevel = tag.dataset.level;
+                currentPage = 1;
+                filterAndRenderCourses();
+            });
+        });
+
+        categoryTags.forEach(tag => {
+            tag.addEventListener('click', () => {
+                categoryTags.forEach(t => t.classList.remove('active'));
+                tag.classList.add('active');
+                currentCategory = tag.dataset.category;
+                currentPage = 1;
+                filterAndRenderCourses();
+            });
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            currentSearch = e.target.value.toLowerCase();
+            currentPage = 1;
+            filterAndRenderCourses();
+        });
+
+        sortSelect.addEventListener('change', () => {
+            sortCourses();
+            renderCourses();
+        });
+
+        // 필터링 및 렌더링
+        function filterAndRenderCourses() {
+            filteredCourses = allCourses.filter(course => {
+                const levelMatch = currentLevel === 'all' || course.level === currentLevel;
+                const categoryMatch = currentCategory === 'all' || course.category === currentCategory;
+                const searchMatch = !currentSearch || 
+                    course.title.toLowerCase().includes(currentSearch) || 
+                    course.desc.toLowerCase().includes(currentSearch);
+                
+                return levelMatch && categoryMatch && searchMatch;
+            });
+
+            courseCount.textContent = filteredCourses.length;
+            sortCourses();
+            renderCourses();
+            renderPagination();
+        }
+
+        // 정렬
+        function sortCourses() {
+            const sortType = sortSelect.value;
+            filteredCourses.sort((a, b) => {
+                if (sortType === 'price-low') return a.price - b.price;
+                if (sortType === 'price-high') return b.price - a.price;
+                return 0;
+            });
+        }
+
+        // 강의 카드 렌더링
+        function renderCourses() {
+            const grid = document.getElementById('coursesGrid');
+            const start = (currentPage - 1) * ITEMS_PER_PAGE;
+            const end = start + ITEMS_PER_PAGE;
+            const coursesToShow = filteredCourses.slice(start, end);
+
+            grid.innerHTML = coursesToShow.map(course => `
+                <div class="course-card">
+                    <div class="course-thumbnail">${course.icon}</div>
+                    <div class="course-info">
+                        <div class="course-category">${getLevelText(course.level)} • ${getCategoryText(course.category)}</div>
+                        <div class="course-title-row">
+                            <h3 class="course-title">${course.title}</h3>
+                            <span class="course-instructor-inline">👤 ${course.instructor}</span>
+                        </div>
+                        <p class="course-description">${course.desc}</p>
+                        ${isLoggedIn ? `
+                            <div class="course-progress">
+                                <div class="progress-label">
+                                    <span class="progress-text">학습 진도</span>
+                                    <span class="progress-percent">${course.progress}%</span>
+                                </div>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar-fill" style="width: ${course.progress}%"></div>
+                                </div>
+                            </div>
+                            <div class="course-meta-logged-in">
+                                <span class="${course.price === 0 ? 'course-price-free' : 'course-price'}">
+                                    ${course.price === 0 ? '무료' : '₩' + course.price.toLocaleString()}
+                                </span>
+                            </div>
+                        ` : `
+                            <div class="course-meta-logged-out">
+                                <span class="${course.price === 0 ? 'course-price-free' : 'course-price'}">
+                                    ${course.price === 0 ? '무료' : '₩' + course.price.toLocaleString()}
+                                </span>
+                                <button class="subscribe-btn">구독하기</button>
+                            </div>
+                        `}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 페이지네이션 렌더링
+        function renderPagination() {
+            const pagination = document.getElementById('pagination');
+            const totalPages = Math.ceil(filteredCourses.length / ITEMS_PER_PAGE);
+
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+
+            let paginationHTML = '';
+
+            // 이전 버튼
+            paginationHTML += `
+                <button class="pagination-btn ${currentPage === 1 ? 'disabled' : ''}" 
+                        onclick="goToPage(${currentPage - 1})" 
+                        ${currentPage === 1 ? 'disabled' : ''}>
+                    ◀
+                </button>
+            `;
+
+            // 페이지 번호
+            const maxVisible = 5;
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+
+            if (endPage - startPage < maxVisible - 1) {
+                startPage = Math.max(1, endPage - maxVisible + 1);
+            }
+
+            if (startPage > 1) {
+                paginationHTML += `<button class="pagination-btn" onclick="goToPage(1)">1</button>`;
+                if (startPage > 2) {
+                    paginationHTML += `<span class="pagination-ellipsis">...</span>`;
+                }
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                paginationHTML += `
+                    <button class="pagination-btn ${i === currentPage ? 'active' : ''}" 
+                            onclick="goToPage(${i})">
+                        ${i}
+                    </button>
+                `;
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    paginationHTML += `<span class="pagination-ellipsis">...</span>`;
+                }
+                paginationHTML += `<button class="pagination-btn" onclick="goToPage(${totalPages})">${totalPages}</button>`;
+            }
+
+            // 다음 버튼
+            paginationHTML += `
+                <button class="pagination-btn ${currentPage === totalPages ? 'disabled' : ''}" 
+                        onclick="goToPage(${currentPage + 1})" 
+                        ${currentPage === totalPages ? 'disabled' : ''}>
+                    ▶
+                </button>
+            `;
+
+            pagination.innerHTML = paginationHTML;
+        }
+
+        // 페이지 이동
+        function goToPage(page) {
+            const totalPages = Math.ceil(filteredCourses.length / ITEMS_PER_PAGE);
+            if (page < 1 || page > totalPages) return;
+            
+            currentPage = page;
+            renderCourses();
+            renderPagination();
+        }
+
+        // 난이도/카테고리 텍스트 변환
+        function getLevelText(level) {
+            const levels = { beginner: '초급', intermediate: '중급', advanced: '고급' };
+            return levels[level] || level;
+        }
+
+        function getCategoryText(category) {
+            const categories = { 
+                grain: '곡물', 
+                vegetable: '채소', 
+                fruit: '과일', 
+                herb: '약초', 
+                smartfarm: '스마트팜' 
+            };
+            return categories[category] || category;
+        }
+
+        // 초기 렌더링
+        filterAndRenderCourses();
+    </script>
+</body>
+</html>
