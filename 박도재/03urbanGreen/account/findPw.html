@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UrbanGreen - 비밀번호 찾기</title>
+    <style>
+        :root {
+            --primary: #5cb85f;
+            --primary-dark: #4caf50;
+            --primary-light: #70c373;
+            --gray: #757575;
+            --light-gray: #f5f3ed;
+            --cream: #fcfbf8;
+            --text: #212121;
+            --success: #4caf50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #faf9f6 0%, #f5f3ed 100%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 로고 헤더 */
+        .logo-header {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+            text-decoration: none;
+        }
+
+        /* 메인 컨테이너 */
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .find-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid rgba(92, 184, 95, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+
+        .find-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .find-header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .find-header p {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        /* 폼 그룹 */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: var(--light-gray);
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(92, 184, 95, 0.1);
+            outline: none;
+            background: white;
+        }
+
+        /* 비밀번호 강도 */
+        .password-strength {
+            margin-top: 0.5rem;
+            height: 4px;
+            background: var(--light-gray);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0;
+            transition: all 0.3s;
+        }
+
+        .password-strength-bar.weak {
+            width: 33%;
+            background: #ff6b6b;
+        }
+
+        .password-strength-bar.medium {
+            width: 66%;
+            background: #ffd93d;
+        }
+
+        .password-strength-bar.strong {
+            width: 100%;
+            background: var(--success);
+        }
+
+        /* 버튼 */
+        .btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(92, 184, 95, 0.3);
+            margin-bottom: 1rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(92, 184, 95, 0.4);
+        }
+
+        /* 단계별 폼 */
+        .step-form {
+            display: none;
+        }
+
+        .step-form.active {
+            display: block;
+        }
+
+        /* 결과 메시지 */
+        .result-message {
+            background: var(--light-gray);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .result-message .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .result-message h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .result-message p {
+            color: var(--gray);
+        }
+
+        /* 링크 섹션 */
+        .links-section {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .links-section a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .links-section a:hover {
+            color: var(--primary);
+        }
+
+        .links-section span {
+            color: var(--gray);
+        }
+
+        /* 푸터 */
+        footer {
+            background: #2d3436;
+            color: white;
+            padding: 2rem 3rem;
+            text-align: center;
+            margin-top: 5rem;
+        }
+
+        footer p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        footer a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: var(--primary);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 로고 헤더 -->
+    <div class="logo-header">
+        <a href="/main/urbangreen.html" class="logo">UrbanGreen</a>
+    </div>
+
+    <!-- 메인 컨테이너 -->
+    <div class="main-container">
+        <div class="find-card">
+            <div class="find-header">
+                <h1>비밀번호 찾기</h1>
+                <p>가입 시 등록한 정보로 비밀번호를 재설정하세요</p>
+            </div>
+
+            <!-- 본인 확인 폼 -->
+            <form id="verifyForm" class="step-form active">
+                <div class="form-group">
+                    <label for="userId">아이디</label>
+                    <input type="text" id="userId" placeholder="아이디를 입력하세요" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">이메일</label>
+                    <input type="email" id="email" placeholder="가입 시 입력한 이메일" required>
+                </div>
+
+                <button type="submit" class="btn">다음</button>
+            </form>
+
+            <!-- 새 비밀번호 설정 폼 -->
+            <form id="resetForm" class="step-form">
+                <div class="form-group">
+                    <label for="newPassword">새 비밀번호</label>
+                    <input type="password" id="newPassword" placeholder="영문, 숫자, 특수문자 포함 8자 이상" required
+                        oninput="checkPasswordStrength()">
+                    <div class="password-strength">
+                        <div class="password-strength-bar" id="strengthBar"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">비밀번호 확인</label>
+                    <input type="password" id="confirmPassword" placeholder="비밀번호를 다시 입력하세요" required>
+                </div>
+
+                <button type="submit" class="btn">비밀번호 변경</button>
+            </form>
+
+            <!-- 완료 메시지 -->
+            <div id="completeMessage" style="display: none;">
+                <div class="result-message">
+                    <div class="icon">✅</div>
+                    <h3>비밀번호 변경 완료</h3>
+                    <p>새로운 비밀번호로 로그인해주세요</p>
+                </div>
+                <button class="btn" onclick="location.href='login.html'">로그인하기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 푸터 -->
+    <footer>
+        <p>
+            대전광역시 중구 선화동 중앙로121번길 20 방산빌딩 3층 |
+            연락처: 0507-1422-2402 |
+            © 2025 UrbanGreen. All rights reserved.
+        </p>
+    </footer>
+
+    <script>
+        // 본인 확인
+        document.getElementById('verifyForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const userId = document.getElementById('userId').value;
+            const email = document.getElementById('email').value;
+
+            if (userId && email) {
+                // 실제로는 서버에서 아이디와 이메일 일치 여부 확인
+                document.getElementById('verifyForm').classList.remove('active');
+                document.getElementById('resetForm').classList.add('active');
+            }
+        });
+
+        // 비밀번호 재설정
+        document.getElementById('resetForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (newPassword !== confirmPassword) {
+                alert('비밀번호가 일치하지 않습니다.');
+                return;
+            }
+
+            // 비밀번호 유효성 검사
+            const pwRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+            if (!pwRegex.test(newPassword)) {
+                alert('영문, 숫자, 특수문자를 포함한 8자 이상으로 입력해주세요.');
+                return;
+            }
+
+            // 비밀번호 변경 완료
+            document.getElementById('resetForm').style.display = 'none';
+            document.getElementById('completeMessage').style.display = 'block';
+            document.getElementById('links').style.display = 'none';
+        });
+
+        // 비밀번호 강도 체크
+        function checkPasswordStrength() {
+            const password = document.getElementById('newPassword').value;
+            const strengthBar = document.getElementById('strengthBar');
+
+            if (!password) {
+                strengthBar.className = 'password-strength-bar';
+                return;
+            }
+
+            let strength = 0;
+            if (password.length >= 8) strength++;
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+            if (/\d/.test(password)) strength++;
+            if (/[!@#$%^&*]/.test(password)) strength++;
+
+            strengthBar.className = 'password-strength-bar';
+            if (strength <= 2) {
+                strengthBar.classList.add('weak');
+            } else if (strength === 3) {
+                strengthBar.classList.add('medium');
+            } else {
+                strengthBar.classList.add('strong');
+            }
+        }
+    </script>
+</body>
+
+</html>
