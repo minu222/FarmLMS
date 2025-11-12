@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>비밀번호 찾기</title>
+    <link rel="stylesheet" href="AccountStyle.css">
+</head>
+
+<body>
+    <!-- 로고 헤더 -->
+    <div class="logo-header">
+        <a href="/main/urbangreen.html" class="logo">UrbanGreen</a>
+    </div>
+    <div class="main-container">
+        <div class="find-card">
+            <h2>비밀번호 찾기</h2>
+            <p>가입 시 등록한 정보로 비밀번호를 재설정하세요.</p>
+
+            <!-- 본인 확인 폼 -->
+            <div>
+                <form id="verifyForm" class="step-form active">
+                    <div class="form-group">
+                        <label for="userId">아이디</label>
+                        <input type="text" id="userId" placeholder="아이디를 입력하세요" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">이메일</label>
+                        <input type="email" id="email" placeholder="가입 시 입력한 이메일" required>
+                    </div>
+
+                    <div>
+                        <button type="button" id="sendCodeBtn" class="btn" aria-controls="codeBlock"
+                            aria-expanded="false">인증하기</button>
+                    </div>
+
+                    <!-- 인증번호 입력영역: 처음엔 감춤 -->
+                    <div id="codeBlock" class="form-group2 hidden" aria-hidden="true">
+                        <label for="ct_num" class="blind">인증번호</label>
+                        <input type="text" id="ct_num" placeholder="인증번호를 입력해주세요." required>
+                        <button type="submit" class="btn">다음</button>
+                    </div>
+                </form>
+                <!-- 새 비밀번호 설정 폼 -->
+                <form id="resetForm" class="step-form">
+                    <div class="form-group">
+                        <label for="newPassword">새 비밀번호</label>
+                        <input type="password" id="newPassword" placeholder="영문, 숫자, 특수문자 포함 8자 이상" required
+                            oninput="checkPasswordStrength()">
+                        <div class="password-strength">
+                            <div class="password-strength-bar" id="strengthBar"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">비밀번호 확인</label>
+                        <input type="password" id="confirmPassword" placeholder="비밀번호를 다시 입력하세요" required>
+                    </div>
+
+                    <button type="submit" class="btn">비밀번호 변경</button>
+                </form>
+
+                <!-- 완료 메시지 -->
+                <div id="completeMessage" style="display: none;">
+                    <div class="result-message">
+                        <div class="icon">✅</div>
+                        <h3>비밀번호 변경 완료</h3>
+                        <p>새로운 비밀번호로 로그인해주세요</p>
+                    </div>
+                    <button class="btn" onclick="location.href='login.html'">로그인하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 푸터 -->
+    <footer>
+        <p>
+            대전광역시 중구 선화동 중앙로121번길 20 방산빌딩 3층 |
+            연락처: 0507-1422-2402 |
+            © 2025 UrbanGreen. All rights reserved.
+        </p>
+    </footer>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // ===== DOM 참조 =====
+        const verifyForm = document.getElementById('verifyForm');
+        const resetForm = document.getElementById('resetForm');
+        const completeMessage = document.getElementById('completeMessage');
+
+        const userId = document.getElementById('userId');
+        const email = document.getElementById('email');
+        const ctInputWrap = document.querySelector('.form-group2'); // 인증번호 영역
+        const ctInput = document.getElementById('ct_num');
+
+        const verifyBtn = verifyForm.querySelector('.btn'); // 첫 번째 버튼(인증하기)
+        const nextBtn = verifyForm.querySelector('button[type="submit"]'); // 다음
+
+        const newPw = document.getElementById('newPassword');
+        const newPw2 = document.getElementById('confirmPassword');
+        const strengthBar = document.getElementById('strengthBar');
+
+        // ===== 상태 =====
+        let codeSent = false;
+        let serverCode = '';
+        let resendCooldown = 0; // 초
+        let cooldownTimer = null;
+
+        // ===== 유틸 =====
+        const show = (el) => { el.classList.remove('hidden'); el.style.display = 'block'; };
+        const hide = (el) => { el.classList.add('hidden'); el.style.display = 'none'; };
+        const toast = (msg) => alert(msg); // 필요하면 커스텀 토스트로 교체
+
+        // 인증번호 6자리 랜덤
+        const generateCode = () => String(Math.floor(100000 + Math.random() * 900000));
+
+        // 재전송 쿨다운 표시/관리
+        const startCooldown = (btn, seconds = 60) => {
+            resendCooldown = seconds;
+            btn.disabled = true;
+            btn.textContent = `인증번호 전송 (${resendCooldown}s)`;
+            cooldownTimer = setInterval(() => {
+                resendCooldown--;
+                if (resendCooldown <= 0) {
+                    clearInterval(cooldownTimer);
+                    btn.disabled = false;
+                    btn.textContent = '인증하기';
+                } else {
+                    btn.textContent = `인증번호 전송 (${resendCooldown}s)`;
+                }
+            }, 1000);
+        };
+
+        // ===== 1) "인증하기" 버튼 클릭 핸들러 =====
+        // HTML에서 <button class="btn" type="button">인증하기</button> 로 수정 권장
+        verifyBtn.addEventListener('click', async (e) => {
+            e.preventDefault(); // 혹시 모를 submit 방지
+
+            // 간단한 클라 검증
+            if (!userId.value.trim()) return toast('아이디를 입력하세요.');
+            if (!email.validity.valid) return toast('올바른 이메일을 입력하세요.');
+
+            // TODO: 실제 서버에 "비밀번호 재설정 요청(인증코드 발송)" API 호출
+            // 예: POST /api/auth/password-reset/request  body: { userId, email }
+            // const res = await fetch('/api/auth/password-reset/request', {
+            //   method: 'POST',
+            //   headers: { 'Content-Type': 'application/json' },
+            //   body: JSON.stringify({ userId: userId.value.trim(), email: email.value.trim() })
+            // });
+            // if (!res.ok) { return toast('가입 정보를 확인해주세요.'); }
+
+            // 데모용(백엔드 없을 때): 랜덤 코드 생성 & 알림으로 노출
+            serverCode = generateCode();
+            codeSent = true;
+            show(ctInputWrap);
+            ctInput.focus();
+            startCooldown(verifyBtn, 60);
+            console.log('[DEV ONLY] 인증코드:', serverCode);
+            toast(`인증번호가 전송되었습니다.\n(데모용 코드: ${serverCode})`);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('verifyForm');
+            const sendBtn = document.getElementById('sendCodeBtn');
+            const codeBlock = document.getElementById('codeBlock');
+            const codeInput = document.getElementById('ct_num');
+
+            sendBtn.addEventListener('click', () => {
+                // 폼 전체 유효성 검사: 아이디/이메일이 비어있거나 이메일 형식이 틀리면 경고 표시
+                if (!form.checkValidity()) {
+                    form.reportValidity(); // 브라우저 기본 에러 풍선
+                    return;
+                }
+                // 모든 인풋 유효 → 인증번호 입력 영역 노출
+                codeBlock.classList.remove('hidden');
+                codeBlock.setAttribute('aria-hidden', 'false');
+                sendBtn.setAttribute('aria-expanded', 'true');
+                // 포커스 이동
+                codeInput.focus();
+            });
+        });
+        
+        // ===== 2) "다음" (verifyForm submit) =====
+        verifyForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!codeSent) return toast('먼저 "인증하기"를 눌러 인증번호를 받으세요.');
+            if (!ctInput.value.trim()) return toast('인증번호를 입력하세요.');
+
+            // TODO: 실제 서버에 "인증번호 확인" API 호출
+            // 예: POST /api/auth/password-reset/verify  body: { userId, email, code }
+            // const res = await fetch('/api/auth/password-reset/verify', { ... });
+
+            // 데모용: 클라에서 생성한 코드 비교
+            if (ctInput.value.trim() !== serverCode) {
+                return toast('인증번호가 올바르지 않습니다.');
+            }
+
+            // 다음 단계로
+            hide(verifyForm);
+            show(resetForm);
+            newPw.focus();
+        });
+
+        // ===== 3) 비밀번호 강도 측정 =====
+        // 길이, 대문자, 소문자, 숫자, 특수문자 점수화 (0~5)
+        function calcStrength(pw) {
+            let score = 0;
+            if (pw.length >= 8) score++;
+            if (/[A-Z]/.test(pw)) score++;
+            if (/[a-z]/.test(pw)) score++;
+            if (/\d/.test(pw)) score++;
+            if (/[^A-Za-z0-9]/.test(pw)) score++;
+            return score;
+        }
+
+        window.checkPasswordStrength = function () {
+            const pw = newPw.value;
+            const score = calcStrength(pw); // 0~5
+            const pct = (score / 5) * 100;
+            strengthBar.style.width = pct + '%';
+            // 색상은 CSS에서 transition과 배경색을 지정해도 좋음
+            if (score <= 2) {
+                strengthBar.style.background = '#e74c3c'; // 약함
+                strengthBar.title = '약함';
+            } else if (score === 3) {
+                strengthBar.style.background = '#f1c40f'; // 보통
+                strengthBar.title = '보통';
+            } else {
+                strengthBar.style.background = '#2ecc71'; // 강함
+                strengthBar.title = '강함';
+            }
+        };
+
+        newPw.addEventListener('input', () => {
+            checkPasswordStrength();
+            // 일치 여부 즉시 피드백
+            if (newPw2.value) validateConfirm();
+        });
+
+        const validateConfirm = () => {
+            if (newPw2.value && newPw.value !== newPw2.value) {
+                newPw2.setCustomValidity('비밀번호가 일치하지 않습니다.');
+            } else {
+                newPw2.setCustomValidity('');
+            }
+        };
+        newPw2.addEventListener('input', validateConfirm);
+
+        // ===== 4) "비밀번호 변경" (resetForm submit) =====
+        resetForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // HTML 기본 검증
+            if (!resetForm.checkValidity()) {
+                resetForm.reportValidity();
+                return;
+            }
+            // 추가 검증
+            const pw = newPw.value;
+            const pw2 = newPw2.value;
+            if (pw !== pw2) return toast('비밀번호가 일치하지 않습니다.');
+            if (calcStrength(pw) < 3) return toast('비밀번호 강도가 너무 약합니다(대/소문자, 숫자, 특수문자 포함 8자 이상 권장).');
+
+            // TODO: 실제 서버에 "비밀번호 확정 변경" API 호출
+            // 예: POST /api/auth/password-reset/confirm  body: { userId, email, code, newPassword }
+            // const res = await fetch('/api/auth/password-reset/confirm', {
+            //   method: 'POST',
+            //   headers: { 'Content-Type': 'application/json' },
+            //   body: JSON.stringify({
+            //     userId: userId.value.trim(),
+            //     email: email.value.trim(),
+            //     code: serverCode, // 실제로는 서버에서 발급한 토큰/코드를 사용
+            //     newPassword: pw
+            //   })
+            // });
+            // if (!res.ok) { return toast('비밀번호 변경에 실패했습니다. 다시 시도해주세요.'); }
+
+            // 성공 처리
+            hide(resetForm);
+            show(completeMessage);
+            // 보안상, 메모리의 민감정보 제거
+            serverCode = '';
+            newPw.value = '';
+            newPw2.value = '';
+        });
+
+        // ===== 접근성/UX 보완 =====
+        // Enter 키로 인증번호 필드에서 "다음"으로 자연 전송되도록 폼 기본 동작 유지
+        // 이메일 자동완성 힌트(이미 input[type=email]로 충분)
+    });
+</script>
+
+
+</html>
