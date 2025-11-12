@@ -193,27 +193,3 @@ body {
 .signup-prompt a:hover {
     text-decoration: underline;
 }
-
-/* 푸터 */
-footer {
-    background: #2d3436;
-    color: white;
-    padding: 2rem 3rem;
-    text-align: center;
-    margin-top: 5rem;
-}
-
-footer p {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 0.9rem;
-    margin: 0;
-}
-
-footer a {
-    color: rgba(255, 255, 255, 0.7);
-    text-decoration: none;
-}
-
-footer a:hover {
-    color: var(--primary);
-}
