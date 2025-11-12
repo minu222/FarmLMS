@@ -14,7 +14,7 @@ body {
 
 /* 헤더 */
 header {
-    background: #50c304;
+    background: #7ecc4a;
     color: white;
     padding: 1rem 2rem;
     display: flex;
@@ -51,21 +51,36 @@ nav a {
     font-weight: 500;
 }
 
+#beige{
+    background-color: rgb(255, 255, 230);
+}
+#note {
+    border: 1px solid none;
+    width: 900px;
+    margin: 0 auto;
+    margin-top: 50px;
+    background-image: url("/img/note.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
 #container {
-    border: 5px solid #ccc;
+    border: 5px solid none;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 1000px;
+    width: 620px;
     margin: 0 auto;
-    margin-top: 70px;
+    margin-top: 30px;
     border-radius: 10px;
     height: 1100px;
+    margin-right: 160px;
 }
 
 #container h1 {
     margin-bottom: 5px;
+    margin-top: 32px;
 }
 
 #contain {
@@ -80,14 +95,17 @@ nav a {
 
 /* 폼 입력 영역 스타일 */
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 18px;
     border-bottom: 1px solid #eee;
-    padding-bottom: 15px;
+    padding-bottom: 8px;
 }
 
 .form-group label {
     display: block;
+    /* display: flex;
+    flex-direction: column; */
     font-weight: bold;
+    margin-top: 8px;
     margin-bottom: 8px;
     color: #1f1f1f;
 }
@@ -104,7 +122,7 @@ nav a {
 .form-group .radio-group {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px;
 }
 
 .form-group .radio-group label {
@@ -120,7 +138,6 @@ nav a {
 
 .submit-button {
     display: block;
-    width: 100%;
     padding: 15px;
     background-color: #5cb85c;
     color: white;
@@ -129,6 +146,9 @@ nav a {
     font-size: 18px;
     cursor: pointer;
     transition: background-color 0.3s;
+    float: inline-end;
+    margin-right: 30px;
+    margin-bottom: 80px;
 }
 
 .submit-button:hover {
@@ -255,5 +275,7 @@ nav a {
 }
 
 #planner-intro-text {
-    text-align: center;
+    margin-top: 8px;
+    margin-bottom: 24px;
+    text-align: left;
 }

@@ -14,7 +14,7 @@ body {
 
 /* 헤더 */
 header {
-  background: #50c304;
+  background: #7ecc4a;
   color: white;
   padding: 1rem 2rem;
   display: flex;
@@ -678,7 +678,7 @@ main.editComment-container {
 }
 
 #footer {
-  background-color: #50c304;
+  background-color: #7ecc4a;
   color: white;
   text-align: center;
   padding: 10px 0;

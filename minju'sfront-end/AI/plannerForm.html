@@ -9,7 +9,7 @@
 
 <body>
     <header>
-        <h1><a href="/main/uvangreen.html">어반그린</a></h1>
+        <h1><a href="/main/urbangreen.html">어반그린</a></h1>
         <nav id="navMenu">
             <a href="/post/free-board.html">자유게시판</a>
             <a href="/main/class.html">강의</a>
@@ -18,106 +18,112 @@
             <a href="/main/game.html">게임</a>
         </nav>
     </header>
-    <div id="container">
-        <h1>🌱 주말농장 성공 플래너 AI</h1>
-        <hr style="height: 10px; width: 40%; border: none; border-top:3px solid #ff0000; margin-left: 10px; margin-bottom: 0px;">
-        <hr style="height: 10px; width: 45%; border: none; border-top:3px solid #ff0000; margin-left: 10px; margin-bottom: 30px;">
-        <hr style="height: 10px; width: 80%; border: none; border-top:5px solid #ccc; margin-bottom: 30px;">
-        <div id="Container">
+    <div id="beige">
+        <div id="note">
+            <div id="container">
+                <h1>🌱 주말농장 성공 플래너 AI</h1>
+                <hr
+                    style="height: 10px; width: 47%; border: none; border-top:3px solid #ff0000; margin-left: 50px; margin-bottom: 1px;">
+                <hr
+                    style="height: 10px; width: 58%; border: none; border-top:3px solid #ff0000; margin-left: 55px; margin-bottom: 6px;">
+                <!-- <hr style="height: 10px; width: 80%; border: none; border-top:5px solid #ccc; margin-bottom: 30px;"> -->
+                <div id="Container">
 
-            <div id="contain">
+                    <div id="contain">
 
-                <h3 id="planner-intro-text">몇 가지 정보를 입력해 주시면, AI가 사용자님께 가장 적합한 텃밭 모델과 초기 재배 계획을 세워드립니다!</h3>
-                <div class="form-container">
+                        <h3 id="planner-intro-text"> &nbsp 몇 가지 정보를 입력해 주시면, AI가 사용자님께 가장 적합한 텃밭 모델과<br> 초기 재배 계획을
+                            세워드립니다!
+                        </h3>
+                        <div class="form-container">
+                            <div id="inputFormArea">
+                                <form th:action="@{/planner/generate}" method="post" id="plannerForm">
 
-                    <div id="inputFormArea">
-                        <form th:action="@{/planner/generate}" method="post" id="plannerForm">
+                                    <div class="form-group">
+                                        <label for="residenceType">1. 현재 거주 형태는 무엇인가요?</label>
+                                        <select id="residenceType" name="residenceType" required>
+                                            <option value="아파트">아파트/오피스텔</option>
+                                            <option value="단독주택">단독주택</option>
+                                            <option value="빌라/다세대">빌라/다세대</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="farmplace">2. 텃밭을 만들 공간은 어디인가요?</label>
+                                        <select id="farmplace" name="farmplace" required>
+                                            <option value="balcony">베란다/발코니</option>
+                                            <option value="rooftop">옥상</option>
+                                            <option value="yard">마당</option>
+                                            <option value="communalfarm">공동텃밭</option>
+                                        </select>
+                                    </div>
 
-                            <div class="form-group">
-                                <label for="residenceType">1. 현재 거주 형태는 무엇인가요?</label>
-                                <select id="residenceType" name="residenceType" required>
-                                    <option value="아파트">아파트/오피스텔</option>
-                                    <option value="단독주택">단독주택</option>
-                                    <option value="빌라/다세대">빌라/다세대</option>
-                                </select>
+                                    <div class="form-group">
+                                        <label for="sunshine">3. 텃밭 공간의 평균 일조량은 어느 정도인가요?</label>
+                                        <select id="sunshine" name="sunshine" required>
+                                            <option value="threehourunder">오전 3시간 미만(저광량)</option>
+                                            <option value="sixhourunder">오전/오후 3~6시간(중광량)</option>
+                                            <option value="sixhourover">하루 종일(6시간이상)(고광량)</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="purpose">4. 텃밭을 가꾸는 주된 목적은 무엇인가요?</label>
+                                        <select id="purpose" name="purpose" required>
+                                            <option value="식용(쌈채소/열매)">식용 (직접 키워 먹기)</option>
+                                            <option value="관상용(허브/꽃)">관상용 및 치유</option>
+                                            <option value="교육용">자녀 교육 및 관찰</option>
+                                            <option value="취미/힐링">취미/힐링</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="preference">5. 키우고 싶은 작물이 있다면 입력해주세요. (선택 사항)</label>
+                                        <input type="text" id="preference" name="preference"
+                                            placeholder="예: 상추, 방울토마토, 바질">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="budget">6. 초기 투자 예산(도구, 흙, 씨앗 등)은 얼마인가요?</label>
+                                        <select id="budget" name="budget" required>
+                                            <option value="5만원 이하">5만원 이하</option>
+                                            <option value="5~10만원">5만원 ~ 10만원</option>
+                                            <option value="10만원 초과">10만원 초과</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>7. 텃밭 재배 경험 수준은 어느 정도인가요?</label>
+                                        <div class="radio-group">
+
+                                            <select id="budget" name="budget" required>
+                                                <option value="5만원 이하">초보(거의 처음)</option>
+                                                <option value="5~10만원">중급(1년 이하 경험)</option>
+                                                <option value="10만원 초과">숙련(1년 이상 경험)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="submit-button" id="submitButton"
+                                        style="margin-top: 60px;">✨
+                                        AI플래너에게 계획 받기</button>
+                                </form>
                             </div>
+                        </div>
 
-                            <div class="form-group">
-                                <label>2. 텃밭을 만들 공간은 어디인가요?</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="space" value="베란다/발코니" checked> 베란다/발코니</label>
-                                    <label><input type="radio" name="space" value="옥상"> 옥상</label>
-                                    <label><input type="radio" name="space" value="마당"> 마당</label>
-                                    <label><input type="radio" name="space" value="공동 텃밭"> 공동 텃밭</label>
-                                </div>
-                            </div>
+                        <div id="loadingArea" style="display:none; text-align:center; margin-top: 50px;">
+                            <p style="font-size: 1.5em; color: #5cb85c; font-weight: bold;">
+                                <span class="spinner" style="font-size: 2em;">⏳</span><br>
+                                AI가 사용자님을 위한 맞춤형 계획을 **분석 및 생성 중입니다**...<br>
+                                잠시만 기다려주세요 (최대 30초 소요)
+                            </p>
+                        </div>
 
-                            <div class="form-group">
-                                <label>3. 텃밭 공간의 평균 일조량은 어느 정도인가요?</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="sunlight" value="오전 3시간 미만"> 오전 3시간 미만
-                                        (저광량)</label>
-                                    <label><input type="radio" name="sunlight" value="오전/오후 3~6시간" checked> 오전/오후 3~6시간
-                                        (중광량)</label>
-                                    <label><input type="radio" name="sunlight" value="하루 종일(6시간 이상)"> 하루 종일(6시간 이상)
-                                        (고광량)</label>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="purpose">4. 텃밭을 가꾸는 주된 목적은 무엇인가요?</label>
-                                <select id="purpose" name="purpose" required>
-                                    <option value="식용(쌈채소/열매)">식용 (직접 키워 먹기)</option>
-                                    <option value="관상용(허브/꽃)">관상용 및 치유</option>
-                                    <option value="교육용">자녀 교육 및 관찰</option>
-                                    <option value="취미/힐링">취미/힐링</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="preference">5. 키우고 싶은 작물이 있다면 입력해주세요. (선택 사항)</label>
-                                <input type="text" id="preference" name="preference" placeholder="예: 상추, 방울토마토, 바질">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="budget">6. 초기 투자 예산(도구, 흙, 씨앗 등)은 얼마인가요?</label>
-                                <select id="budget" name="budget" required>
-                                    <option value="5만원 이하">5만원 이하</option>
-                                    <option value="5~10만원">5만원 ~ 10만원</option>
-                                    <option value="10만원 초과">10만원 초과</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label>7. 텃밭 재배 경험 수준은 어느 정도인가요?</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="experienceLevel" value="초보(처음)" checked> 초보 (거의
-                                        처음)</label>
-                                    <label><input type="radio" name="experienceLevel" value="중급(1년 이하)"> 중급 (1년 이하
-                                        경험)</label>
-                                    <label><input type="radio" name="experienceLevel" value="숙련(1년 이상)"> 숙련 (1년 이상
-                                        경험)</label>
-                                </div>
-                            </div>
-
-                            <button type="submit" class="submit-button" id="submitButton" style="margin-top: 70px;">✨ AI
-                                플래너에게 계획 받기</button>
-                        </form>
+                        <div id="resultArea" style="display:none; margin-top: 20px;"></div>
                     </div>
 
-                    <div id="loadingArea" style="display:none; text-align:center; margin-top: 50px;">
-                        <p style="font-size: 1.5em; color: #5cb85c; font-weight: bold;">
-                            <span class="spinner" style="font-size: 2em;">⏳</span><br>
-                            AI가 사용자님을 위한 맞춤형 계획을 **분석 및 생성 중입니다**...<br>
-                            잠시만 기다려주세요 (최대 30초 소요)
-                        </p>
-                    </div>
-
-                    <div id="resultArea" style="display:none; margin-top: 20px;"></div>
                 </div>
-
             </div>
         </div>
+    </div>
     </div>
 </body>
 

@@ -14,7 +14,7 @@ body {
 
 /* 헤더 */
 header {
-    background: #50c304;
+    background: #7ecc4a;
     color: white;
     padding: 1rem 2rem;
     display: flex;
@@ -68,9 +68,10 @@ main {
     background-color: #a5f89b;
     /* 임시 표시용 */
     height: 400px;
-    width: 1800px;
-    border-radius: 10px;    
+    width: 1170px;
+    border-radius: 10px;
     margin-top: 64px;
+
 }
 
 .slide {
@@ -87,22 +88,20 @@ main {
 }
 
 .dots {
-    display: flex;
-    position: absolute;
     bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
+    margin: 0 auto;
+    width: 100px;
 }
 
 .dot {
-    display: flex;
-    flex-direction: row;
-    width: 12px;
-    height: 12px;
+    width: 20px;
+    height: 20px;
     margin: 0 5px;
-    border-radius: 50%;
-    background-color: white;
+    /* border-radius: 50%; */
+    color: white;
     opacity: 0.5;
+    position: relative;
+    bottom: 30px;
 }
 
 .dot.active {
@@ -114,9 +113,9 @@ main {
 .tab_obj {
     width: 200px;
     padding: 30px;
-    height: 60%;
-    background-color: #0f5700;
+    height: 35%;
     border-radius: 24px;
+    background-color: #2d5e22;
     margin-top: 100px;
     font-size: 22px;
     position: fixed;
@@ -128,10 +127,14 @@ main {
     color: white;
 }
 
-
 #tab_list li {
     list-style-type: none;
     margin-top: 20px;
+    background-color: #2d5e22;
+}
+
+.tab_obj li:hover {
+    opacity: 30%;
 }
 
 #tab_list a {
@@ -139,6 +142,9 @@ main {
     color: white;
 }
 
+/* #underall{
+    width: 1300px;
+} */
 #Empty {
     display: flex;
     margin: 20px;
@@ -147,7 +153,7 @@ main {
 }
 
 .emptyBox {
-    width: 400px;
+    width: 378px;
 }
 
 .emptyBox h1 {
@@ -155,6 +161,7 @@ main {
 }
 
 #post {
+    padding: 10px;
     border: 1px solid #ccc;
     height: 300px;
     flex-direction: column;
@@ -163,6 +170,7 @@ main {
 }
 
 #co {
+    padding: 10px;
     border: 1px solid #ccc;
     height: 300px;
     border-radius: 10px;
@@ -170,6 +178,7 @@ main {
 }
 
 #notice {
+    padding: 10px;
     border: 1px solid #ccc;
     height: 300px;
     border-radius: 10px;
@@ -178,15 +187,20 @@ main {
 /* 로그인 박스*/
 
 .login {
-    width: 350px;
+    width: 320px;
     border: 1.2px solid #ccc;
-    padding: 50px 20px 50px 50px;
-    margin-top: 60px;
+    padding: 50px 10px 20px 20px;
     border-radius: 10px;
+    height: 20%;
+    border-radius: 24px;
+    margin-top: 100px;
+    position: fixed;
+    top: 50px;
+    right: 10px;
+    opacity: 90%;
 }
 
 .login h2 {
-    padding-top: 40px;
     padding-left: 35px;
     margin-bottom: 60px;
     color: #1a1a1a;
@@ -199,7 +213,7 @@ main {
 .login a {
     padding: 20px 60px 20px 60px;
     text-decoration: none;
-    background-color: #50c304;
+    background-color: #7ecc4a;
     border-radius: 10px;
     color: white;
     width: 300px;
@@ -207,7 +221,7 @@ main {
 }
 
 #footer {
-    background-color: #50c304;
+    background-color: #7ecc4a;
     color: white;
     text-align: center;
     padding: 10px 0;
