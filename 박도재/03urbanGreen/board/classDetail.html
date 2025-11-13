@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>벼농사 시작하기 - UrbanGreen</title>
+    <title>강의 상세 - UrbanGreen</title>
     <style>
         :root {
             --primary: #5cb85f;
@@ -14,6 +13,7 @@
             --light-gray: #f5f3ed;
             --cream: #fcfbf8;
             --text: #212121;
+            --bg-white: #ffffff;
         }
 
         * {
@@ -31,9 +31,10 @@
             background: #f8f9fa;
             color: var(--text);
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        /* ========== 헤더 ========== */
+        /* 헤더 */
         header {
             position: fixed;
             top: 0;
@@ -96,214 +97,55 @@
             border-radius: 2px;
         }
 
-        /* ========== 메인 컨테이너 ========== */
-        .main-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 7rem 2rem 3rem;
-        }
-
-        .breadcrumb {
-            margin-bottom: 2rem;
-            font-size: 0.9rem;
-            color: var(--gray);
-        }
-
-        .breadcrumb a {
-            color: var(--gray);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .breadcrumb a:hover {
-            color: var(--primary);
-        }
-
-        .course-layout {
+        /* 메인 컨텐츠 */
+        .main-content {
+            max-width: 1400px;
+            margin: 80px auto 0;
+            padding: 2rem;
             display: grid;
-            grid-template-columns: 1fr 380px;
+            grid-template-columns: 1fr 350px;
             gap: 2rem;
         }
 
-        /* ========== 강의 메인 영역 ========== */
-        .course-main {
-            background: white;
-            border-radius: 16px;
-            border: 1px solid #e9ecef;
-            overflow: hidden;
-        }
-
-        .course-video {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+        /* 왼쪽 영역 */
+        .left-section {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 5rem;
-            cursor: pointer;
-        }
-
-        .course-content {
-            padding: 2.5rem;
-        }
-
-        .course-header-info {
-            margin-bottom: 2rem;
-        }
-
-        .course-category {
-            font-size: 0.9rem;
-            color: var(--primary);
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .course-title {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            line-height: 1.3;
-        }
-
-        .course-instructor {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1rem;
-            color: var(--gray);
-            margin-bottom: 1.5rem;
-        }
-
-        .course-stats {
-            display: flex;
+            flex-direction: column;
             gap: 2rem;
-            padding: 1.5rem 0;
-            border-top: 1px solid #e9ecef;
-            border-bottom: 1px solid #e9ecef;
-            margin-bottom: 2rem;
         }
 
-        .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.95rem;
-            color: var(--gray);
-        }
-
-        .course-description {
-            margin-bottom: 2.5rem;
-        }
-
-        .section-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .course-description p {
-            color: var(--gray);
-            line-height: 1.8;
-            margin-bottom: 1rem;
-        }
-
-        .feature-list {
-            list-style: none;
-            margin-bottom: 2rem;
-        }
-
-        .feature-list li {
-            padding: 0.8rem 0;
-            padding-left: 2rem;
-            position: relative;
-            color: var(--text);
-        }
-
-        .feature-list li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: var(--primary);
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 1rem;
-            padding-top: 2rem;
-            border-top: 1px solid #e9ecef;
-        }
-
-        .btn {
-            flex: 1;
-            padding: 1rem 2rem;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: none;
-            text-align: center;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            box-shadow: 0 4px 16px rgba(92, 184, 95, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 24px rgba(92, 184, 95, 0.4);
-        }
-
-        .btn-secondary {
-            background: var(--light-gray);
-            color: var(--text);
-            border: 1px solid #e9ecef;
-        }
-
-        .btn-secondary:hover {
-            background: rgba(92, 184, 95, 0.1);
-            border-color: var(--primary);
-        }
-
-        /* ========== 사이드바 ========== */
-        .course-sidebar {
+        /* 오른쪽 사이드바 - 강의 목차 */
+        .right-sidebar {
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
         }
 
-        .sidebar-card {
+        .curriculum-sidebar {
             background: white;
-            border-radius: 16px;
-            border: 1px solid #e9ecef;
-            padding: 2rem;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 100px;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
         }
 
-        .sidebar-title {
-            font-size: 1.1rem;
+        .curriculum-header {
+            font-size: 1.2rem;
             font-weight: 700;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text);
         }
 
-        .curriculum-list {
+        .chapter-list {
             list-style: none;
         }
 
-        .curriculum-item {
+        .chapter-item {
             padding: 1rem;
-            background: var(--light-gray);
-            border-radius: 10px;
-            margin-bottom: 0.8rem;
+            border-bottom: 1px solid #e9ecef;
             cursor: pointer;
             transition: all 0.3s;
             display: flex;
@@ -311,63 +153,457 @@
             align-items: center;
         }
 
-        .curriculum-item:hover {
-            background: rgba(92, 184, 95, 0.1);
+        .chapter-item:last-child {
+            border-bottom: none;
         }
 
-        .curriculum-item.active {
-            background: var(--primary);
+        .chapter-item:hover {
+            background: var(--light-gray);
+        }
+
+        .chapter-item.active {
+            background: var(--primary-light);
             color: white;
         }
 
-        .lesson-title {
-            font-size: 0.95rem;
+        .chapter-number {
             font-weight: 600;
+            margin-right: 0.5rem;
         }
 
-        .lesson-duration {
-            font-size: 0.85rem;
+        .chapter-duration {
             color: var(--gray);
+            font-size: 0.85rem;
         }
 
-        .curriculum-item.active .lesson-duration {
-            color: rgba(255, 255, 255, 0.8);
+        .chapter-item.active .chapter-duration {
+            color: white;
         }
 
-        .instructor-card {
-            text-align: center;
+        /* 영상 섹션 */
+        .video-section {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
 
-        .instructor-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5rem;
-            margin: 0 auto 1rem;
         }
 
-        .instructor-name {
+        .video-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+        }
+
+        .video-placeholder-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .video-placeholder-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .video-info {
+            padding: 1.5rem;
+        }
+
+        .video-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .video-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .instructor-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        /* 현재 강의 진도율 섹션 */
+        .current-lesson-progress {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .current-progress-header {
             font-size: 1.1rem;
             font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .current-progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 0.5rem;
         }
 
-        .instructor-bio {
-            font-size: 0.9rem;
+        .current-lesson-title {
+            font-weight: 600;
+            color: var(--text);
+            font-size: 0.95rem;
+        }
+
+        .current-progress-percent {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .current-progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .current-progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+
+        /* 탭 섹션 */
+        .tabs-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .tab-buttons {
+            display: flex;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 1rem;
+            background: white;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
             color: var(--gray);
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-btn:hover {
+            background: var(--light-gray);
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab-content {
+            padding: 1.5rem;
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        /* 강의 설명 */
+        .description-content {
+            line-height: 1.8;
+            color: var(--text);
+        }
+
+        .description-content h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+            margin-top: 1.5rem;
+        }
+
+        .description-content h3:first-child {
+            margin-top: 0;
+        }
+
+        .description-content p {
+            margin-bottom: 1rem;
+        }
+
+        .description-content ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .description-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* QnA 섹션 */
+        .qna-list {
+            list-style: none;
+        }
+
+        .qna-item {
+            padding: 1.5rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .qna-item:last-child {
+            border-bottom: none;
+        }
+
+        .qna-question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.8rem;
+        }
+
+        .qna-question-info {
+            flex: 1;
+        }
+
+        .qna-question-author {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-bottom: 0.3rem;
+        }
+
+        .qna-question {
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .qna-question-content {
+            color: var(--text);
+            font-size: 0.95rem;
             line-height: 1.6;
         }
 
-        /* ========== 푸터 ========== */
+        .qna-question-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .qna-action-btn {
+            padding: 0.4rem 0.8rem;
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--gray);
+        }
+
+        .qna-action-btn:hover {
+            background: var(--light-gray);
+            border-color: var(--gray);
+        }
+
+        .qna-action-btn.delete {
+            color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .qna-action-btn.delete:hover {
+            background: #dc3545;
+            color: white;
+        }
+
+        /* 답글 영역 */
+        .qna-replies {
+            margin-top: 1rem;
+            padding-left: 2rem;
+            border-left: 3px solid var(--light-gray);
+        }
+
+        .qna-reply-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .qna-reply-item:last-child {
+            border-bottom: none;
+        }
+
+        .qna-reply-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .qna-reply-author {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .qna-reply-content {
+            color: var(--gray);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* 답글 입력 영역 */
+        .qna-reply-input-area {
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .qna-reply-input-area.active {
+            display: block;
+        }
+
+        .qna-reply-input {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            resize: vertical;
+            min-height: 60px;
+            font-family: inherit;
+        }
+
+        .qna-reply-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .qna-reply-btn {
+            margin-top: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .qna-reply-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .qna-pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .qna-page-btn {
+            min-width: 35px;
+            padding: 0.5rem 0.8rem;
+            border: 1px solid #e9ecef;
+            background: white;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .qna-page-btn:hover:not(.active):not(.disabled) {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .qna-page-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .qna-page-btn.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .qna-input-area {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .qna-input-label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .qna-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+        }
+
+        .qna-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .qna-submit {
+            margin-top: 0.5rem;
+            padding: 0.7rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            float: right;
+        }
+
+        .qna-submit:hover {
+            background: var(--primary-dark);
+        }
+
+        /* 푸터 */
         footer {
             background: #2d3436;
             color: white;
             padding: 3rem 2rem 2rem;
-            margin-top: 5rem;
         }
 
         .footer-container {
@@ -383,11 +619,6 @@
             font-size: 1.3rem;
             margin-bottom: 1rem;
             color: var(--primary);
-        }
-
-        .footer-about p {
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.6;
         }
 
         .footer-links h4 {
@@ -439,15 +670,14 @@
         }
     </style>
 </head>
-
 <body>
-    <!-- ========== 헤더 ========== -->
+    <!-- 헤더 -->
     <header id="header">
         <div class="header-container">
-            <a href="http://127.0.0.1:5500/main/main.html" class="logo">UrbanGreen</a>
+            <div class="logo">UrbanGreen</div>
             <nav>
                 <a href="http://127.0.0.1:5500/board/class.html" class="active">강의</a>
-                <a href="http://127.0.0.1:5500/board//notice.htmll">공지사항</a>
+                <a href="http://127.0.0.1:5500/board//notice.html">공지사항</a>
                 <a href="http://127.0.0.1:5500/board/chat.html">채팅</a>
                 <a href="/AI/aichoice.html">AI</a>
                 <a href="/main/game.html">게임</a>
@@ -456,134 +686,162 @@
         </div>
     </header>
 
-    <!-- ========== 메인 컨테이너 ========== -->
-    <div class="main-container">
-        <!-- 브레드크럼 -->
-        <div class="breadcrumb">
-            <a href="/main/main.html">홈</a> &gt;
-            <a href="/main/class.html">강의</a> &gt;
-            <span>벼농사 시작하기</span>
+    <!-- 메인 컨텐츠 -->
+    <main class="main-content">
+        <!-- 왼쪽 영역 -->
+        <div class="left-section">
+            <!-- 영상 섹션 -->
+            <section class="video-section">
+                <div class="video-container">
+                    <div class="video-placeholder">
+                        <div class="video-placeholder-icon">🎬</div>
+                        <div class="video-placeholder-text">영상 섬네일 및 재생버튼</div>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <h1 class="video-title">1강: 벼농사의 기초 이론</h1>
+                    <div class="video-meta">
+                        <span class="instructor-tag">👤 김농부</span>
+                        <span>•</span>
+                        <span>초급</span>
+                        <span>•</span>
+                        <span>15:30</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 현재 강의 진도율 (로그인 시에만 표시) -->
+            <section class="current-lesson-progress" id="currentLessonProgress" style="display: none;">
+                <h2 class="current-progress-header">이 강의 진도율</h2>
+                <div class="current-progress-info">
+                    <span class="current-lesson-title">1강: 벼농사의 기초 이론</span>
+                    <span class="current-progress-percent">75%</span>
+                </div>
+                <div class="current-progress-bar">
+                    <div class="current-progress-fill" style="width: 75%"></div>
+                </div>
+            </section>
+
+            <!-- 탭 섹션 (강의 설명, QnA) -->
+            <section class="tabs-section">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" data-tab="description">강의 설명</button>
+                    <button class="tab-btn" data-tab="qna">QnA</button>
+                </div>
+
+                <!-- 강의 설명 탭 -->
+                <div class="tab-content">
+                    <div class="tab-panel active" id="description-panel">
+                        <div class="description-content">
+                            <h3>강의 소개</h3>
+                            <p>
+                                이 강의는 귀농을 준비하는 분들을 위한 벼농사 입문 과정입니다. 
+                                벼농사의 기초 이론부터 실전 재배 기술까지 체계적으로 학습할 수 있습니다.
+                            </p>
+
+                            <h3>수강 대상</h3>
+                            <ul>
+                                <li>귀농을 준비하는 청년 농부</li>
+                                <li>벼농사에 관심이 있는 초보자</li>
+                                <li>농업 기초 지식을 쌓고 싶은 분</li>
+                                <li>스마트팜 기술을 벼농사에 적용하고 싶은 분</li>
+                            </ul>
+
+                            <h3>강의 특징</h3>
+                            <ul>
+                                <li>현직 농부의 생생한 현장 경험 공유</li>
+                                <li>단계별 실습 가이드 제공</li>
+                                <li>Q&A를 통한 1:1 질의응답</li>
+                                <li>평생 수강 가능한 온라인 콘텐츠</li>
+                            </ul>
+
+                            <h3>학습 목표</h3>
+                            <p>
+                                본 강의를 수강하시면 벼농사의 전 과정을 이해하고, 
+                                직접 벼농사를 시작할 수 있는 실전 능력을 갖추게 됩니다.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- QnA 탭 -->
+                    <div class="tab-panel" id="qna-panel">
+                        <ul class="qna-list" id="qnaList">
+                            <!-- JavaScript로 동적 렌더링 -->
+                        </ul>
+
+                        <div class="qna-pagination" id="qnaPagination">
+                            <!-- JavaScript로 동적 렌더링 -->
+                        </div>
+
+                        <div class="qna-input-area">
+                            <div class="qna-input-label">질문하기</div>
+                            <textarea class="qna-input" placeholder="강의와 관련된 질문을 남겨주세요..." id="questionInput"></textarea>
+                            <button class="qna-submit" onclick="submitQuestion()">등록</button>
+                            <div style="clear: both;"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
 
-        <div class="course-layout">
-            <!-- 강의 메인 영역 -->
-            <div class="course-main">
-                <div class="course-video">
-                    🌾
-                </div>
-
-                <div class="course-content">
-                    <div class="course-header-info">
-                        <div class="course-category">초급 • 곡물</div>
-                        <h1 class="course-title">벼농사 시작하기</h1>
-                        <div class="course-instructor">
-                            👤 김농부
-                        </div>
-                    </div>
-
-                    <div class="course-stats">
-                        <div class="stat-item">
-                            📚 총 12강
-                        </div>
-                        <div class="stat-item">
-                            ⏱️ 6시간
-                        </div>
-                        <div class="stat-item">
-                            👥 1,245명 수강
-                        </div>
-                        <div class="stat-item">
-                            ⭐ 4.8 (324)
-                        </div>
-                    </div>
-
-                    <div class="course-description">
-                        <h2 class="section-title">강의 소개</h2>
-                        <p>이 강의는 귀농을 준비하는 분들을 위한 벼농사 입문 과정입니다. 벼농사의 기초 이론부터 실전 재배 기술까지 체계적으로 학습할 수 있습니다.</p>
-                    </div>
-
-                    <div class="course-description">
-                        <h2 class="section-title">수강 대상</h2>
-                        <ul class="feature-list">
-                            <li>귀농을 준비하는 청년 농부</li>
-                            <li>벼농사에 관심이 있는 초보자</li>
-                            <li>농업 기초 지식을 쌓고 싶은 분</li>
-                            <li>스마트팜 기술을 벼농사에 적용하고 싶은 분</li>
-                        </ul>
-                    </div>
-
-                    <div class="course-description">
-                        <h2 class="section-title">강의 특징</h2>
-                        <ul class="feature-list">
-                            <li>현직 농부의 생생한 현장 경험 공유</li>
-                            <li>단계별 실습 가이드 제공</li>
-                            <li>Q&A를 통한 1:1 질의응답</li>
-                            <li>평생 수강 가능한 온라인 콘텐츠</li>
-                        </ul>
-                    </div>
-
-                    <div class="course-description">
-                        <h2 class="section-title">학습 목표</h2>
-                        <p>본 강의를 수강하시면 벼농사의 전 과정을 이해하고, 직접 벼농사를 시작할 수 있는 실전 능력을 갖추게 됩니다.</p>
-                    </div>
-
-                    <div class="action-buttons">
-                        <button class="btn btn-primary">▶ 수강 시작하기</button>
-                        <button class="btn btn-secondary">💬 질문하기</button>
-                    </div>
-                </div>
+        <!-- 오른쪽 사이드바 - 강의 목차 -->
+        <aside class="right-sidebar">
+            <div class="curriculum-sidebar">
+                <h2 class="curriculum-header">강의 목차</h2>
+                <ul class="chapter-list">
+                    <li class="chapter-item active">
+                        <span><span class="chapter-number">1강</span>벼농사의 기초 이론</span>
+                        <span class="chapter-duration">15:30</span>
+                    </li>
+                    <li class="chapter-item">
+                        <span><span class="chapter-number">2강</span>토양 준비와 파종</span>
+                        <span class="chapter-duration">20:15</span>
+                    </li>
+                    <li class="chapter-item">
+                        <span><span class="chapter-number">3강</span>물 관리 방법</span>
+                        <span class="chapter-duration">18:45</span>
+                    </li>
+                    <li class="chapter-item">
+                        <span><span class="chapter-number">4강</span>병충해 예방</span>
+                        <span class="chapter-duration">22:10</span>
+                    </li>
+                    <li class="chapter-item">
+                        <span><span class="chapter-number">5강</span>비료 주기</span>
+                        <span class="chapter-duration">16:30</span>
+                    </li>
+                    <li class="chapter-item">
+                        <span><span class="chapter-number">6강</span>수확 시기 판단</span>
+                        <span class="chapter-duration">19:20</span>
+                    </li>
+                    <li class="chapter-item">
+                        <span><span class="chapter-number">7강</span>수확 방법</span>
+                        <span class="chapter-duration">25:00</span>
+                    </li>
+                    <li class="chapter-item">
+                        <span><span class="chapter-number">8강</span>건조 및 저장</span>
+                        <span class="chapter-duration">17:45</span>
+                    </li>
+                    <li class="chapter-item">
+                        <span><span class="chapter-number">9강</span>판매 전략</span>
+                        <span class="chapter-duration">21:30</span>
+                    </li>
+                    <li class="chapter-item">
+                        <span><span class="chapter-number">10강</span>종합 정리 및 Q&A</span>
+                        <span class="chapter-duration">30:00</span>
+                    </li>
+                </ul>
             </div>
+        </aside>
+    </main>
 
-            <!-- 사이드바 -->
-            <aside class="course-sidebar">
-                <!-- 커리큘럼 -->
-                <div class="sidebar-card">
-                    <h3 class="sidebar-title">커리큘럼</h3>
-                    <ul class="curriculum-list">
-                        <li class="curriculum-item active">
-                            <div class="lesson-title">1강: 벼농사의 기초 이론</div>
-                            <div class="lesson-duration">25분</div>
-                        </li>
-                        <li class="curriculum-item">
-                            <div class="lesson-title">2강: 토양 준비하기</div>
-                            <div class="lesson-duration">30분</div>
-                        </li>
-                        <li class="curriculum-item">
-                            <div class="lesson-title">3강: 파종 시기와 방법</div>
-                            <div class="lesson-duration">28분</div>
-                        </li>
-                        <li class="curriculum-item">
-                            <div class="lesson-title">4강: 물 관리의 중요성</div>
-                            <div class="lesson-duration">35분</div>
-                        </li>
-                        <li class="curriculum-item">
-                            <div class="lesson-title">5강: 병해충 관리</div>
-                            <div class="lesson-duration">40분</div>
-                        </li>
-                        <li class="curriculum-item">
-                            <div class="lesson-title">6강: 수확과 건조</div>
-                            <div class="lesson-duration">32분</div>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- 강사 정보 -->
-                <div class="sidebar-card instructor-card">
-                    <h3 class="sidebar-title">강사 소개</h3>
-                    <div class="instructor-avatar">👨‍🌾</div>
-                    <div class="instructor-name">김농부</div>
-                    <p class="instructor-bio">30년 경력의 벼농사 전문가로, 전통 농법과 스마트팜 기술을 결합한 혁신적인 재배 방법을 연구하고 있습니다.</p>
-                </div>
-            </aside>
-        </div>
-    </div>
-
-    <!-- ========== 푸터 ========== -->
+    <!-- 푸터 -->
     <footer>
         <div class="footer-container">
             <div class="footer-about">
                 <h3>UrbanGreen</h3>
                 <p>청년 귀농인을 위한 작물재배 교육 플랫폼입니다.</p>
             </div>
+
             <div class="footer-links">
                 <h4>서비스</h4>
                 <ul class="service-list">
@@ -615,6 +873,25 @@
     </footer>
 
     <script>
+        // 로그인 상태 설정
+        const isLoggedIn = true;
+        const currentUserId = 1;
+        const isInstructor = false;
+
+        // 현재 재생 중인 강의 정보
+        const currentLesson = {
+            title: '1강: 벼농사의 기초 이론',
+            progress: 75
+        };
+
+        // 로그인 상태에 따른 UI 표시
+        if (isLoggedIn) {
+            document.getElementById('currentLessonProgress').style.display = 'block';
+            document.querySelector('.current-lesson-title').textContent = currentLesson.title;
+            document.querySelector('.current-progress-percent').textContent = currentLesson.progress + '%';
+            document.querySelector('.current-progress-fill').style.width = currentLesson.progress + '%';
+        }
+
         // 헤더 스크롤 효과
         window.addEventListener('scroll', () => {
             const header = document.getElementById('header');
@@ -625,17 +902,194 @@
             }
         });
 
-        // 커리큘럼 클릭 이벤트
-        document.querySelectorAll('.curriculum-item').forEach(item => {
-            item.addEventListener('click', function () {
-                document.querySelectorAll('.curriculum-item').forEach(i => i.classList.remove('active'));
-                this.classList.add('active');
+        // 탭 전환
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabPanels = document.querySelectorAll('.tab-panel');
 
-                // 실제로는 여기서 영상 변경 로직 구현
-                alert('강의 영상이 변경됩니다.');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                tabPanels.forEach(panel => panel.classList.remove('active'));
+                document.getElementById(this.dataset.tab + '-panel').classList.add('active');
             });
         });
+
+        // 챕터 클릭 이벤트
+        const chapterItems = document.querySelectorAll('.chapter-item');
+        chapterItems.forEach(item => {
+            item.addEventListener('click', function() {
+                chapterItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // QnA 데이터
+        const qnaData = [
+            { 
+                id: 1,
+                author: '학생A', 
+                authorId: 1,
+                question: '벼 파종 시기가 언제인가요?', 
+                content: '지역별로 차이가 있는지, 그리고 초보자가 주의해야 할 점도 알려주세요.',
+                replies: [
+                    { author: '김농부 강사', content: '지역마다 차이가 있지만 일반적으로 4월 중순~5월 초가 적기입니다. 기온이 15도 이상 유지될 때 파종하는 것이 좋습니다.' }
+                ]
+            },
+            { 
+                id: 2,
+                author: '학생B', 
+                authorId: 2,
+                question: '물 관리는 어떻게 해야 하나요?', 
+                content: '물 깊이를 어느 정도로 유지해야 하는지 궁금합니다.',
+                replies: [
+                    { author: '김농부 강사', content: '생육 단계별로 물 깊이를 조절해야 합니다. 초기에는 5-7cm, 분얼기에는 3-5cm 정도가 적당합니다.' }
+                ]
+            },
+            { 
+                id: 3,
+                author: '학생C', 
+                authorId: 3,
+                question: '유기농 재배도 가능한가요?', 
+                content: '화학비료를 사용하지 않고 재배하는 방법이 있을까요?',
+                replies: []
+            },
+        ];
+
+        // QnA 페이징 설정
+        const ITEMS_PER_PAGE = 2;
+        let currentQnaPage = 1;
+
+        function renderQna() {
+            const start = (currentQnaPage - 1) * ITEMS_PER_PAGE;
+            const end = start + ITEMS_PER_PAGE;
+            const qnaToShow = qnaData.slice(start, end);
+
+            const qnaList = document.getElementById('qnaList');
+            qnaList.innerHTML = qnaToShow.map(item => `
+                <li class="qna-item">
+                    <div class="qna-question-header">
+                        <div class="qna-question-info">
+                            <div class="qna-question-author">👤 ${item.author}</div>
+                            <div class="qna-question">${item.question}</div>
+                            <div class="qna-question-content">${item.content}</div>
+                        </div>
+                        ${item.authorId === currentUserId ? `
+                        <div class="qna-question-actions">
+                            <button class="qna-action-btn" onclick="editQuestion(${item.id})">수정</button>
+                            <button class="qna-action-btn delete" onclick="deleteQuestion(${item.id})">삭제</button>
+                        </div>
+                        ` : ''}
+                    </div>
+                    
+                    ${item.replies.length > 0 ? `
+                    <div class="qna-replies">
+                        ${item.replies.map(reply => `
+                            <div class="qna-reply-item">
+                                <div class="qna-reply-header">
+                                    <span class="qna-reply-author">👨‍🏫 ${reply.author}</span>
+                                </div>
+                                <div class="qna-reply-content">${reply.content}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    ` : ''}
+                    
+                    ${isInstructor ? `
+                    <button class="qna-action-btn" style="margin-top: 1rem;" onclick="toggleReplyInput(${item.id})">답글 달기</button>
+                    <div class="qna-reply-input-area" id="reply-input-${item.id}">
+                        <textarea class="qna-reply-input" placeholder="답글을 작성하세요..." id="reply-content-${item.id}"></textarea>
+                        <button class="qna-reply-btn" onclick="submitReply(${item.id})">답글 등록</button>
+                    </div>
+                    ` : ''}
+                </li>
+            `).join('');
+
+            renderQnaPagination();
+        }
+
+        function renderQnaPagination() {
+            const totalPages = Math.ceil(qnaData.length / ITEMS_PER_PAGE);
+            const pagination = document.getElementById('qnaPagination');
+            
+            let paginationHTML = '';
+
+            paginationHTML += `
+                <button class="qna-page-btn ${currentQnaPage === 1 ? 'disabled' : ''}" 
+                        onclick="goToQnaPage(${currentQnaPage - 1})" 
+                        ${currentQnaPage === 1 ? 'disabled' : ''}>
+                    ‹
+                </button>
+            `;
+
+            for (let i = 1; i <= totalPages; i++) {
+                paginationHTML += `
+                    <button class="qna-page-btn ${i === currentQnaPage ? 'active' : ''}" 
+                            onclick="goToQnaPage(${i})">
+                        ${i}
+                    </button>
+                `;
+            }
+
+            paginationHTML += `
+                <button class="qna-page-btn ${currentQnaPage === totalPages ? 'disabled' : ''}" 
+                        onclick="goToQnaPage(${currentQnaPage + 1})" 
+                        ${currentQnaPage === totalPages ? 'disabled' : ''}>
+                    ›
+                </button>
+            `;
+
+            pagination.innerHTML = paginationHTML;
+        }
+
+        function goToQnaPage(page) {
+            const totalPages = Math.ceil(qnaData.length / ITEMS_PER_PAGE);
+            if (page < 1 || page > totalPages) return;
+            
+            currentQnaPage = page;
+            renderQna();
+        }
+
+        function toggleReplyInput(questionId) {
+            const replyInput = document.getElementById(`reply-input-${questionId}`);
+            replyInput.classList.toggle('active');
+        }
+
+        function submitReply(questionId) {
+            const replyContent = document.getElementById(`reply-content-${questionId}`).value;
+            if (!replyContent.trim()) {
+                alert('답글 내용을 입력해주세요.');
+                return;
+            }
+            
+            alert('답글이 등록되었습니다.');
+            document.getElementById(`reply-content-${questionId}`).value = '';
+            document.getElementById(`reply-input-${questionId}`).classList.remove('active');
+        }
+
+        function submitQuestion() {
+            const questionContent = document.getElementById('questionInput').value;
+            if (!questionContent.trim()) {
+                alert('질문 내용을 입력해주세요.');
+                return;
+            }
+            
+            alert('질문이 등록되었습니다.');
+            document.getElementById('questionInput').value = '';
+        }
+
+        function editQuestion(questionId) {
+            alert(`질문 ${questionId} 수정 기능 (백엔드 연동 필요)`);
+        }
+
+        function deleteQuestion(questionId) {
+            if (confirm('정말 삭제하시겠습니까?')) {
+                alert(`질문 ${questionId} 삭제됨 (백엔드 연동 필요)`);
+            }
+        }
+
+        // 초기 QnA 렌더링
+        renderQna();
     </script>
 </body>
-
 </html>
