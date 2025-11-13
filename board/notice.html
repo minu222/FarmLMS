@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Page</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/notice.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+
+</head>
+<body>
+    <!-- 헤더 -->
+    <div th:replace="~{fragments/header :: header}"></div>
+
+    <!-- 페이지 헤더 -->
+    <section class="page-header">
+        <div class="page-header-content">
+            <h1>공지사항</h1>
+            <p>UrbanGreen의 새로운 소식과 중요한 공지를 확인하세요</p>
+        </div>
+    </section>
+
+    <!-- 게시판 컨텐츠 -->
+    <section class="board-content">
+
+        <div class="board-header">
+            <div class="board-info">
+                총 <strong th:text="${total}">0</strong>개의 게시글
+            </div>
+
+            <!-- 검색 -->
+            <form th:action="@{/board/notice}" method="get" class="search-box">
+                <input type="text" class="search-input" name="q"
+                       placeholder="검색어를 입력하세요" th:value="${q}">
+                <!-- 페이지는 1로 초기화 -->
+                <input type="hidden" name="page" value="1">
+                <button type="submit" class="search-btn">검색</button>
+            </form>
+        </div>
+
+        <div class="notice-list">
+            <table class="notice-table">
+                <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>작성일</th>
+                    <th>조회</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- 데이터 없을 때 -->
+                <tr th:if="${#lists.isEmpty(notices)}">
+                    <td colspan="5" style="text-align:center;color:#888;">등록된 공지사항이 없습니다.</td>
+                </tr>
+
+                <!-- 목록 렌더링 -->
+                <tr th:each="n, iter : ${notices}">
+                    <!-- 번호: 총개수 - (현재페이지오프셋 + index) -->
+                    <td th:text="${total - ((page - 1) * size + iter.index)}">1</td>
+
+                    <td class="title-cell">
+                        <a th:href="@{/board/notice/{id}(id=${n.id})}"
+                           th:text="${n.title}">제목</a>
+                    </td>
+
+                    <td th:text="${n.authorName}">관리자</td>
+                    <td th:text="${#temporals.format(n.createdAt, 'yyyy.MM.dd')}">2025.11.13</td>
+                    <td th:text="${n.viewCount}">0</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 페이징 -->
+        <div class="pagination" th:if="${totalPages > 1}"
+             th:with="prev=${page - 1}, next=${page + 1}">
+            <a th:if="${page > 1}"
+               th:href="@{|/board/notice?page=${prev}&size=${size}&q=${q}|}">◀</a>
+
+            <a th:each="i : ${#numbers.sequence(1, totalPages)}"
+               th:text="${i}"
+               th:classappend="${i == page} ? 'active' : ''"
+               th:href="@{|/board/notice?page=${i}&size=${size}&q=${q}|}">1</a>
+
+            <a th:if="${page < totalPages}"
+               th:href="@{|/board/notice?page=${next}&size=${size}&q=${q}|}">▶</a>
+        </div>
+
+    </section>
+
+    <!-- 푸터 -->
+    <footer th:replace="fragments/footer :: footer"></footer>
+
+    <script>
+        // 헤더 스크롤 효과
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // 공지사항 데이터
+        const noticeData = [
+            { id: 101, title: '[필독] 2025년 귀농 지원 프로그램 안내', author: '관리자', date: '2025-11-10', views: 523, pinned: true },
+            { id: 102, title: '[중요] 스마트팜 교육 일정 변경 안내', author: '관리자', date: '2025-11-08', views: 387, pinned: true },
+            { id: 25, title: '12월 신규 강의 오픈 안내', author: '관리자', date: '2025-11-11', views: 156, pinned: false },
+            { id: 24, title: '강의 평가 이벤트 당첨자 발표', author: '관리자', date: '2025-11-09', views: 243, pinned: false },
+            { id: 23, title: '홈페이지 점검 안내 (11/15)', author: '관리자', date: '2025-11-07', views: 189, pinned: false },
+            { id: 22, title: '가을 특별 할인 이벤트', author: '관리자', date: '2025-11-05', views: 421, pinned: false },
+            { id: 21, title: '신규 강사진 소개', author: '관리자', date: '2025-11-03', views: 312, pinned: false },
+            { id: 20, title: '10월 우수 수강생 발표', author: '관리자', date: '2025-11-01', views: 276, pinned: false },
+            { id: 19, title: '채팅 기능 업데이트 안내', author: '관리자', date: '2025-10-30', views: 198, pinned: false },
+            { id: 18, title: '수강 후기 이벤트 진행', author: '관리자', date: '2025-10-28', views: 365, pinned: false },
+            { id: 17, title: 'AI 추천 기능 고도화', author: '관리자', date: '2025-10-25', views: 287, pinned: false },
+            { id: 16, title: '게임 콘텐츠 업데이트', author: '관리자', date: '2025-10-23', views: 334, pinned: false },
+            { id: 15, title: '9월 수강생 만족도 조사 결과', author: '관리자', date: '2025-10-20', views: 201, pinned: false },
+            { id: 14, title: '추석 연휴 고객센터 운영 안내', author: '관리자', date: '2025-09-28', views: 178, pinned: false },
+            { id: 13, title: '신규 강의 - 버섯 재배 완전정복', author: '관리자', date: '2025-09-25', views: 445, pinned: false },
+            { id: 12, title: '여름 특강 참여 후기 공모전', author: '관리자', date: '2025-09-20', views: 298, pinned: false },
+            { id: 11, title: '모바일 앱 출시 예정 안내', author: '관리자', date: '2025-09-15', views: 512, pinned: false },
+            { id: 10, title: '8월 베스트 강의 발표', author: '관리자', date: '2025-09-10', views: 389, pinned: false },
+            { id: 9, title: '여름 휴가 기간 안내', author: '관리자', date: '2025-08-01', views: 267, pinned: false },
+            { id: 8, title: '상반기 이벤트 당첨자 발표', author: '관리자', date: '2025-07-28', views: 423, pinned: false },
+            { id: 7, title: '7월 신규 강사 모집', author: '관리자', date: '2025-07-15', views: 356, pinned: false },
+            { id: 6, title: '시스템 점검 완료 안내', author: '관리자', date: '2025-07-10', views: 189, pinned: false },
+            { id: 5, title: '귀농 멘토링 프로그램 오픈', author: '관리자', date: '2025-07-05', views: 478, pinned: false },
+            { id: 4, title: '6월 수강생 이벤트 결과', author: '관리자', date: '2025-07-01', views: 312, pinned: false },
+            { id: 3, title: '플랫폼 개편 안내', author: '관리자', date: '2025-06-28', views: 534, pinned: false },
+        ];
+
+        // 페이징 설정: 고정글 포함 10개 표시
+        const ITEMS_PER_PAGE = 10;
+        let currentPage = 1;
+        let filteredData = [...noticeData];
+
+        function renderNoticeList() {
+            // 고정글과 일반글 분리
+            const pinnedPosts = filteredData.filter(item => item.pinned);
+            const normalPosts = filteredData.filter(item => !item.pinned);
+
+            // 고정글 개수
+            const pinnedCount = pinnedPosts.length;
+            // 페이지당 표시할 일반글 개수 (10 - 고정글 개수)
+            const normalPostsPerPage = ITEMS_PER_PAGE - pinnedCount;
+
+            // 현재 페이지의 일반글만 가져오기
+            const start = (currentPage - 1) * normalPostsPerPage;
+            const end = start + normalPostsPerPage;
+            const normalPostsToShow = normalPosts.slice(start, end);
+
+            // 고정글 + 현재 페이지 일반글 결합
+            const postsToShow = [...pinnedPosts, ...normalPostsToShow];
+
+            const tbody = document.getElementById('noticeTableBody');
+            tbody.innerHTML = postsToShow.map(item => `
+                <tr class="${item.pinned ? 'pinned' : ''}" onclick="viewNotice(${item.id})">
+                    <td class="notice-number">
+                        ${item.pinned ? '<span class="pin-badge">📌 고정</span>' : item.id}
+                    </td>
+                    <td>
+                        <div class="notice-title">
+                            ${item.title}
+                        </div>
+                    </td>
+                    <td class="notice-author">${item.author}</td>
+                    <td class="notice-date">${item.date}</td>
+                    <td class="notice-views">${item.views}</td>
+                </tr>
+            `).join('');
+
+            renderPagination();
+        }
+
+        function renderPagination() {
+            // 고정글과 일반글 분리
+            const pinnedPosts = filteredData.filter(item => item.pinned);
+            const normalPosts = filteredData.filter(item => !item.pinned);
+
+            const pinnedCount = pinnedPosts.length;
+            const normalPostsPerPage = ITEMS_PER_PAGE - pinnedCount;
+            
+            // 일반글 기준으로 페이지 수 계산
+            const totalPages = Math.ceil(normalPosts.length / normalPostsPerPage);
+            
+            if (totalPages <= 1) {
+                document.getElementById('pagination').innerHTML = '';
+                return;
+            }
+
+            const pagination = document.getElementById('pagination');
+            let paginationHTML = '';
+
+            // 이전 버튼
+            paginationHTML += `
+                <button class="pagination-btn ${currentPage === 1 ? 'disabled' : ''}" 
+                        onclick="goToPage(${currentPage - 1})" 
+                        ${currentPage === 1 ? 'disabled' : ''}>
+                    ‹
+                </button>
+            `;
+
+            // 페이지 번호
+            const maxVisible = 5;
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+
+            if (endPage - startPage < maxVisible - 1) {
+                startPage = Math.max(1, endPage - maxVisible + 1);
+            }
+
+            if (startPage > 1) {
+                paginationHTML += `<button class="pagination-btn" onclick="goToPage(1)">1</button>`;
+                if (startPage > 2) {
+                    paginationHTML += `<span style="padding: 0 0.5rem;">...</span>`;
+                }
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                paginationHTML += `
+                    <button class="pagination-btn ${i === currentPage ? 'active' : ''}" 
+                            onclick="goToPage(${i})">
+                        ${i}
+                    </button>
+                `;
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    paginationHTML += `<span style="padding: 0 0.5rem;">...</span>`;
+                }
+                paginationHTML += `<button class="pagination-btn" onclick="goToPage(${totalPages})">${totalPages}</button>`;
+            }
+
+            // 다음 버튼
+            paginationHTML += `
+                <button class="pagination-btn ${currentPage === totalPages ? 'disabled' : ''}" 
+                        onclick="goToPage(${currentPage + 1})" 
+                        ${currentPage === totalPages ? 'disabled' : ''}>
+                    ›
+                </button>
+            `;
+
+            pagination.innerHTML = paginationHTML;
+        }
+
+        function goToPage(page) {
+            const pinnedPosts = filteredData.filter(item => item.pinned);
+            const normalPosts = filteredData.filter(item => !item.pinned);
+            
+            const pinnedCount = pinnedPosts.length;
+            const normalPostsPerPage = ITEMS_PER_PAGE - pinnedCount;
+            const totalPages = Math.ceil(normalPosts.length / normalPostsPerPage);
+            
+            if (page < 1 || page > totalPages) return;
+            
+            currentPage = page;
+            renderNoticeList();
+        }
+
+        function viewNotice(id) {
+            alert(`게시글 ${id} 상세 페이지로 이동 (백엔드 연동 필요)`);
+        }
+
+        function searchNotice() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            if (searchTerm.trim() === '') {
+                filteredData = [...noticeData];
+            } else {
+                filteredData = noticeData.filter(item => 
+                    item.title.toLowerCase().includes(searchTerm) || 
+                    item.author.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            currentPage = 1;
+            document.getElementById('totalCount').textContent = filteredData.length;
+            renderNoticeList();
+        }
+
+        // Enter 키로 검색
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchNotice();
+            }
+        });
+
+        // 초기 렌더링
+        renderNoticeList();
+    </script>
+</body>
+</html>
