@@ -49,20 +49,3 @@ footer {
     color: rgba(255, 255, 255, 0.6);
     font-size: 0.9rem;
 }
-
-.service-list {
-    display: flex;
-    flex-wrap: wrap;
-    max-width: 180px;
-    /* 필요에 따라 조정 */
-    gap: 0.3rem 1.5rem;
-    /* 행/열 간격, 디자인에 맞게 조정 가능 */
-    list-style: none;
-    padding: 0;
-}
-
-.service-list li {
-    width: 33.3%;
-    /* 한 줄에 2개(총 2줄, 마지막만 1칸) */
-    margin-bottom: 0.5rem;
-}
