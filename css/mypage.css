@@ -1,0 +1,260 @@
+/* ===== 컬러/토큰 ===== */
+:root{
+    --bg-page: #f5f6fa;
+    --panel: #ffffff;
+    --ink-1: #2f3640;
+    --ink-2: #4b5563;
+    --ink-3: #6b7280;
+    --ink-sub: #9aa3af;
+    --brand: #40739e;
+    --brand-strong: #2f6a97;
+    --accent: #2f3640;
+    --shadow: 0 8px 24px rgba(0,0,0,.06);
+    --radius: 12px;
+}
+
+/* ===== 전체 레이아웃 ===== */
+.mypage-container{
+    display:flex;
+    min-height:100vh;
+    background:var(--bg-page);
+    margin-top:80px; /* 헤더 높이 보정 */
+    gap:20px;
+    padding:24px;
+    box-sizing:border-box;
+}
+
+/* ===== 사이드바 ===== */
+.sidebar{
+    width:240px;
+    background: #1f2430;
+    color:#fff;
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 96px; /* 헤더 + 외곽 여백 */
+    align-self:flex-start;
+    padding: 12px;
+}
+
+.sidebar ul{ list-style:none; margin:0; padding:6px; }
+.sidebar ul li{ margin:4px 0; }
+
+.sidebar ul li a{
+    display:block;
+    padding:12px 14px;
+    color:#cfd6e4;
+    text-decoration:none;
+    border-radius:10px;
+    font-weight:600;
+    letter-spacing:.1px;
+    transition:transform .04s ease, background .2s ease, color .2s ease;
+}
+
+.sidebar ul li a:hover{
+    background:#2b3242;
+    color:#fff;
+    transform: translateY(-1px);
+}
+
+.sidebar ul li.active a{
+    background: linear-gradient(180deg, #3a79a8, #356b93);
+    color:#fff;
+}
+
+/* ===== 메인 ===== */
+#mypage-content{
+    flex:1;
+    min-width:0;
+    background:transparent;
+    border-radius: var(--radius);
+}
+
+/* ===== 상단 프로필 헤더 ===== */
+.profile-header{
+    display:grid;
+    grid-template-columns: 72px 1fr auto;
+    align-items:center;
+    gap:16px;
+    background: var(--panel);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+}
+
+.avatar{
+    width:72px;height:72px;
+    border-radius:50%;
+    background: linear-gradient(180deg, #6aa6cc, #3e7ca3);
+    color:#fff; display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:28px; letter-spacing:.5px;
+    text-transform: uppercase;
+    box-shadow: 0 6px 16px rgba(64,115,158,.25);
+}
+
+.profile-title h1{
+    margin:0 0 6px 0;
+    font-size:24px;
+    color:var(--ink-1);
+    letter-spacing:.2px;
+}
+
+.profile-header .meta{
+    display:flex; align-items:center; gap:10px;
+    color:var(--ink-3); font-size:14px;
+}
+
+.profile-header .meta .dot{ opacity:.6; }
+
+.badge{
+    display:inline-block;
+    padding:4px 10px;
+    border-radius:999px;
+    font-size:12px; font-weight:700;
+    background:#e6f0f7; color:#225b86;
+    letter-spacing:.4px; text-transform: uppercase;
+}
+
+.btn-outline{
+    border:1px solid #c7d5e4;
+    background: #f7fbff;
+    color:#1e4f74;
+    padding:10px 14px;
+    border-radius:10px;
+    font-weight:700;
+    text-decoration:none;
+    transition: background .2s, color .2s, transform .04s;
+}
+
+.btn-outline:hover{
+    background:#e9f4fd;
+    color:#153a56;
+    transform: translateY(-1px);
+}
+
+/* ===== 본문 ===== */
+.profile-body{
+    display:grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap:16px;
+}
+
+/* 정보 그리드 */
+.info-grid{
+    background: var(--panel);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    box-shadow: var(--shadow);
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:14px 18px;
+}
+
+.info-item{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    min-width:0;
+}
+
+.info-label{
+    font-size:12px; font-weight:700;
+    color:var(--ink-sub); letter-spacing:.4px;
+    text-transform: uppercase;
+}
+
+.info-value{
+    font-size:16px; color:var(--ink-1); font-weight:600;
+    word-break:break-word;
+}
+
+/* 내 소개 카드 */
+.intro-card{
+    background: var(--panel);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    box-shadow: var(--shadow);
+}
+
+.intro-head{
+    display:flex; align-items:baseline; gap:12px; margin-bottom:12px;
+}
+
+.intro-head h2{
+    margin:0; font-size:18px; color:var(--ink-1);
+}
+
+.hint{ color:var(--ink-sub); }
+
+.intro-form textarea{
+    width:100%;
+    border:1px solid #e2e8f0;
+    border-radius:10px;
+    padding:12px 14px;
+    outline:none;
+    resize:vertical;
+    min-height:120px;
+    font-size:15px;
+    color:var(--ink-2);
+    background:#fbfdff;
+    transition: box-shadow .2s, border-color .2s;
+}
+
+.intro-form textarea:focus{
+    border-color:#b7d3ea;
+    box-shadow: 0 0 0 4px rgba(64,115,158,.12);
+}
+
+.form-actions{
+    display:flex; gap:10px; margin-top:12px;
+}
+
+.btn-primary{
+    background: var(--brand);
+    color:#fff; border:none;
+    padding:10px 16px; border-radius:10px;
+    font-weight:700; cursor:pointer;
+    transition: background .2s, transform .04s;
+}
+
+.btn-primary:hover{ background: var(--brand-strong); transform: translateY(-1px); }
+
+.btn-ghost{
+    display:inline-flex; align-items:center; justify-content:center;
+    background: transparent;
+    border:1px solid #dbe5ef; color:#2a4863;
+    padding:10px 16px; border-radius:10px; text-decoration:none;
+    font-weight:700; transition: background .2s, color .2s, transform .04s;
+}
+
+.btn-ghost:hover{
+    background:#f6fbff; color:#18344a; transform: translateY(-1px);
+}
+
+/* 기존 공통 버튼 최소 영향 */
+button{
+    background: var(--brand);
+    color:#fff; border:none; padding:10px 18px;
+    border-radius:10px; cursor:pointer;
+    font-weight:600; transition: background .2s, transform .04s;
+}
+button:hover{ background: var(--brand-strong); transform: translateY(-1px); }
+
+/* ===== 반응형 ===== */
+@media (max-width: 1024px){
+    .profile-body{ grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px){
+    .mypage-container{ flex-direction:column; padding:16px; }
+    .sidebar{ width:100%; position:static; border-radius:12px; }
+    #mypage-content{ margin:0; }
+    .profile-header{ grid-template-columns: 56px 1fr; row-gap:10px; }
+    .btn-outline{ grid-column: 1 / -1; justify-self: start; }
+    .info-grid{ grid-template-columns: 1fr; }
+}
+
+
+.intro-readonly { white-space: pre-wrap; color: var(--ink-2); line-height: 1.6; padding: 8px 0; }
+.btn-outline.sm { padding: 6px 10px; font-size: 12px; }
