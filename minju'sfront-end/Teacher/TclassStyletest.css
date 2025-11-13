@@ -1,0 +1,934 @@
+ :root {
+     --primary: #5cb85f;
+     --primary-dark: #4caf50;
+     --primary-light: #70c373;
+     --gray: #757575;
+     --light-gray: #f5f3ed;
+     --cream: #fcfbf8;
+     --text: #212121;
+     --bg-white: #ffffff;
+ }
+
+ * {
+     margin: 0;
+     padding: 0;
+     box-sizing: border-box;
+ }
+
+ .page {
+     flex: 1;
+ }
+
+ html {
+     scroll-behavior: smooth;
+     height: 100%;
+ }
+
+ body {
+     display: flex;
+     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+     background: #f6f7f9;
+     ;
+     color: var(--text);
+     line-height: 1.6;
+     overflow-x: hidden;
+     margin: 0;
+     /* 기본 여백 제거(중요) */
+     min-height: 100dvh;
+     /* 화면 전체 높이 */
+     display: flex;
+     flex-direction: column;
+     /* 위→아래 배치 */
+ }
+
+ /* 헤더 - 심플하고 깔끔하게 */
+ header {
+     top: 0;
+     left: 0;
+     right: 0;
+     z-index: 1000;
+     background: rgba(255, 255, 255, 0.98);
+     border-bottom: 1px solid #e9ecef;
+     transition: all 0.3s ease;
+ }
+
+ header.scrolled {
+     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+ }
+
+ .header-container {
+     max-width: 1200px;
+     margin: 0 auto;
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     padding: 1.2rem 2rem;
+ }
+
+ .logo {
+     font-size: 1.6rem;
+     font-weight: 700;
+     color: var(--primary);
+     letter-spacing: -0.5px;
+ }
+
+ #logo {
+     text-decoration: none;
+     color: var(--primary);
+ }
+
+ nav {
+     display: flex;
+     gap: 2rem;
+ }
+
+ nav a {
+     color: var(--text);
+     text-decoration: none;
+     font-weight: 500;
+     font-size: 0.95rem;
+     transition: all 0.3s;
+ }
+
+ nav a:hover {
+     color: var(--primary);
+ }
+
+ .hidden {
+     display: none;
+ }
+
+ /* 좌측 사이드 구성 */
+
+ .tab_obj {
+     margin-top: 50px;
+     position: fixed;
+ }
+
+ .tab_obj h2 {
+     text-align: center;
+     margin-bottom: 3rem;
+     color: var(--primary);
+ }
+
+ #leftobj {
+     border: 5px solid none;
+     width: 270px;
+     left: 5px;
+ }
+
+ #TeachProfile {
+     border: 2px solid none;
+     height: 150px;
+ }
+
+ #subNavT {
+     width: 250px;
+     background: #ffffff;
+     padding: 1rem;
+     border: 3px solid none;
+     border-radius: 6px;
+     display: flex;
+     flex-direction: column;
+     gap: 10px;
+     flex-shrink: 0;
+ }
+
+ #subNavT a {
+     display: flex;
+     margin: 8px 0;
+     padding: 0.5rem 1rem;
+     background: #5cb85f;
+     color: white;
+     text-decoration: none;
+     border-radius: 4px;
+ }
+
+ #subNavT a:hover {
+     background: #549850;
+ }
+
+ #TeachProfile {
+     text-align: center;
+ }
+
+ #TeachProfile button {
+     margin-top: 10px;
+     padding: 5px;
+     border: 1px solid #ccc;
+     border-radius: 10px;
+     background-color: #5cb85f;
+     color: white;
+
+ }
+
+ #needLogin {
+     display: none;
+     text-align: center;
+ }
+
+ #loginT {
+     margin: 0 auto;
+     padding: 5px;
+     text-decoration: none;
+     border: 1px solid #ccc;
+     border-radius: 10px;
+     background-color: #5cb85f;
+     color: white;
+ }
+
+ #needLogin p {
+     margin-top: 16px;
+ }
+
+
+ /*________________________________________________________________________________________*/
+ /*uploadCourse*/
+ /* 오른쪽 컨텐츠 */
+ main.uploadCourse-container {
+     margin: 0 auto;
+     margin-top: 30px;
+     padding: 24px;
+     box-sizing: border-box;
+     background: #fff;
+     border-radius: 6px;
+     width: 960px;
+ }
+
+ /* 업로드 컨트롤 기본 스타일 */
+ .uploadCourse-Control {
+     background: var(--card, #f9f9f9);
+     border: 1px solid #e5e7eb;
+     margin: 20px;
+     border-radius: 12px;
+     display: flex;
+     align-items: center;
+     gap: 8px;
+     padding: 10px 12px;
+     width: 180px;
+     max-width: 100%;
+ }
+
+ .uploadCourse-container p input[type="text"] {
+     width: 80%;
+     padding: 10px 14px;
+     border: 1px solid #ccc;
+     border-radius: 20px;
+     font-size: 16px;
+     outline: none;
+     transition: 0.3s;
+     /* 입력란 길이 조절 */
+ }
+
+ .uploadCourse-Control input,
+ .uploadCourse-Control select {
+     border: none;
+     outline: none;
+     width: 100%;
+     font-size: 14px;
+     background: transparent;
+     color: var(--text, #333);
+ }
+
+ #cate {
+     width: 1000px;
+     display: flex;
+ }
+
+ #rankcheck p {
+     display: inline-block;
+     font-weight: bold;
+     color: #4caf50;
+     font-weight: 600;
+     margin-right: 56px;
+ }
+
+ #difficulty {
+     background: var(--card, #f9f9f9);
+     border: 1px solid #e5e7eb;
+     margin: 20px;
+     border-radius: 12px;
+     display: flex;
+     align-items: center;
+     gap: 8px;
+     padding: 10px 12px;
+     width: 180px;
+     max-width: 100%;
+ }
+
+ #pricebox p {
+     display: inline-block;
+     font-weight: bold;
+     color: #4caf50;
+     font-weight: 600;
+     margin-right: 12px;
+ }
+
+ #pricebox input {
+     margin-left: 32px;
+     border-radius: 10px;
+     padding: 10px;
+     margin-top: 5px;
+     width: 80%;
+     border: 1px solid #ccc;
+     margin-right: 10px;
+ }
+
+ /* 버튼 스타일 */
+ .cta {
+     border-radius: 12px;
+     border: none;
+     background: var(--primary, #4caf50);
+     color: white;
+     font-weight: 700;
+     cursor: pointer;
+ }
+
+ .cta:hover {
+     background: var(--primary-600, #45a049);
+ }
+
+ .uploadMedia-card {
+
+     padding: 10px;
+     margin-bottom: 10px;
+     display: flex;
+     gap: 16px;
+     justify-content: flex-start;
+     align-items: center;
+
+ }
+
+ .uploadMedia-action {
+     display: flex;
+     align-items: center;
+     gap: 8px;
+     margin-bottom: 0;
+ }
+
+ .upload-btn {
+     display: inline-block;
+     padding: 8px 16px;
+     background: #ffffff;
+     color: #000000;
+     font-weight: 400;
+     font-size: 14px;
+     border-radius: 8px;
+     cursor: pointer;
+     border: 1px solid #ccc;
+     transition: all 0.3s;
+ }
+
+ .upload-btn:hover {
+     background: #f0f0f0;
+ }
+
+ .uploadBtns button {
+     width: 100px;
+     height: 50px;
+     background: #4caf50;
+     color: white;
+     border: none;
+     padding: 10px 16px;
+     border-radius: 8px;
+     cursor: pointer;
+     font-weight: 550;
+     font-size: 15px;
+     transition: all 0.2s ease;
+ }
+
+ .uploadBtns {
+     display: flex;
+     justify-content: flex-end;
+     gap: 10px;
+     margin-top: 16px;
+ }
+
+ /* mngclass*/
+
+ .classbox {
+     margin: 0 auto;
+     margin-top: 100px;
+     padding: 24px;
+     box-sizing: border-box;
+     background: #fff;
+     border-radius: 6px;
+     width: 960px;
+ }
+
+ .classbox-title {
+     border: 1px solid none;
+     margin: 0 auto;
+     padding: 24px;
+     background-color: #333;
+     margin-bottom: 15px;
+     border-radius: 10px;
+ }
+ .classbox-title a{
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+ }
+
+ .studentM {
+     display: none;
+     /* 기본은 숨김 */
+     position: absolute;
+     background-color: #f9f9f9;
+     width: 912px;
+     min-width: 160px;
+     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+     z-index: 1;
+     left: -24px;
+     top: 3px;
+     border-collapse: collapse;
+     /* 표처럼 붙이기 옵션 (선택사항) */
+ }
+
+
+ /* 드롭다운 컨테이너 */
+ .dropdown {
+     position: relative;
+ }
+
+ .dropbtn {
+     display: inline-block;
+     background-color: #333;
+     color: #f1f1f1;
+     text-align: center;
+     padding: 14px 16px;
+     text-decoration: none;
+     cursor: pointer;
+     position: absolute;
+     right: 10px;
+     top: -37px;
+     border-radius: 10px;
+     border: 1px solid none;
+ }
+
+ /* .open 클래스가 붙었을 때만 메뉴 열기 */
+ .dropdown.open .studentM {
+     display: table;
+     /* flex 대신 table로 동작 */
+ }
+
+ .studentM th,
+ td {
+     /* table-cell 기본값을 쓰는게 좋음 */
+     display: table-cell;
+     /* 또는 아예 display 설정 안 해도 됨 */
+     color: black;
+     padding: 10px 16px;
+     text-align: center;
+     /* margin은 table-cell에는 잘 안 먹으니 빼주는 게 좋아요 */
+     /* margin: 10px 100px;  -> 필요하면 padding으로 조절 */
+ }
+
+ .studentM tr:hover {
+     background-color: #f1f1f1;
+ }
+
+ /*________________________________________________________________________________________*/
+ 
+ /*uploadQuiz*/
+ .uploadQuiz-container {
+     flex: 1;
+     padding: 24px;
+     box-sizing: border-box;
+     background: #fff;
+     border-radius: 6px;
+ }
+
+ .uploadQuiz-container p input[type="text"][readonly] {
+     width: 80%;
+     padding: 10px 14px;
+     border: 1px solid #ccc;
+     border-radius: 20px;
+     font-size: 16px;
+     outline: none;
+     transition: 0.3s;
+     background-color: #f0f0f0;
+ }
+
+ .quiz-card {
+     border: 1px solid #ddd;
+     border-radius: 10px;
+     padding: 1rem;
+     margin-bottom: 1.5rem;
+     background: #fafafa;
+     font-size: 16px;
+
+ }
+
+ .quiz-card h3 {
+     margin-top: 0;
+     color: #333;
+ }
+
+ .quizCard-area {
+     max-height: 100px;
+     resize: vertical;
+     font-size: 16px;
+     margin: auto;
+ }
+
+
+ .quizCard-area {
+     width: 97%;
+     padding: 10px;
+     margin-top: 8px;
+     border: 1px solid #ccc;
+     border-radius: 6px;
+     font-size: 16px;
+ }
+
+ .quiz-card input[type="text"] {
+     width: 50%;
+     padding: 10px;
+     margin-top: 8px;
+     border: 1px solid #ccc;
+     border-radius: 6px;
+     font-size: 16px;
+ }
+
+ .quiz-card textarea::placeholder,
+ .quiz-card input[type="text"]::placeholder {
+     font-size: 16px;
+     color: #999;
+ }
+
+
+
+ /* myCourse */
+
+ .myCourse-topBar {
+     display: flex;
+     justify-content: flex-end;
+     align-items: center;
+     margin-bottom: 20px;
+ }
+
+ .myCourse-container {
+     flex: 1;
+     padding: 24px;
+     box-sizing: border-box;
+     background: #fff;
+     border-radius: 6px;
+
+ }
+
+ .myCourse-Control {
+     background: var(--card, #f9f9f9);
+     border: 1px solid #e5e7eb;
+     border-radius: 12px;
+     display: flex;
+     align-items: center;
+     gap: 8px;
+     padding: 10px 12px;
+     width: 150px;
+     max-width: 100%;
+ }
+
+ .myCourse-Control input,
+ .myCourse-Control select {
+     border: none;
+     outline: none;
+     width: 100%;
+     font-size: 14px;
+     background: transparent;
+     color: var(--text, #333);
+ }
+
+ /* 검색창 */
+ .myCourse-searchBox {
+     width: 400px;
+     display: flex;
+     justify-content: flex-end;
+     align-items: center;
+     margin: 20px;
+ }
+
+ .myCourse-searchBox input {
+     flex: 1;
+     font-size: 16px;
+     padding: 8px 12px;
+     border: 1px solid #ddd;
+     border-radius: 20px;
+     outline: none;
+ }
+
+ .myCourse-searchBox button {
+     margin-left: 8px;
+     background: #4caf50;
+     color: white;
+     border: none;
+     padding: 8px 14px;
+     border-radius: 50%;
+     cursor: pointer;
+ }
+
+ .myCourse-searchBox button:hover {
+     background: #45a049;
+ }
+
+ /* 강의 카드 */
+ .myCourse-card {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     border: 1px solid #ddd;
+     border-radius: 16px;
+     padding: 16px;
+     margin-bottom: 16px;
+     background: #fafafa;
+ }
+
+ .myCourse-thumb {
+     flex-shrink: 0;
+     width: 220px;
+     height: 220px;
+     background: #e0e0e0;
+     border-radius: 10px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     font-size: 0.9rem;
+     color: #555;
+     overflow: hidden;
+ }
+
+ .myCourse-thumb img {
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
+     /* **새로 추가** - 비율을 유지하며 박스를 꽉 채움 */
+     object-position: center;
+     /* **새로 추가** - 이미지를 중앙에 정렬 */
+ }
+
+ .course-row {
+     display: flex;
+     align-items: flex-start;
+     gap: 10px;
+     margin-bottom: 12px;
+ }
+
+ .courseTitle {
+     display: flex;
+     padding: 5px;
+ }
+
+ .myCourse-badge {
+     font-size: 12px;
+     color: #065f46;
+     background: #d1fae5;
+     padding: 4px 8px;
+     border-radius: 999px;
+     border: 1px solid #a7f3d0;
+     margin-left: 10px;
+ }
+
+ .myCourse-info {
+     flex: 1;
+     margin-left: 50px;
+ }
+
+ .myCourse-info h3 {
+     margin: 0;
+     font-weight: bold;
+ }
+
+ .myCourse-info p {
+     margin: 4px 0;
+     font-size: 0.9rem;
+ }
+
+ .courseExplain {
+     margin: 0;
+     font-size: 0.95rem;
+     height: 180px;
+     max-width: 900px;
+     border-radius: 6px;
+     border: solid 1px #ccc;
+     background: #ffffff;
+     /* 연한 배경으로 구분 */
+     padding: 12px;
+     white-space: pre-line;
+     /* 줄바꿈 반영 */
+     overflow-y: auto;
+     /* 내용 많으면 스크롤 */
+     max-height: 250px;
+
+ }
+
+ .course-createdAt {
+     font-size: 0.9rem;
+
+ }
+
+ /* 액션 버튼 */
+ .myCourse-actions {
+     display: flex;
+     flex-direction: column;
+     gap: 10px;
+     margin-right: 30px;
+ }
+
+ .courseEdit-btn,
+ .quizEdit-btn {
+     background: #4caf50;
+     color: white;
+     border: none;
+     padding: 14px 20px;
+     border-radius: 8px;
+     cursor: pointer;
+     font-size: 0.9rem;
+ }
+
+ .courseDelete-btn {
+     background: #e37070;
+     color: white;
+     border: none;
+     padding: 14px 20px;
+     border-radius: 8px;
+     cursor: pointer;
+     font-size: 0.9rem;
+ }
+
+ .courseEdit-btn:hover {
+     background: #388e3c;
+ }
+
+ .quizEdit-btn:hover {
+     background: #388e3c;
+ }
+
+ .courseDelete-btn:hover {
+     background: #e45a5a;
+ }
+
+ /* 다음글 이전글*/
+ .myCourse-navigation {
+     margin-top: 2rem;
+     text-align: center;
+     /* 가운데 정렬 */
+ }
+
+ .myCourse-navigation button {
+     background: none;
+     /* 버튼 배경 제거 */
+     border: none;
+     /* 버튼 테두리 제거 */
+     margin: 0 12px;
+     font-size: 15px;
+     color: #4caf50;
+     font-weight: 600;
+     transition: color 0.2s;
+     cursor: pointer;
+ }
+
+ .myCourse-navigation button:hover {
+     color: #388e3c;
+     text-decoration: underline;
+ }
+
+
+ /*________________________________________________________________________________________*/
+
+ /*editQuiz*/
+ .editQuiz-container {
+     flex: 1;
+     padding: 24px;
+     box-sizing: border-box;
+     background: #fff;
+     border-radius: 6px;
+ }
+
+ .editQuiz-container p input[type="text"][readonly] {
+     width: 80%;
+     padding: 10px 14px;
+     border: 1px solid #ccc;
+     border-radius: 20px;
+     font-size: 16px;
+     outline: none;
+     transition: 0.3s;
+     background-color: #f0f0f0;
+ }
+
+ .quiz-card {
+     border: 1px solid #ddd;
+     border-radius: 10px;
+     padding: 1rem;
+     margin-bottom: 1.5rem;
+     background: #fafafa;
+     font-size: 16px;
+
+ }
+
+ .quiz-card h3 {
+     margin-top: 0;
+     color: #333;
+ }
+
+ .quizCard-area {
+     max-height: 100px;
+     resize: vertical;
+     font-size: 16px;
+     margin: auto;
+ }
+
+
+ .quizCard-area {
+     width: 97%;
+     padding: 10px;
+     margin-top: 8px;
+     border: 1px solid #ccc;
+     border-radius: 6px;
+     font-size: 16px;
+ }
+
+ .quiz-card input[type="text"] {
+     width: 50%;
+     padding: 10px;
+     margin-top: 8px;
+     border: 1px solid #ccc;
+     border-radius: 6px;
+     font-size: 16px;
+ }
+
+ .quiz-card textarea::placeholder,
+ .quiz-card input[type="text"]::placeholder {
+     font-size: 16px;
+     color: #999;
+ }
+
+ /*________________________________________________________________________________________*/
+
+ /* 푸터 */
+ footer {
+     background: #2d3436;
+     color: white;
+     text-align: center;
+     padding: 2rem 2rem 2rem;
+     margin-top: 30px;
+
+ }
+
+ .footer-container {
+     max-width: 1200px;
+     margin: 0 auto;
+     display: grid;
+     grid-template-columns: 2fr 1fr 1fr 1fr;
+     gap: 2rem;
+     margin-bottom: 2rem;
+ }
+
+ .footer-about h3 {
+     font-size: 1.3rem;
+     margin-bottom: 1rem;
+     color: var(--primary);
+ }
+
+ .footer-links h4 {
+     margin-bottom: 1rem;
+     font-weight: 600;
+ }
+
+ .footer-links ul {
+     list-style: none;
+ }
+
+ .footer-links li {
+     margin-bottom: 0.5rem;
+ }
+
+ .footer-links a {
+     color: rgba(255, 255, 255, 0.7);
+     text-decoration: none;
+     transition: color 0.3s;
+ }
+
+ .footer-links a:hover {
+     color: var(--primary);
+ }
+
+ .footer-bottom {
+     border-top: 1px solid rgba(255, 255, 255, 0.1);
+     padding-top: 2rem;
+     text-align: center;
+     color: rgba(255, 255, 255, 0.6);
+     font-size: 0.9rem;
+ }
+
+ #footerall {
+     text-decoration: none;
+     color: white;
+ }
+
+ /* 반응형 */
+ @media (max-width: 1024px) {
+     .header-container {
+         padding: 1rem 1.5rem;
+     }
+
+     .course-card {
+         min-width: calc(50% - 1rem);
+     }
+
+     .carousel-btn-prev {
+         left: 10px;
+     }
+
+     .carousel-btn-next {
+         right: 10px;
+     }
+
+     .footer-container {
+         grid-template-columns: 1fr 1fr;
+         gap: 2rem;
+     }
+ }
+
+ @media (max-width: 768px) {
+     nav {
+         display: none;
+     }
+
+     .hero {
+         padding: 4rem 1.5rem 3rem;
+     }
+
+     .course-card {
+         min-width: 100%;
+     }
+
+     .footer-container {
+         grid-template-columns: 1fr;
+     }
+
+     .path-steps {
+         grid-template-columns: 1fr;
+     }
+ }
+
+ /* 스크롤 애니메이션 */
+ @keyframes fadeInUp {
+     from {
+         opacity: 0;
+         transform: translateY(30px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ .animate-on-scroll {
+     opacity: 0;
+     transform: translateY(30px);
+ }
+
+ .animate-on-scroll.animated {
+     animation: fadeInUp 0.6s ease forwards;
+ }
