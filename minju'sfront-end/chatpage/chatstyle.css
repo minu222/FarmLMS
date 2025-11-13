@@ -1,0 +1,628 @@
+    :root {
+        --primary: #5cb85f;
+        --primary-dark: #4caf50;
+        --primary-light: #70c373;
+        --gray: #757575;
+        --light-gray: #f5f3ed;
+        --text: #212121;
+        --border: #e9ecef;
+        --panel: #ffffff;
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0
+    }
+
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        background: #f8f9fa;
+        color: var(--text);
+        line-height: 1.6
+    }
+
+    /* 헤더 */
+    header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.98);
+        border-bottom: 1px solid var(--border);
+        transition: all 0.3s ease
+    }
+
+    header.scrolled {
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08)
+    }
+
+    .header-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.2rem 2rem
+    }
+
+    .logo {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: var(--primary);
+        letter-spacing: -0.5px;
+        text-decoration: none
+    }
+
+    nav {
+        display: flex;
+        gap: 2rem
+    }
+
+    nav a {
+        color: var(--text);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.95rem;
+        transition: all 0.3s
+    }
+
+    nav a:hover,
+    nav a.active {
+        color: var(--primary)
+    }
+
+    /* 3컬럼 레이아웃 */
+    .layout {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem;
+        display: grid;
+        grid-template-columns: 320px 1fr 280px;
+        gap: 1.5rem;
+        min-height: calc(100vh - 180px)
+    }
+
+    .col {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column
+    }
+
+    .col.left {
+        align-self: start
+    }
+
+    .col-head {
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--border);
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 8px
+    }
+
+    .section {
+        display: flex;
+        flex-direction: column
+    }
+
+    .section-head {
+        padding: 10px 14px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--gray);
+        background: #fafafa;
+        border-top: 1px solid var(--border)
+    }
+
+    /* 최대 3개 아이템 높이로 제한 */
+    .list {
+        overflow-y: auto;
+        max-height: calc(3 * 80px)
+    }
+
+    .list::-webkit-scrollbar {
+        width: 6px
+    }
+
+    .list::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px
+    }
+
+    .list::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 10px
+    }
+
+    .list::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8
+    }
+
+    /* 좌측: 참여/미참여 방 목록 */
+    .room-item {
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--border);
+        cursor: pointer;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        transition: all .2s;
+        min-height: 80px
+    }
+
+    .room-item:hover {
+        background: #fafafa
+    }
+
+    .room-item:last-child {
+        border-bottom: none
+    }
+
+    .room-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: linear-gradient(135deg, var(--primary-light), var(--primary-dark));
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 0.95rem;
+        flex-shrink: 0
+    }
+
+    .room-body {
+        flex: 1;
+        min-width: 0
+    }
+
+    .room-title {
+        font-weight: 700;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap
+    }
+
+    .badge-joined {
+        background: var(--primary);
+        color: #fff;
+        border-radius: 12px;
+        padding: 2px 8px;
+        font-size: 0.7rem;
+        font-weight: 800
+    }
+
+    .room-meta {
+        margin-top: 4px;
+        color: var(--gray);
+        font-size: 0.82rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis
+    }
+
+    .room-item.active {
+        outline: 2px solid var(--primary);
+        outline-offset: -2px;
+        background: #f0fdf4
+    }
+
+    /* 채팅방 만들기 버튼 */
+    .create-room-container {
+        padding: 14px;
+        border-top: 1px solid var(--border);
+        background: #fafafa
+    }
+
+    .create-room-btn {
+        width: 100%;
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 0.8rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all .2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px
+    }
+
+    .create-room-btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(92, 184, 95, 0.3)
+    }
+
+    /* 가운데: 채팅창 */
+    .chat-head {
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 10px
+    }
+
+    .chat-room-name {
+        font-weight: 800;
+        flex: 1
+    }
+
+    .leave-btn {
+        background: #ef4444;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all .2s
+    }
+
+    .leave-btn:hover {
+        background: #dc2626
+    }
+
+    .chat-view {
+        flex: 1;
+        overflow: auto;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        background: #f5f7f9
+    }
+
+    .msg {
+        max-width: 70%;
+        padding: 10px 12px;
+        border-radius: 12px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, .05)
+    }
+
+    .msg.me {
+        align-self: flex-end;
+        background: #dff5e1;
+        border: 1px solid #ccebd1
+    }
+
+    .msg.other {
+        align-self: flex-start;
+        background: #fff;
+        border: 1px solid var(--border)
+    }
+
+    .msg .author {
+        font-size: 0.78rem;
+        color: var(--gray);
+        margin-bottom: 3px;
+        font-weight: 600
+    }
+
+    .chat-input-wrap {
+        padding: 10px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        gap: 8px;
+        background: #fff
+    }
+
+    .chat-input {
+        flex: 1;
+        resize: none;
+        min-height: 42px;
+        max-height: 120px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 10px;
+        outline: none;
+        font-size: 0.95rem;
+        font-family: inherit
+    }
+
+    .chat-input:focus {
+        border-color: var(--primary)
+    }
+
+    .send-btn {
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 0 20px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all .2s
+    }
+
+    .send-btn:hover {
+        background: var(--primary-dark)
+    }
+
+    .send-btn:disabled {
+        opacity: .5;
+        cursor: not-allowed
+    }
+
+    /* 우측: 온라인/오프라인 */
+    .user-item {
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 10px
+    }
+
+    .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%
+    }
+
+    .dot.online {
+        background: #22c55e
+    }
+
+    .dot.offline {
+        background: #cbd5e1
+    }
+
+    .user-name {
+        flex: 1;
+        font-size: 0.9rem
+    }
+
+    .pill {
+        font-size: 0.72rem;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 2px 8px;
+        color: var(--gray);
+        background: #fafafa
+    }
+
+    /* 모달 */
+    .modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, .5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000
+    }
+
+    .modal.active {
+        display: flex
+    }
+
+    .modal-card {
+        background: #fff;
+        border-radius: 16px;
+        width: min(450px, 92vw);
+        padding: 2rem;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        animation: slideIn 0.3s ease
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateY(-50px);
+            opacity: 0
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1
+        }
+    }
+
+    .modal-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem
+    }
+
+    .modal-desc {
+        color: var(--gray);
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem
+    }
+
+    .modal-room-info {
+        background: var(--light-gray);
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem
+    }
+
+    .modal-room-name {
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: var(--text);
+        margin-bottom: 0.5rem
+    }
+
+    .modal-room-desc {
+        font-size: 0.9rem;
+        color: var(--gray)
+    }
+
+    .modal-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end
+    }
+
+    .btn {
+        padding: 0.9rem 1.5rem;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 600;
+        transition: all .2s
+    }
+
+    .btn.cancel {
+        background: #e9ecef;
+        color: var(--text)
+    }
+
+    .btn.cancel:hover {
+        background: #dee2e6
+    }
+
+    .btn.primary {
+        background: var(--primary);
+        color: #fff
+    }
+
+    .btn.primary:hover {
+        background: var(--primary-dark)
+    }
+
+    /* 채팅방 생성 모달 */
+    .form-group {
+        margin-bottom: 1.2rem
+    }
+
+    .form-label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--text);
+        font-size: 0.9rem
+    }
+
+    .form-input,
+    .form-textarea {
+        width: 100%;
+        padding: 0.7rem;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-family: inherit;
+        outline: none
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+        border-color: var(--primary)
+    }
+
+    .form-textarea {
+        resize: vertical;
+        min-height: 80px
+    }
+
+    /* 푸터 */
+    footer {
+        background: #2d3436;
+        color: white;
+        padding: 2.2rem 2rem 2rem;
+        margin-top: 3rem
+    }
+
+    .footer-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
+        gap: 3rem;
+        margin-bottom: 1.8rem
+    }
+
+    .footer-about h3 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+        color: var(--primary)
+    }
+
+    .footer-about p {
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.6
+    }
+
+    .footer-links h4 {
+        margin-bottom: 1rem;
+        font-weight: 600
+    }
+
+    .footer-links ul {
+        list-style: none
+    }
+
+    .footer-links li {
+        margin-bottom: 0.5rem
+    }
+
+    .footer-links a {
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        transition: color 0.3s
+    }
+
+    .footer-links a:hover {
+        color: var(--primary)
+    }
+
+    .footer-bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 2rem;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.9rem
+    }
+
+    /* 반응형 */
+    @media (max-width:1200px) {
+        .layout {
+            grid-template-columns: 280px 1fr 240px
+        }
+    }
+
+    @media (max-width:960px) {
+        nav {
+            display: none
+        }
+
+        .layout {
+            grid-template-columns: 1fr;
+            gap: 12px
+        }
+
+        .col.right {
+            order: 3
+        }
+
+        .col.left {
+            order: 1
+        }
+
+        .col.center {
+            order: 2;
+            min-height: 60vh
+        }
+
+        .footer-container {
+            grid-template-columns: 1fr
+        }
+    }
+
+    @media (max-width:640px) {
+        .header-container {
+            padding: 1rem
+        }
+    }
