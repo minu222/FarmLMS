@@ -140,24 +140,14 @@
 
     // 전체 강의 데이터
     const allCourses = [
-        { id: 1, level: 'beginner', category: 'grain', icon: '🌾', title: '벼농사 시작하기', desc: '벼농사의 기초부터 수확까지', instructor: '김농부', price: 49000, progress: 65 },
-        { id: 2, level: 'beginner', category: 'vegetable', icon: '🥬', title: '상추 재배 입문', desc: '베란다에서 쉽게 키우는 상추', instructor: '이채소', price: 0, progress: 100 },
-        { id: 3, level: 'intermediate', category: 'fruit', icon: '🍓', title: '딸기 재배 중급', desc: '수확량을 늘리는 노하우', instructor: '박딸기', price: 89000, progress: 30 },
-        { id: 4, level: 'intermediate', category: 'herb', icon: '🌿', title: '약초 재배 가이드', desc: '건강한 약초 키우기', instructor: '최약초', price: 69000, progress: 0 },
-        { id: 5, level: 'advanced', category: 'smartfarm', icon: '🚜', title: '스마트팜 구축', desc: 'IoT를 활용한 농장 자동화', instructor: '정스마트', price: 129000, progress: 45 },
-        { id: 6, level: 'beginner', category: 'grain', icon: '🌽', title: '옥수수 재배', desc: '초보자를 위한 옥수수 농사', instructor: '강옥수', price: 39000, progress: 80 },
-        { id: 7, level: 'intermediate', category: 'vegetable', icon: '🍅', title: '토마토 재배 실전', desc: '맛있는 토마토 키우기', instructor: '윤토마', price: 59000, progress: 20 },
-        { id: 8, level: 'beginner', category: 'fruit', icon: '🍇', title: '포도 재배 기초', desc: '포도나무 관리의 시작', instructor: '임포도', price: 0, progress: 55 },
-        { id: 9, level: 'advanced', category: 'vegetable', icon: '🥒', title: '오이 대량 재배', desc: '상업용 오이 재배 노하우', instructor: '한오이', price: 99000, progress: 0 },
-        { id: 10, level: 'beginner', category: 'herb', icon: '🍃', title: '허브 가드닝', desc: '실내에서 키우는 허브', instructor: '조허브', price: 45000, progress: 90 },
-        { id: 11, level: 'intermediate', category: 'fruit', icon: '🍑', title: '복숭아 과수원', desc: '복숭아 나무 관리 6개월 코스', instructor: '서복숭', price: 79000, progress: 15 },
-        { id: 12, level: 'advanced', category: 'smartfarm', icon: '💡', title: '데이터 기반 농업', desc: '센서와 데이터로 최적화하기', instructor: '홍데이터', price: 149000, progress: 0 },
-        { id: 13, level: 'beginner', category: 'vegetable', icon: '🥕', title: '당근 재배 입문', desc: '뿌리채소의 기본', instructor: '신당근', price: 35000, progress: 70 },
-        { id: 14, level: 'intermediate', category: 'grain', icon: '🌾', title: '밀 재배 실습', desc: '밀농사의 모든 것', instructor: '민밀알', price: 69000, progress: 0 },
-        { id: 15, level: 'advanced', category: 'fruit', icon: '🍎', title: '사과 과수원 경영', desc: '사과농장 수익 극대화', instructor: '오사과', price: 119000, progress: 35 },
-        { id: 16, level: 'beginner', category: 'herb', icon: '🌱', title: '쑥과 민들레', desc: '자생 약초 채취와 재배', instructor: '황약초', price: 0, progress: 100 },
-        { id: 17, level: 'intermediate', category: 'smartfarm', icon: '🤖', title: '자동화 시스템', desc: '관개부터 수확까지 자동화', instructor: '송시스템', price: 95000, progress: 50 },
-        { id: 18, level: 'advanced', category: 'herb', icon: '🌼', title: '한약재 재배', desc: '인삼, 당귀 등 고급 약재', instructor: '전한약', price: 109000, progress: 0 }
+        { id: 1, level: 'beginner', category: 'seed', title: '벼농사 시작하기', desc: '벼농사의 기초부터 수확까지', instructor: '김농부', price: 49000, progress: 65 },
+        { id: 2, level: 'beginner', category: 'grow', title: '상추 재배 입문', desc: '베란다에서 쉽게 키우는 상추', instructor: '이채소', price: 0, progress: 100 },
+        { id: 3, level: 'intermediate', category: 'grow', title: '딸기 재배 중급', desc: '수확량을 늘리는 노하우', instructor: '박딸기', price: 89000, progress: 30 },
+        { id: 4, level: 'intermediate', category: 'grow', title: '약초 재배 가이드', desc: '건강한 약초 키우기', instructor: '최약초', price: 69000, progress: 0 },
+        { id: 5, level: 'beginner', category: 'grow', title: '옥수수 재배', desc: '초보자를 위한 옥수수 농사', instructor: '강옥수', price: 39000, progress: 80 },
+        { id: 6, level: 'intermediate', category: 'grow', title: '토마토 재배 실전', desc: '맛있는 토마토 키우기', instructor: '윤토마', price: 59000, progress: 20 },
+        { id: 7, level: 'beginner', category: 'grow', title: '포도 재배 기초', desc: '포도나무 관리의 시작', instructor: '임포도', price: 0, progress: 55 },
+        { id: 8, level: 'advanced', category: 'grow', title: '오이 대량 재배', desc: '상업용 오이 재배 노하우', instructor: '한오이', price: 99000, progress: 0 },
     ];
 
     const ITEMS_PER_PAGE = 6;
@@ -361,13 +351,11 @@
     }
 
     function getCategoryText(category) {
-        const categories = {
-            grain: '곡물',
-            vegetable: '채소',
-            fruit: '과일',
-            herb: '약초',
-            smartfarm: '스마트팜'
-        };
+            const categories = {
+                seed: '모종',
+                grow: '재배',
+                ship: '출하'
+            };
         return categories[category] || category;
     }
 
