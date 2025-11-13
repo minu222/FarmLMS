@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UrbanGreen - 회원가입</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/signup.css}">
+</head>
+<body>
+<div class="logo-header">
+    <a th:href="@{/main/urbangreen}" class="logo">UrbanGreen</a>
+</div>
+
+<div class="main-container">
+    <div class="signup-card">
+        <div class="signup-header">
+            <h1>회원가입</h1>
+            <p>청년 귀농의 첫 걸음을 시작하세요</p>
+        </div>
+
+        <form th:action="@{/signup}" method="post" th:object="${user}">
+            <!-- 아이디 -->
+            <!-- 아이디 -->
+            <div class="form-group">
+                <label for="id">아이디 <span class="required">*</span></label>
+                <input type="text" id="id" th:field="*{id}" placeholder="영문, 숫자 4-12자" required>
+                <div class="validation-msg" th:if="${idError}" th:text="${idError}"></div>
+            </div>
+
+            <!-- 비밀번호 -->
+            <div class="form-group">
+                <label for="password">비밀번호 <span class="required">*</span></label>
+                <input type="password" id="password" th:field="*{password}" placeholder="영문, 숫자 포함 8자 이상" required>
+                <div class="validation-msg" th:if="${passwordError}" th:text="${passwordError}"></div>
+            </div>
+
+            <!-- 닉네임 -->
+            <div class="form-group">
+                <label for="nickname">닉네임 <span class="required">*</span></label>
+                <input type="text" id="nickname" th:field="*{nickname}" required>
+                <div class="validation-msg" th:if="${nicknameError}" th:text="${nicknameError}"></div>
+            </div>
+            <!-- 이름 -->
+            <div class="form-group">
+                <label for="name">이름 <span class="required">*</span></label>
+                <input type="text" id="name" th:field="*{name}" placeholder="이름을 입력하세요" required>
+            </div>
+
+            <!-- 이메일 -->
+            <div class="form-group">
+                <label for="email">이메일 <span class="required">*</span></label>
+                <input type="email" id="email" th:field="*{email}" placeholder="example@email.com" required>
+            </div>
+
+            <!-- 생년월일 -->
+            <div class="form-group">
+                <label for="birth">생년월일</label>
+                <input type="date" id="birth" th:field="*{birth}">
+            </div>
+
+            <button type="submit" class="signup-btn">회원가입</button>
+        </form>
+
+        <div class="login-link">
+            이미 계정이 있으신가요?
+            <a th:href="@{/login}">로그인</a>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+
+</body>
+</html>
