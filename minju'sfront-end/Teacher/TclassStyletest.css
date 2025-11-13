@@ -1,6 +1,6 @@
  :root {
      --primary: #5cb85f;
-     --primary-dark: #4caf50;
+     --primary-dark: #7bca7d;
      --primary-light: #70c373;
      --gray: #757575;
      --light-gray: #f5f3ed;
@@ -360,7 +360,7 @@
      border: 1px solid none;
      margin: 0 auto;
      padding: 24px;
-     background-color: #333;
+     background-color: var(--primary-dark);
      margin-bottom: 15px;
      border-radius: 10px;
  }
@@ -393,8 +393,8 @@
 
  .dropbtn {
      display: inline-block;
-     background-color: #333;
-     color: #f1f1f1;
+     background-color: white;
+     color: #4caf50;
      text-align: center;
      padding: 14px 16px;
      text-decoration: none;
@@ -403,7 +403,7 @@
      right: 10px;
      top: -37px;
      border-radius: 10px;
-     border: 1px solid none;
+     border: 1px solid #ccc;
  }
 
  /* .open 클래스가 붙었을 때만 메뉴 열기 */

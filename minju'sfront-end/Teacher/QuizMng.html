@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>퀴즈 관리</title>
+    <link rel="stylesheet" href="quizstyle.css">
+</head>
+
+<body>
+    <header id="header">
+        <div class="header-container">
+            <div class="logo"><a id="logo" href="/main/urbangreen.html">UrbanGreen</a></div>
+            <nav>
+                <a href="/main/class.html">강의</a>
+                <a href="/post/free-board.html">공지사항</a>
+                <a href="/Account/login.html">채팅</a>
+                <a href="/AI/aichoice.html">AI 추천</a>
+                <a href="/main/game.html">게임</a>
+                <a href="/main/urbangreen.html">로그아웃</a>
+            </nav>
+        </div>
+    </header>
+    <main class="page-wrapper">
+        <div class="tab_obj">
+
+            <h2>나의 메뉴</h2>
+            <div id="leftobj">
+                <div id="TeachProfile">
+                    <h3>My 프로필</h3>
+                    <p><span id="username">(강사명은 DB와 연결하기)</span>강사님</p>
+                    <button type="submit">로그아웃</button>
+                </div>
+
+                <!--로그아웃 후 노출되는 프로필 섹션-->
+                <div id="needLogin">
+                    <a id="loginT" href="login.html"> 로그인</a>
+                    <p style="text-align: center; margin-bottom: 10px;">로그인 후 이용 가능합니다.</p>
+                </div>
+
+                <nav id="subNavT">
+                    <a href="modifyInfoT.html">정보 수정</a>
+                    <a href="mngclass.html">강의 관리</a>
+                    <a href="">내 댓글 관리</a>
+                    <a href="">퀴즈 관리</a>
+                </nav>
+            </div>
+        </div>
+
+        <div class="uploadQuiz-container">
+            <h2>퀴즈 출제</h2>
+            <p style="color:#4caf50; font-weight: 600; margin-right: 6px;">
+                강의 제목 :<input type="text" th:value="${course.courses_name}" readonly id="coursesName">
+            </p>
+            <hr style="margin: 20px 0 20px 0;">
+
+            <form id="quizUploadForm">
+                <input type="hidden" id="coursesId" name="coursesId">
+
+                <div id="quizWrapper">
+                    <div class="quiz-card">
+                        <h3>Q1.</h3>
+                        <textarea class="quizCard-area" name="quiz_question" rows="2"
+                            placeholder="문제를 입력하세요"></textarea>
+                        <br><label style="font-size: large; font-weight: 600;">정답: </label>
+                        <input type="text" name="quiz_result" placeholder="정답 입력">
+                    </div>
+                </div>
+
+                <div class="uploadBtns">
+                    <button id="addQuiz-btn" type="button">문항 추가</button>
+                    <button id="uploadQuiz-btn" type="submit">출제 완료</button>
+                    <button type="button" onclick="window.history.back()">닫기</button>
+                </div>
+            </form>
+        </div>
+    </main>
+    <footer>
+        <p>
+            <a id="footerall" href="https://naver.me/5LHhFcBI"> 대전광역시 중구 선화동 중앙로121번길 20 방산빌딩 3층　</a> ｜
+            <span>연락처:
+                0507-1422-2402
+            </span> | © 2025 UrbanGreen. All rights reserved.
+        </p>
+    </footer>
+</body>
+<script th:inline="javascript">
+    const quizWrapper = document.getElementById("quizWrapper");
+    const addQuizBtn = document.getElementById("addQuiz-btn");
+    const quizUploadForm = document.getElementById("quizUploadForm");
+    let quizCount = 1;
+
+    // URL에서 강의 ID(courseId) 추출
+    const pathArray = window.location.pathname.split('/');
+    const coursesId = pathArray[pathArray.length - 1];
+    document.getElementById('coursesId').value = coursesId;
+
+    // 강의 제목 가져오기
+    const coursesName = document.getElementById("coursesName").value;
+
+    // 동적으로 퀴즈 카드 추가
+    addQuizBtn.addEventListener("click", () => {
+        if (quizCount >= 5) {
+            alert("최대 5문제까지 출제 가능합니다.");
+            return;
+        }
+        quizCount++;
+        const newCard = document.createElement("div");
+        newCard.className = "quiz-card";
+        newCard.innerHTML = `
+        <h3>Q${quizCount}.</h3>
+        <textarea class="quizCard-area" name="quiz_question" rows="2" placeholder="문제를 입력하세요"></textarea>
+        <label style="font-size: large; font-weight: 600;">정답: </label>
+        <input type="text" name="quiz_result" placeholder="정답 입력">
+    `;
+        quizWrapper.appendChild(newCard);
+    });
+
+    // 폼 제출(출제 완료) 이벤트 처리
+    quizUploadForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const formData = new FormData(quizUploadForm);
+        const quizzes = [];
+        const questions = formData.getAll('quiz_question');
+        const results = formData.getAll('quiz_result');
+
+        for (let i = 0; i < questions.length; i++) {
+            quizzes.push({
+                coursesId: coursesId,
+                quiz_name: coursesName,
+                quiz_question: questions[i],
+                quiz_result: results[i]
+            });
+        }
+
+        fetch("/quiz/upload", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(quizzes)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("퀴즈 출제에 실패했습니다.");
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert("강의 등록 및 퀴즈 출제가 완료되었습니다.");
+                window.location.href = "/course/main";
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert(error.message);
+            });
+    });
+</script>
+
+</html>
