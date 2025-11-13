@@ -1,0 +1,158 @@
+/* --- 공통 및 폼 스타일 --- */
+body { font-family: 'Arial', sans-serif; line-height: 1.6; padding: 0; max-width: 100%; margin: 0; background-color: #f4fcf4; padding-top: 80px;}
+h1 { color: #38761d; text-align: center; }
+.form-container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+
+.main-content-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+nav {
+    display: flex;
+    gap: 1rem;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* 폼 입력 영역 스타일 */
+.form-group { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+.form-group label { display: block; font-weight: bold; margin-bottom: 8px; color: #555; }
+.form-group select, .form-group input[type="text"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+.form-group .radio-group { display: flex; flex-wrap: wrap; gap: 10px; }
+.form-group .radio-group label { font-weight: normal; margin-right: 15px; display: flex; align-items: center; }
+.form-group .radio-group input[type="radio"] { margin-right: 5px; }
+.submit-button { display: block; width: 100%; padding: 15px; background-color: #5cb85c; color: white; border: none; border-radius: 5px; font-size: 18px; cursor: pointer; transition: background-color 0.3s; }
+.submit-button:hover { background-color: #449d44; }
+/* 로딩 애니메이션 스타일 */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.spinner {
+    display: inline-block;
+    animation: spin 2s linear infinite;
+}
+
+/* --- 결과 페이지 스타일 통합 --- */
+#resultArea { /* .result-container이 삽입될 영역 */
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9fff9;
+}
+.result-container {
+    padding: 0; /* resultArea에서 이미 패딩을 줬으므로 여기서는 0 */
+    border: none;
+    background-color: transparent;
+}
+
+/* 돌아가기 버튼 */
+.result-container .back-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+/* AI 결과 영역 (.ai-output) 디자인 개선 */
+.ai-output {
+    padding: 10px 0;
+    line-height: 1.7; /* 줄 간격 넓혀 가독성 향상 */
+}
+
+.ai-output h2 {
+    border-bottom: 2px solid #5cb85c;
+    padding-bottom: 5px;
+    color: #38761d;
+    margin-top: 25px;
+    font-size: 1.6em; /* 제목 폰트 크기 조정 */
+}
+
+.ai-output p, .ai-output li {
+    font-size: 1.05em;
+}
+
+.ai-output ul, .ai-output ol {
+    margin: 10px 0 20px 20px;
+    padding: 0;
+    list-style-type: disc;
+}
+
+.ai-output li {
+    margin-bottom: 8px;
+    font-size: 1.05em;
+    color: #333;
+}
+
+/* 표 스타일 (투자 재료 리스트) 최종 개선 */
+.ai-output table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 20px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.ai-output th, .ai-output td {
+    border: 1px solid #e0e0e0;
+    padding: 12px 15px;
+    text-align: left;
+    font-size: 0.95em;
+}
+
+/* 테이블 헤더 (th) 스타일 */
+.ai-output th {
+    background-color: #f0f7f0;
+    color: #38761d;
+    font-weight: bold;
+    text-align: center;
+    border-bottom: 2px solid #5cb85c;
+}
+
+/* 테이블 본문 (td) 스타일 */
+.ai-output tr:nth-child(even) td {
+    background-color: #fcfcfc;
+}
+
+/* Tip과 같은 마지막 줄의 레이아웃이 깨지지 않도록 처리 */
+.ai-output p:last-of-type {
+    margin-top: 25px;
+    padding: 12px;
+    background-color: #e6f2e6;
+    border-radius: 5px;
+    border-left: 5px solid #5cb85c;
+    font-weight: 500;
+    color: #333;
+}
+
+#planner-intro-text {
+    text-align: center;
+}
+
+:root {
+    --primary: #5cb85f; /* UrbanGreen의 녹색 */
+    --primary-dark: #449d44;
+    --text: #212121;
+}
+
+.header-container, .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.2rem 2rem;
+}
+
+h1, #planner-intro-text {
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 10px 0;
+}

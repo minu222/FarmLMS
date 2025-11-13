@@ -11,7 +11,7 @@ public class PlantIdController {
     // 단순 html 연결
     @GetMapping("/diagnosisPlant")
     public String identificationForm() {
-        return "plant_diagnosis";
+        return "/AI/plant_diagnosis";
     }
 
 }

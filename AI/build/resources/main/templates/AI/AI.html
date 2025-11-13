@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UrbanGreen - AI 서비스 선택</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/AI/AIStyle.css">
+</head>
+
+<body>
+<header id="header">
+    <div class="header-container">
+        <div class="logo">UrbanGreen</div>
+        <nav>
+            <a href="http://127.0.0.1:5500/board/class.html">강의</a>
+            <a href="http://127.0.0.1:5500/board//notice.html">공지사항</a>
+            <a href="http://127.0.0.1:5500/board/chat.html">채팅</a>
+            <a href="/">AI</a>
+            <a href="/main/game.html">게임</a>
+            <a href="http://127.0.0.1:5500/account/login.html">로그인</a>
+        </nav>
+    </div>
+</header>
+
+<section class="ai-choice-section">
+    <div class="section-header animate-on-scroll">
+        <div class="section-header-text">
+            <h2>AI 기반 농업 솔루션</h2>
+            <p>UrbanGreen의 인공지능 기술로 더 똑똑하고 효율적인 농사를 경험하세요.</p>
+        </div>
+    </div>
+    <hr>
+    <div class="ai-options-grid">
+        <div class="ai-option-card animate-on-scroll" style="animation-delay: 0.1s;">
+            <div class="ai-content-wrap">
+                <div class="ai-image-container">
+                    <img src="/img/planner.jpg">
+                </div>
+                <h3>주말농장 플래너</h3>
+                <p>
+                    작물 선택부터 텃밭 설계, 파종 및 수확 시기까지 <br>
+                    개인 환경에 맞춘 최적의 주말농장 계획을 세워드립니다.
+                </p>
+            </div>
+            <a href="/planner" class="ai-link-btn">
+                플래너 시작하기
+            </a>
+        </div>
+
+        <div class="ai-option-card animate-on-scroll" style="animation-delay: 0.2s;">
+            <div class="ai-content-wrap">
+                <div class="ai-image-container">
+                    <img src="/img/diagnosis.jpg">
+                </div>
+                <h3>AI 기반 식물 진단</h3>
+                <p>
+                    잎의 사진 한 장으로 작물의 병해충이나 영양 결핍 상태를 진단하고 <br>
+                    맞춤형 관리 방법과 해결책을 즉시 제공받으세요.
+                </p>
+            </div>
+            <a href="/diagnosisPlant" class="ai-link-btn">
+                식물 진단하기
+            </a>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-container">
+        <div class="footer-about">
+            <h3>UrbanGreen</h3>
+            <p>청년 귀농인을 위한 작물재배 교육 플랫폼입니다.</p>
+        </div>
+
+        <div class="footer-links">
+            <h4>서비스</h4>
+            <ul>
+                <a href="http://127.0.0.1:5500/board/class.html">강의</a>
+                <li><a href="http://127.0.0.1:5500/board//notice.html">공지사항</a></li>
+                <li><a href="http://127.0.0.1:5500/board/chat.html">채팅</a></li>
+                <li><a href="/AI/aichoice.html">AI</a></li>
+                <li><a href="/main/game.html">게임</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-links">
+            <h4>고객지원</h4>
+            <ul>
+                <li><a href="http://127.0.0.1:5500/main/faq.html">FAQ</a></li>
+                <li><a href="http://127.0.0.1:5500/main/terms.html">이용약관</a></li>
+                <li><a href="http://127.0.0.1:5500/main/privacy.html">개인정보처리방침</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>
+            대전광역시 중구 선화동 중앙로121번길 20 방산빌딩 3층 |
+            연락처: 0507-1422-2402 |
+            © 2025 UrbanGreen. All rights reserved.
+        </p>
+    </div>
+</footer>
+
+<script>
+    // 기존 메인 페이지의 스크립트 재활용
+    // 헤더 스크롤 효과
+    window.addEventListener('scroll', () => {
+        const header = document.getElementById('header');
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+
+    // 스크롤 애니메이션
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animated');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.animate-on-scroll').forEach(el => {
+        observer.observe(el);
+    });
+</script>
+</body>
+
+</html>

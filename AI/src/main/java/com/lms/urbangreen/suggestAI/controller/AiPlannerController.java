@@ -26,7 +26,7 @@ public class AiPlannerController {
     // 텃밭 계획 입력 폼 페이지
     @GetMapping("/planner")
     public String plannerForm() {
-        return "plannerForm"; // plannerForm.html을 렌더링
+        return "/AI/plannerForm"; // plannerForm.html을 렌더링
     }
 
     // 텃밭 계획 생성 요청 처리
@@ -47,6 +47,6 @@ public class AiPlannerController {
         // 3. 템플릿 이름과 Fragment 셀렉터를 반환 (Spring View Resolver에게 렌더링을 위임)
         // @ResponseBody가 붙어있어도, 반환된 String은 View 이름이 아닌
         // 렌더링된 HTML Fragment 문자열로 간주되어 클라이언트에게 전달됩니다.
-        return "plannerResult :: result-content";
+        return "AI/plannerResult :: result-content";
     }
 }
