@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>UrbanGreen - 작물 퀴즈 풀기</title>
+  <!-- 기존 head 내 스타일 및 메타 태그 등 유지 -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>UrbanGreen - 작물 재배 퀴즈</title>
     <style>
         :root {
             --primary: #5cb85f;
@@ -292,7 +292,6 @@
         }
     </style>
 </head>
-
 <body>
     <header id="header">
         <div class="header-container">
@@ -307,20 +306,20 @@
             </nav>
         </div>
     </header>
-    
-    <main class="main-container">
-        <div class="quiz-title">작물재배 퀴즈</div>
-        <div class="quiz-progress" id="quizProgress">1 / 3 문제</div>
-        <div class="quiz-card" id="quizCard">
-            <div class="quiz-question" id="quizQuestion"></div>
-            <div class="quiz-choices" id="quizChoices"></div>
-        </div>
-        <div class="quiz-action-group" id="quizActionGroup">
-            <button class="btn btn-primary" id="submitBtn">제출</button>
-        </div>
-        <div class="quiz-result" id="quizResult" style="display:none;"></div>
-    </main>
-    
+
+<main class="main-container">
+  <div class="quiz-title">작물재배 퀴즈</div>
+  <div class="quiz-progress" id="quizProgress">1 / 3 문제</div>
+  <div class="quiz-card" id="quizCard">
+    <div class="quiz-question" id="quizQuestion"></div>
+    <div class="quiz-choices" id="quizChoices"></div>
+  </div>
+  <div class="quiz-action-group" id="quizActionGroup">
+    <button class="btn btn-primary" id="submitBtn">제출</button>
+  </div>
+  <div class="quiz-result" id="quizResult" style="display:none;"></div>
+</main>
+
     <footer>
         <div class="footer-container">
             <div class="footer-about">
@@ -357,71 +356,81 @@
             </p>
         </div>
     </footer>
-    
-    <script>
-        const quizData = [
-            {
-                question: "딸기 스마트팜에서 온·습도를 관리하는 장비는?",
-                choices: ["조도 센서", "양액 탱크", "환경 컨트롤러", "양액 이송펌프"],
-                answer: 2
-            },
-            {
-                question: "토마토 재배에 가장 적합한 pH 범위는?",
-                choices: ["4.0~4.5", "5.5~6.5", "7.5~8.0", "6.8~7.3"],
-                answer: 1
-            },
-            {
-                question: "벼 이앙 후 수확까지의 대표 시기는?",
-                choices: ["60~80일", "90~110일", "120~140일", "150~180일"],
-                answer: 2
-            },
-        ];
 
-        let current = 0;
-        let selected = null;
-        let score = 0;
+<script>
+  const quizData = [
+    {
+      question: "딸기 스마트팜에서 온·습도를 관리하는 장비는?",
+      choices: ["조도 센서", "양액 탱크", "환경 컨트롤러", "양액 이송펌프"],
+      answer: 2
+    },
+    {
+      question: "토마토 재배에 가장 적합한 pH 범위는?",
+      choices: ["4.0~4.5", "5.5~6.5", "7.5~8.0", "6.8~7.3"],
+      answer: 1
+    },
+    {
+      question: "벼 이앙 후 수확까지의 대표 시기는?",
+      choices: ["60~80일", "90~110일", "120~140일", "150~180일"],
+      answer: 2
+    },
+  ];
 
-        function showQuiz(idx) {
-            const q = quizData[idx];
-            document.getElementById('quizQuestion').textContent = q.question;
-            document.getElementById('quizChoices').innerHTML = q.choices.map((txt, i) =>
-                `<button class="quiz-choice-btn${selected === i ? ' selected' : ''}" data-idx="${i}">${txt}</button>`
-            ).join('');
-            document.getElementById('quizProgress').textContent = (idx + 1) + ' / ' + quizData.length + ' 문제';
-            document.getElementById('quizResult').style.display = 'none';
-            document.getElementById('submitBtn').textContent = idx === quizData.length - 1 ? '최종 제출' : '제출';
-            // 선택 이벤트
-            [...document.querySelectorAll('.quiz-choice-btn')].forEach(btn => {
-                btn.onclick = (e) => {
-                    selected = Number(btn.dataset.idx);
-                    showQuiz(current);
-                };
-            });
-        }
+  let current = 0;
+  let selected = null;
+  let score = 0;
+  let isQuizDirty = false; // 저장 상태 감지 변수
+
+  function showQuiz(idx) {
+    const q = quizData[idx];
+    document.getElementById('quizQuestion').textContent = q.question;
+    document.getElementById('quizChoices').innerHTML = q.choices.map((txt, i) => 
+      `<button class="quiz-choice-btn${selected===i?' selected':''}" data-idx="${i}">${txt}</button>`
+    ).join('');
+    document.getElementById('quizProgress').textContent = (idx+1) + ' / ' + quizData.length + ' 문제';
+    document.getElementById('quizResult').style.display='none';
+    document.getElementById('submitBtn').textContent = idx === quizData.length-1 ? '최종 제출' : '제출';
+
+    [...document.querySelectorAll('.quiz-choice-btn')].forEach(btn=>{
+      btn.onclick = () => {
+        selected = Number(btn.dataset.idx);
+        isQuizDirty = true;  // 답변 선택시 변경 감지
         showQuiz(current);
+      };
+    });
+  }
+  
+  showQuiz(current);
 
-        document.getElementById('submitBtn').onclick = () => {
-            if (selected == null) {
-                alert('답을 선택하세요.');
-                return;
-            }
-            // 정답 체크
-            if (selected === quizData[current].answer) score++;
-            // 다음 or 결과
-            if (current < quizData.length - 1) {
-                current++; selected = null;
-                showQuiz(current);
-            } else {
-                // 결과 보여주기
-                document.getElementById('quizCard').innerHTML = '';
-                document.getElementById('quizActionGroup').innerHTML =
-                    `<a href="#" class="btn btn-secondary" onclick="window.location.reload();return false;">다시 풀기</a>`;
-                document.getElementById('quizResult').style.display = 'block';
-                document.getElementById('quizResult').textContent =
-                    `총 ${quizData.length}문제 중 ${score}개 맞췄습니다!`;
-            }
-        };
-    </script>
+  document.getElementById('submitBtn').onclick = () => {
+    if(selected == null) {
+      alert('답을 선택하세요.');
+      return;
+    }
+    if(selected === quizData[current].answer) score++;
+    if(current < quizData.length-1) {
+      current++; selected = null;
+      showQuiz(current);
+    } else {
+      document.getElementById('quizCard').innerHTML = '';
+      document.getElementById('quizActionGroup').innerHTML =
+        `<a href="#" class="btn btn-secondary" onclick="window.location.reload();return false;">다시 풀기</a>`;
+      document.getElementById('quizResult').style.display='block';
+      document.getElementById('quizResult').textContent = 
+          `총 ${quizData.length}문제 중 ${score}개 맞췄습니다!`;
+      isQuizDirty = false; // 퀴즈 완료시 변경사항 없음
+    }
+  };
+
+  // 페이지 벗어나기 경고
+  window.addEventListener('beforeunload', function (e) {
+    if (isQuizDirty) {
+      const confirmationMessage = '저장하지 않는 변경사항이 있습니다. 페이지를 떠나시겠습니까?';
+      e.preventDefault();
+      e.returnValue = confirmationMessage;
+      return confirmationMessage;
+    }
+  });
+</script>
 </body>
-
 </html>
