@@ -112,8 +112,9 @@
    /* 좌측 사이드 구성 */
 
    .tab_obj {
-       margin-top: 100px;
+       margin-top: 50px;
        position: fixed;
+       margin-left: 10px;
    }
 
    .tab_obj h2 {
@@ -342,55 +343,6 @@
        margin-top: 20px;
        margin-left: 12px;
    }
-
-   .quiz-card {
-       border: 1px solid #ddd;
-       border-radius: 10px;
-       padding: 1rem;
-       margin-bottom: 1.5rem;
-       background: #fafafa;
-       font-size: 16px;
-
-   }
-
-   .quiz-card h3 {
-       margin-top: 0;
-       color: #333;
-   }
-
-   .quizCard-area {
-       max-height: 100px;
-       resize: vertical;
-       font-size: 16px;
-       margin: auto;
-   }
-
-
-   .quizCard-area {
-       width: 97%;
-       padding: 10px;
-       margin-top: 8px;
-       border: 1px solid #ccc;
-       border-radius: 6px;
-       font-size: 16px;
-   }
-
-   .quiz-card input[type="text"] {
-       width: 50%;
-       padding: 10px;
-       margin-top: 8px;
-       border: 1px solid #ccc;
-       border-radius: 6px;
-       font-size: 16px;
-   }
-
-   .quiz-card textarea::placeholder,
-   .quiz-card input[type="text"]::placeholder {
-       font-size: 16px;
-       color: #999;
-   }
-
-
 
    /* myCourse */
 
@@ -778,15 +730,11 @@
        color: #333;
    }
 
+
    .quizCard-area {
        max-height: 100px;
-       resize: vertical;
-       font-size: 16px;
+       resize: none;
        margin: auto;
-   }
-
-
-   .quizCard-area {
        width: 97%;
        padding: 10px;
        margin-top: 8px;

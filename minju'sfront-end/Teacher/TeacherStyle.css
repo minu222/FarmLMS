@@ -51,7 +51,6 @@
 
  /* 헤더 - 심플하고 깔끔하게 */
  header {
-     position: fixed;
      top: 0;
      left: 0;
      right: 0;
@@ -110,8 +109,9 @@
  /* 좌측 사이드 구성 */
 
  .tab_obj {
-     margin-top: 100px;
+     margin-top: 50px;
      position: fixed;
+     margin-left: 10px;
  }
 
  .tab_obj h2 {
@@ -243,7 +243,7 @@
      color: red;
  }
 
- 
+
  /* 푸터 */
  footer {
      background: #2d3436;
@@ -299,9 +299,10 @@
      color: rgba(255, 255, 255, 0.6);
      font-size: 0.9rem;
  }
+
  #footerall {
-    text-decoration: none;
-    color: white;
+     text-decoration: none;
+     color: white;
  }
 
  /* 반응형 */

@@ -102,6 +102,7 @@
 
  .tab_obj {
      margin-top: 50px;
+     margin-left: 10px;
      position: fixed;
  }
 
@@ -192,14 +193,14 @@
      box-sizing: border-box;
      background: #fff;
      border-radius: 6px;
-     width: 960px;
+     width: 1000px;
  }
 
  /* 업로드 컨트롤 기본 스타일 */
  .uploadCourse-Control {
      background: var(--card, #f9f9f9);
      border: 1px solid #e5e7eb;
-     margin: 20px;
+     margin: 20px 20px 20px 10px;
      border-radius: 12px;
      display: flex;
      align-items: center;
@@ -265,7 +266,7 @@
  }
 
  #pricebox input {
-     margin-left: 32px;
+     margin-left: 80px;
      border-radius: 10px;
      padding: 10px;
      margin-top: 5px;
@@ -356,6 +357,19 @@
      width: 960px;
  }
 
+ #addclassbtn {
+     text-decoration: none;
+     margin-left: 91%;
+     background-color: #5cb85f;
+     color: white;
+     padding: 8px;
+     border-radius: 10px;
+ }
+
+ #addclassbtn :hover {
+     color: #549850;
+ }
+
  .classbox-title {
      border: 1px solid none;
      margin: 0 auto;
@@ -364,10 +378,11 @@
      margin-bottom: 15px;
      border-radius: 10px;
  }
- .classbox-title a{
-    text-decoration: none;
-    color: white;
-    font-weight: bold;
+
+ .classbox-title a {
+     text-decoration: none;
+     color: white;
+     font-weight: bold;
  }
 
  .studentM {
@@ -429,7 +444,7 @@
  }
 
  /*________________________________________________________________________________________*/
- 
+
  /*uploadQuiz*/
  .uploadQuiz-container {
      flex: 1;
@@ -496,242 +511,6 @@
      font-size: 16px;
      color: #999;
  }
-
-
-
- /* myCourse */
-
- .myCourse-topBar {
-     display: flex;
-     justify-content: flex-end;
-     align-items: center;
-     margin-bottom: 20px;
- }
-
- .myCourse-container {
-     flex: 1;
-     padding: 24px;
-     box-sizing: border-box;
-     background: #fff;
-     border-radius: 6px;
-
- }
-
- .myCourse-Control {
-     background: var(--card, #f9f9f9);
-     border: 1px solid #e5e7eb;
-     border-radius: 12px;
-     display: flex;
-     align-items: center;
-     gap: 8px;
-     padding: 10px 12px;
-     width: 150px;
-     max-width: 100%;
- }
-
- .myCourse-Control input,
- .myCourse-Control select {
-     border: none;
-     outline: none;
-     width: 100%;
-     font-size: 14px;
-     background: transparent;
-     color: var(--text, #333);
- }
-
- /* 검색창 */
- .myCourse-searchBox {
-     width: 400px;
-     display: flex;
-     justify-content: flex-end;
-     align-items: center;
-     margin: 20px;
- }
-
- .myCourse-searchBox input {
-     flex: 1;
-     font-size: 16px;
-     padding: 8px 12px;
-     border: 1px solid #ddd;
-     border-radius: 20px;
-     outline: none;
- }
-
- .myCourse-searchBox button {
-     margin-left: 8px;
-     background: #4caf50;
-     color: white;
-     border: none;
-     padding: 8px 14px;
-     border-radius: 50%;
-     cursor: pointer;
- }
-
- .myCourse-searchBox button:hover {
-     background: #45a049;
- }
-
- /* 강의 카드 */
- .myCourse-card {
-     display: flex;
-     align-items: center;
-     justify-content: space-between;
-     border: 1px solid #ddd;
-     border-radius: 16px;
-     padding: 16px;
-     margin-bottom: 16px;
-     background: #fafafa;
- }
-
- .myCourse-thumb {
-     flex-shrink: 0;
-     width: 220px;
-     height: 220px;
-     background: #e0e0e0;
-     border-radius: 10px;
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     font-size: 0.9rem;
-     color: #555;
-     overflow: hidden;
- }
-
- .myCourse-thumb img {
-     width: 100%;
-     height: 100%;
-     object-fit: cover;
-     /* **새로 추가** - 비율을 유지하며 박스를 꽉 채움 */
-     object-position: center;
-     /* **새로 추가** - 이미지를 중앙에 정렬 */
- }
-
- .course-row {
-     display: flex;
-     align-items: flex-start;
-     gap: 10px;
-     margin-bottom: 12px;
- }
-
- .courseTitle {
-     display: flex;
-     padding: 5px;
- }
-
- .myCourse-badge {
-     font-size: 12px;
-     color: #065f46;
-     background: #d1fae5;
-     padding: 4px 8px;
-     border-radius: 999px;
-     border: 1px solid #a7f3d0;
-     margin-left: 10px;
- }
-
- .myCourse-info {
-     flex: 1;
-     margin-left: 50px;
- }
-
- .myCourse-info h3 {
-     margin: 0;
-     font-weight: bold;
- }
-
- .myCourse-info p {
-     margin: 4px 0;
-     font-size: 0.9rem;
- }
-
- .courseExplain {
-     margin: 0;
-     font-size: 0.95rem;
-     height: 180px;
-     max-width: 900px;
-     border-radius: 6px;
-     border: solid 1px #ccc;
-     background: #ffffff;
-     /* 연한 배경으로 구분 */
-     padding: 12px;
-     white-space: pre-line;
-     /* 줄바꿈 반영 */
-     overflow-y: auto;
-     /* 내용 많으면 스크롤 */
-     max-height: 250px;
-
- }
-
- .course-createdAt {
-     font-size: 0.9rem;
-
- }
-
- /* 액션 버튼 */
- .myCourse-actions {
-     display: flex;
-     flex-direction: column;
-     gap: 10px;
-     margin-right: 30px;
- }
-
- .courseEdit-btn,
- .quizEdit-btn {
-     background: #4caf50;
-     color: white;
-     border: none;
-     padding: 14px 20px;
-     border-radius: 8px;
-     cursor: pointer;
-     font-size: 0.9rem;
- }
-
- .courseDelete-btn {
-     background: #e37070;
-     color: white;
-     border: none;
-     padding: 14px 20px;
-     border-radius: 8px;
-     cursor: pointer;
-     font-size: 0.9rem;
- }
-
- .courseEdit-btn:hover {
-     background: #388e3c;
- }
-
- .quizEdit-btn:hover {
-     background: #388e3c;
- }
-
- .courseDelete-btn:hover {
-     background: #e45a5a;
- }
-
- /* 다음글 이전글*/
- .myCourse-navigation {
-     margin-top: 2rem;
-     text-align: center;
-     /* 가운데 정렬 */
- }
-
- .myCourse-navigation button {
-     background: none;
-     /* 버튼 배경 제거 */
-     border: none;
-     /* 버튼 테두리 제거 */
-     margin: 0 12px;
-     font-size: 15px;
-     color: #4caf50;
-     font-weight: 600;
-     transition: color 0.2s;
-     cursor: pointer;
- }
-
- .myCourse-navigation button:hover {
-     color: #388e3c;
-     text-decoration: underline;
- }
-
 
  /*________________________________________________________________________________________*/
 
