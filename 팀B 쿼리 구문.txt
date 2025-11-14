@@ -1,0 +1,29 @@
+-- 회원가입 샘플(user_type은 디폴트값이 아닌 경우에만 할당)
+INSERT INTO all_users (user_type, id, password, name, nickname, birth, email, intro)
+VALUES ('admin', 'admin01', 'password123', '김완장', '관리자01', '2000-01-15', 'admin01@example.com', '분탕은 사형');
+
+
+-- 강의 카테고리 샘플
+INSERT INTO lecture_category (category_name, category_img, difficulty) VALUES
+('모종', '/images/category/basic.jpg', beginner),
+('출하', '/images/category/smartfarm.jpg', advanced),
+('재배', '/images/category/organic.jpg', beginner),
+('재배', '/images/category/crops.jpg', intermediate),
+('재배', '/images/category/pest.jpg', advanced);
+
+-- 강의등록 샘플
+INSERT INTO lecture (lec_category_id, user_id, title, content, video_url, price)
+VALUES (1, 11, '농업 기초 입문', '농업의 기본 원리와 작물 재배 방법', 'https://example.com/videos/farming101.mp4', 12000);
+
+-- 뷰를 통해 구독자 조회
+SELECT lecture_id, title, price, subs_count
+FROM v_lecture_subscribers
+WHERE lecture_id = 1;
+
+
+-- 퀴즈 카테고리 샘플
+INSERT INTO quiz_category (category_name, difficulty, pass_score, total_questions, category_img, description) VALUES
+('농업기초 퀴즈', '초급', 60, 10, '/images/quiz/basic.jpg', '농업의 기본 개념을 테스트합니다'),
+('작물재배 퀴즈', '중급', 70, 15, '/images/quiz/crops.jpg', '작물 재배 지식을 확인합니다'),
+('병해충관리 퀴즈', '중급', 70, 12, '/images/quiz/pest.jpg', '병해충 관리 능력을 평가합니다'),
+('스마트팜 퀴즈', '고급', 80, 20, '/images/quiz/smartfarm.jpg', '스마트팜 기술 이해도를 측정합니다');
