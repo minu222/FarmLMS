@@ -1,2 +1,0 @@
-INSERT INTO all_users (id, password, name, nickname, birth, email, intro)
-VALUES ('student02', 'password123', '이학생', '고수농부', '2000-01-15', 'student02@example.com', '농업을 배우고 싶습니다.');
