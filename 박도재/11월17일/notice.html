@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지사항 - UrbanGreen</title>
+    <link th:href="@{/css/board/notice.css}" rel="stylesheet">
+    <link th:href="@{/css/fragments/header.css}" rel="stylesheet">
+    <link th:href="@{/css/fragments/footer.css}" rel="stylesheet">
+</head>
+<body>
+<!-- 헤더 -->
+<header th:replace="~{fragments/header :: header}"></header>
+
+<main class="notice-container">
+    <!-- 페이지 헤더 -->
+    <div class="page-header">
+        <h1 class="page-title">공지사항</h1>
+        <p class="page-description">UrbanGreen의 새로운 소식과 중요한 공지를 확인하세요</p>
+    </div>
+
+    <!-- 검색 및 총 게시글 -->
+    <div class="notice-controls">
+        <div class="total-count">
+            총 <strong th:text="${total}">0</strong>개의 게시글
+        </div>
+        <form class="search-form" th:action="@{/board/notice}" method="get">
+            <input type="text" name="q" placeholder="제목 또는 내용으로 검색"
+                   th:value="${q}" class="search-input">
+            <button type="submit" class="search-btn">검색</button>
+        </form>
+    </div>
+
+    <!-- 공지사항 테이블 -->
+    <div class="notice-table-wrapper">
+        <table class="notice-table">
+            <thead>
+            <tr>
+                <th class="col-number">번호</th>
+                <th class="col-title">제목</th>
+                <th class="col-author">작성자</th>
+                <th class="col-date">작성일</th>
+                <th class="col-views">조회</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- ⭐ 고정 공지 2개 (여기만 추가) -->
+            <tr th:each="notice, stat : ${pinnedNotices}" class="pinned-row">
+                <td class="col-number" th:text="${notice.id}">1</td>  <!-- 번호 표시 -->
+                <td class="col-title">
+                    <span class="pin-badge">필독</span>
+                    <a th:href="@{/board/notice/{id}(id=${notice.id})}"
+                       class="notice-link"
+                       th:text="${notice.title}">
+                        제목
+                    </a>
+                </td>
+                <td class="col-author" th:text="${notice.authorName}">관리자</td>
+                <td class="col-date" th:text="${#temporals.format(notice.createdAt, 'yyyy.MM.dd')}">2025.11.13</td>
+                <td class="col-views" th:text="${notice.viewCount}">0</td>
+            </tr>
+
+            <!-- 일반 공지 -->
+            <tr th:if="${#lists.isEmpty(notices)}" class="empty-row">
+                <td colspan="5">등록된 공지사항이 없습니다.</td>
+            </tr>
+
+            <tr th:each="notice, stat : ${notices}" th:unless="${notice.isPinned}">
+                <td class="col-number" th:text="${total - ((page - 1) * size) - stat.index}">1</td>
+                <td class="col-title">
+                    <a th:href="@{/board/notice/{id}(id=${notice.id})}"
+                       class="notice-link" th:text="${notice.title}">
+                        제목
+                    </a>
+                </td>
+                <td class="col-author" th:text="${notice.authorName}">관리자</td>
+                <td class="col-date" th:text="${#temporals.format(notice.createdAt, 'yyyy.MM.dd')}">2025.11.13</td>
+                <td class="col-views" th:text="${notice.viewCount}">0</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 페이지네이션 -->
+    <div class="pagination" th:if="${totalPages > 0}">
+        <a th:href="@{/board/notice(page=${page > 1 ? page - 1 : 1}, size=${size}, q=${q})}"
+           class="page-btn" th:classappend="${page == 1} ? 'disabled'">
+            이전
+        </a>
+
+        <span th:each="i : ${#numbers.sequence(1, totalPages)}"
+              th:if="${i >= page - 2 && i <= page + 2}">
+                <a th:href="@{/board/notice(page=${i}, size=${size}, q=${q})}"
+                   class="page-number" th:classappend="${i == page} ? 'active'"
+                   th:text="${i}">1</a>
+            </span>
+
+        <a th:href="@{/board/notice(page=${page < totalPages ? page + 1 : totalPages}, size=${size}, q=${q})}"
+           class="page-btn" th:classappend="${page == totalPages} ? 'disabled'">
+            다음
+        </a>
+    </div>
+</main>
+
+<!-- 푸터 -->
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>
