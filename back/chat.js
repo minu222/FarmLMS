@@ -129,20 +129,22 @@ function subscribeRoom(roomId) {
         currentSubscription.unsubscribe();
     }
 
-    // 서버는 항상 /topic/chat 으로만 브로드캐스트
+    // 서버는 항상 /topic/chat 으로 메시지를 쏴줌
     currentSubscription = stompClient.subscribe(
         "/topic/chat",
         function (message) {
             const body = JSON.parse(message.body);
 
-            // 🔥 현재 선택된 방의 메시지만 표시
+            // 🔥 현재 선택된 방의 메시지만 보여주기
             if (!currentRoomId || Number(body.roomId) !== Number(roomId)) {
                 return;
             }
+
             appendMessage(body);
         }
     );
 }
+
 
 // ===== 방 목록 로드 =====
 async function loadRoomList() {
@@ -580,6 +582,20 @@ function formatTime(str) {
     return `${hh}:${mi}`;
 }
 
+function sendPresence(type) {
+    if (!stompClient || !stompClient.connected || !currentRoomId || !userId) return;
+
+    const payload = {
+        roomId: currentRoomId,
+        userId: userId,
+        nickname: userNickname,
+        type: type
+    };
+
+    // ✅ presence용 목적지
+    stompClient.send(`/app/presence/${currentRoomId}`, {}, JSON.stringify(payload));
+}
+
 function subscribePresence(roomId) {
     if (!stompClient || !stompClient.connected) return;
 
@@ -596,18 +612,6 @@ function subscribePresence(roomId) {
     );
 }
 
-function sendPresence(type) {
-    if (!stompClient || !stompClient.connected || !currentRoomId || !userId) return;
-
-    const payload = {
-        roomId: currentRoomId,
-        userId: userId,
-        nickname: userNickname,
-        type: type
-    };
-
-    stompClient.send(`/app/presence/${currentRoomId}`, {}, JSON.stringify(payload));
-}
 
 function renderOnlineUsers(users) {
     if (!onlineListEl) return;
