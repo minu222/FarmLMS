@@ -129,10 +129,16 @@ function subscribeRoom(roomId) {
         currentSubscription.unsubscribe();
     }
 
+    // 서버는 항상 /topic/chat 으로만 브로드캐스트
     currentSubscription = stompClient.subscribe(
-        "/topic/room." + roomId,
+        "/topic/chat",
         function (message) {
             const body = JSON.parse(message.body);
+
+            // 🔥 현재 선택된 방의 메시지만 표시
+            if (!currentRoomId || Number(body.roomId) !== Number(roomId)) {
+                return;
+            }
             appendMessage(body);
         }
     );
@@ -405,7 +411,8 @@ function sendMessage() {
         content: text,
     };
 
-    stompClient.send(`/app/chat/${currentRoomId}`, {}, JSON.stringify(payload));
+    stompClient.send("/app/chat.send", {}, JSON.stringify(payload));
+
     chatInputEl.value = "";
 }
 
