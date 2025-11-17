@@ -1,7 +1,7 @@
-package com.lms.urbangreen.urbangreenproject.repository;
+package com.lms.urbangreen.urbangreenproject.board.repository;
 
-import com.lms.urbangreen.urbangreenproject.model.NoticeDetail;
-import com.lms.urbangreen.urbangreenproject.model.NoticeListItem;
+import com.lms.urbangreen.urbangreenproject.board.entity.NoticeDetail;
+import com.lms.urbangreen.urbangreenproject.board.entity.NoticeListItem;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -37,19 +37,20 @@ public class NoticeRepository {
     /* 페이지 목록 */
     public List<NoticeListItem> findPage(int page, int size, String q) {
         StringBuilder sb = new StringBuilder("""
-            SELECT n.notice_id AS id,
-                   n.title,
-                   n.view_count,
-                   n.created_at,
-                   COALESCE(u.nickname, u.name) AS author_name
-            FROM notice n
-            JOIN all_users u ON u.user_id = n.user_id
-            """);
+        SELECT n.notice_id AS id,
+               n.title,
+               n.view_count,
+               n.created_at,
+               COALESCE(u.nickname, u.name) AS author_name
+        FROM notice n
+        JOIN all_users u ON u.user_id = n.user_id
+        """);
         List<Object> params = new ArrayList<>();
         if (q != null && !q.isBlank()) {
-            sb.append(" WHERE (n.title LIKE ? OR n.content LIKE ?) ");
+            // 제목만 검색
+            sb.append(" WHERE n.title LIKE ? ");
             String like = "%" + q + "%";
-            params.add(like); params.add(like);
+            params.add(like);
         }
         sb.append(" ORDER BY n.created_at DESC, n.notice_id DESC ");
         sb.append(" LIMIT ? OFFSET ? ");
@@ -64,6 +65,7 @@ public class NoticeRepository {
                 toLdt(rs.getTimestamp("created_at"))
         ), params.toArray());
     }
+
 
     /* 상세 조회 */
     public NoticeDetail findById(int id) {
