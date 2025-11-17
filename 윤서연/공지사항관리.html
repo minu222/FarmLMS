@@ -1,0 +1,745 @@
+<!-- =========================
+  공지사항 관리 페이지 (가운데 콘텐츠)
+========================= -->
+<style>
+  .notice-management {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      sans-serif;
+    padding: 20px 24px;
+    box-sizing: border-box;
+  }
+
+  .notice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .notice-header h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .notice-header-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .notice-header-actions button {
+    padding: 6px 12px;
+    font-size: 13px;
+    border-radius: 4px;
+    border: 1px solid #cbd5e1;
+    background-color: #e5e7eb;
+    color: #111827;
+    cursor: pointer;
+  }
+
+  .notice-header-actions button.primary {
+    border-color: #2563eb;
+    background-color: #2563eb;
+    color: #fff;
+  }
+
+  .notice-header-actions button.danger {
+    border-color: #e11d48;
+    background-color: #e11d48;
+    color: #fff;
+  }
+
+  .notice-header-actions button:hover {
+    filter: brightness(0.95);
+  }
+
+  .notice-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  /* 리스트 패널 */
+  .notice-list-panel {
+    border: 1px solid #e2e2e2;
+    border-radius: 8px;
+    background-color: #fff;
+    overflow: hidden;
+  }
+
+  .notice-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-size: 13px;
+  }
+
+  .notice-table thead {
+    background-color: #f8fafc;
+    border-bottom: 1px solid #e2e2e2;
+  }
+
+  .notice-table th,
+  .notice-table td {
+    padding: 8px 10px;
+    text-align: left;
+    border-bottom: 1px solid #f1f5f9;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .notice-table th {
+    font-weight: 600;
+    color: #475569;
+  }
+
+  .notice-table th:first-child,
+  .notice-table td:first-child {
+    width: 40px;
+    text-align: center;
+  }
+
+  .notice-table th:nth-child(2),
+  .notice-table td:nth-child(2) {
+    width: 60px; /* 순번 */
+    text-align: center;
+  }
+
+  .notice-table th:nth-child(3),
+  .notice-table td:nth-child(3) {
+    /* 제목 */
+    text-align: left;
+  }
+
+  .notice-table tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+  }
+
+  .notice-table tbody tr:nth-child(even) {
+    background-color: #f9fafb;
+  }
+
+  .notice-table tbody tr:hover {
+    background-color: #eef2ff;
+    cursor: pointer;
+  }
+
+  .notice-row.active {
+    background-color: #e0edff !important;
+  }
+
+  .notice-table input[type="checkbox"] {
+    cursor: pointer;
+  }
+
+  .notice-empty-row {
+    text-align: center;
+    padding: 20px 0;
+    color: #94a3b8;
+  }
+
+  .pin-label {
+    display: inline-block;
+    margin-right: 6px;
+    padding: 1px 6px;
+    border-radius: 999px;
+    font-size: 11px;
+    background-color: #f97316;
+    color: #fff;
+  }
+
+  /* 오른쪽 상세 패널 */
+  .notice-detail-panel {
+    border: 1px solid #e2e2e2;
+    border-radius: 8px;
+    background-color: #fff;
+    padding: 14px 16px;
+    min-height: 260px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .notice-detail-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .notice-detail-helper {
+    font-size: 12px;
+    color: #6b7280;
+    margin: 0 0 4px 0;
+  }
+
+  .notice-detail-form label {
+    display: block;
+    font-size: 13px;
+    margin-top: 8px;
+    margin-bottom: 4px;
+    color: #374151;
+  }
+
+  .notice-detail-form input[type="text"],
+  .notice-detail-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 13px;
+    padding: 6px 8px;
+    border-radius: 4px;
+    border: 1px solid #d1d5db;
+  }
+
+  .notice-detail-form textarea {
+    resize: vertical;
+    min-height: 140px;
+  }
+
+  .notice-pin-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #4b5563;
+  }
+
+  .notice-detail-actions {
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .notice-detail-actions button {
+    padding: 6px 12px;
+    font-size: 13px;
+    border-radius: 4px;
+    border: 1px solid #d1d5db;
+    background-color: #e5e7eb;
+    cursor: pointer;
+  }
+
+  .notice-detail-actions button.primary {
+    border-color: #2563eb;
+    background-color: #2563eb;
+    color: #fff;
+  }
+
+  .notice-detail-actions button:hover {
+    filter: brightness(0.96);
+  }
+
+  .notice-detail-disabled input,
+  .notice-detail-disabled textarea,
+  .notice-detail-disabled button,
+  .notice-detail-disabled input[type="checkbox"] {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  @media (max-width: 960px) {
+    .notice-management {
+      padding: 16px;
+    }
+
+    .notice-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .notice-list-panel {
+      overflow-x: auto;
+    }
+
+    .notice-table {
+      min-width: 480px;
+    }
+  }
+</style>
+
+<div class="notice-management">
+  <div class="notice-header">
+    <h2>공지사항 관리</h2>
+    <div class="notice-header-actions">
+      <button type="button" class="primary" id="addNoticeBtn">
+        공지사항 등록
+      </button>
+      <button type="button" class="danger" id="deleteSelectedNoticesBtn">
+        선택 삭제
+      </button>
+      <button type="button" id="pinSelectedNoticesBtn">선택 고정 설정</button>
+    </div>
+  </div>
+
+  <div class="notice-layout">
+    <!-- 왼쪽: 공지 리스트 -->
+    <section class="notice-list-panel">
+      <table class="notice-table">
+        <thead>
+          <tr>
+            <th>
+              <input type="checkbox" id="selectAllNotices" />
+            </th>
+            <th>순번</th>
+            <th>제목</th>
+          </tr>
+        </thead>
+        <tbody id="noticeTableBody">
+          <!-- JS 렌더링 -->
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 오른쪽: 상세 / 수정 -->
+    <section class="notice-detail-panel" id="noticeDetailPanel">
+      <h3 class="notice-detail-title">공지사항 상세</h3>
+      <p class="notice-detail-helper" id="noticeDetailHelper">
+        왼쪽에서 공지사항을 선택하거나 "공지사항 등록" 버튼을 눌러 새 공지를
+        작성하세요.
+      </p>
+
+      <div class="notice-detail-form" id="noticeDetailForm">
+        <label for="noticeDetailTitle">제목</label>
+        <input type="text" id="noticeDetailTitle" />
+
+        <label for="noticeDetailContent">내용</label>
+        <textarea id="noticeDetailContent"></textarea>
+
+        <label class="notice-pin-checkbox">
+          <input type="checkbox" id="noticeDetailPinned" />
+          이 공지를 고정글로 설정
+        </label>
+
+        <div class="notice-detail-actions">
+          <button type="button" id="resetNoticeBtn">되돌리기</button>
+          <button type="button" class="primary" id="saveNoticeBtn">저장</button>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+  (function () {
+    // ==========================
+    // 샘플 데이터 (백엔드 연동 시 교체)
+    // ==========================
+    let notices = [
+      {
+        id: 1,
+        title: "정기 점검 안내 (10/20)",
+        content:
+          "10월 20일 02:00 ~ 04:00 동안 서비스 정기 점검이 예정되어 있습니다.\n점검 시간 동안 일부 서비스 이용이 제한될 수 있습니다.",
+        pinned: true,
+        selected: false,
+        createdAt: "2025-10-10 09:00",
+      },
+      {
+        id: 2,
+        title: "신규 강의 오픈 안내",
+        content:
+          "프론트엔드 심화 과정을 포함한 3개의 신규 강의가 오픈되었습니다.\n수강 신청은 강의 목록 페이지에서 가능합니다.",
+        pinned: false,
+        selected: false,
+        createdAt: "2025-10-05 14:30",
+      },
+      {
+        id: 3,
+        title: "개인정보 처리방침 개정 안내",
+        content:
+          "2025년 11월 1일부터 개인정보 처리방침 일부 내용이 변경됩니다.\n자세한 내용은 홈페이지 하단 링크를 참고해주세요.",
+        pinned: false,
+        selected: false,
+        createdAt: "2025-10-01 11:15",
+      },
+    ];
+
+    // ==========================
+    // 상태
+    // ==========================
+    let currentNoticeId = null;
+    let isNewNotice = false;
+    let draftNotice = null; // 화면에서 수정 중인 임시 객체
+
+    // ==========================
+    // DOM
+    // ==========================
+    const noticeTableBodyEl = document.getElementById("noticeTableBody");
+    const selectAllNoticesEl = document.getElementById("selectAllNotices");
+
+    const addNoticeBtnEl = document.getElementById("addNoticeBtn");
+    const deleteSelectedNoticesBtnEl = document.getElementById(
+      "deleteSelectedNoticesBtn"
+    );
+    const pinSelectedNoticesBtnEl = document.getElementById(
+      "pinSelectedNoticesBtn"
+    );
+
+    const detailPanelEl = document.getElementById("noticeDetailPanel");
+    const detailHelperEl = document.getElementById("noticeDetailHelper");
+    const detailTitleEl = document.getElementById("noticeDetailTitle");
+    const detailContentEl = document.getElementById("noticeDetailContent");
+    const detailPinnedEl = document.getElementById("noticeDetailPinned");
+    const saveNoticeBtnEl = document.getElementById("saveNoticeBtn");
+    const resetNoticeBtnEl = document.getElementById("resetNoticeBtn");
+    const detailFormEl = document.getElementById("noticeDetailForm");
+
+    // ==========================
+    // 유틸
+    // ==========================
+    function escapeHtml(str) {
+      if (!str) return "";
+      return str.replace(/[&<>"']/g, function (m) {
+        switch (m) {
+          case "&":
+            return "&amp;";
+          case "<":
+            return "&lt;";
+          case ">":
+            return "&gt;";
+          case '"':
+            return "&quot;";
+          case "'":
+            return "&#39;";
+          default:
+            return m;
+        }
+      });
+    }
+
+    function getSortedNotices() {
+      // 고정글 먼저, 그다음 id(최근 등록 순)
+      return [...notices].sort((a, b) => {
+        if (a.pinned === b.pinned) {
+          return b.id - a.id;
+        }
+        return a.pinned ? -1 : 1;
+      });
+    }
+
+    function findNoticeById(id) {
+      return notices.find((n) => n.id === id) || null;
+    }
+
+    function setDetailDisabled(disabled) {
+      if (disabled) {
+        detailFormEl.classList.add("notice-detail-disabled");
+        detailTitleEl.value = "";
+        detailContentEl.value = "";
+        detailPinnedEl.checked = false;
+      } else {
+        detailFormEl.classList.remove("notice-detail-disabled");
+      }
+    }
+
+    // ==========================
+    // 렌더링 - 리스트
+    // ==========================
+    function renderNoticeTable() {
+      if (!notices.length) {
+        noticeTableBodyEl.innerHTML = `
+          <tr>
+            <td class="notice-empty-row" colspan="3">
+              등록된 공지사항이 없습니다.
+            </td>
+          </tr>
+        `;
+        selectAllNoticesEl.checked = false;
+        selectAllNoticesEl.disabled = true;
+        return;
+      }
+
+      selectAllNoticesEl.disabled = false;
+
+      const sorted = getSortedNotices();
+      let rowsHtml = "";
+
+      sorted.forEach((n, idx) => {
+        const isActive = n.id === currentNoticeId;
+        rowsHtml += `
+          <tr class="notice-row${isActive ? " active" : ""}" data-id="${n.id}">
+            <td>
+              <input
+                type="checkbox"
+                class="notice-select-checkbox"
+                ${n.selected ? "checked" : ""}
+              />
+            </td>
+            <td>${idx + 1}</td>
+            <td>
+              ${n.pinned ? '<span class="pin-label">고정</span>' : ""}
+              <span class="notice-title-text">${escapeHtml(n.title)}</span>
+            </td>
+          </tr>
+        `;
+      });
+
+      noticeTableBodyEl.innerHTML = rowsHtml;
+      updateSelectAllCheckbox();
+    }
+
+    function updateSelectAllCheckbox() {
+      if (!notices.length) {
+        selectAllNoticesEl.checked = false;
+        return;
+      }
+      const allSelected = notices.every((n) => n.selected);
+      selectAllNoticesEl.checked = allSelected;
+    }
+
+    // ==========================
+    // 렌더링 - 상세
+    // ==========================
+    function fillDetailFormFromDraft() {
+      if (!draftNotice) {
+        setDetailDisabled(true);
+        detailHelperEl.textContent =
+          '왼쪽에서 공지사항을 선택하거나 "공지사항 등록" 버튼을 눌러 새 공지를 작성하세요.';
+        return;
+      }
+
+      setDetailDisabled(false);
+      detailTitleEl.value = draftNotice.title || "";
+      detailContentEl.value = draftNotice.content || "";
+      detailPinnedEl.checked = !!draftNotice.pinned;
+
+      if (isNewNotice) {
+        detailHelperEl.textContent = "새 공지사항을 작성 중입니다.";
+      } else {
+        detailHelperEl.textContent = "선택한 공지사항을 수정할 수 있습니다.";
+      }
+    }
+
+    function openExistingNotice(id) {
+      const notice = findNoticeById(id);
+      if (!notice) return;
+      currentNoticeId = notice.id;
+      isNewNotice = false;
+      draftNotice = { ...notice }; // 복사본으로 편집
+      fillDetailFormFromDraft();
+      renderNoticeTable();
+    }
+
+    function startNewNotice() {
+      isNewNotice = true;
+      currentNoticeId = null;
+      draftNotice = {
+        id: null,
+        title: "",
+        content: "",
+        pinned: false,
+      };
+      fillDetailFormFromDraft();
+      renderNoticeTable();
+    }
+
+    function clearDetailIfNoNotice() {
+      currentNoticeId = null;
+      isNewNotice = false;
+      draftNotice = null;
+      fillDetailFormFromDraft();
+      renderNoticeTable();
+    }
+
+    // ==========================
+    // 저장 / 되돌리기
+    // ==========================
+    function saveNotice() {
+      if (!draftNotice) {
+        alert("저장할 공지사항이 없습니다.");
+        return;
+      }
+
+      const title = detailTitleEl.value.trim();
+      const content = detailContentEl.value.trim();
+      const pinned = detailPinnedEl.checked;
+
+      if (!title) {
+        alert("제목을 입력하세요.");
+        detailTitleEl.focus();
+        return;
+      }
+
+      if (isNewNotice) {
+        const newId =
+          notices.length > 0 ? Math.max(...notices.map((n) => n.id)) + 1 : 1;
+        const newNotice = {
+          id: newId,
+          title,
+          content,
+          pinned,
+          selected: false,
+          createdAt: new Date().toISOString().slice(0, 16).replace("T", " "),
+        };
+        notices.push(newNotice);
+        currentNoticeId = newId;
+        isNewNotice = false;
+        draftNotice = { ...newNotice };
+      } else {
+        const idx = notices.findIndex((n) => n.id === currentNoticeId);
+        if (idx !== -1) {
+          notices[idx].title = title;
+          notices[idx].content = content;
+          notices[idx].pinned = pinned;
+          draftNotice = { ...notices[idx] };
+        }
+      }
+
+      fillDetailFormFromDraft();
+      renderNoticeTable();
+      alert("저장되었습니다.");
+    }
+
+    function resetNotice() {
+      if (!draftNotice) return;
+
+      if (isNewNotice) {
+        // 새 공지 작성 중이면 그냥 폼 비우기
+        draftNotice = {
+          id: null,
+          title: "",
+          content: "",
+          pinned: false,
+        };
+      } else {
+        const original = findNoticeById(currentNoticeId);
+        if (original) {
+          draftNotice = { ...original };
+        }
+      }
+      fillDetailFormFromDraft();
+    }
+
+    // ==========================
+    // 이벤트 바인딩
+    // ==========================
+    function bindEvents() {
+      // 전체선택
+      selectAllNoticesEl.addEventListener("change", function () {
+        const checked = selectAllNoticesEl.checked;
+        notices.forEach((n) => {
+          n.selected = checked;
+        });
+        renderNoticeTable();
+      });
+
+      // 리스트 내부 (체크박스 / 행 클릭)
+      noticeTableBodyEl.addEventListener("click", function (e) {
+        const checkbox = e.target.closest(".notice-select-checkbox");
+        const row = e.target.closest(".notice-row");
+
+        // 체크박스 클릭
+        if (checkbox && row) {
+          e.stopPropagation();
+          const id = Number(row.dataset.id);
+          const notice = findNoticeById(id);
+          if (!notice) return;
+          notice.selected = checkbox.checked;
+          updateSelectAllCheckbox();
+          return;
+        }
+
+        // 행 클릭 -> 상세 보기
+        if (row) {
+          const id = Number(row.dataset.id);
+          openExistingNotice(id);
+        }
+      });
+
+      // 제목 / 내용 / 고정 체크박스 → draft 업데이트
+      detailTitleEl.addEventListener("input", function () {
+        if (!draftNotice) return;
+        draftNotice.title = this.value;
+      });
+
+      detailContentEl.addEventListener("input", function () {
+        if (!draftNotice) return;
+        draftNotice.content = this.value;
+      });
+
+      detailPinnedEl.addEventListener("change", function () {
+        if (!draftNotice) return;
+        draftNotice.pinned = this.checked;
+      });
+
+      // 새 공지 등록
+      addNoticeBtnEl.addEventListener("click", function () {
+        startNewNotice();
+      });
+
+      // 선택 삭제
+      deleteSelectedNoticesBtnEl.addEventListener("click", function () {
+        const hasSelected = notices.some((n) => n.selected);
+        if (!hasSelected) {
+          alert("삭제할 공지를 선택하세요.");
+          return;
+        }
+        if (!confirm("선택한 공지사항을 삭제하시겠습니까?")) return;
+
+        const deletingIds = notices.filter((n) => n.selected).map((n) => n.id);
+        notices = notices.filter((n) => !n.selected);
+
+        if (!notices.length) {
+          clearDetailIfNoNotice();
+          return;
+        }
+
+        // 현재 보고 있던 공지가 삭제되었는지 확인
+        if (currentNoticeId && deletingIds.includes(currentNoticeId)) {
+          const sorted = getSortedNotices();
+          const firstId = sorted[0]?.id || null;
+          if (firstId) {
+            openExistingNotice(firstId);
+          } else {
+            clearDetailIfNoNotice();
+          }
+        } else {
+          renderNoticeTable();
+        }
+      });
+
+      // 선택 고정 설정
+      pinSelectedNoticesBtnEl.addEventListener("click", function () {
+        const selected = notices.filter((n) => n.selected);
+        if (!selected.length) {
+          alert("고정할 공지를 선택하세요.");
+          return;
+        }
+        selected.forEach((n) => {
+          n.pinned = true;
+        });
+
+        // 현재 보고 있는 공지도 선택 상태였다면 draft 반영
+        if (
+          draftNotice &&
+          !isNewNotice &&
+          selected.some((n) => n.id === currentNoticeId)
+        ) {
+          draftNotice.pinned = true;
+          detailPinnedEl.checked = true;
+        }
+
+        renderNoticeTable();
+        alert("선택한 공지가 고정글로 설정되었습니다.");
+      });
+
+      // 저장 / 되돌리기
+      saveNoticeBtnEl.addEventListener("click", saveNotice);
+      resetNoticeBtnEl.addEventListener("click", resetNotice);
+    }
+
+    // ==========================
+    // 초기화
+    // ==========================
+    function init() {
+      draftNotice = null;
+      setDetailDisabled(true);
+      renderNoticeTable();
+      bindEvents();
+    }
+
+    document.addEventListener("DOMContentLoaded", init);
+  })();
+</script>

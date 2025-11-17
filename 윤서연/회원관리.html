@@ -1,0 +1,595 @@
+<!-- =========================
+  회원 관리 페이지 (가운데 콘텐츠)
+========================= -->
+<style>
+  .member-management {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      sans-serif;
+    padding: 20px 24px;
+    box-sizing: border-box;
+  }
+
+  .member-management h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .member-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .member-header-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .member-header button {
+    padding: 6px 12px;
+    font-size: 13px;
+    border-radius: 4px;
+    border: 1px solid #e11d48;
+    background-color: #e11d48;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .member-header button:hover {
+    background-color: #be123c;
+  }
+
+  .member-table-wrapper {
+    border: 1px solid #e2e2e2;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #fff;
+  }
+
+  .member-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-size: 13px;
+  }
+
+  .member-table thead {
+    background-color: #f8fafc;
+    border-bottom: 1px solid #e2e2e2;
+  }
+
+  .member-table th,
+  .member-table td {
+    padding: 8px 10px;
+    text-align: center;
+    border-bottom: 1px solid #f1f5f9;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .member-table th {
+    font-weight: 600;
+    color: #475569;
+  }
+
+  .member-table tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+  }
+
+  .member-table tbody tr:nth-child(even) {
+    background-color: #f9fafb;
+  }
+
+  .member-table tbody tr:hover {
+    background-color: #eef2ff;
+  }
+
+  .member-table th:first-child,
+  .member-table td:first-child {
+    width: 40px;
+  }
+
+  .member-table th:nth-child(2),
+  .member-table td:nth-child(2) {
+    width: 60px; /* 순번 */
+  }
+
+  .member-table th:nth-child(3),
+  .member-table td:nth-child(3) {
+    width: 80px; /* 이름 */
+  }
+
+  .member-table th:nth-child(4),
+  .member-table td:nth-child(4) {
+    width: 110px; /* 아이디 */
+  }
+
+  .member-table th:nth-child(5),
+  .member-table td:nth-child(5) {
+    width: 110px; /* 닉네임 */
+  }
+
+  .member-table th:nth-child(6),
+  .member-table td:nth-child(6) {
+    width: 180px; /* 이메일 */
+  }
+
+  .member-table th:nth-child(7),
+  .member-table td:nth-child(7) {
+    width: 120px; /* 생년월일 */
+  }
+
+  .member-table th:nth-child(8),
+  .member-table td:nth-child(8) {
+    width: 90px; /* 구분 */
+  }
+
+  .member-table input[type="checkbox"] {
+    cursor: pointer;
+  }
+
+  .member-role-select {
+    width: 80px;
+    padding: 3px 4px;
+    font-size: 12px;
+    border-radius: 4px;
+    border: 1px solid #cbd5e1;
+    background-color: #f8fafc;
+  }
+
+  /* 하단 정보 + 페이지네이션 감싸기 */
+  .member-bottom-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .member-count-info {
+    font-size: 12px;
+    color: #64748b;
+  }
+
+  /* 페이지네이션 */
+  .member-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  .member-pagination button {
+    min-width: 26px;
+    height: 26px;
+    padding: 0 6px;
+    font-size: 12px;
+    border-radius: 4px;
+    border: 1px solid #d4d4d4;
+    background-color: #fff;
+    cursor: pointer;
+  }
+
+  .member-pagination button.active {
+    background-color: #2563eb;
+    border-color: #2563eb;
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .member-pagination button:hover {
+    background-color: #eef2ff;
+  }
+
+  .member-empty-row {
+    text-align: center;
+    padding: 20px 0;
+    color: #94a3b8;
+  }
+
+  @media (max-width: 960px) {
+    .member-management {
+      padding: 16px;
+    }
+
+    .member-table-wrapper {
+      overflow-x: auto;
+    }
+
+    .member-table {
+      min-width: 720px;
+    }
+  }
+</style>
+
+<div class="member-management">
+  <div class="member-header">
+    <h2>회원 관리</h2>
+    <div class="member-header-actions">
+      <button type="button" id="deleteSelectedMembersBtn">
+        선택 회원 삭제
+      </button>
+    </div>
+  </div>
+
+  <div class="member-table-wrapper">
+    <table class="member-table">
+      <thead>
+        <tr>
+          <th>
+            <input type="checkbox" id="selectAllMembers" />
+          </th>
+          <th>순번</th>
+          <th>이름</th>
+          <th>아이디</th>
+          <th>닉네임</th>
+          <th>이메일</th>
+          <th>생년월일</th>
+          <th>구분</th>
+        </tr>
+      </thead>
+      <tbody id="memberTableBody">
+        <!-- JS로 렌더링 -->
+      </tbody>
+    </table>
+  </div>
+
+  <div class="member-bottom-bar">
+    <div class="member-count-info" id="memberCountInfo"></div>
+    <div class="member-pagination" id="memberPagination"></div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    // ============================
+    // 샘플 회원 데이터 (백엔드 연동 시 교체)
+    // ============================
+    const members = [
+      {
+        name: "김학생",
+        userId: "student01",
+        nickname: "코딩좋아",
+        email: "student01@example.com",
+        birth: "2001-01-01",
+        role: "학생",
+        selected: false,
+      },
+      {
+        name: "이강사",
+        userId: "teacher01",
+        nickname: "프론트강사",
+        email: "teacher01@example.com",
+        birth: "1990-05-12",
+        role: "강사",
+        selected: false,
+      },
+      {
+        name: "박학생",
+        userId: "student02",
+        nickname: "디자인꿈나무",
+        email: "student02@example.com",
+        birth: "2002-03-10",
+        role: "학생",
+        selected: false,
+      },
+      {
+        name: "최강사",
+        userId: "teacher02",
+        nickname: "백엔드마스터",
+        email: "teacher02@example.com",
+        birth: "1988-08-20",
+        role: "강사",
+        selected: false,
+      },
+      {
+        name: "정학생",
+        userId: "student03",
+        nickname: "uiux초보",
+        email: "student03@example.com",
+        birth: "2000-11-30",
+        role: "학생",
+        selected: false,
+      },
+      {
+        name: "윤학생",
+        userId: "student04",
+        nickname: "야근러버",
+        email: "student04@example.com",
+        birth: "2001-07-15",
+        role: "학생",
+        selected: false,
+      },
+      {
+        name: "장강사",
+        userId: "teacher03",
+        nickname: "스타트업멘토",
+        email: "teacher03@example.com",
+        birth: "1985-09-01",
+        role: "강사",
+        selected: false,
+      },
+      {
+        name: "오학생",
+        userId: "student05",
+        nickname: "그림좋아",
+        email: "student05@example.com",
+        birth: "2003-02-22",
+        role: "학생",
+        selected: false,
+      },
+      {
+        name: "한학생",
+        userId: "student06",
+        nickname: "열공중",
+        email: "student06@example.com",
+        birth: "1999-12-10",
+        role: "학생",
+        selected: false,
+      },
+      {
+        name: "류강사",
+        userId: "teacher04",
+        nickname: "PM강사",
+        email: "teacher04@example.com",
+        birth: "1987-01-19",
+        role: "강사",
+        selected: false,
+      },
+      {
+        name: "서학생",
+        userId: "student07",
+        nickname: "DB초보",
+        email: "student07@example.com",
+        birth: "2001-04-14",
+        role: "학생",
+        selected: false,
+      },
+      {
+        name: "문학생",
+        userId: "student08",
+        nickname: "도전러",
+        email: "student08@example.com",
+        birth: "2002-06-06",
+        role: "학생",
+        selected: false,
+      },
+      {
+        name: "홍강사",
+        userId: "teacher05",
+        nickname: "마케팅강사",
+        email: "teacher05@example.com",
+        birth: "1983-03-03",
+        role: "강사",
+        selected: false,
+      },
+    ];
+
+    // ============================
+    // 상태
+    // ============================
+    let currentPage = 1;
+    const MEMBERS_PER_PAGE = 10;
+
+    // ============================
+    // DOM 참조
+    // ============================
+    const memberTableBodyEl = document.getElementById("memberTableBody");
+    const memberPaginationEl = document.getElementById("memberPagination");
+    const memberCountInfoEl = document.getElementById("memberCountInfo");
+    const selectAllMembersEl = document.getElementById("selectAllMembers");
+    const deleteSelectedBtnEl = document.getElementById(
+      "deleteSelectedMembersBtn"
+    );
+
+    // ============================
+    // 유틸
+    // ============================
+    function getTotalPages() {
+      return Math.max(1, Math.ceil(members.length / MEMBERS_PER_PAGE));
+    }
+
+    function getPageSlice() {
+      const startIndex = (currentPage - 1) * MEMBERS_PER_PAGE;
+      const endIndex = startIndex + MEMBERS_PER_PAGE;
+      return {
+        slice: members.slice(startIndex, endIndex),
+        startIndex,
+      };
+    }
+
+    // ============================
+    // 렌더링: 테이블
+    // ============================
+    function renderTable() {
+      if (!members.length) {
+        memberTableBodyEl.innerHTML = `
+          <tr>
+            <td class="member-empty-row" colspan="8">
+              등록된 회원이 없습니다.
+            </td>
+          </tr>
+        `;
+        memberCountInfoEl.textContent = "총 0명";
+        memberPaginationEl.innerHTML = "";
+        selectAllMembersEl.checked = false;
+        selectAllMembersEl.disabled = true;
+        return;
+      }
+
+      selectAllMembersEl.disabled = false;
+
+      const { slice, startIndex } = getPageSlice();
+      let rowsHtml = "";
+
+      slice.forEach((m, idx) => {
+        const no = startIndex + idx + 1; // 순번
+        rowsHtml += `
+          <tr data-member-index="${startIndex + idx}">
+            <td>
+              <input
+                type="checkbox"
+                class="member-select-checkbox"
+                ${m.selected ? "checked" : ""}
+              />
+            </td>
+            <td>${no}</td>
+            <td title="${m.name}">${m.name}</td>
+            <td title="${m.userId}">${m.userId}</td>
+            <td title="${m.nickname}">${m.nickname}</td>
+            <td title="${m.email}">${m.email}</td>
+            <td>${m.birth}</td>
+            <td>
+              <select class="member-role-select">
+                <option value="학생" ${
+                  m.role === "학생" ? "selected" : ""
+                }>학생</option>
+                <option value="강사" ${
+                  m.role === "강사" ? "selected" : ""
+                }>강사</option>
+              </select>
+            </td>
+          </tr>
+        `;
+      });
+
+      memberTableBodyEl.innerHTML = rowsHtml;
+
+      // 페이지 내 선택 상태 보고 "전체선택" 체크 여부 업데이트
+      updateSelectAllCheckbox();
+      // 하단 인원 수
+      memberCountInfoEl.textContent = `총 ${members.length}명`;
+      // 페이지네이션 렌더
+      renderPagination();
+    }
+
+    // ============================
+    // 렌더링: 페이지네이션
+    // ============================
+    function renderPagination() {
+      const totalPages = getTotalPages();
+      let html = "";
+
+      // 1,2,3,..., > 스타일
+      for (let p = 1; p <= totalPages; p++) {
+        html += `<button type="button" class="page-btn${
+          p === currentPage ? " active" : ""
+        }" data-page="${p}">${p}</button>`;
+      }
+
+      if (currentPage < totalPages) {
+        html += `<button type="button" class="page-btn" data-page="next">&gt;</button>`;
+      }
+
+      memberPaginationEl.innerHTML = html;
+    }
+
+    // ============================
+    // "전체선택" 상태 업데이트
+    // ============================
+    function updateSelectAllCheckbox() {
+      const { slice } = getPageSlice();
+      if (!slice.length) {
+        selectAllMembersEl.checked = false;
+        return;
+      }
+      const allSelected = slice.every((m) => m.selected);
+      selectAllMembersEl.checked = allSelected;
+    }
+
+    // ============================
+    // 이벤트 바인딩
+    // ============================
+    function bindEvents() {
+      // 헤더의 전체선택 체크박스
+      selectAllMembersEl.addEventListener("change", function () {
+        const { slice, startIndex } = getPageSlice();
+        const checked = selectAllMembersEl.checked;
+        slice.forEach((m, idx) => {
+          members[startIndex + idx].selected = checked;
+        });
+        renderTable();
+      });
+
+      // 행 내부(체크박스 / 역할 셀렉트) - 이벤트 위임
+      memberTableBodyEl.addEventListener("change", function (e) {
+        const row = e.target.closest("tr[data-member-index]");
+        if (!row) return;
+        const index = Number(row.dataset.memberIndex);
+        const member = members[index];
+        if (!member) return;
+
+        // 개별 체크박스
+        if (e.target.classList.contains("member-select-checkbox")) {
+          member.selected = e.target.checked;
+          updateSelectAllCheckbox();
+          return;
+        }
+
+        // 역할(학생/강사) 셀렉트 박스
+        if (e.target.classList.contains("member-role-select")) {
+          member.role = e.target.value;
+          return;
+        }
+      });
+
+      // 페이지네이션
+      memberPaginationEl.addEventListener("click", function (e) {
+        const btn = e.target.closest(".page-btn");
+        if (!btn) return;
+        const page = btn.dataset.page;
+        const totalPages = getTotalPages();
+
+        if (page === "next") {
+          if (currentPage < totalPages) {
+            currentPage++;
+          }
+        } else {
+          const num = Number(page);
+          if (!isNaN(num) && num >= 1 && num <= totalPages) {
+            currentPage = num;
+          }
+        }
+        renderTable();
+      });
+
+      // 선택 회원 삭제
+      deleteSelectedBtnEl.addEventListener("click", function () {
+        const hasSelected = members.some((m) => m.selected);
+        if (!hasSelected) {
+          alert("삭제할 회원을 선택하세요.");
+          return;
+        }
+        if (!confirm("선택한 회원을 삭제하시겠습니까?")) return;
+
+        for (let i = members.length - 1; i >= 0; i--) {
+          if (members[i].selected) {
+            members.splice(i, 1);
+          }
+        }
+
+        const totalPages = getTotalPages();
+        if (currentPage > totalPages) {
+          currentPage = totalPages;
+        }
+
+        renderTable();
+      });
+    }
+
+    // ============================
+    // 초기화
+    // ============================
+    function init() {
+      currentPage = 1;
+      renderTable();
+      bindEvents();
+    }
+
+    document.addEventListener("DOMContentLoaded", init);
+  })();
+</script>

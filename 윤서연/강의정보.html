@@ -1,0 +1,892 @@
+<!-- =========================
+  강의 관리 - 댓글 관리자 페이지 (가운데 콘텐츠)
+========================= -->
+<style>
+  .lecture-management {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      sans-serif;
+    padding: 20px 24px;
+    box-sizing: border-box;
+  }
+
+  .lecture-management h2 {
+    font-size: 20px;
+    margin-bottom: 16px;
+    font-weight: 700;
+  }
+
+  .lecture-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+    align-items: center;
+  }
+
+  .lecture-filters label {
+    font-size: 13px;
+    margin-right: 4px;
+    color: #555;
+  }
+
+  .lecture-filters input[type="text"],
+  .lecture-filters select {
+    padding: 6px 8px;
+    font-size: 13px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+
+  .lecture-layout {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: 20px;
+    min-height: 480px;
+  }
+
+  /* 강의 리스트 영역 */
+  .lecture-list-panel {
+    border: 1px solid #e2e2e2;
+    border-radius: 8px;
+    background-color: #fafafa;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .lecture-list-panel-header {
+    padding: 10px 12px;
+    border-bottom: 1px solid #e2e2e2;
+    font-size: 14px;
+    font-weight: 600;
+    background-color: #f3f3f3;
+  }
+
+  .lecture-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    max-height: 500px;
+  }
+
+  .lecture-item {
+    padding: 10px 12px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background-color 0.15s;
+  }
+
+  .lecture-item:last-child {
+    border-bottom: none;
+  }
+
+  .lecture-item:hover {
+    background-color: #f0f7ff;
+  }
+
+  .lecture-item.active {
+    background-color: #e3f0ff;
+  }
+
+  .lecture-item-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .lecture-item-meta {
+    font-size: 12px;
+    color: #777;
+  }
+
+  /* 강의 상세 + 댓글 영역 */
+  .lecture-detail-panel {
+    border: 1px solid #e2e2e2;
+    border-radius: 8px;
+    background-color: #fff;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .lecture-info h3 {
+    margin: 0 0 8px;
+    font-size: 18px;
+  }
+
+  .lecture-info p {
+    margin: 2px 0;
+    font-size: 13px;
+    color: #555;
+  }
+
+  .lecture-info .tag {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 999px;
+    background-color: #f0f3ff;
+    font-size: 11px;
+    color: #334;
+    margin-right: 4px;
+  }
+
+  .divider {
+    height: 1px;
+    border: none;
+    background-color: #eee;
+    margin: 14px 0;
+  }
+
+  /* 댓글 영역 */
+  .comments-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .comments-header h4 {
+    margin: 0;
+    font-size: 15px;
+  }
+
+  .comments-header span {
+    font-size: 12px;
+    color: #777;
+  }
+
+  .comments-container {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+
+  .comment {
+    border: 1px solid #eee;
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+    background-color: #fafbff;
+  }
+
+  .comment-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+
+  .comment-author {
+    font-weight: 600;
+  }
+
+  .comment-date {
+    color: #999;
+  }
+
+  .comment-content {
+    font-size: 13px;
+    margin: 4px 0 8px;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .comment-actions {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+
+  .comment-actions button {
+    font-size: 11px;
+    padding: 3px 6px;
+    border-radius: 4px;
+    border: 1px solid #d0d0d0;
+    background-color: #fff;
+    cursor: pointer;
+  }
+
+  .comment-actions button:hover {
+    background-color: #f0f0f0;
+  }
+
+  .reply-form {
+    margin-top: 6px;
+  }
+
+  .reply-form textarea {
+    width: 100%;
+    resize: vertical;
+    min-height: 40px;
+    padding: 6px 8px;
+    font-size: 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+
+  .reply-form-actions {
+    margin-top: 4px;
+    display: flex;
+    gap: 6px;
+    justify-content: flex-end;
+  }
+
+  .reply-form-actions button {
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #d0d0d0;
+    background-color: #fff;
+    cursor: pointer;
+  }
+
+  .reply-form-actions button.primary {
+    background-color: #2563eb;
+    color: #fff;
+    border-color: #2563eb;
+  }
+
+  .reply-form-actions button.primary:hover {
+    background-color: #1d4ed8;
+  }
+
+  .replies {
+    border-left: 2px solid #dde4ff;
+    margin-top: 6px;
+    padding-left: 10px;
+  }
+
+  .reply {
+    margin-top: 6px;
+    padding: 6px 8px;
+    border-radius: 4px;
+    background-color: #f5f7ff;
+  }
+
+  .reply-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    margin-bottom: 4px;
+  }
+
+  .reply-author {
+    font-weight: 600;
+  }
+
+  .reply-date {
+    color: #999;
+  }
+
+  .reply-content {
+    font-size: 12px;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .reply-actions {
+    margin-top: 4px;
+    text-align: right;
+  }
+
+  .reply-actions button {
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid #d0d0d0;
+    background-color: #fff;
+    cursor: pointer;
+  }
+
+  .reply-actions button:hover {
+    background-color: #f0f0f0;
+  }
+
+  .empty-message {
+    font-size: 13px;
+    color: #777;
+    text-align: center;
+    margin: 16px 0;
+  }
+
+  /* 페이지네이션 */
+  .pagination {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  .pagination button {
+    min-width: 26px;
+    height: 26px;
+    padding: 0 6px;
+    font-size: 12px;
+    border-radius: 4px;
+    border: 1px solid #d4d4d4;
+    background-color: #fff;
+    cursor: pointer;
+  }
+
+  .pagination button.active {
+    background-color: #2563eb;
+    border-color: #2563eb;
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .pagination button:hover {
+    background-color: #eef2ff;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  /* 반응형 (가운데 영역만) */
+  @media (max-width: 900px) {
+    .lecture-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<div class="lecture-management">
+  <h2>강의 관리</h2>
+
+  <!-- 검색 & 분류 -->
+  <div class="lecture-filters">
+    <div>
+      <label for="searchLecture">검색</label>
+      <input
+        type="text"
+        id="searchLecture"
+        placeholder="강의명 / 강사명을 입력하세요"
+      />
+    </div>
+
+    <div>
+      <label for="categoryFilter">강의 분류</label>
+      <select id="categoryFilter">
+        <option value="">전체</option>
+        <option value="프로그래밍">프로그래밍</option>
+        <option value="디자인">디자인</option>
+        <option value="비즈니스">비즈니스</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="levelFilter">레벨</label>
+      <select id="levelFilter">
+        <option value="">전체</option>
+        <option value="입문">입문</option>
+        <option value="초급">초급</option>
+        <option value="중급">중급</option>
+        <option value="고급">고급</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="lecture-layout">
+    <!-- 왼쪽: 강의 리스트 -->
+    <aside class="lecture-list-panel">
+      <div class="lecture-list-panel-header">강의 목록</div>
+      <ul class="lecture-list" id="lectureList"></ul>
+    </aside>
+
+    <!-- 오른쪽: 강의 상세 & 댓글 -->
+    <section class="lecture-detail-panel">
+      <div class="lecture-info" id="lectureInfo">
+        <p>왼쪽에서 강의를 선택하세요.</p>
+      </div>
+
+      <hr class="divider" />
+
+      <div id="commentsSection">
+        <div class="comments-header">
+          <h4>댓글</h4>
+          <span id="commentCountLabel"></span>
+        </div>
+
+        <div class="comments-container" id="commentsContainer"></div>
+
+        <!-- 페이지네이션 -->
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+  (function () {
+    // ---------------------------
+    // 샘플 데이터 (백엔드 연동 시 교체)
+    // ---------------------------
+    const lectures = [
+      {
+        id: 1,
+        title: "JavaScript 입문",
+        instructor: "김코딩",
+        category: "프로그래밍",
+        level: "입문",
+        status: "공개",
+        description: "프론트엔드 개발을 위한 자바스크립트 기초를 다룹니다.",
+        comments: [
+          {
+            id: 101,
+            author: "수강생A",
+            content: "강의가 이해하기 쉬워요!",
+            createdAt: "2025-10-01 10:12",
+            replies: [
+              {
+                id: 1001,
+                author: "관리자",
+                content: "도움이 되었다니 다행입니다 :)",
+                createdAt: "2025-10-01 11:03",
+              },
+            ],
+          },
+          {
+            id: 102,
+            author: "수강생B",
+            content: "예제 코드 파일은 어디서 받을 수 있나요?",
+            createdAt: "2025-10-02 09:20",
+            replies: [
+              {
+                id: 1002,
+                author: "관리자",
+                content: "상단 자료실 메뉴에서 다운로드 가능합니다.",
+                createdAt: "2025-10-02 09:45",
+              },
+            ],
+          },
+          {
+            id: 103,
+            author: "수강생C",
+            content: "조금 더 천천히 설명해주시면 좋겠어요.",
+            createdAt: "2025-10-03 14:05",
+            replies: [],
+          },
+          {
+            id: 104,
+            author: "수강생D",
+            content: "퀴즈가 있어서 복습하기 좋네요!",
+            createdAt: "2025-10-04 16:30",
+            replies: [],
+          },
+          {
+            id: 105,
+            author: "수강생E",
+            content: "브라우저 호환성 부분도 다뤄주시나요?",
+            createdAt: "2025-10-05 18:10",
+            replies: [],
+          },
+          {
+            id: 106,
+            author: "수강생F",
+            content: "실습 위주라 지루하지 않아요.",
+            createdAt: "2025-10-06 09:50",
+            replies: [],
+          },
+        ],
+      },
+      {
+        id: 2,
+        title: "UI/UX 디자인 실무",
+        instructor: "이디자인",
+        category: "디자인",
+        level: "중급",
+        status: "공개",
+        description: "실제 사례를 통해 UI/UX 디자인 프로세스를 학습합니다.",
+        comments: [
+          {
+            id: 201,
+            author: "수강생G",
+            content: "피그마 사용하는 부분이 유익했습니다.",
+            createdAt: "2025-09-20 15:22",
+            replies: [],
+          },
+        ],
+      },
+      {
+        id: 3,
+        title: "스타트업 비즈니스 모델",
+        instructor: "박대표",
+        category: "비즈니스",
+        level: "초급",
+        status: "비공개",
+        description:
+          "스타트업 창업을 위한 비즈니스 모델 설계 방법을 소개합니다.",
+        comments: [],
+      },
+    ];
+
+    // ---------------------------
+    // 상태
+    // ---------------------------
+    let filteredLectures = [...lectures];
+    let currentLecture = null;
+    let currentPage = 1;
+    const COMMENTS_PER_PAGE = 5;
+
+    // ---------------------------
+    // DOM 참조
+    // ---------------------------
+    const lectureListEl = document.getElementById("lectureList");
+    const lectureInfoEl = document.getElementById("lectureInfo");
+    const commentsContainerEl = document.getElementById("commentsContainer");
+    const paginationEl = document.getElementById("pagination");
+    const commentCountLabelEl = document.getElementById("commentCountLabel");
+
+    const searchInputEl = document.getElementById("searchLecture");
+    const categoryFilterEl = document.getElementById("categoryFilter");
+    const levelFilterEl = document.getElementById("levelFilter");
+
+    // ---------------------------
+    // 유틸
+    // ---------------------------
+    function escapeHtml(str) {
+      if (!str) return "";
+      return str.replace(/[&<>"']/g, function (m) {
+        switch (m) {
+          case "&":
+            return "&amp;";
+          case "<":
+            return "&lt;";
+          case ">":
+            return "&gt;";
+          case '"':
+            return "&quot;";
+          case "'":
+            return "&#39;";
+          default:
+            return m;
+        }
+      });
+    }
+
+    // ---------------------------
+    // 강의 리스트 렌더링
+    // ---------------------------
+    function renderLectureList() {
+      if (!filteredLectures.length) {
+        lectureListEl.innerHTML =
+          '<li class="lecture-item"><span class="lecture-item-title">조건에 맞는 강의가 없습니다.</span></li>';
+        return;
+      }
+
+      lectureListEl.innerHTML = filteredLectures
+        .map(
+          (lec) =>
+            `<li class="lecture-item${
+              currentLecture && currentLecture.id === lec.id ? " active" : ""
+            }" data-id="${lec.id}">
+              <div class="lecture-item-title">${escapeHtml(lec.title)}</div>
+              <div class="lecture-item-meta">
+                ${escapeHtml(lec.instructor)} · ${escapeHtml(
+              lec.category
+            )} · ${escapeHtml(lec.level)}
+              </div>
+            </li>`
+        )
+        .join("");
+    }
+
+    function renderLectureInfo() {
+      if (!currentLecture) {
+        lectureInfoEl.innerHTML = "<p>왼쪽에서 강의를 선택하세요.</p>";
+        return;
+      }
+
+      const lec = currentLecture;
+      lectureInfoEl.innerHTML = `
+        <h3>${escapeHtml(lec.title)}</h3>
+        <p><span class="tag">${escapeHtml(lec.category)}</span>
+           <span class="tag">${escapeHtml(lec.level)}</span>
+           <span class="tag">${escapeHtml(lec.status)}</span>
+        </p>
+        <p><strong>강사</strong> : ${escapeHtml(lec.instructor)}</p>
+        <p><strong>설명</strong> : ${escapeHtml(lec.description)}</p>
+      `;
+    }
+
+    // ---------------------------
+    // 댓글 렌더링 + 페이지네이션
+    // ---------------------------
+    function renderComments() {
+      if (!currentLecture) {
+        commentsContainerEl.innerHTML =
+          '<p class="empty-message">강의를 먼저 선택하세요.</p>';
+        paginationEl.innerHTML = "";
+        commentCountLabelEl.textContent = "";
+        return;
+      }
+
+      const comments = currentLecture.comments || [];
+      const totalCount = comments.length;
+      const totalPages = Math.max(1, Math.ceil(totalCount / COMMENTS_PER_PAGE));
+
+      // 현재 페이지 보정
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+
+      const startIndex = (currentPage - 1) * COMMENTS_PER_PAGE;
+      const pageComments = comments.slice(
+        startIndex,
+        startIndex + COMMENTS_PER_PAGE
+      );
+
+      commentCountLabelEl.textContent = totalCount
+        ? `총 ${totalCount}개`
+        : "댓글 없음";
+
+      if (!comments.length) {
+        commentsContainerEl.innerHTML =
+          '<p class="empty-message">아직 댓글이 없습니다.</p>';
+      } else if (!pageComments.length) {
+        commentsContainerEl.innerHTML =
+          '<p class="empty-message">이 페이지에는 댓글이 없습니다.</p>';
+      } else {
+        commentsContainerEl.innerHTML = pageComments
+          .map((comment) => renderCommentHtml(comment))
+          .join("");
+      }
+
+      // 페이지네이션 렌더링
+      let paginationHtml = "";
+      for (let p = 1; p <= totalPages; p++) {
+        paginationHtml += `<button class="page-btn${
+          p === currentPage ? " active" : ""
+        }" data-page="${p}">${p}</button>`;
+      }
+      if (currentPage < totalPages) {
+        paginationHtml += `<button class="page-btn next" data-page="next">&gt;</button>`;
+      }
+      paginationEl.innerHTML = paginationHtml;
+    }
+
+    function renderCommentHtml(comment) {
+      const repliesHtml = (comment.replies || [])
+        .map(
+          (reply) => `
+        <div class="reply" data-reply-id="${reply.id}">
+          <div class="reply-header">
+            <span class="reply-author">${escapeHtml(reply.author)}</span>
+            <span class="reply-date">${escapeHtml(reply.createdAt)}</span>
+          </div>
+          <div class="reply-content">${escapeHtml(reply.content)}</div>
+          <div class="reply-actions">
+            <button type="button" class="delete-reply-btn">답글 삭제</button>
+          </div>
+        </div>
+      `
+        )
+        .join("");
+
+      return `
+      <div class="comment" data-comment-id="${comment.id}">
+        <div class="comment-header">
+          <span class="comment-author">${escapeHtml(comment.author)}</span>
+          <span class="comment-date">${escapeHtml(comment.createdAt)}</span>
+        </div>
+        <div class="comment-content">${escapeHtml(comment.content)}</div>
+        <div class="comment-actions">
+          <button type="button" class="reply-btn">답글</button>
+          <button type="button" class="delete-comment-btn">댓글 삭제</button>
+        </div>
+
+        <div class="reply-form hidden">
+          <textarea
+            class="reply-textarea"
+            rows="2"
+            placeholder="답글을 입력하세요."
+          ></textarea>
+          <div class="reply-form-actions">
+            <button type="button" class="submit-reply-btn primary">등록</button>
+            <button type="button" class="cancel-reply-btn">취소</button>
+          </div>
+        </div>
+
+        <div class="replies">
+          ${repliesHtml}
+        </div>
+      </div>
+    `;
+    }
+
+    // ---------------------------
+    // 필터 적용
+    // ---------------------------
+    function applyFilters() {
+      const searchTerm = searchInputEl.value.trim().toLowerCase();
+      const category = categoryFilterEl.value;
+      const level = levelFilterEl.value;
+
+      filteredLectures = lectures.filter((lec) => {
+        const text = (lec.title + " " + lec.instructor).toLowerCase();
+        const matchesSearch = !searchTerm || text.includes(searchTerm);
+        const matchesCategory = !category || lec.category === category;
+        const matchesLevel = !level || lec.level === level;
+        return matchesSearch && matchesCategory && matchesLevel;
+      });
+
+      // 현재 선택 강의가 필터 결과에 없는 경우 첫 강의 선택
+      if (
+        !currentLecture ||
+        !filteredLectures.find((l) => l.id === currentLecture.id)
+      ) {
+        currentLecture = filteredLectures[0] || null;
+        currentPage = 1;
+      }
+
+      renderLectureList();
+      renderLectureInfo();
+      renderComments();
+    }
+
+    // ---------------------------
+    // 이벤트 바인딩
+    // ---------------------------
+    function bindEvents() {
+      // 강의 리스트 클릭
+      lectureListEl.addEventListener("click", function (e) {
+        const item = e.target.closest(".lecture-item");
+        if (!item) return;
+        const id = Number(item.dataset.id);
+        const selected = lectures.find((lec) => lec.id === id);
+        if (!selected) return;
+        currentLecture = selected;
+        currentPage = 1;
+        renderLectureList();
+        renderLectureInfo();
+        renderComments();
+      });
+
+      // 검색 / 필터
+      searchInputEl.addEventListener("input", applyFilters);
+      categoryFilterEl.addEventListener("change", applyFilters);
+      levelFilterEl.addEventListener("change", applyFilters);
+
+      // 댓글/답글 관련 (이벤트 위임)
+      commentsContainerEl.addEventListener("click", function (e) {
+        const commentEl = e.target.closest(".comment");
+        if (!commentEl || !currentLecture) return;
+        const commentId = Number(commentEl.dataset.commentId);
+        const comment = currentLecture.comments.find((c) => c.id === commentId);
+        if (!comment) return;
+
+        // 답글 버튼
+        if (e.target.classList.contains("reply-btn")) {
+          const replyForm = commentEl.querySelector(".reply-form");
+          if (replyForm) {
+            replyForm.classList.toggle("hidden");
+            const textarea = replyForm.querySelector(".reply-textarea");
+            if (!replyForm.classList.contains("hidden") && textarea) {
+              textarea.focus();
+            }
+          }
+          return;
+        }
+
+        // 댓글 삭제
+        if (e.target.classList.contains("delete-comment-btn")) {
+          if (!confirm("이 댓글을 삭제하시겠습니까?")) return;
+          currentLecture.comments = currentLecture.comments.filter(
+            (c) => c.id !== commentId
+          );
+          renderComments();
+          return;
+        }
+
+        // 답글 등록
+        if (e.target.classList.contains("submit-reply-btn")) {
+          const replyForm = commentEl.querySelector(".reply-form");
+          const textarea =
+            replyForm && replyForm.querySelector(".reply-textarea");
+          if (!textarea) return;
+          const content = textarea.value.trim();
+          if (!content) {
+            alert("답글 내용을 입력하세요.");
+            return;
+          }
+          const newReply = {
+            id: Date.now(),
+            author: "관리자",
+            content,
+            createdAt: new Date().toISOString().slice(0, 16).replace("T", " "),
+          };
+          comment.replies.push(newReply);
+          textarea.value = "";
+          replyForm.classList.add("hidden");
+          renderComments();
+          return;
+        }
+
+        // 답글 취소
+        if (e.target.classList.contains("cancel-reply-btn")) {
+          const replyForm = commentEl.querySelector(".reply-form");
+          if (replyForm) {
+            replyForm.classList.add("hidden");
+            const textarea = replyForm.querySelector(".reply-textarea");
+            if (textarea) textarea.value = "";
+          }
+          return;
+        }
+
+        // 답글 삭제
+        if (e.target.classList.contains("delete-reply-btn")) {
+          const replyEl = e.target.closest(".reply");
+          if (!replyEl) return;
+          const replyId = Number(replyEl.dataset.replyId);
+          if (!confirm("이 답글을 삭제하시겠습니까?")) return;
+          comment.replies = comment.replies.filter((r) => r.id !== replyId);
+          renderComments();
+          return;
+        }
+      });
+
+      // 페이지네이션 클릭
+      paginationEl.addEventListener("click", function (e) {
+        const btn = e.target.closest(".page-btn");
+        if (!btn || !currentLecture) return;
+
+        const comments = currentLecture.comments || [];
+        const totalPages = Math.max(
+          1,
+          Math.ceil(comments.length / COMMENTS_PER_PAGE)
+        );
+
+        const page = btn.dataset.page;
+        if (page === "next") {
+          if (currentPage < totalPages) {
+            currentPage++;
+            renderComments();
+          }
+        } else {
+          const num = Number(page);
+          if (!isNaN(num) && num >= 1 && num <= totalPages) {
+            currentPage = num;
+            renderComments();
+          }
+        }
+      });
+    }
+
+    // ---------------------------
+    // 초기화
+    // ---------------------------
+    function init() {
+      currentLecture = filteredLectures[0] || null;
+      currentPage = 1;
+      renderLectureList();
+      renderLectureInfo();
+      renderComments();
+      bindEvents();
+    }
+
+    document.addEventListener("DOMContentLoaded", init);
+  })();
+</script>

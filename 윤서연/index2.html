@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html class="light" lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>CropLearn - Explore Courses</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#22C55E",
+              "background-light": "#F0FDF4",
+              "background-dark": "#141E17",
+              "card-light": "#FFFFFF",
+              "card-dark": "#1A281E",
+              "text-light-primary": "#1F2937",
+              "text-dark-primary": "#ECFDF5",
+              "text-light-secondary": "#4B5563",
+              "text-dark-secondary": "#A3E6B4",
+              "border-light": "#D1FAE5",
+              "border-dark": "#166534",
+              accent: "#4ADE80",
+            },
+            fontFamily: { display: ["Lexend", "sans-serif"] },
+            borderRadius: {
+              DEFAULT: "0.5rem",
+              lg: "0.75rem",
+              xl: "1rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+      }
+      .main-bg-image {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background-image: url("https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=2070&auto=format&fit=crop");
+        background-size: cover;
+        background-position: center;
+      }
+      .main-bg-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        background-color: var(--overlay-color);
+        backdrop-filter: blur(2px);
+      }
+      html.light {
+        --overlay-color: rgba(240, 253, 244, 0.8);
+      }
+      html.dark {
+        --overlay-color: rgba(20, 30, 23, 0.9);
+      }
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      /* 디자인은 유지, 배치만 개선 */
+    </style>
+  </head>
+  <body
+    class="font-display bg-background-light dark:bg-background-dark text-text-light-primary dark:text-text-dark-primary"
+  >
+    <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+      <div class="main-bg-image"></div>
+      <div class="main-bg-overlay"></div>
+      <div class="relative flex h-full grow flex-col z-10">
+        <div class="flex flex-1 justify-center py-5">
+          <div
+            class="flex flex-col w-full max-w-6xl flex-1 px-4 sm:px-6 lg:px-8"
+          >
+            <!-- Header (디자인 유지) -->
+            <header
+              class="flex items-center justify-between whitespace-nowrap border border-solid border-border-light dark:border-border-dark px-4 sm:px-6 py-4 bg-card-light/80 dark:bg-card-dark/80 backdrop-blur-sm rounded-xl shadow-sm"
+            >
+              <div class="flex items-center gap-4">
+                <div class="size-8 text-primary">
+                  <span class="material-symbols-outlined !text-4xl">eco</span>
+                </div>
+                <h2 class="text-xl font-bold tracking-[-0.015em]">CropLearn</h2>
+              </div>
+              <div class="hidden md:flex flex-1 justify-center gap-8">
+                <div class="flex items-center gap-9">
+                  <a class="text-primary font-bold text-sm" href="#"
+                    >전체 강의</a
+                  >
+                  <a
+                    class="text-text-light-secondary dark:text-text-dark-secondary hover:text-primary dark:hover:text-primary text-sm font-medium"
+                    href="#"
+                    >나의 강의실</a
+                  >
+                  <a
+                    class="text-text-light-secondary dark:text-text-dark-secondary hover:text-primary dark:hover:text-primary text-sm font-medium"
+                    href="#"
+                    >커뮤니티</a
+                  >
+                </div>
+              </div>
+              <div class="flex items-center gap-4">
+                <button
+                  class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 hover:bg-primary/20"
+                  aria-label="알림"
+                >
+                  <span class="material-symbols-outlined text-primary"
+                    >notifications</span
+                  >
+                </button>
+                <div
+                  class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
+                  style="
+                    background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA4oDu7B29XNzCTXqv5qF0QvjzW_ZpMLnrx7wAD6wKGvFPvEhNnYdDBZwdiMMkh22caKmlry1kjltO1AxX9Bah7VieoHoULqOzEv3KTgcyEDjA_tIWLNZcoMyBWL_EppDCvraeEE2LTm6utjlT751GkzaajEzP2j2F-iDHGr2Zj3ycdhvj8TRTt8O8IBdZcN2I5pBk3QRXxuZ3agPf09AShvlVCYuxS9KAplA0MM9BHpiuCb848jCqywQ6_ykJKXMz0QvkhW4opi44');
+                  "
+                ></div>
+              </div>
+            </header>
+
+            <!-- Title -->
+            <main class="mt-7 flex flex-col gap-6">
+              <!-- 여백 소폭 축소 -->
+              <div class="flex flex-wrap justify-between gap-4 px-2">
+                <div class="flex min-w-72 flex-col gap-1.5">
+                  <p class="text-4xl font-black tracking-[-0.033em]">
+                    강의 탐색하기
+                  </p>
+                  <p
+                    class="text-base text-text-light-secondary dark:text-text-dark-secondary"
+                  >
+                    기술을 키울 수 있는 올바른 강의를 찾아보세요
+                  </p>
+                </div>
+              </div>
+
+              <!-- Controls -->
+              <div
+                class="flex flex-col gap-3 p-4 bg-card-light/80 dark:bg-card-dark/80 backdrop-blur-sm rounded-xl shadow-sm border border-border-light dark:border-border-dark"
+              >
+                <div class="px-1 py-1">
+                  <label class="flex flex-col min-w-40 h-12 w-full"
+                    ><!-- 높이 살짝 줄임 -->
+                    <div
+                      class="flex w-full items-stretch rounded-lg h-full border border-border-light dark:border-border-dark focus-within:ring-2 focus-within:ring-primary bg-background-light dark:bg-background-dark"
+                    >
+                      <div
+                        class="flex items-center justify-center pl-4 text-text-light-secondary dark:text-text-dark-secondary"
+                      >
+                        <span class="material-symbols-outlined">search</span>
+                      </div>
+                      <input
+                        id="searchInput"
+                        class="form-input flex w/full flex-1 rounded-lg bg-transparent px-4 text-base focus:outline-0 focus:ring-0 placeholder:text-text-light-secondary dark:placeholder:text-text-dark-secondary"
+                        placeholder="강의명 또는 강사명으로 검색"
+                      />
+                    </div>
+                  </label>
+                </div>
+
+                <!-- 정렬 + 가로 스크롤 카테고리 바 -->
+                <div class="flex items-center gap-3 px-1">
+                  <div class="relative shrink-0">
+                    <select
+                      id="sortSelect"
+                      class="appearance-none cursor-pointer h-9 rounded-full bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark pl-4 pr-10 text-sm font-medium text-text-light-primary dark:text-text-dark-primary focus:outline-none focus:ring-2 focus:ring-primary"
+                    >
+                      <option value="new">최신순</option>
+                      <option value="old">오래된순</option>
+                      <option value="pop">인기순</option>
+                    </select>
+                    <div
+                      class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-text-light-secondary dark:text-text-dark-secondary"
+                    >
+                      <span class="material-symbols-outlined !text-base"
+                        >expand_more</span
+                      >
+                    </div>
+                  </div>
+
+                  <div class="relative w-full">
+                    <button
+                      id="catPrev"
+                      class="absolute left-0 top-1/2 -translate-y-1/2 z-10 hidden md:flex items-center justify-center size-8 rounded-full bg-card-light/80 dark:bg-card-dark/80 border border-border-light dark:border-border-dark hover:bg-primary/10"
+                      aria-label="카테고리 왼쪽"
+                    >
+                      <span class="material-symbols-outlined"
+                        >chevron_left</span
+                      >
+                    </button>
+                    <div
+                      id="catScroller"
+                      class="no-scrollbar overflow-x-auto whitespace-nowrap w-full px-9 md:px-10"
+                    >
+                      <div
+                        id="chipRow"
+                        class="inline-flex items-center gap-2"
+                      ></div>
+                    </div>
+                    <button
+                      id="catNext"
+                      class="absolute right-0 top-1/2 -translate-y-1/2 z-10 hidden md:flex items-center justify-center size-8 rounded-full bg-card-light/80 dark:bg-card-dark/80 border border-border-light dark:border-border-dark hover:bg-primary/10"
+                      aria-label="카테고리 오른쪽"
+                    >
+                      <span class="material-symbols-outlined"
+                        >chevron_right</span
+                      >
+                    </button>
+                  </div>
+
+                  <label
+                    class="flex items-center gap-2 cursor-pointer shrink-0"
+                  >
+                    <input
+                      id="subOnly"
+                      type="checkbox"
+                      class="form-checkbox h-5 w-5 rounded text-primary bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark focus:ring-primary"
+                    />
+                    <span class="text-sm font-medium">내가 구독한 강의</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- 카드 영역 -->
+              <div
+                id="cardGrid"
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"
+              ></div>
+
+              <!-- 페이지네이션 -->
+              <div class="flex items-center justify-center pt-6 pb-4">
+                <nav aria-label="Pagination" class="flex items-center gap-2">
+                  <button
+                    id="prevPageBtn"
+                    class="flex items-center justify-center size-9 rounded-full text-text-light-secondary dark:text-text-dark-secondary hover:bg-primary/10 hover:text-primary"
+                    aria-label="이전 페이지"
+                  >
+                    <span class="material-symbols-outlined">chevron_left</span>
+                  </button>
+                  <div id="pageNumbers" class="flex items-center gap-2"></div>
+                  <button
+                    id="nextPageBtn"
+                    class="flex items-center justify-center size-9 rounded-full text-text-light-secondary dark:text-text-dark-secondary hover:bg-primary/10 hover:text-primary"
+                    aria-label="다음 페이지"
+                  >
+                    <span class="material-symbols-outlined">chevron_right</span>
+                  </button>
+                </nav>
+              </div>
+            </main>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // ===== 데이터 =====
+      const categories = [
+        "딸기",
+        "토마토",
+        "상추",
+        "수경재배",
+        "논",
+        "도시농업",
+        "토양",
+        "포도",
+        "오이",
+        "파프리카",
+        "블루베리",
+        "감자",
+        "고구마",
+        "사과",
+        "배",
+        "복숭아",
+        "체리",
+        "수박",
+        "멜론",
+        "허브",
+        "고추",
+        "양파",
+        "마늘",
+        "브로콜리",
+        "양배추",
+      ];
+
+      const sampleImgs = {
+        딸기: "https://lh3.googleusercontent.com/aida-public/AB6AXuDvsKnI0F-j2F97xQixKsBQiCq2G7-hhzgsa6UyHou1KEsMZbpddQIMoTePWYibJQeyTioZxqFD97n43bAgOM57K4KNKyI-A46GqD3q7QwMDl9Ek00fhJ7uVUV_W087x6sGtwmqjwjxgOr-jVZ_quKiqLsO2dAO4SS_gjj3ll0RdUxgy1xDjKWnDJ_wmdBH5P_HTQs7ewy2bWcKznH4m-H48l8cZIgHmgk3xte1LNP4F-f1moly6U4CtK1X_ssxkmV6VhxnezNAaI0",
+        토마토:
+          "https://lh3.googleusercontent.com/aida-public/AB6AXuB3N6QETUlaycmNzZFXuiVSD9zhHW8oK04S0SfrM_jEjfVF5_q5Mkw1rTPwxrVdic22_am2uUTZdIxg3wvXiC_heiD0JiTKmiJt3PpnUthGnWyqHRhQkOjjX9exoCQI7VNqWwxjG17w1lkA7nU5UyOgUewhN42zK8epWOtzU0QjX4pJrjvdWpn9d3-Lbt3ybZJyOLS4lxURet2Rfw6uIRINDHmDFYwJUivKKbJJECdb1SppzNgkGj_ORJmDO2Kux7i7UDDSb_tDGEM",
+        상추: "https://lh3.googleusercontent.com/aida-public/AB6AXuDm_bSCfbqqPEEIaFuFnmYBT4AhSma0Nk-pFrnL3ZS96NPche4tgTFloemsjnuY3YTQRvDGUKsmNt2K5rjPJAT4tlyRzOi10vy6JjdwjYAEeutbFlzCSd-qaH_GhZO9YzAYMz-JAdSYZC1oXX3qCELxeKb1NCknSZv8beJjMQbQCV8W5T87DfwQ8Z_6wfNBao_JCRycxcwbF3aag0zoj4cGgPkID5r_t9agZKbWdF130HYcnKQX_KdbpSN11IZ9q28NIfGsPyokV6E",
+        수경재배:
+          "https://lh3.googleusercontent.com/aida-public/AB6AXuD54g-rsgjoZqZoIIAQWYTds0xyOvIzd4WlPYLzYgQRzFHzddtVK_tx6gSm3ibG4CdknmURcu3oXl-GqWxcPMVCHglx-ZIDTwd-dXCZzm4n-CTpUkLLS4CgCxBDRTc6IuULIAQzCPTtKBKvTDa2Tac5miJ_1-8aNNylGWe7Elv1AA8-dCnelUI0mtzkLg6X7yDXvX9PHDWpaOdZU5OoXbCoa8f83JCtMb4-Fkq1BS3FZx-yEy2trM4fuq0eXpGnjovydGcV1_11wd8",
+        논: "https://lh3.googleusercontent.com/aida-public/AB6AXuAuvMjdcSnmJiaIYoqvE5hTHpueahxVXH5XfAUTJdCdl_PR3YyIf0NIrZmiIN9jQbfFiGutyoAYZMO9tSMNprTrhQ7okFlygWaO9lTTXc42-r5MycBowI7PNxZBIr-X0LiwlyIvnKdf7i9zyL1VSJRn10vt9TLHpn2rhLtAorkbzMwYvTqKchreet69uPcMHiplC5htOPnsfeNxsHd6AmNSpDsFm3IEkiRhdr3ikVbmQ1ISn6tekrQAjzm7X4RqSLBmzbXUsvPnb_A",
+        도시농업:
+          "https://lh3.googleusercontent.com/aida-public/AB6AXuCDnjzPMpgWzw4T4hXFgU7ihGAOLhnlOdPfc-PotwdV38NnbQ5n6HEhKawW7y-ktQKFaLUcxwJ_tbc_AJ74Pk_KCOWG4FeoIjQyDYSFfqpWX7gIzehRMKepRsqb8C2AHYhLNna52wULZzvNBwTsHlVccInS8c2m82kYaHnqkMICFR8MZdx2Zen3oFmz5eXR6eEwL-uZRjctJhhbaf2W0fFCW64k29XBCngpQB4W6KCqywSYKnLF820vowLJ--cXs15ZyouC9eX5V4A",
+        토양: "https://lh3.googleusercontent.com/aida-public/AB6AXuDZW1005i6QkJ7PTqMeI8jZ2Ltr-2yQSedNHLIMkHOf8_hSwwSM5aFqX-L8LD7DP6uOPbR2NZ4FMqNT0Kt-U3KsTeEDamr3NLiAGz8L8XM_FTu1MGIKoXJeIXjGvz7zJ-REmkMbJuTGjof1x3_spmMI0IDW7XsqKwuj49IpH2w3Yv37xn5NMv2zPNuEFpz-n2nU8jkaV4O4AocX-6qWkVvVKL1kr3Dr06AqFan7-BQJegYqXeIVE_vY44vGLJvfk8oR8Ltc21oESys",
+        포도: "https://lh3.googleusercontent.com/aida-public/AB6AXuA5gDh0_tt0yje6lE9KC9icBAWUPpDMt5h1PSsPHZHdwgkFFbF1iwkvl33ymaYoTCmHYNDph5_02uTCXAWJrJa70s-d46a4WTCTa2oInK_25iq5-MFtXFTIHEAnS2X4hS2ryyduMrDeJhoZhAJoceinJeuEfYOMAwgjTCkp6El6Iu8mgwob35yV0VEyofKKPJLVmF5MeEc5wEtwF6wgj_fdr0OQ6hhdfTp7FGDS5IjeyWfjUyIpbU9PMwNRcAaiqKuOCxn-0sFR_5E",
+      };
+
+      const placeholderImg =
+        "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80&w=1600&auto=format&fit=crop";
+      const avatarImgs = [
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuBoayuiDXFmq07sKulkCCHDkZf0KS4Qcex2QjKNh2XwbfBne5TLnYFcbGjolqXU9Mb4wxQyECW8CfqrZF4xfT3JJFpjh1CN86ZMVOhXFxRBcv9ThKRwXzg-wBbevYqrHQX-PKCO2IA8zZXHrk2pBHRBE8lGVuXhnbU6UkJg_GYNFdW0wgCoGzBWnGMKcYei4tI5_-JvxTByc2uXoI5jSHRy0gSXuxyTGKASS6opBrSj3Dqeo4MhZdRVotbu7JJyCju1lyddyUYy8Go",
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuCzHMvjx8Udp2XWuZsXLHywK972Ukv6O5OizlDgpIxvDY7o_DCwrdr1iOnrEOhbecotdSHojgFQBt4RX4fX7zV_2VjlAb7rUpFDuiruhyyccYRxI5f_RvLtUhXsgsBXDLhJfjJkLT_AJUGXJ646tyw21XIIsn0nHya0lb_dGtkhijVF0E12FWLlBvWFPVBruP-QpMhgDo2HNO7EpTmK7Bu3OBMyhyK2lVqHMrT07ff8RIXR3D1NJD2yGET4z9l-hUgULFd2VJ-5taU",
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuBMTwaePVW74NyEPsqnNWsR0BqEFRIM2LazMJOPM410Ll0KjP8qHJ4OYEuT_t8GDzny8ejy-Z27MzdBTDiAMBVnnAhh_GHHBwRIvd2P7or3Wkv3MbsIFIMef9CQwkmbSyelw_tf0PEaOAtg69-GmK4psb7jD1wmkuS5CHNzzlNfm32YU9K1gP3Db2oRLTQDom6PVMPQMlEU0R8un0W43yk89PW4jA_KV-106DlathIiXwk-mAIQFBR_i7v3VYZ9kIvF0nqe7rQEYnw",
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuBAq72UJhns5Cgk--GJRg8buq9wp1qDrQqfqfWdTSAXG3xCsAme4A9QmHFd09J6ftU3k_uQP67QeODxPvrbCA2k-rz5d1AmGdwn5Oxsr8JUBHOoQUr7NzpjSxC4U7v60oVqthrTpgu40d-ySqr4FmXcvNNSq7orJW5avH4DmsU3mT4DWOxcy6g9GicUEHOtv2SyEN8dKq2vF9fvwUbs044zex-aD9JsHhvRN7N3nZDNa8ErxxVTIoE5VI00KeCDFtE0YikoH5lNMMc",
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuBswN7gbnpEDLfM016lnJ5QdMsiglzgz7-Inabu22fQ0QK1VjalpdtNLPq8u9Qr-SPqqwiQI9-ogiN412KaMoQxp7-iJWhvxgF9t0M4Ww3f8mR0m5h3z7mKIG8u1kCkz1nL0lG6o9l8tqgS7P-QGmA",
+      ];
+
+      const instructorNames = [
+        "김농부 교수",
+        "이박사",
+        "박아나",
+        "존 파머",
+        "최민준",
+        "김사라",
+        "데이비스 박사",
+        "이사벨라 로시",
+        "한지민",
+        "오현우",
+        "정소라",
+        "마리오 비타",
+        "박수진",
+        "최다은",
+        "Alex Green",
+      ];
+
+      const titlesByCat = {
+        딸기: [
+          "초보자를 위한 스마트팜 딸기 재배 A to Z",
+          "사계절 딸기 수확 전략",
+          "병해 관리와 당도 올리기",
+        ],
+        토마토: [
+          "고급 토마토 해충 관리",
+          "방울토마토 수경재배 실전",
+          "완숙토마토 수량 극대화",
+        ],
+        상추: [
+          "유기농 상추 재배 기술",
+          "상추 연작장해 해결법",
+          "속성 재배로 회전율 높이기",
+        ],
+        수경재배: [
+          "수경재배 101: 시작하기",
+          "NFT/DWC 시스템 구축",
+          "양액 관리의 과학",
+        ],
+        논: [
+          "논 관개 마스터하기",
+          "직파 vs 이앙, 무엇이 맞나",
+          "병해충 통합관리",
+        ],
+        도시농업: [
+          "도시 농업: 발코니 정원",
+          "옥상텃밭 물관리",
+          "작은 공간 큰 수확",
+        ],
+        토양: ["토양 건강의 과학", "유기물 관리 심화", "pH와 양분 밸런싱"],
+        포도: [
+          "최대 수확량을 위한 포도나무 가지치기",
+          "덩굴 관리와 동해 대비",
+          "와인용 품종 재배",
+        ],
+        오이: ["오이 재배 핵심", "덩굴손 관리와 유인", "탄저병 예방"],
+        파프리카: ["파프리카 하우스 재배", "착색과 수량 관리", "수확 후 관리"],
+        블루베리: [
+          "블루베리 토양/수분 관리",
+          "품종 선택과 접목",
+          "가지치기 실전",
+        ],
+        감자: ["감자 종서 관리", "수확량 늘리는 관개", "역병 관리"],
+        고구마: ["고구마 묘 준비", "비닐멀칭과 습도", "수확과 저장"],
+        사과: ["사과 착과 관리", "화상병 예방", "주지 만들기"],
+        배: ["배 과원 설계", "가지치기 정석", "과실 비대 관리"],
+        복숭아: ["복숭아 꽃솎기", "과실벌레 통합관리", "갈변 예방"],
+        체리: ["체리 비가림 시설", "새 피해 방지", "수확 타이밍"],
+        수박: ["수박 접목과 정식", "당도 올리는 기술", "병해충 관리"],
+        멜론: ["멜론 유인/적심", "망 칠 시기", "수확 후 당도 유지"],
+        허브: ["허브 기초", "바질/민트 집중 코스", "실내 조명 관리"],
+        고추: ["노지 고추의 모든 것", "역병/진딧물 관리", "수확 일정 설계"],
+        양파: ["양파 파종부터 저장까지", "추대 방지", "양분 설계"],
+        마늘: ["마늘 파종 심화", "월동 관리", "수확과 건조"],
+        브로콜리: ["브로콜리 생리장해", "수확일 예측", "저온기 관리"],
+        양배추: ["양배추 정식 밀도", "배추좀나방 관리", "수확 후 저장"],
+      };
+
+      const PER_PAGE = 12;
+      const TOTAL = 120;
+      const randInt = (min, max) =>
+        Math.floor(Math.random() * (max - min + 1)) + min;
+      const pick = (arr) => arr[randInt(0, arr.length - 1)];
+
+      const courses = Array.from({ length: TOTAL }).map((_, i) => {
+        const cat = pick(categories);
+        const title = pick(titlesByCat[cat] || [cat + " 심화 과정"]);
+        const createdAt = Date.now() - randInt(0, 1000 * 60 * 60 * 24 * 720);
+        return {
+          id: i + 1,
+          title,
+          category: cat,
+          instructor: pick(instructorNames),
+          students: randInt(150, 5200),
+          lectures: randInt(6, 24),
+          image: sampleImgs[cat] || placeholderImg,
+          avatar: pick(avatarImgs),
+          createdAt,
+          subscribed: Math.random() < 0.25,
+        };
+      });
+
+      // ===== 상태 =====
+      const state = {
+        search: "",
+        sort: "new",
+        category: "딸기",
+        subOnly: false,
+        page: 1,
+      };
+
+      // ===== 엘리먼트 =====
+      const cardGrid = document.getElementById("cardGrid");
+      const searchInput = document.getElementById("searchInput");
+      const sortSelect = document.getElementById("sortSelect");
+      const subOnly = document.getElementById("subOnly");
+      const pageNumbers = document.getElementById("pageNumbers");
+      const prevPageBtn = document.getElementById("prevPageBtn");
+      const nextPageBtn = document.getElementById("nextPageBtn");
+      const catScroller = document.getElementById("catScroller");
+      const chipRow = document.getElementById("chipRow");
+      const catPrev = document.getElementById("catPrev");
+      const catNext = document.getElementById("catNext");
+
+      // ===== 카테고리 칩 가로 바 구성 =====
+      function buildChips() {
+        chipRow.innerHTML = "";
+        categories.forEach((cat, idx) => {
+          const btn = document.createElement("button");
+          btn.setAttribute("data-chip", "");
+          btn.setAttribute("data-category", cat);
+          btn.className =
+            "h-9 rounded-full border px-4 text-sm flex items-center gap-x-2 bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark hover:bg-primary/10 hover:border-primary";
+          btn.innerHTML =
+            idx === 0
+              ? '<img class="h-5 w-5" alt="icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOpAMwi97C_FBCGaG03ifpnPGQhaIeMZSOKOIfwgE_KmxJFMz9Mpc0aDoQsEBW8f1T0hlG25PwoOGpo48kYDvJ9c74YxlK1SyrNFJEK3Eq8EyJwHZIXlEKBC49MCs8zOR-4DLenfBnvDvDhikx__xNYRSJso-4bxJ6uzr8og4GESAcAwV7Fx9JYaxb9QrCqn5G3s-wc8T7cwaWfBfKWuz1ubfM9qddBFWDKEtc175NkuSeCRdClDikUNYWpebAoZWB1nCkRrI8IkA"/><span>' +
+                cat +
+                "</span>"
+              : '<span class="material-symbols-outlined !text-base">local_florist</span><span>' +
+                cat +
+                "</span>";
+          chipRow.appendChild(btn);
+        });
+      }
+
+      function updateChipStyles() {
+        document.querySelectorAll("button[data-chip]").forEach((btn) => {
+          const cat = btn.getAttribute("data-category");
+          const active = state.category === cat;
+          btn.className = active
+            ? "h-9 rounded-full bg-primary/10 border border-primary px-4 text-sm font-bold text-primary flex items-center gap-x-2"
+            : "h-9 rounded-full border px-4 text-sm flex items-center gap-x-2 bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark hover:bg-primary/10 hover:border-primary";
+        });
+      }
+
+      // 수평 스크롤 버튼
+      const SCROLL_STEP = 240;
+      catPrev.addEventListener("click", () => {
+        catScroller.scrollBy({ left: -SCROLL_STEP, behavior: "smooth" });
+      });
+      catNext.addEventListener("click", () => {
+        catScroller.scrollBy({ left: SCROLL_STEP, behavior: "smooth" });
+      });
+
+      // 칩 클릭 (이벤트 위임)
+      chipRow.addEventListener("click", (e) => {
+        const btn = e.target.closest("button[data-chip]");
+        if (!btn) return;
+        const cat = btn.getAttribute("data-category");
+        state.category = state.category === cat ? null : cat;
+        state.page = 1;
+        updateChipStyles();
+        render();
+      });
+
+      // ===== 입력 바인딩 =====
+      let searchTimer;
+      const DEBOUNCE = 160;
+      searchInput.addEventListener("input", () => {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(() => {
+          state.search = searchInput.value.trim();
+          state.page = 1;
+          render();
+        }, DEBOUNCE);
+      });
+      sortSelect.addEventListener("change", () => {
+        state.sort = sortSelect.value;
+        state.page = 1;
+        render();
+      });
+      subOnly.addEventListener("change", () => {
+        state.subOnly = subOnly.checked;
+        state.page = 1;
+        render();
+      });
+
+      // ===== 필터/정렬/페이지 =====
+      function applyFilters(list) {
+        let out = [...list];
+        if (state.category)
+          out = out.filter((c) => c.category === state.category);
+        if (state.subOnly) out = out.filter((c) => c.subscribed);
+        if (state.search) {
+          const q = state.search.toLowerCase();
+          out = out.filter(
+            (c) =>
+              c.title.toLowerCase().includes(q) ||
+              c.instructor.toLowerCase().includes(q)
+          );
+        }
+        switch (state.sort) {
+          case "new":
+            out.sort((a, b) => b.createdAt - a.createdAt);
+            break;
+          case "old":
+            out.sort((a, b) => a.createdAt - b.createdAt);
+            break;
+          case "pop":
+            out.sort((a, b) => b.students - a.students);
+            break;
+        }
+        return out;
+      }
+
+      function paginate(arr, page, per) {
+        const total = arr.length;
+        const totalPages = Math.max(1, Math.ceil(total / per));
+        const p = Math.min(Math.max(1, page), totalPages);
+        const start = (p - 1) * per;
+        return { slice: arr.slice(start, start + per), totalPages, page: p };
+      }
+
+      // ===== 렌더링 =====
+      function numToK(n) {
+        return n >= 1000
+          ? (n / 1000).toFixed(1).replace(/\.0$/, "") + "K"
+          : String(n);
+      }
+      function cardHTML(c) {
+        return `
+        <div class="flex flex-col gap-3 rounded-xl bg-card-light dark:bg-card-dark shadow-sm overflow-hidden transition-all hover:shadow-lg hover:-translate-y-1">
+          <div class="w-full bg-center bg-no-repeat aspect-video bg-cover" style="background-image:url('${
+            c.image
+          }');"></div>
+          <div class="p-4 flex flex-col flex-grow">
+            <p class="text-base font-bold flex-grow">${c.title}</p>
+            <div class="flex items-center gap-2 mt-3">
+              <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-6" style="background-image:url('${
+                c.avatar
+              }');"></div>
+              <p class="text-sm text-text-light-secondary dark:text-text-dark-secondary">${
+                c.instructor
+              }</p>
+              <span class="ml-auto text-[11px] px-2 py-0.5 rounded-full border border-border-light dark:border-border-dark text-text-light-secondary dark:text-text-dark-secondary">${
+                c.category
+              }</span>
+            </div>
+            <div class="flex items-center gap-4 mt-3 text-text-light-secondary dark:text-text-dark-secondary">
+              <div class="flex items-center gap-1"><span class="material-symbols-outlined !text-base">group</span><p class="text-xs">${numToK(
+                c.students
+              )}</p></div>
+              <div class="flex items-center gap-1"><span class="material-symbols-outlined !text-base">play_circle</span><p class="text-xs">총 ${
+                c.lectures
+              }강</p></div>
+              ${
+                c.subscribed
+                  ? '<span class="ml-auto text-[10px] font-semibold px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary">구독중</span>'
+                  : ""
+              }
+            </div>
+          </div>
+        </div>`;
+      }
+
+      function renderCards(items) {
+        cardGrid.innerHTML = items.map(cardHTML).join("");
+      }
+
+      function renderPagination(totalPages) {
+        pageNumbers.innerHTML = "";
+        const p = state.page;
+        const mkBtn = (label, page, active = false) => {
+          const b = document.createElement("button");
+          b.textContent = label;
+          b.className = active
+            ? "flex items-center justify-center size-9 rounded-full text-white bg-primary font-bold"
+            : "flex items-center justify-center size-9 rounded-full text-text-light-secondary dark:text-text-dark-secondary hover:bg-primary/10 hover:text-primary";
+          b.addEventListener("click", () => {
+            state.page = page;
+            render();
+          });
+          return b;
+        };
+        const pages = new Set([
+          1,
+          2,
+          3,
+          p - 2,
+          p - 1,
+          p,
+          p + 1,
+          p + 2,
+          totalPages - 2,
+          totalPages - 1,
+          totalPages,
+        ]);
+        const list = [...pages]
+          .filter((x) => x >= 1 && x <= totalPages)
+          .sort((a, b) => a - b);
+        let last = 0;
+        list.forEach((n) => {
+          if (n - last > 1) {
+            const span = document.createElement("span");
+            span.className =
+              "text-text-light-secondary dark:text-text-dark-secondary";
+            span.textContent = "...";
+            pageNumbers.appendChild(span);
+          }
+          pageNumbers.appendChild(mkBtn(String(n), n, n === p));
+          last = n;
+        });
+        prevPageBtn.onclick = () => {
+          if (state.page > 1) {
+            state.page--;
+            render();
+          }
+        };
+        nextPageBtn.onclick = () => {
+          if (state.page < totalPages) {
+            state.page++;
+            render();
+          }
+        };
+      }
+
+      function render() {
+        updateChipStyles();
+        const filtered = applyFilters(courses);
+        const { slice, totalPages, page } = paginate(
+          filtered,
+          state.page,
+          PER_PAGE
+        );
+        state.page = page;
+        renderCards(slice);
+        renderPagination(totalPages);
+      }
+
+      // 초기화
+      buildChips();
+      render();
+    </script>
+  </body>
+</html>
