@@ -1,0 +1,98 @@
+<!-- src/main/resources/templates/chat/chat.html -->
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>채팅 - UrbanGreen</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}"/>
+    <link rel="stylesheet" th:href="@{/css/board/chat.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<main class="layout" id="app"
+      th:attr="data-user-id=${session.loginUser != null ? session.loginUser.userId : 0},
+               data-user-nickname=${session.loginUser != null ? session.loginUser.nickname : '게스트'}">
+
+    <!-- 좌: 참여/미참여 -->
+    <aside class="col left">
+        <div class="col-head">참여 채팅방</div>
+        <div id="joinedList" class="list section"></div>
+        <div class="section-head">미참여 채팅방</div>
+        <div id="otherList" class="list section"></div>
+
+        <div class="create-room-container">
+            <button class="create-room-btn" onclick="openCreateModal()">
+                <span style="font-size:1.2rem">+</span><span>새 채팅방 만들기</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- 가운데 -->
+    <section class="col center">
+        <div class="chat-head">
+            <div class="chat-room-name" id="activeRoomName">채팅방을 선택하세요</div>
+            <div class="chat-head-actions">
+                <button id="deleteBtn" class="delete-btn" style="display:none" onclick="deleteRoom()">방 삭제</button>
+                <button id="leaveBtn" class="leave-btn" style="display:none" onclick="leaveRoom()">나가기</button>
+            </div>
+        </div>
+
+        <div class="chat-view" id="chatView"></div>
+        <div class="chat-input-wrap">
+            <textarea id="chatInput" class="chat-input" placeholder="메시지를 입력하세요..." disabled></textarea>
+            <button id="sendBtn" class="send-btn" disabled>전송</button>
+        </div>
+    </section>
+
+    <!-- 우: 온라인/오프라인 (데모용) -->
+    <aside class="col right">
+        <div class="col-head">온라인 사용자</div>
+        <div id="onlineList" class="list"></div>
+        <div class="section-head">오프라인 사용자</div>
+        <div id="offlineList" class="list"></div>
+    </aside>
+</main>
+
+<!-- 입장 모달 -->
+<div id="joinModal" class="modal">
+    <div class="modal-card">
+        <div class="modal-title">채팅방 입장</div>
+        <div class="modal-desc">채팅방에 입장하시겠습니까?</div>
+        <div class="modal-room-info">
+            <div class="modal-room-name" id="modalRoomName"></div>
+        </div>
+        <div class="modal-actions">
+            <button class="btn cancel" onclick="closeModal()">취소</button>
+            <button class="btn primary" onclick="confirmJoin()">입장하기</button>
+        </div>
+    </div>
+</div>
+
+<!-- 생성 모달 -->
+<div id="createModal" class="modal">
+    <div class="modal-card">
+        <div class="modal-title">새 채팅방 만들기</div>
+        <div class="modal-desc">채팅방 정보를 입력해주세요</div>
+        <div class="form-group">
+            <label class="form-label">채팅방 이름 *</label>
+            <input type="text" id="newRoomName" class="form-input" maxlength="30">
+        </div>
+        <div class="modal-actions">
+            <button class="btn cancel" onclick="closeCreateModal()">취소</button>
+            <button class="btn primary" onclick="confirmCreate()">생성하기</button>
+        </div>
+    </div>
+</div>
+
+<!-- SockJS / STOMP (CDN에서 로드) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+<!-- 채팅 전용 JS (반드시 라이브러리 로딩 후에) -->
+<script th:src="@{/js/chat.js}"></script>
+</body>
+</html>
+
+</body>
+</html>
