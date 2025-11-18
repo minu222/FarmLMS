@@ -53,19 +53,20 @@
             <form id="courseUploadForm" enctype="multipart/form-data">
                 <div id="cate">
                     <div class="uploadCourse-Control">
-                        <select id="uploadCourse-Category" name="courses_category">
-                            <option value="">카테고리를 선택하세요</option>
-                            <option value="seed">모종/씨앗 고르기</option>
-                            <option value="cultivate">재배</option>
-                            <option value="consignment">출하</option>
+                        <select id="category1" required>
+                            <option value=""> 카테고리를 선택하세요</option>
+                            <option value="vegetable_gardening">텃밭가꾸기</option>
+                            <option value="indoor_garden">하우스 농사/실내정원</option>
+                            <option value="farm">노지</option>
                         </select>
                     </div>
-                    <div id="rankcheck">
-                        <select id="difficulty" name="difficulty" required>
-                            <option value="" disabled selected hidden>난이도를 선택하세요</option>
-                            <option value="hard">상</option>
-                            <option value="normal">중</option>
-                            <option value="easy">하</option>
+                    <div id="cate2">
+                    <select id="category2" required>
+                        <option value=""> 카테고리를 선택하세요</option>
+                        <option value="vegetable_seed">모종/씨앗</option>
+                        <option value="vegetable_cultivate">재배</option>
+                        <option value="deliver">출하</option>
+                    </select>
                         </select>
                     </div>
                 </div>
