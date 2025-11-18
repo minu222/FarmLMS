@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>주말농장 AI 플래너 입력</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/ai/AIPlannerStyle.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<div class="main-content-wrapper">
+    <h1>🌱 주말농장 성공 플래너 AI</h1>
+    <h3 id="planner-intro-text">몇 가지 정보를 입력해 주시면, AI가 사용자님께 가장 적합한 텃밭 모델과 초기 재배 계획을 세워드립니다!</h3>
+    <div class="form-container">
+
+        <div id="inputFormArea">
+            <form th:action="@{/planner/generate}" method="post" id="plannerForm">
+
+                <div class="form-group">
+                    <label for="residenceType">1. 현재 거주 형태는 무엇인가요?</label>
+                    <select id="residenceType" name="residenceType" required>
+                        <option value="아파트">아파트/오피스텔</option>
+                        <option value="단독주택">단독주택</option>
+                        <option value="빌라/다세대">빌라/다세대</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>2. 텃밭을 만들 공간은 어디인가요?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="space" value="베란다/발코니" checked> 베란다/발코니</label>
+                        <label><input type="radio" name="space" value="옥상"> 옥상</label>
+                        <label><input type="radio" name="space" value="마당"> 마당</label>
+                        <label><input type="radio" name="space" value="공동 텃밭"> 공동 텃밭</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>3. 텃밭 공간의 평균 일조량은 어느 정도인가요?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="sunlight" value="오전 3시간 미만"> 오전 3시간 미만 (저광량)</label>
+                        <label><input type="radio" name="sunlight" value="오전/오후 3~6시간" checked> 오전/오후 3~6시간
+                            (중광량)</label>
+                        <label><input type="radio" name="sunlight" value="하루 종일(6시간 이상)"> 하루 종일(6시간 이상) (고광량)</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="purpose">4. 텃밭을 가꾸는 주된 목적은 무엇인가요?</label>
+                    <select id="purpose" name="purpose" required>
+                        <option value="식용(쌈채소/열매)">식용 (직접 키워 먹기)</option>
+                        <option value="관상용(허브/꽃)">관상용 및 치유</option>
+                        <option value="교육용">자녀 교육 및 관찰</option>
+                        <option value="취미/힐링">취미/힐링</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="preference">5. 키우고 싶은 작물이 있다면 입력해주세요. (선택 사항)</label>
+                    <input type="text" id="preference" name="preference" placeholder="예: 상추, 방울토마토, 바질">
+                </div>
+
+                <div class="form-group">
+                    <label for="budget">6. 초기 투자 예산(도구, 흙, 씨앗 등)은 얼마인가요?</label>
+                    <select id="budget" name="budget" required>
+                        <option value="5만원 이하">5만원 이하</option>
+                        <option value="5~10만원">5만원 ~ 10만원</option>
+                        <option value="10만원 초과">10만원 초과</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>7. 텃밭 재배 경험 수준은 어느 정도인가요?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="experienceLevel" value="초보(처음)" checked> 초보 (거의 처음)</label>
+                        <label><input type="radio" name="experienceLevel" value="중급(1년 이하)"> 중급 (1년 이하 경험)</label>
+                        <label><input type="radio" name="experienceLevel" value="숙련(1년 이상)"> 숙련 (1년 이상 경험)</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-button" id="submitButton">✨ AI 플래너에게 계획 받기</button>
+            </form>
+        </div>
+
+        <div id="loadingArea" style="display:none; text-align:center; margin-top: 50px;">
+            <p style="font-size: 1.5em; color: #5cb85c; font-weight: bold;">
+                <span class="spinner" style="font-size: 2em;">⏳</span><br>
+                AI가 사용자님을 위한 맞춤형 계획을 **분석 및 생성 중입니다**...<br>
+                잠시만 기다려주세요 (최대 30초 소요)
+            </p>
+        </div>
+
+        <div id="resultArea" style="display:none; margin-top: 20px;">
+        </div>
+
+    </div>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+</body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('plannerForm');
+        const inputFormArea = document.getElementById('inputFormArea');
+        const submitButton = document.getElementById('submitButton');
+        const loadingArea = document.getElementById('loadingArea');
+        const resultArea = document.getElementById('resultArea');
+
+        // 상단 안내 텍스트 요소와 h1 요소 선택
+        const introText = document.getElementById('planner-intro-text');
+
+        form.addEventListener('submit', function (event) {
+            // 폼의 기본 제출 동작(페이지 이동)을 막습니다.
+            event.preventDefault();
+
+            // 1. UI 전환: 입력 폼, 상단 텍스트 및 로딩 화면 표시
+            if (introText) introText.style.display = 'none'; // 상단 안내 텍스트 숨김
+
+            inputFormArea.style.display = 'none'; // 폼 양식 전체 숨김
+            loadingArea.style.display = 'block';   // 로딩 화면 표시
+            resultArea.style.display = 'none';    // 이전 결과 화면 숨김 (재요청 시 대비)
+
+            // FormData 객체를 사용하여 폼 데이터 수집
+            const formData = new FormData(form);
+            const data = {};
+            formData.forEach((value, key) => data[key] = value);
+
+            // 2. 비동기(AJAX) 통신 시작 (fetch API 사용)
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('API 통신 오류 발생: ' + response.status);
+                    }
+                    return response.text();
+                })
+                .then(htmlFragment => {
+                    // 3. 성공 시: 결과 영역에 HTML 삽입 및 UI 전환
+                    // 결과가 삽입될 때는 제목과 안내 텍스트는 계속 숨김 상태 유지
+                    resultArea.innerHTML = htmlFragment; // 받은 HTML 조각 삽입
+                    loadingArea.style.display = 'none';
+                    resultArea.style.display = 'block';
+                })
+                .catch(error => {
+                    // 4. 실패 시: 오류 메시지 표시 및 UI 복구
+                    console.error('AJAX Error:', error);
+
+                    // 오류 발생 시 제목과 안내 텍스트를 다시 표시
+                    if (introText) introText.style.display = 'block';
+
+                    // 오류 메시지를 결과 영역에 표시
+                    resultArea.innerHTML = `<h2>⚠️ 요청 처리 중 오류가 발생했습니다.</h2><p>오류 내용: ${error.message}</p><button onclick="location.reload()" class="back-button">다시 시도하기</button>`;
+
+                    loadingArea.style.display = 'none';
+                    resultArea.style.display = 'block';
+                    inputFormArea.style.display = 'block'; // 오류 시 폼을 다시 보여줄지 결정 (현재는 유지)
+                });
+        });
+    });
+</script>
+
+</html>

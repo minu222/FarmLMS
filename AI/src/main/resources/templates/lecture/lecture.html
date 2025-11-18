@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>전체 강의 - UrbanGreen</title>
+  <link rel="stylesheet" href="/css/lecture/lecture.css">
+  <link rel="stylesheet" href="/css/header.css">
+  <link rel="stylesheet" href="/css/footer.css">
+</head>
+<body>
+
+<!-- ========== 헤더 ========== -->
+<div th:replace="fragments/header :: header"></div>
+
+<!-- ========== 페이지 헤더 ========== -->
+<section class="page-header">
+  <div class="page-header-content">
+    <h1>전체 강의</h1>
+    <p>귀농을 위한 다양한 작물재배 강의를 만나보세요</p>
+  </div>
+</section>
+
+<!-- ========== 필터 섹션 ========== -->
+<section class="filter-section">
+  <div class="filter-container">
+    <div class="search-row">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="강의 검색..." id="searchInput">
+      </div>
+    </div>
+
+    <div class="filter-row">
+      <!-- 난이도 필터 -->
+      <button class="filter-tag active" data-category="all">전체</button>
+      <button class="filter-tag" data-category="GARDENING">텃밭</button>
+      <button class="filter-tag" data-category="FIELD">노지</button>
+      <button class="filter-tag" data-category="HOUSE">하우스</button>
+
+      <!-- 구분선 -->
+      <div class="filter-divider"></div>
+
+      <!-- 카테고리 필터 -->
+      <button class="filter-tag active" data-sub_category="all">전체</button>
+      <button class="filter-tag" data-sub_category="SEED">모종</button>
+      <button class="filter-tag" data-sub_category="GROW">재배</button>
+      <button class="filter-tag" data-sub_category="SHIP">출하</button>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 강의 목록 ========== -->
+<section class="courses-content">
+  <div class="courses-header">
+    <div class="courses-count">
+      총 <strong id="courseCount"></strong>개의 강의
+    </div>
+    <select class="sort-select" id="sortSelect">
+      <option value="newest">최신순</option>
+    </select>
+  </div>
+
+  <div class="courses-grid" id="coursesGrid">
+    <!-- JavaScript로 동적 생성 -->
+  </div>
+
+  <!-- ========== 페이지네이션 ========== -->
+  <div class="pagination" id="pagination">
+    <!-- JavaScript로 동적 생성 -->
+  </div>
+</section>
+
+<!-- ========== 푸터 ========== -->
+<div th:replace="fragments/footer :: footer"></div>
+
+<script th:inline="javascript">
+  // 헤더 스크롤 효과
+  window.addEventListener('scroll', () => {
+    const header = document.getElementById('header');
+    if (window.scrollY > 50) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  });
+
+  // 로그인 상태 (true: 로그인, false: 비로그인)
+  const isLoggedIn = false; // true/false로 변경
+
+  // ⭐ 수정된 부분: lecture 객체에서 instructorNickname 필드를 사용합니다.
+  const allCourses = [[${lectures}]].map(lecture => {
+    // Thymeleaf 엔티티 객체를 프론트엔드 JS 객체 형식에 맞게 변환
+    return {
+      Lecture_id: lecture.lecture_id,
+      // DTO에서 이미 문자열로 변환되었으므로 그대로 사용합니다.
+      sub_category: lecture.sub_category,
+      category: lecture.category,
+      title: lecture.title,
+      desc: lecture.content, // DTO의 content를 desc로 사용
+      instructor: lecture.instructorNickname, // ⭐ DTO의 닉네임 필드 사용
+      img_url : lecture.img_url,
+    };
+  });
+
+  const ITEMS_PER_PAGE = 6;
+  let currentPage = 1;
+  let filteredCourses = [...allCourses];
+  let currentSub_category = 'all';
+  let currentCategory = 'all';
+  let currentSearch = '';
+
+  // DOM 요소
+  const sub_categoryTags = document.querySelectorAll('[data-sub_category]');
+  const categoryTags = document.querySelectorAll('[data-category]');
+  const searchInput = document.getElementById('searchInput');
+  const sortSelect = document.getElementById('sortSelect');
+  const courseCount = document.getElementById('courseCount');
+
+  // 이벤트 리스너
+  sub_categoryTags.forEach(tag => {
+    tag.addEventListener('click', () => {
+      sub_categoryTags.forEach(t => t.classList.remove('active'));
+      tag.classList.add('active');
+      currentSub_category = tag.dataset.sub_category;
+      currentPage = 1;
+      filterAndRenderCourses();
+    });
+  });
+
+  categoryTags.forEach(tag => {
+    tag.addEventListener('click', () => {
+      categoryTags.forEach(t => t.classList.remove('active'));
+      tag.classList.add('active');
+      currentCategory = tag.dataset.category;
+      currentPage = 1;
+      filterAndRenderCourses();
+    });
+  });
+
+  searchInput.addEventListener('input', (e) => {
+    currentSearch = e.target.value.toLowerCase();
+    currentPage = 1;
+    filterAndRenderCourses();
+  });
+
+  sortSelect.addEventListener('change', () => {
+    renderCourses();
+  });
+
+  // 텍스트를 지정된 길이로 자르고 말줄임표를 추가하는 함수
+  function truncateDescription(text, maxLength = 90) {
+    if (!text) return '';
+    // 줄바꿈 문자를 공백으로 대체하고 공백을 제거한 후 길이를 체크합니다.
+    const cleanText = text.replace(/\n/g, ' ').trim();
+
+    if (cleanText.length > maxLength) {
+      return cleanText.substring(0, maxLength).trim() + '...';
+    }
+    return cleanText;
+  }
+
+  // 필터링 및 렌더링
+  function filterAndRenderCourses() {
+    filteredCourses = allCourses.filter(course => {
+      const sub_categoryMatch = currentSub_category === 'all' || course.sub_category === currentSub_category;
+      const categoryMatch = currentCategory === 'all' || course.category === currentCategory;
+      const searchMatch = !currentSearch ||
+              course.title.toLowerCase().includes(currentSearch) ||
+              course.desc.toLowerCase().includes(currentSearch);
+
+      return sub_categoryMatch && categoryMatch && searchMatch;
+    });
+
+    courseCount.textContent = filteredCourses.length;
+    renderCourses();
+    renderPagination();
+  }
+
+  // 강의 카드 렌더링
+  function renderCourses() {
+    const grid = document.getElementById('coursesGrid');
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    const end = start + ITEMS_PER_PAGE;
+    const coursesToShow = filteredCourses.slice(start, end);
+
+    grid.innerHTML = coursesToShow.map(course => `
+                <a href="/lecture/lectureDetail?lectureId=${course.Lecture_id}" class="course-card-link">
+                    <div class="course-card">
+                        <div class="course-thumbnail">${course.img_url}</div>
+                        <div class="course-info">
+                            <div class="course-category">${getCategoryText(course.category)} • ${getSub_categoryText(course.sub_category)}</div>
+                            <div class="course-title-row">
+                                <h3 class="course-title">${course.title}</h3>
+                                <span class="course-instructor-inline">👤 ${course.instructor}</span>
+                            </div>
+                            <p class="course-description">${truncateDescription(course.desc, 90)}</p>
+                            ${isLoggedIn ? `
+                                <div class="course-meta-logged-in">
+                                    <button class="subscribe-btn">시청하기</button>
+                                </div>
+                            ` : `
+                                <div class="course-meta-logged-out">
+                                    <button class="subscribe-btn">시청하기</button>
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                </a>
+            `).join('');
+  }
+
+  // 페이지네이션 렌더링
+  function renderPagination() {
+    const pagination = document.getElementById('pagination');
+    const totalPages = Math.ceil(filteredCourses.length / ITEMS_PER_PAGE);
+
+    if (totalPages <= 1) {
+      pagination.innerHTML = '';
+      return;
+    }
+
+    let paginationHTML = '';
+
+    // 이전 버튼
+    paginationHTML += `
+                <button class="pagination-btn ${currentPage === 1 ? 'disabled' : ''}"
+                        onclick="goToPage(${currentPage - 1})"
+                        ${currentPage === 1 ? 'disabled' : ''}>
+                    ◀
+                </button>
+            `;
+
+    // 페이지 번호
+    const maxVisible = 5;
+    let startPage = Math.max(1, currentPage - 2);
+    let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+
+    if (endPage - startPage < maxVisible - 1) {
+      startPage = Math.max(1, endPage - maxVisible + 1);
+    }
+
+    if (startPage > 1) {
+      paginationHTML += `<button class="pagination-btn" onclick="goToPage(1)">1</button>`;
+      if (startPage > 2) {
+        paginationHTML += `<span class="pagination-ellipsis">...</span>`;
+      }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      paginationHTML += `
+                    <button class="pagination-btn ${i === currentPage ? 'active' : ''}"
+                            onclick="goToPage(${i})">
+                        ${i}
+                    </button>
+                `;
+    }
+
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        paginationHTML += `<span class="pagination-ellipsis">...</span>`;
+      }
+      paginationHTML += `<button class="pagination-btn" onclick="goToPage(${totalPages})">${totalPages}</button>`;
+    }
+
+    // 다음 버튼
+    paginationHTML += `
+                <button class="pagination-btn ${currentPage === totalPages ? 'disabled' : ''}"
+                        onclick="goToPage(${currentPage + 1})"
+                        ${currentPage === totalPages ? 'disabled' : ''}>
+                    ▶
+                </button>
+            `;
+
+    pagination.innerHTML = paginationHTML;
+  }
+
+  // 페이지 이동
+  function goToPage(page) {
+    const totalPages = Math.ceil(filteredCourses.length / ITEMS_PER_PAGE);
+    if (page < 1 || page > totalPages) return;
+
+    currentPage = page;
+    renderCourses();
+    renderPagination();
+  }
+
+  // 난이도/카테고리 텍스트 변환
+  function getSub_categoryText(sub_category) {
+    const sub_categorys = { SEED: '모종', GROW: '재배', SHIP: '출하' };
+    return sub_categorys[sub_category] || sub_category;
+  }
+
+  function getCategoryText(category) {
+    const categories = {
+      GARDENING: '텃밭',
+      FIELD: '노지',
+      HOUSE: '하우스'
+    };
+    return categories[category] || category;
+  }
+
+  // 초기 렌더링
+  filterAndRenderCourses();
+</script>
+</body>
+</html>

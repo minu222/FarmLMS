@@ -1,13 +1,16 @@
 package com.lms.urbangreen;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
+@RequiredArgsConstructor
 public class HomeController {
 
-    @GetMapping("/")
-    public String home() {
-        return "/AI/AI";
+    @GetMapping({"/", "/main"})
+    public String showHomePage(org.springframework.ui.Model model) {
+        model.addAttribute("courses", java.util.Collections.emptyList());
+        return "main/main";
     }
 }

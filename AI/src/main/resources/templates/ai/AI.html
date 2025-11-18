@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UrbanGreen - AI 서비스 선택</title>
+    <link rel="stylesheet" href="/css/main/main.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/ai/AIStyle.css">
+</head>
+
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<section class="ai-choice-section">
+    <div class="section-header animate-on-scroll">
+        <div class="section-header-text">
+            <h2>AI 기반 농업 솔루션</h2>
+            <p>UrbanGreen의 인공지능 기술로 더 똑똑하고 효율적인 농사를 경험하세요.</p>
+        </div>
+    </div>
+    <hr>
+    <div class="ai-options-grid">
+        <div class="ai-option-card animate-on-scroll" style="animation-delay: 0.1s;">
+            <div class="ai-content-wrap">
+                <div class="ai-image-container">
+                    <img src="/img/ai/planner.jpg">
+                </div>
+                <h3>주말농장 플래너</h3>
+                <p>
+                    작물 선택부터 텃밭 설계, 파종 및 수확 시기까지 <br>
+                    개인 환경에 맞춘 최적의 주말농장 계획을 세워드립니다.
+                </p>
+            </div>
+            <a href="/planner" class="ai-link-btn">
+                플래너 시작하기
+            </a>
+        </div>
+
+        <div class="ai-option-card animate-on-scroll" style="animation-delay: 0.2s;">
+            <div class="ai-content-wrap">
+                <div class="ai-image-container">
+                    <img src="/img/ai/diagnosis.jpg">
+                </div>
+                <h3>AI 기반 식물 진단</h3>
+                <p>
+                    잎의 사진 한 장으로 작물의 병해충이나 영양 결핍 상태를 진단하고 <br>
+                    맞춤형 관리 방법과 해결책을 즉시 제공받으세요.
+                </p>
+            </div>
+            <a href="/diagnosisPlant" class="ai-link-btn">
+                식물 진단하기
+            </a>
+        </div>
+    </div>
+</section>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+<script>
+    // 기존 메인 페이지의 스크립트 재활용
+    // 헤더 스크롤 효과
+    window.addEventListener('scroll', () => {
+        const header = document.getElementById('header');
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+
+    // 스크롤 애니메이션
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animated');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.animate-on-scroll').forEach(el => {
+        observer.observe(el);
+    });
+</script>
+</body>
+
+</html>
