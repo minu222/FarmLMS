@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8"/>
     <title>채팅 - UrbanGreen</title>
-    <link rel="stylesheet" th:href="@{/css/header.css}"/>
+    <link rel="stylesheet" th:href="@{/css/fragments/header.css}"/>
+    <link rel="stylesheet" th:href="@{/css/fragments/footer.css}"/>
     <link rel="stylesheet" th:href="@{/css/board/chat.css}"/>
 </head>
 <body>
@@ -47,10 +48,8 @@
 
     <!-- 우: 온라인/오프라인 (데모용) -->
     <aside class="col right">
-        <div class="col-head">온라인 사용자</div>
+        <div class="col-head">참여자</div>
         <div id="onlineList" class="list"></div>
-        <div class="section-head">오프라인 사용자</div>
-        <div id="offlineList" class="list"></div>
     </aside>
 </main>
 
@@ -85,14 +84,13 @@
     </div>
 </div>
 
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
 <!-- SockJS / STOMP (CDN에서 로드) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 
 <!-- 채팅 전용 JS (반드시 라이브러리 로딩 후에) -->
 <script th:src="@{/js/chat.js}"></script>
-</body>
-</html>
-
 </body>
 </html>
