@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UrbanGreen - 회원가입</title>
+    <link rel="stylesheet" th:href="@{/css/main/main.css}">
+    <link rel="stylesheet" th:href="@{/css/account/signup.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/footerShort.css}">
+</head>
+<body>
+<div class="logo-header">
+    <a th:href="@{/main}" class="logo">UrbanGreen</a>
+</div>
+
+<div class="main-container">
+    <div class="signup-card">
+        <div class="signup-header">
+            <h1>회원가입</h1>
+            <p>청년 귀농의 첫 걸음을 시작하세요</p>
+        </div>
+
+        <form id="signupForm" th:action="@{/signup}" method="post" th:object="${user}">
+            <!-- 아이디 -->
+            <div class="form-group">
+                <label for="id">아이디 <span class="required">*</span></label>
+                <div class="input-row">
+                    <input type="text" id="id" th:field="*{id}" placeholder="영문, 숫자 4-12자" required>
+                    <button type="button" class="check-btn" id="idCheckBtn">중복확인</button>
+                </div>
+                <div class="validation-msg" th:if="${idError}" th:text="${idError}"></div>
+            </div>
+
+
+            <!-- 비밀번호 -->
+            <div class="form-group">
+                <label for="password">비밀번호 <span class="required">*</span></label>
+                <input type="password" id="password" th:field="*{password}" placeholder="영문, 숫자 포함 8자 이상" required>
+
+                <!-- ✅ 비밀번호 조건 메시지 (프론트 검증용) -->
+                <div class="validation-msg" id="passwordConditionMsg"></div>
+
+                <!-- (서버 검증용 메시지: 그대로 두고 싶으면 유지) -->
+                <div class="validation-msg" th:if="${passwordError}" th:text="${passwordError}"></div>
+            </div>
+
+            <!-- 비밀번호 확인 -->
+            <div class="form-group">
+                <label for="passwordConfirm">비밀번호 확인 <span class="required">*</span></label>
+                <input type="password" id="passwordConfirm" name="passwordConfirm" placeholder="비밀번호를 다시 입력하세요" required>
+
+                <!-- ✅ 비밀번호 일치 여부 메시지 -->
+                <div class="validation-msg" id="passwordMatchMsg"></div>
+            </div>
+
+            <!-- 닉네임 -->
+            <div class="form-group">
+                <label for="nickname">닉네임 <span class="required">*</span></label>
+                <div class="input-row">
+                    <input type="text" id="nickname" th:field="*{nickname}" required>
+                    <button type="button" class="check-btn" id="nicknameCheckBtn">중복확인</button>
+                </div>
+                <div class="validation-msg" th:if="${nicknameError}" th:text="${nicknameError}"></div>
+            </div>
+            <!-- 이름 -->
+            <div class="form-group">
+                <label for="name">이름 <span class="required">*</span></label>
+                <input type="text" id="name" th:field="*{name}" placeholder="이름을 입력하세요" required>
+            </div>
+
+            <!-- 이메일 -->
+            <div class="form-group">
+                <label for="email">이메일 <span class="required">*</span></label>
+                <input type="email" id="email" th:field="*{email}" placeholder="example@email.com" required>
+            </div>
+
+            <!-- 생년월일 -->
+            <div class="form-group">
+                <label for="birth">생년월일</label>
+                <input type="date" id="birth" th:field="*{birth}">
+            </div>
+
+            <button type="submit" class="signup-btn">회원가입</button>
+        </form>
+
+        <div class="login-link">
+            이미 계정이 있으신가요?
+            <a th:href="@{/login}">로그인</a>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="fragments/footerShort :: footerShort"></footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const signupForm = document.getElementById('signupForm');
+
+        const idInput = document.getElementById('id');
+        const nicknameInput = document.getElementById('nickname');
+        const idCheckBtn = document.getElementById('idCheckBtn');
+        const nicknameCheckBtn = document.getElementById('nicknameCheckBtn');
+
+        const passwordInput = document.getElementById('password');
+        const passwordConfirmInput = document.getElementById('passwordConfirm');
+        const passwordConditionMsg = document.getElementById('passwordConditionMsg');
+        const passwordMatchMsg = document.getElementById('passwordMatchMsg');
+
+        console.log("signup script loaded"); // ✅ 콘솔 확인용
+
+        // ==========================
+        //  비밀번호 조건 체크
+        //  (영문 + 숫자 포함, 8자 이상)
+        // ==========================
+        const pwPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
+        function checkPasswordCondition() {
+            const pw = passwordInput.value;
+
+            if (!pw) {
+                passwordConditionMsg.textContent = "";
+                return false;
+            }
+
+            if (!pwPattern.test(pw)) {
+                passwordConditionMsg.textContent = "비밀번호는 영문과 숫자를 포함한 8자 이상이어야 합니다.";
+                passwordConditionMsg.style.color = "#c62828"; // 빨간색
+                return false;
+            } else {
+                passwordConditionMsg.textContent = "사용 가능한 비밀번호입니다.";
+                passwordConditionMsg.style.color = "#2e7d32"; // 초록색
+                return true;
+            }
+        }
+
+        // ==========================
+        //  비밀번호 일치 여부 체크
+        // ==========================
+        function checkPasswordMatch() {
+            const pw = passwordInput.value;
+            const pwc = passwordConfirmInput.value;
+
+            if (!pwc) {
+                passwordMatchMsg.textContent = "";
+                return false;
+            }
+
+            if (pw === pwc) {
+                passwordMatchMsg.textContent = "비밀번호가 일치합니다.";
+                passwordMatchMsg.style.color = "#2e7d32";
+                return true;
+            } else {
+                passwordMatchMsg.textContent = "비밀번호가 일치하지 않습니다.";
+                passwordMatchMsg.style.color = "#c62828";
+                return false;
+            }
+        }
+
+        // 입력할 때 바로바로 체크
+        if (passwordInput) {
+            passwordInput.addEventListener('input', function () {
+                checkPasswordCondition();
+                if (passwordConfirmInput.value) {
+                    checkPasswordMatch();
+                }
+            });
+        }
+        if (passwordConfirmInput) {
+            passwordConfirmInput.addEventListener('input', checkPasswordMatch);
+        }
+
+        // 폼 submit 시 최종 체크
+        if (signupForm) {
+            signupForm.addEventListener('submit', function (e) {
+                const conditionOk = checkPasswordCondition();
+                const matchOk = checkPasswordMatch();
+
+                if (!conditionOk || !matchOk) {
+                    e.preventDefault();
+                    if (!conditionOk) {
+                        passwordInput.focus();
+                    } else {
+                        passwordConfirmInput.focus();
+                    }
+                }
+            });
+        }
+
+        // ==========================
+        //  아이디 / 닉네임 중복체크 (AJAX)
+        // ==========================
+        if (idCheckBtn && idInput) {
+            const checkIdUrl = "/api/signup/check-id";
+
+            idCheckBtn.addEventListener('click', async function () {
+                const idVal = idInput.value.trim();
+                if (!idVal) {
+                    alert("아이디를 먼저 입력해 주세요.");
+                    idInput.focus();
+                    return;
+                }
+
+                try {
+                    const res = await fetch(checkIdUrl + "?id=" + encodeURIComponent(idVal));
+                    if (!res.ok) throw new Error("네트워크 오류");
+
+                    const available = await res.json();
+                    if (available) {
+                        alert("사용 가능한 아이디입니다.");
+                    } else {
+                        alert("이미 사용 중인 아이디입니다.");
+                    }
+                } catch (e) {
+                    console.error(e);
+                    alert("아이디 중복체크 중 오류가 발생했습니다.");
+                }
+            });
+        }
+
+        if (nicknameCheckBtn && nicknameInput) {
+            const checkNicknameUrl = "/api/signup/check-nickname";
+
+            nicknameCheckBtn.addEventListener('click', async function () {
+                const nicknameVal = nicknameInput.value.trim();
+                if (!nicknameVal) {
+                    alert("닉네임을 먼저 입력해 주세요.");
+                    nicknameInput.focus();
+                    return;
+                }
+
+                try {
+                    const res = await fetch(checkNicknameUrl + "?nickname=" + encodeURIComponent(nicknameVal));
+                    if (!res.ok) throw new Error("네트워크 오류");
+
+                    const available = await res.json();
+                    if (available) {
+                        alert("사용 가능한 닉네임입니다.");
+                    } else {
+                        alert("이미 사용 중인 닉네임입니다.");
+                    }
+                } catch (e) {
+                    console.error(e);
+                    alert("닉네임 중복체크 중 오류가 발생했습니다.");
+                }
+            });
+        }
+    });
+</script>
+
+
+
+</body>
+</html>
