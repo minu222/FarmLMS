@@ -563,3 +563,97 @@ body {
     background-color: #ff5c5c;
     color: #fff;
 }
+
+
+.chat-message .msg-nickname {
+    font-size: 0.75rem;
+    color: #888;
+    margin-bottom: 2px;
+}
+.chat-message.mine .msg-nickname { text-align: right; }
+.chat-message.others .msg-nickname { text-align: left; }
+
+
+
+
+/* ===== 기본 높이 세팅 ===== */
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+}
+
+/* ===== 전체 레이아웃: 좌/중/우 3컬럼 ===== */
+main.layout {
+    display: flex;
+    gap: 16px;
+    /* 헤더 높이만큼 뺀 나머지 전체를 채움 (헤더가 더 높이면 80px 조절) */
+    height: calc(100vh - 80px);
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+/* 공통 컬럼 기본값 */
+.col {
+    display: flex;
+    flex-direction: column;
+    min-height: 0; /* ★ 내부 스크롤이 가능하도록 필수 */
+}
+
+/* 좌우 컬럼 폭 (원하는 대로 조절 가능) */
+.col.left,
+.col.right {
+    width: 260px;
+}
+
+/* 가운데 컬럼: 박스 모양 + flex 컬럼 */
+.col.center {
+    flex: 1;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background-color: #fff;
+    overflow: hidden;   /* 안쪽에서만 스크롤 */
+}
+
+/* ===== 채팅 헤더 (위에 고정) ===== */
+.chat-head {
+    flex-shrink: 0;
+    padding: 10px 14px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* ===== 채팅 내용 영역 (여기만 스크롤) ===== */
+.chat-view {
+    flex: 1;
+    overflow-y: auto;   /* ★ 스크롤 생기는 부분 */
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* ===== 입력 영역 (아래 고정) ===== */
+.chat-input-wrap {
+    flex-shrink: 0;
+    padding: 8px 12px 10px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+    background-color: #fafafa;
+}
+
+.chat-input-wrap .chat-input {
+    flex: 1;
+    resize: none;      /* 마우스로 크기 조절 못 하게 (원하면 빼도 됨) */
+}
+
+.chat-input-wrap .send-btn {
+    flex-shrink: 0;
+}
