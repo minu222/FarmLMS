@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<header th:fragment="header">
+    <div class="header-container">
+        <div class="logo-header">
+            <a th:href="@{/main}" class="logo">UrbanGreen</a>
+        </div>
+
+        <nav>
+            <a th:href="@{/board/class}">강의</a>
+            <a th:href="@{/board/notice}">공지사항</a>
+            <a th:href="@{/chat}">채팅</a>
+            <a th:href="@{/ai/aichoice}">AI 추천</a>
+            <a th:href="@{/main/game}">게임</a>
+        </nav>
+
+        <div class="user-menu">
+            <!-- 로그인 전 -->
+            <a th:if="${session.loginUser == null}" th:href="@{/login}">로그인</a>
+
+            <!-- 로그인 후 -->
+            <span th:if="${session.loginUser != null}">
+                <!-- 🔹 관리자: userType이 'admin' / 'ADMIN' 등일 때 -->
+                <a th:if="${#strings.equalsIgnoreCase(session.loginUser.userType, 'admin')}"
+                   th:href="@{/admin/adminUserManage}"
+                   th:text="${session.loginUser.nickname}">닉네임</a>
+
+                <!-- 🔹 일반 회원: 나머지 -->
+                <a th:if="${!#strings.equalsIgnoreCase(session.loginUser.userType, 'admin')}"
+                   th:href="@{/mypage/profile}"
+                   th:text="${session.loginUser.nickname}">닉네임</a>
+
+                <a th:href="@{/logout}">로그아웃</a>
+            </span>
+        </div>
+    </div>
+</header>
+
+</body>
+</html>
