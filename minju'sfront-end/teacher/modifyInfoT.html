@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>강사 My페이지</title>
+    <link rel="stylesheet" href="TeacherStyle.css">
+</head>
+
+<body>
+    <!-- 헤더 -->
+    <header id="header">
+        <div class="header-container">
+            <div class="logo"><a id="logo" href="/main/urbangreen.html">UrbanGreen</a></div>
+            <nav>
+                <a href="/main/class.html">강의</a>
+                <a href="/post/free-board.html">공지사항</a>
+                <a href="/Account/login.html">채팅</a>
+                <a href="/AI/aichoice.html">AI 추천</a>
+                <a href="/main/game.html">게임</a>
+                <a href="/main/urbangreen.html">로그아웃</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="page">
+        <div class="tab_obj">
+            <h2>나의 메뉴</h2>
+            <div id="leftobj">
+                <div id="TeachProfile">
+                    <h3>My 프로필</h3>
+                    <p><span id="username">(강사명은 DB에서 가져올 수 있도록 연결하기)강사님</span></p>
+                    <button type="submit">로그아웃</button>
+                </div>
+
+                <!--로그아웃 후 노출되는 프로필 섹션-->
+                <div id="needLogin">
+                    <a id="loginT" href="login.html"> 로그인</a>
+                    <p style="text-align: center; margin-bottom: 10px;">로그인 후 이용 가능합니다.</p>
+                </div>
+
+                <nav id="subNavT">
+                    <a href="modifyInfoT.html">정보 수정</a>
+                    <a href="mngclass.html">강의 관리</a>
+                    <a href="">내 댓글 관리</a>
+                    <a href="QuizMng.html">퀴즈 관리</a>
+                </nav>
+            </div>
+        </div>
+        <div id="info">
+            <h2
+                style="background-color: #5cb85fa9; color: white; padding: 15px; margin-bottom: 20px; border-radius: 10px 10px 0 0;">
+                내 정보 수정</h2>
+            <div id="form-all">
+                <div class="field">
+                    <label for="name" style="margin-right: 40px;">이름</label>
+                    <input id="userId" name="username" style="width: 55%;" type="text" autocomplete="username" required>
+                </div>
+                <div class="field">
+                    <label for="username" style="margin-right: 25px;">아이디</label>
+                    <input id="userId" name="username" style="width: 55%;" type="text" autocomplete="username" required>
+                    <p id="usernameHelp" class="help" style="font-size: 12px;">영문 소문자+숫자 6–20자</p>
+                </div>
+                <div class="field">
+                    <label for="nickname" style="margin-right: 25px;">닉네임</label>
+                    <input id="nickname" name="nickname" type="text" style="width: 55%;" autocomplete="nickname">
+                    <p id="nicknameHelp" class="help" style="font-size: 12px;">영문 소문자+숫자 6–20자</p>
+                    <button type="button" class="btn outline" aria-describedby="nicknameHelp">중복 확인</button>
+                </div>
+                <div class="field">
+                    <label for="password" style="margin-right: 10px;"> 비밀번호</label>
+                    <input id="userpw" name="userpw" style="width: 55%;" type="password" required>
+                    <p id="pwHelp" class="help" style="font-size: 12px;">영문/숫자/특수문자 2종 이상 포함 8–20자</p>
+                    <button type="submit" class="btn outline" aria-describedby="resetPw"
+                        style="margin-left: 10px;">재설정</button>
+                </div>
+
+                <div class="field">
+                    <label for="birth" style="margin-right: 10px;">생년월일</label>
+                    <input id="birth" name="birth" type="date" style="width: 55%;" autocomplete="bday">
+                </div>
+
+                <div class="field">
+                    <label for="email" style="margin-right: 25px;">이메일</label>
+                    <input id="email" name="email" type="email" style="width: 55%;" autocomplete="email"
+                        placeholder="example@email.com">
+                </div>
+                <button id="modifyInfobtn" type="submit">수정 하기</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>
+            <a id="footerall" href="https://naver.me/5LHhFcBI"> 대전광역시 중구 선화동 중앙로121번길 20 방산빌딩 3층　</a> ｜ <span>연락처:
+                0507-1422-2402
+            </span> | © 2025 UrbanGreen. All rights reserved.
+        </p>
+    </footer>
+</body>
+
+</html>

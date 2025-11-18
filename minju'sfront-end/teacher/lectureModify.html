@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>UrbanGreen - 강의 수정</title>
+    <link th:href="@{/css/teacher/lectureModify.css}" rel="stylesheet">
+    <link th:href="@{/css/fragments/header.css}" rel="stylesheet">
+    <link th:href="@{/css/fragments/footer.css}" rel="stylesheet">
+</head>
+<body>
+    <!-- header -->
+    <div th:replace="~{fragments/header :: header}"></div>
+    <!-- Main Container -->
+    <main class="main-container">
+        <div class="page-header">
+            <h1>강의 수정</h1>
+            <p>강의 정보를 수정해주세요.</p>
+        </div>
+        <form class="lecture-form" id="lectureEditForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="title">강의명</label>
+                <input type="text" id="title" placeholder="예) 스마트팜 딸기 완전정복" required maxlength="100">
+
+                <div class="form-group">
+                    <label for="category" style="margin-top: 1.2rem;">카테고리</label>
+                    <select id="category1" required>
+                        <option value="">선택하세요</option>
+                        <option value="vegetable_gardening">텃밭가꾸기</option>
+                        <option value="indoor_garden">하우스 농사/실내정원</option>
+                        <option value="farm">노지</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="category">카테고리</label>
+                    <select id="category2" required>
+                        <option value="">선택하세요</option>
+                        <option value="vegetable_seed">모종/씨앗</option>
+                        <option value="vegetable_cultivate">재배</option>
+                        <option value="deliver">출하</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="desc">강의 설명</label>
+                    <textarea id="desc" placeholder="강의의 주요 내용, 특징, 대상 등 자세히 입력해 주세요." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>썸네일 이미지</label>
+                    <div id="currentThumb" style="margin-bottom:1rem;">
+                        <img id="currentThumbImg" src="" alt="현재 썸네일"
+                            style="max-width:200px; border-radius:12px; display:none;">
+                    </div>
+                    <label for="thumbUpload" class="file-upload-btn">📷 새 이미지 선택 (선택사항)</label>
+                    <input type="file" id="thumbUpload" class="file-upload-input" accept="image/*">
+                    <div class="file-list" id="fileList"></div>
+                </div>
+                <div class="button-group">
+                    <a href="/main/class.html" class="btn btn-secondary">취소</a>
+                    <button type="button" class="btn btn-danger" onclick="deleteLecture()">삭제</button>
+                    <button type="submit" class="btn btn-primary">수정 완료</button>
+                </div>
+        </form>
+    </main>
+    <footer th:replace="fragments/footer :: footer"></footer>
+    <script>
+        // 기존 이미지 미리보기 표시
+        const lectureId = new URLSearchParams(window.location.search).get('id');
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            // 실제로는 서버에서 데이터 fetch로 불러오기
+            const data = {
+                title: '스마트팜 딸기 완전정복',
+                level: 'intermediate',
+                price: 89000,
+                desc: '딸기 재배의 모든 것을 배웁니다.',
+                thumbUrl: 'https://example.com/thumb.jpg'
+            };
+
+            document.getElementById('title').value = data.title;
+            document.getElementById('category').value = data.level;
+            document.getElementById('desc').value = data.desc;
+
+            if (data.thumbUrl) {
+                const img = document.getElementById('currentThumbImg');
+                img.src = data.thumbUrl;
+                img.style.display = 'block';
+            }
+        });
+
+        // 폼 제출
+        document.getElementById('lectureEditForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const title = document.getElementById('title').value.trim();
+            const category1 = document.getElementById('category1').value;
+            const category2 = document.getElementById('category2').value;
+            const level = document.getElementById('category').value;
+            const desc = document.getElementById('desc').value.trim();
+
+            if (!title || !category1 || !category2 || !desc) {
+                alert('모든 필수 항목을 입력해주세요.');
+                return;
+            }
+
+            alert('강의가 수정되었습니다!');
+            window.location.href = '/main/class.html';
+        });
+
+        // 삭제
+        function deleteLecture() {
+            if (confirm('정말 삭제하시겠습니까?')) {
+                alert('강의가 삭제되었습니다.');
+                window.location.href = '/main/class.html';
+            }
+        }
+    </script>
+</body>
+
+</html>

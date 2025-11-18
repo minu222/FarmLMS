@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>퀴즈 등록</title>
+    <link rel="stylesheet" href="quizstyle.css">
+</head>
+
+<body>
+
+    <header id="header">
+        <div class="header-container">
+            <div class="logo">
+                <a id="logo" href="/main/urbansgreen.html">UrbanGreen</a>
+            </div>
+            <nav>
+                <a href="/main/class.html">강의</a>
+                <a href="/post/free-board.html">공지사항</a>
+                <a href="/Account/login.html">채팅</a>
+                <a href="/AI/aichoice.html">AI 추천</a>
+                <a href="/main/game.html">게임</a>
+                <a href="/main/urbangreen.html">로그아웃</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="page">
+        <!-- 좌측 사이드 + 오른쪽 보드 영역 전체 -->
+        <div class="content-layout">
+            <div class="tab_obj">
+                <h2>나의 메뉴</h2>
+                <div id="leftobj">
+                    <div id="TeachProfile">
+                        <h3>My 프로필</h3>
+                        <p><span id="username">(강사명은 DB와 연결하기)</span>강사님</p>
+                        <button type="submit">로그아웃</button>
+                    </div>
+
+                    <!--로그아웃 후 노출되는 프로필 섹션-->
+                    <div id="needLogin">
+                        <a id="loginT" href="login.html"> 로그인</a>
+                        <p style="text-align: center; margin-bottom: 10px;">
+                            로그인 후 이용 가능합니다.
+                        </p>
+                    </div>
+
+                    <nav id="subNavT">
+                        <a href="modifyInfoT.html">정보 수정</a>
+                        <a href="mngclass.html">강의 관리</a>
+                        <a href="">내 댓글 관리</a>
+                        <a href="QuizMng.html">퀴즈 관리</a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- 메인 보드 영역 -->
+            <main class="board-container">
+                <h2 id="editQh2">퀴즈 수정</h2>
+                <table id="noticeTable">
+                    <thead>
+                        <tr>
+                            <th>강의 카테고리</th> <!--텃밭/하우스/노지-->
+                            <th>중분류</th><!--모종/씨앗 or 재배 or 출하-->
+                            <th>등록일</th>
+                            <th>퀴즈 등록여부</th>
+                            <th>퀴즈 수정/삭제</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="post : ${posts}">
+                            <!-- 강의 카테고리 -->
+                            <td th:text="${post.category}">텃밭</td>
+
+                            <!-- 중분류 -->
+                            <td th:text="${post.subCategory}">모종</td>
+
+                            <!-- 등록일 -->
+                            <td th:text="${#dates.format(post.createdAt, 'yyyy.MM.dd')}">2025.11.18</td>
+
+                            <!-- 퀴즈 등록여부 -->
+                            <td th:text="${post.quizRegistered} ? '등록됨' : '미등록'">미등록</td>
+                            <td class="editDelete">
+                                <button class="edit-btn" style="width: 78px;"
+                                    th:onclick="'window.location.href=\'@{/teacher/editQuiz}\' '">
+                                    수정/등록
+                                </button>
+                                <form th:action="@{/teacher/choiceEditQuiz/delete}" style="width: 56px;" method="post"
+                                    onsubmit="return confirm('삭제하시겠습니까?');">
+                                    <!-- 삭제할 대상 ID 전달 -->
+                                    <input type="hidden" name="id" th:value="${post.id}">
+
+                                    <!-- Spring Security CSRF 쓰면 (옵션) -->
+                                    <!--
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                     -->
+
+                                    <button type="submit" class="delete-btn"
+                                        style="width: 40px; margin-left: 10px;">삭제</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>
+            <a id="footerall" href="https://naver.me/5LHhFcBI">
+                대전광역시 중구 선화동 중앙로121번길 20 방산빌딩 3층　
+            </a> ｜
+            <span>연락처: 0507-1422-2402</span> |
+            © 2025 UrbanGreen. All rights reserved.
+        </p>
+    </footer>
+</body>
+
+</html>
