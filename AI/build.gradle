@@ -32,6 +32,8 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+    runtimeOnly 'com.mysql:mysql-connector-j'
 
     // Gemini API를 위한 Google AI SDK 추가
     implementation 'com.google.cloud:google-cloud-aiplatform:3.79.0'
@@ -39,6 +41,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
     implementation 'com.vladsch.flexmark:flexmark-all:0.64.8'
+
+    //구글 스토리지 클라우드
+    implementation 'com.google.cloud:google-cloud-storage:2.60.0'
+
+    //웹소켓
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
 }
 
 tasks.named('test') {
