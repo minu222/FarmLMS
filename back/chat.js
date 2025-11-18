@@ -235,19 +235,14 @@ async function enterRoom(roomId, roomName, ownerUserId) {
         }
     }
 
-    // 과거 메시지 로드
+    // 과거 메시지 로드 (수정 버전)
     try {
         const res = await fetch(`/api/chat/rooms/${roomId}/messages?limit=100`);
         if (res.ok) {
             const messages = await res.json();
             messages.forEach((msg) => {
-                appendMessage({
-                    messageId: msg.messageId,
-                    roomId: msg.roomId,
-                    userId: msg.userId,
-                    content: msg.content,
-                    createdAt: msg.createdAt,
-                });
+                // nickname, createdAt 등 서버에서 준 그대로 사용
+                appendMessage(msg);
             });
         }
     } catch (e) {
@@ -425,26 +420,49 @@ function appendMessage(msg) {
     const wrap = document.createElement("div");
     wrap.classList.add("chat-message");
 
-    if (Number(msg.userId) === Number(userId)) {
+    const isMine = Number(msg.userId) === Number(userId);
+    if (isMine) {
         wrap.classList.add("mine");
     } else {
         wrap.classList.add("others");
     }
 
+    // 🔹 닉네임
+    const nicknameEl = document.createElement("div");
+    nicknameEl.classList.add("msg-nickname");
+
+    // DB에서 온 nickname 우선 사용
+    let nicknameText = msg.nickname;
+
+    // 혹시 null/빈 문자열이면 fallback
+    if (!nicknameText || nicknameText.trim() === "") {
+        if (isMine && userNickname) {
+            nicknameText = userNickname;
+        } else {
+            nicknameText = `사용자 ${msg.userId}`;
+        }
+    }
+
+    nicknameEl.textContent = nicknameText;
+
+    // 🔹 내용
     const textEl = document.createElement("div");
     textEl.classList.add("msg-text");
     textEl.textContent = msg.content;
 
+    // 🔹 시간
     const metaEl = document.createElement("div");
     metaEl.classList.add("msg-meta");
     metaEl.textContent = formatTime(msg.createdAt);
 
+    wrap.appendChild(nicknameEl);
     wrap.appendChild(textEl);
     wrap.appendChild(metaEl);
 
     chatViewEl.appendChild(wrap);
     chatViewEl.scrollTop = chatViewEl.scrollHeight;
 }
+
 
 // ===== 모달(입장) =====
 function openJoinModal(roomId, roomName, ownerUserId) {
