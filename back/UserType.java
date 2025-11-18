@@ -1,4 +1,4 @@
-package com.lms.urbangreen.urbangreenproject.model;
+package com.lms.urbangreen.urbangreenproject.user.entity;
 
 public enum UserType {
     admin,

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UrbanGreen - 로그인</title>
+    <link rel="stylesheet" th:href="@{/css/account/login.css}">
+    <link rel="stylesheet" th:href="@{/css/main/main.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/footerShort.css}">
+
+</head>
+<body>
+<!-- 로고 헤더 -->
+<div class="logo-header">
+    <a th:href="@{/main}" class="logo">UrbanGreen</a>
+</div>
+
+<!-- 메인 컨테이너 -->
+<div class="main-container">
+    <div class="login-card">
+        <h1>로그인</h1>
+
+
+
+        <!-- ✅ 로그인 실패 메시지 -->
+        <div class="alert-message error"
+             th:if="${loginError}"
+             th:text="${loginError}">
+        </div>
+
+
+
+        <!--로그인 폼-->
+        <form th:action="@{/login}" method="post">
+            <div class="form-group">
+                <label for="id">아이디</label>
+                <input type="text" id="id" name="id" placeholder="아이디를 입력하세요" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">비밀번호</label>
+                <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" required>
+            </div>
+
+            <button type="submit" class="login-btn">로그인</button>
+        </form>
+        <div class="links-section">
+            <div class="auth-links">
+                <a th:href="@{/findId}">아이디 찾기</a>
+                <span>|</span>
+                <a th:href="@{/findPassword}">비밀번호 찾기</a>
+            </div>
+
+            <div class="signup-prompt">
+                아직 회원이 아니신가요?
+                <a th:href="@{/signup}">회원가입</a>
+            </div>
+        </div>
+    </div>
+</div>
+<footer th:replace="fragments/footerShort :: footerShort"></footer>
+
+<script th:inline="javascript" th:if="${signupSuccessMsg}">
+    // 회원가입 성공 시에만 이 스크립트가 렌더링됨
+    alert(/*[[${signupSuccessMsg}]]*/ "회원가입이 완료되었습니다. 로그인해 주세요.");
+</script>
+<script th:inline="javascript" th:if="${pwChangeSuccessMsg}">
+    alert(/*[[${pwChangeSuccessMsg}]]*/ "비밀번호가 변경되었습니다. 새 비밀번호로 로그인해 주세요.");
+</script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UrbanGreen - 아이디 찾기</title>
+    <link rel="stylesheet" th:href="@{/css/account/findId.css}">
+    <link rel="stylesheet" th:href="@{/css/main/main.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/footerShort.css}">
+
+
+
+</head>
+<body>
+<!-- 로고 헤더 -->
+<div class="logo-header">
+    <a th:href="@{/main}" class="logo">UrbanGreen</a>
+</div>
+
+<!-- 메인 컨테이너 -->
+<div class="main-container">
+    <div class="find-card">
+        <div class="find-header">
+            <h1>아이디 찾기</h1>
+            <p>가입 시 등록한 정보로 찾을 수 있어요</p>
+        </div>
+
+        <!-- 전체 에러 메시지 (옵션) -->
+        <div class="validation-msg"
+             th:if="${errorMessage != null}"
+             th:text="${errorMessage}"></div>
+
+        <!-- 이메일로 찾기 (타임리프 폼) -->
+        <form id="emailForm"
+              th:action="@{/find-id}"
+              method="post"
+              th:object="${findIdForm}">
+            <div class="form-group">
+                <label for="name">이름</label>
+                <input type="text"
+                       id="name"
+                       th:field="*{name}"
+                       placeholder="이름을 입력하세요"
+                       required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">이메일</label>
+                <input type="email"
+                       id="email"
+                       th:field="*{email}"
+                       placeholder="example@email.com"
+                       required>
+            </div>
+
+            <button type="submit" class="find-btn">아이디 찾기</button>
+        </form>
+
+        <!-- 결과 영역 -->
+        <div class="result-section"
+             id="resultSection"
+             th:classappend="${foundId != null} ? ' show' : ''">
+
+            <!-- 아이디를 찾은 경우 -->
+            <div th:if="${foundId != null}">
+                <div class="result-title">회원님의 아이디를 찾았습니다</div>
+                <div class="result-id" th:text="${foundId}">youngfarmer123</div>
+                <div class="result-date"
+                     th:if="${joinedAt != null}"
+                     th:text="'가입일: ' + ${joinedAt}">
+                    가입일: 2024-03-15
+                </div>
+
+                <!-- ✅ 로그인하러 가기 버튼 -->
+                <div class="login-link-wrap">
+                    <a th:href="@{/login}" class="login-link-btn">
+                        로그인하러 가기
+                    </a>
+                </div>
+            </div>
+
+            <!-- 일치하는 정보가 없는 경우 -->
+            <div th:if="${foundId == null and errorMessage != null}">
+                <div class="result-title" th:text="${errorMessage}">
+                    일치하는 회원 정보를 찾을 수 없습니다.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<footer th:replace="fragments/footerShort :: footerShort"></footer>
+
+    <script>
+        // 탭 전환
+        function showTab(tab) {
+            const emailForm = document.getElementById('emailForm');
+            const nicknameForm = document.getElementById('nicknameForm');
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const resultSection = document.getElementById('resultSection');
+
+            // 결과 숨기기
+            resultSection.classList.remove('show');
+
+        // 이메일로 찾기
+        document.getElementById('emailForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('name1').value;
+            const email = document.getElementById('email').value;
+
+            if (name && email) {
+                // 실제로는 서버 API 호출
+                document.getElementById('resultSection').classList.add('show');
+            }
+        });
+    </script>
+</body>
+</html>
