@@ -84,7 +84,7 @@ function uploadAndIdentifyPlantID() {
     const reader = new FileReader();
 
     // ⚠️ Plant.ID API Key (보안상 주의 필요)
-    const apiKey = "mSdAv442nCQq7qmJGDSUwAIX9dl6yRt38YYwYUG83yKEGLA0tX";
+    const apiKey = "";
     const latitude = 37.51;
     const longitude = 127.04;
     const health = "all";
@@ -262,4 +262,5 @@ function displayPlantIDInfo(plantIdResponse, base64Image) {
             diseaseNameContainer.innerHTML = `<p><strong>상태:</strong> 원인 불명확. 추가 진단이나 전문가의 도움이 필요합니다.</p>`;
         }
     }
+
 }
