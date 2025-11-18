@@ -1,6 +1,7 @@
 package com.lms.urbangreen.urbangreenproject.chat.repository;
 
 import com.lms.urbangreen.urbangreenproject.chat.domain.ChatMessage;
+import com.lms.urbangreen.urbangreenproject.chat.dto.ChatMessagePayload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -9,6 +10,9 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -87,5 +91,51 @@ public class ChatMessageRepository {
                 ORDER BY created_at ASC, message_id ASC
                 """;
         return jdbc.query(sql, this::mapRow, roomId);
+    }
+
+    public List<ChatMessagePayload> findRecentMessagesWithNickname(Integer roomId, int limit) {
+        String sql = """
+            SELECT m.message_id,
+                   m.room_id,
+                   m.user_id,
+                   COALESCE(u.nickname, u.name) AS nickname,
+                   m.content,
+                   m.created_at
+            FROM chat_message m
+            JOIN chat_member cm
+              ON cm.room_id = m.room_id
+             AND cm.user_id = m.user_id
+            JOIN all_users u
+              ON u.user_id = cm.user_id
+            WHERE m.room_id = ?
+            ORDER BY m.created_at ASC, m.message_id ASC
+            LIMIT ?
+            """;
+
+        DateTimeFormatter fmt = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+
+        return jdbc.query(sql, (rs, i) -> {
+            Integer messageId = rs.getInt("message_id");
+            Integer rId       = rs.getInt("room_id");
+            Integer uId       = rs.getInt("user_id");
+            String nickname   = rs.getString("nickname");
+            String content    = rs.getString("content");
+
+            Timestamp ts = rs.getTimestamp("created_at");
+            String createdAtStr = null;
+            if (ts != null) {
+                LocalDateTime ldt = ts.toLocalDateTime();
+                createdAtStr = ldt.format(fmt);
+            }
+
+            return new ChatMessagePayload(
+                    messageId,
+                    rId,
+                    uId,
+                    nickname,
+                    content,
+                    createdAtStr
+            );
+        }, roomId, limit);
     }
 }

@@ -2,7 +2,9 @@ package com.lms.urbangreen.urbangreenproject.chat.service;
 
 import com.lms.urbangreen.urbangreenproject.chat.domain.ChatMessage;
 import com.lms.urbangreen.urbangreenproject.chat.domain.ChatRoom;
+import com.lms.urbangreen.urbangreenproject.chat.dto.ChatMessagePayload;
 import com.lms.urbangreen.urbangreenproject.chat.dto.RoomListResponse;
+import com.lms.urbangreen.urbangreenproject.chat.repository.AllUsersRepository;
 import com.lms.urbangreen.urbangreenproject.chat.repository.ChatMemberRepository;
 import com.lms.urbangreen.urbangreenproject.chat.repository.ChatMessageRepository;
 import com.lms.urbangreen.urbangreenproject.chat.repository.ChatRoomRepository;
@@ -10,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -19,6 +22,10 @@ public class ChatService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMemberRepository chatMemberRepository;
     private final ChatMessageRepository chatMessageRepository;
+    private final AllUsersRepository allUsersRepository;
+
+    private static final DateTimeFormatter ISO_FMT =
+            DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
     /**
      * 유저 기준 참여/미참여 방 목록
@@ -90,13 +97,33 @@ public class ChatService {
 
 
 
-    /**
-     * 메시지 저장 (다음 단계 WebSocket에서 사용 예정)
-     */
-    @Transactional
-    public ChatMessage saveMessage(Integer roomId, Integer userId, String content) {
-        Integer messageId = chatMessageRepository.save(roomId, userId, content);
-        return chatMessageRepository.findById(messageId)
-                .orElseThrow(() -> new IllegalStateException("메시지 저장 후 조회 실패"));
+
+    /** DB에 메시지 저장 후 생성된 message_id 리턴 */
+    public Integer saveMessage(Integer roomId, Integer userId, String content) {
+        // 기존에 Integer 리턴하는 save(...) 가 있다고 가정
+        return chatMessageRepository.save(roomId, userId, content);
+    }
+
+    /** 특정 방의 최근 메시지 + 닉네임 리스트 */
+    public List<ChatMessagePayload> getRecentMessages(Integer roomId, int limit) {
+        return chatMessageRepository.findRecentMessagesWithNickname(roomId, limit);
+    }
+
+    /** ChatMessage -> ChatMessagePayload 변환하면서 닉네임 붙이기 */
+    private ChatMessagePayload toPayloadWithNickname(ChatMessage m) {
+        String nickname = allUsersRepository.findNicknameByUserId(m.getUserId());
+
+        String createdAtStr = m.getCreatedAt() != null
+                ? m.getCreatedAt().format(ISO_FMT)
+                : null;
+
+        return new ChatMessagePayload(
+                m.getMessageId(),
+                m.getRoomId(),
+                m.getUserId(),
+                nickname,
+                m.getContent(),
+                createdAtStr
+        );
     }
 }

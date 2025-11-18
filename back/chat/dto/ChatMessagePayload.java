@@ -17,6 +17,7 @@ public class ChatMessagePayload {
     private Integer messageId;
     private Integer roomId;
     private Integer userId;
+    private String nickname;   // 🔹 추가
     private String content;
     private String createdAt;  // ISO 문자열(프론트에서 new Date()로 파싱해서 사용)
 }

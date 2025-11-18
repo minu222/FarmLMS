@@ -2,6 +2,7 @@ package com.lms.urbangreen.urbangreenproject.chat.api;
 
 import com.lms.urbangreen.urbangreenproject.chat.domain.ChatMessage;
 import com.lms.urbangreen.urbangreenproject.chat.domain.ChatRoom;
+import com.lms.urbangreen.urbangreenproject.chat.dto.ChatMessagePayload;
 import com.lms.urbangreen.urbangreenproject.chat.dto.CreateRoomRequest;
 import com.lms.urbangreen.urbangreenproject.chat.dto.RoomListResponse;
 import com.lms.urbangreen.urbangreenproject.chat.service.ChatService;
@@ -66,14 +67,12 @@ public class ChatRestController {
         chatService.leaveRoom(userId, roomId);
     }
 
-    /**
-     * 채팅 메시지 목록 조회
-     * ex) GET /api/chat/rooms/5/messages?limit=100
-     */
+    /** 방 메시지 목록 (최근 limit개) */
     @GetMapping("/rooms/{roomId}/messages")
-    public List<ChatMessage> getMessages(@PathVariable("roomId") Integer roomId,
-                                         @RequestParam(name = "limit", defaultValue = "100") Integer limit) {
-
-        return chatService.getMessages(roomId, limit);
+    public List<ChatMessagePayload> getMessages(
+            @PathVariable Integer roomId,
+            @RequestParam(name = "limit", defaultValue = "100") int limit
+    ) {
+        return chatService.getRecentMessages(roomId, limit);
     }
 }
