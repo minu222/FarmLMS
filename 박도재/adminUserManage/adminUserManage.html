@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>UrbanGreen - 관리자 회원 관리</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 외부 공통 header/footer css (fragment에서 불러옴) -->
+    <link rel="stylesheet" th:href="@{/css/admin/adminUserManage.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/header.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/footer.css}">
+</head>
+
+<body>
+<!-- 헤더 Fragment 붙이기 -->
+<header th:replace="fragments/header :: header"></header>
+<main>
+    <div class="admin-layout">
+        <nav class="admin-side">
+            <button class="menu-btn">회원관리</button>
+            <button class="menu-btn">공지사항 관리</button>
+            <button class="menu-btn">댓글관리</button>
+        </nav>
+        <section class="admin-main">
+            <form class="table-search-bar">
+                <input type="text" placeholder="검색">
+                <button type="submit">삭제</button>
+            </form>
+            <table class="admin-table">
+                <thead>
+                <tr>
+                    <th><input type="checkbox"></th>
+                    <th>순번</th>
+                    <th>이름</th>
+                    <th>아이디</th>
+                    <th>닉네임</th>
+                    <th>이메일</th>
+                    <th>생년월일</th>
+                    <th>구분</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td>1</td>
+                    <td>홍길동</td>
+                    <td>hong</td>
+                    <td>길동</td>
+                    <td>hong@example.com</td>
+                    <td>2025-01-01</td>
+                    <td>
+                        <select class="role-select">
+                            <option value="student" selected>학생</option>
+                            <option value="teacher">강사</option>
+                        </select>
+                    </td>
+                </tr>
+                <!-- 데이터 row 추가 -->
+                </tbody>
+            </table>
+            <div class="table-pagination">
+                <a href="#" class="active">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <a href="#">4</a>
+                <a href="#">5</a>
+                <span>...</span>
+                <a href="#">9</a>
+                <a href="#">10</a>
+            </div>
+        </section>
+    </div>
+</main>
+<!-- 푸터 Fragment 붙이기 -->
+<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>
