@@ -344,357 +344,6 @@
        margin-left: 12px;
    }
 
-   /* myCourse */
-
-   .myCourse-topBar {
-       display: flex;
-       justify-content: flex-end;
-       align-items: center;
-       margin-bottom: 20px;
-   }
-
-   .myCourse-container {
-       flex: 1;
-       padding: 24px;
-       box-sizing: border-box;
-       background: #fff;
-       border-radius: 6px;
-
-   }
-
-   .myCourse-Control {
-       background: var(--card, #f9f9f9);
-       border: 1px solid #e5e7eb;
-       border-radius: 12px;
-       display: flex;
-       align-items: center;
-       gap: 8px;
-       padding: 10px 12px;
-       width: 150px;
-       max-width: 100%;
-   }
-
-   .myCourse-Control input,
-   .myCourse-Control select {
-       border: none;
-       outline: none;
-       width: 100%;
-       font-size: 14px;
-       background: transparent;
-       color: var(--text, #333);
-   }
-
-   /* 검색창 */
-   .myCourse-searchBox {
-       width: 400px;
-       display: flex;
-       justify-content: flex-end;
-       align-items: center;
-       margin: 20px;
-   }
-
-   .myCourse-searchBox input {
-       flex: 1;
-       font-size: 16px;
-       padding: 8px 12px;
-       border: 1px solid #ddd;
-       border-radius: 20px;
-       outline: none;
-   }
-
-   .myCourse-searchBox button {
-       margin-left: 8px;
-       background: #4caf50;
-       color: white;
-       border: none;
-       padding: 8px 14px;
-       border-radius: 50%;
-       cursor: pointer;
-   }
-
-   .myCourse-searchBox button:hover {
-       background: #45a049;
-   }
-
-   /* 강의 카드 */
-   .myCourse-card {
-       display: flex;
-       align-items: center;
-       justify-content: space-between;
-       border: 1px solid #ddd;
-       border-radius: 16px;
-       padding: 16px;
-       margin-bottom: 16px;
-       background: #fafafa;
-   }
-
-   .myCourse-thumb {
-       flex-shrink: 0;
-       width: 220px;
-       height: 220px;
-       background: #e0e0e0;
-       border-radius: 10px;
-       display: flex;
-       align-items: center;
-       justify-content: center;
-       font-size: 0.9rem;
-       color: #555;
-       overflow: hidden;
-   }
-
-   .myCourse-thumb img {
-       width: 100%;
-       height: 100%;
-       object-fit: cover;
-       /* **새로 추가** - 비율을 유지하며 박스를 꽉 채움 */
-       object-position: center;
-       /* **새로 추가** - 이미지를 중앙에 정렬 */
-   }
-
-   .course-row {
-       display: flex;
-       align-items: flex-start;
-       gap: 10px;
-       margin-bottom: 12px;
-   }
-
-   .courseTitle {
-       display: flex;
-       padding: 5px;
-   }
-
-   .myCourse-badge {
-       font-size: 12px;
-       color: #065f46;
-       background: #d1fae5;
-       padding: 4px 8px;
-       border-radius: 999px;
-       border: 1px solid #a7f3d0;
-       margin-left: 10px;
-   }
-
-   .myCourse-info {
-       flex: 1;
-       margin-left: 50px;
-   }
-
-   .myCourse-info h3 {
-       margin: 0;
-       font-weight: bold;
-   }
-
-   .myCourse-info p {
-       margin: 4px 0;
-       font-size: 0.9rem;
-   }
-
-   .courseExplain {
-       margin: 0;
-       font-size: 0.95rem;
-       height: 180px;
-       max-width: 900px;
-       border-radius: 6px;
-       border: solid 1px #ccc;
-       background: #ffffff;
-       /* 연한 배경으로 구분 */
-       padding: 12px;
-       white-space: pre-line;
-       /* 줄바꿈 반영 */
-       overflow-y: auto;
-       /* 내용 많으면 스크롤 */
-       max-height: 250px;
-
-   }
-
-   .course-createdAt {
-       font-size: 0.9rem;
-
-   }
-
-   /* 액션 버튼 */
-   .myCourse-actions {
-       display: flex;
-       flex-direction: column;
-       gap: 10px;
-       margin-right: 30px;
-   }
-
-   .courseEdit-btn,
-   .quizEdit-btn {
-       background: #4caf50;
-       color: white;
-       border: none;
-       padding: 14px 20px;
-       border-radius: 8px;
-       cursor: pointer;
-       font-size: 0.9rem;
-   }
-
-   .courseDelete-btn {
-       background: #e37070;
-       color: white;
-       border: none;
-       padding: 14px 20px;
-       border-radius: 8px;
-       cursor: pointer;
-       font-size: 0.9rem;
-   }
-
-   .courseEdit-btn:hover {
-       background: #388e3c;
-   }
-
-   .quizEdit-btn:hover {
-       background: #388e3c;
-   }
-
-   .courseDelete-btn:hover {
-       background: #e45a5a;
-   }
-
-   /* 다음글 이전글*/
-   .myCourse-navigation {
-       margin-top: 2rem;
-       text-align: center;
-       /* 가운데 정렬 */
-   }
-
-   .myCourse-navigation button {
-       background: none;
-       /* 버튼 배경 제거 */
-       border: none;
-       /* 버튼 테두리 제거 */
-       margin: 0 12px;
-       font-size: 15px;
-       color: #4caf50;
-       font-weight: 600;
-       transition: color 0.2s;
-       cursor: pointer;
-   }
-
-   .myCourse-navigation button:hover {
-       color: #388e3c;
-       text-decoration: underline;
-   }
-
-
-
-
-   /*editCourse*/
-   /* 업로드 컨트롤 기본 스타일 */
-
-   main.editCourse-container {
-       flex: 1;
-       padding: 24px;
-       box-sizing: border-box;
-       background: #fff;
-       border-radius: 6px;
-   }
-
-   .editCourse-Control {
-       background: var(--card, #f9f9f9);
-       border: 1px solid #e5e7eb;
-       border-radius: 12px;
-       display: flex;
-       align-items: center;
-       gap: 8px;
-       padding: 10px 12px;
-       width: 150px;
-       max-width: 100%;
-   }
-
-   .editCourse-container p input[type="text"] {
-       width: 80%;
-       padding: 10px 14px;
-       border: 1px solid #ccc;
-       border-radius: 20px;
-       font-size: 16px;
-       outline: none;
-       transition: 0.3s;
-       /* 입력란 길이 조절 */
-   }
-
-   .editCourse-Control input,
-   .editCourse-Control select {
-       border: none;
-       outline: none;
-       width: 100%;
-       font-size: 14px;
-       background: transparent;
-       color: var(--text, #333);
-   }
-
-   /* 버튼 스타일 */
-   .cta {
-       border-radius: 12px;
-       border: none;
-       background: var(--primary, #4caf50);
-       color: white;
-       font-weight: 700;
-       cursor: pointer;
-   }
-
-   .cta:hover {
-       background: var(--primary-600, #45a049);
-   }
-
-   .editMedia-card {
-
-       padding: 10px;
-       margin-bottom: 10px;
-       display: flex;
-       gap: 16px;
-       justify-content: flex-start;
-       align-items: center;
-
-   }
-
-   .editMedia-action {
-       display: flex;
-       align-items: center;
-       gap: 8px;
-       margin-bottom: 0;
-   }
-
-   .edit-btn {
-       display: inline-block;
-       padding: 8px 16px;
-       background: #ffffff;
-       color: #000000;
-       font-weight: 400;
-       font-size: 14px;
-       border-radius: 8px;
-       cursor: pointer;
-       border: 1px solid #ccc;
-       transition: all 0.3s;
-   }
-
-   .edit-btn:hover {
-       background: #f0f0f0;
-   }
-
-   .editBtns button {
-       width: 100px;
-       height: 50px;
-       background: #4caf50;
-       color: white;
-       border: none;
-       padding: 10px 16px;
-       border-radius: 8px;
-       cursor: pointer;
-       font-weight: 550;
-       font-size: 15px;
-       transition: all 0.2s ease;
-   }
-
-   .editBtns {
-       display: flex;
-       justify-content: flex-end;
-       gap: 10px;
-       margin-top: 16px;
-   }
-
-
    /*editQuiz*/
    .editQuiz-container {
        flex: 1;
@@ -702,6 +351,22 @@
        box-sizing: border-box;
        background: #fff;
        border-radius: 6px;
+   }
+
+   .quiz-card-header {
+       display: flex;
+       justify-content: space-between;
+       align-items: center;
+   }
+
+   /* 기본은 체크박스 숨김 */
+   .quiz-delete-checkbox {
+       display: none;
+   }
+
+   /* delete-mode 클래스가 붙었을 때만 보이게 */
+   .delete-mode .quiz-delete-checkbox {
+       display: inline-block;
    }
 
    .editQuiz-container p input[type="text"][readonly] {
@@ -741,6 +406,7 @@
        border: 1px solid #ccc;
        border-radius: 6px;
        font-size: 16px;
+       margin-right: 10px;
    }
 
    .quiz-card input[type="text"] {
@@ -757,6 +423,110 @@
        font-size: 16px;
        color: #999;
    }
+
+
+   /*QuizMng*/
+
+   .classbox {
+       display: flex;
+       margin: 0 auto;
+       margin-top: 180px;
+       margin-bottom: 100px;
+       padding: 24px;
+       border: 1px solid none;
+       box-sizing: border-box;
+       background: #fff;
+       border-radius: 6px;
+       width: 960px;
+   }
+
+   .QuizMbtn {
+       text-decoration: none;
+       margin-left: 20%;
+       background-color: #5cb85f;
+       color: white;
+       padding: 8px;
+       border-radius: 10px;
+       font-size: 1.2em;
+   }
+
+   .QuizMbtn :hover {
+       color: #549850;
+   }
+
+   .classbox-title {
+       border: 1px solid none;
+       margin: 0 auto;
+       padding: 24px;
+       background-color: var(--primary-dark);
+       margin-bottom: 15px;
+       border-radius: 10px;
+   }
+
+   .classbox-title a {
+       text-decoration: none;
+       color: white;
+       font-weight: bold;
+   }
+
+   .studentM {
+       display: none;
+       /* 기본은 숨김 */
+       position: absolute;
+       background-color: #f9f9f9;
+       width: 912px;
+       min-width: 160px;
+       box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+       z-index: 1;
+       left: -24px;
+       top: 3px;
+       border-collapse: collapse;
+       /* 표처럼 붙이기 옵션 (선택사항) */
+   }
+
+
+   /* 드롭다운 컨테이너 */
+   .dropdown {
+       position: relative;
+   }
+
+   .dropbtn {
+       display: inline-block;
+       background-color: white;
+       color: #4caf50;
+       text-align: center;
+       padding: 14px 16px;
+       text-decoration: none;
+       cursor: pointer;
+       position: absolute;
+       right: 10px;
+       top: -37px;
+       border-radius: 10px;
+       border: 1px solid #ccc;
+   }
+
+   /* .open 클래스가 붙었을 때만 메뉴 열기 */
+   .dropdown.open .studentM {
+       display: table;
+       /* flex 대신 table로 동작 */
+   }
+
+   .studentM th,
+   td {
+       /* table-cell 기본값을 쓰는게 좋음 */
+       display: table-cell;
+       /* 또는 아예 display 설정 안 해도 됨 */
+       color: black;
+       padding: 10px 16px;
+       text-align: center;
+       /* margin은 table-cell에는 잘 안 먹으니 빼주는 게 좋아요 */
+       /* margin: 10px 100px;  -> 필요하면 padding으로 조절 */
+   }
+
+   .studentM tr:hover {
+       background-color: #f1f1f1;
+   }
+
 
    /* 푸터 */
    footer {
