@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UrbanGreen - 게임</title>
+    <link th:href="@{/css/board/game.css}" rel="stylesheet">
+    <link th:href="@{/css/fragments/header.css}" rel="stylesheet">
+    <link th:href="@{/css/fragments/footer.css}" rel="stylesheet">
+</head>
+
+<body>
+<!-- 메인 컨테이너 -->
+<div class="main-container">
+    <!-- 게임 화면 영역 -->
+    <div class="game-screen-section">
+        <div class="game-screen">
+            <!-- 실제 게임이 로드되는 영역 -->
+            <div id="gameCanvas" class="game-canvas">
+                <div class="game-placeholder">
+                    <h2>🎮 게임을 선택해주세요</h2>
+                    <p>아래에서 플레이할 게임을 선택하세요</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 게임 설명 영역 -->
+    <div class="game-description-section">
+        <div class="game-tabs">
+            <button class="tab-btn active" data-game="farming">
+                작물 재배 시뮬레이터
+            </button>
+        </div>
+
+        <!-- 게임별 설명 -->
+        <div class="game-details">
+            <!-- 작물 재배 시뮬레이터 -->
+            <div id="farming-detail" class="game-detail">
+                <div class="detail-header">
+                    <h3>작물 재배 시뮬레이터</h3>
+                </div>
+                <div class="game-description">
+                    <h4>게임 설명</h4>
+                    <p>씨앗을 심고, 물을 주고, 비료를 주며 작물을 키워보세요.
+                        계절과 날씨를 고려하여 최적의 재배 환경을 만들어야 합니다.</p>
+
+                    <h4>학습 목표</h4>
+                    <ul>
+                        <li>작물별 재배 조건 이해</li>
+                        <li>생육 단계별 관리 방법 학습</li>
+                        <li>병충해 예방 및 대처법 습득</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 게임 로드 함수
+    function loadFarmingGame(canvas) {
+        canvas.innerHTML = `
+        <div style="width: 100%; height: 100%; background: linear-gradient(to bottom, #87CEEB 0%, #98D98E 100%); display: flex; align-items: center; justify-content: center; flex-direction: column; color: white;">
+            <div style="text-align: center;">
+                <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">🌱 작물 재배 시뮬레이터</h2>
+                <p style="font-size: 1.3rem; margin-bottom: 2rem;">게임이 여기에 로드됩니다</p>
+                <div style="background: rgba(255,255,255,0.2); padding: 1.5rem; border-radius: 12px;">
+                    <p style="font-size: 1rem; margin-bottom: 0.5rem;">실제 게임은 Unity, Phaser.js 등으로 개발하여</p>
+                    <p style="font-size: 1rem;">이 영역에 임베드됩니다</p>
+                </div>
+            </div>
+        </div>
+    `;
+    }
+
+    // 페이지 로드 시
+    window.addEventListener('DOMContentLoaded', () => {
+        console.log('게임 페이지 로드 완료');
+    });
+</script>
+</body>
+</html>
