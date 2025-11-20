@@ -1,0 +1,170 @@
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.98);
+    border-bottom: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+header.scrolled {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 2rem;
+}
+
+.logo {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: -0.5px;
+    text-decoration: none;
+}
+
+nav {
+    display: flex;
+    gap: 2rem;
+}
+
+nav a {
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+nav a:hover,
+nav a.active {
+    color: var(--primary);
+}
+
+nav a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--primary);
+    border-radius: 2px;
+}
+
+.header-container nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.user-menu {
+    display: flex;           /* 플렉스 박스 사용 */
+    flex-direction: column;  /* 세로(위아래) 정렬로 변경 */
+    align-items: center;     /* 가로(center) 정렬 */
+    gap: 4px;                /* 요소 간격 */
+    text-align: center;      /* 텍스트 중앙 정렬 */
+}
+
+.user-nickname {
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.user-logout {
+    margin-top: 0.25rem;
+    font-size: 0.9rem;
+    color: #333;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.user-logout:hover {
+    text-decoration: underline;
+}
+
+/* AI 메뉴 드롭다운 컨테이너 */
+nav .dropdown {
+    position: relative;
+}
+
+/* 드롭다운 버튼 (AI 링크), 소문자 dropBtn으로 통일 */
+nav .dropBtn {
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 0;
+    display: inline-block;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+/* 드롭다운 내용물 숨김 */
+nav .dropdown-content {
+    display: none; /* 기본 숨김 */
+    position: absolute;
+    top: 100%;
+    left: 50%; /* 가운데 정렬 */
+    transform: translateX(-50%);
+    background-color: #fff;
+    min-width: 160px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    border-radius: 6px;
+    z-index: 1500;
+    flex-direction: column;
+    padding: 0.5rem 0;
+}
+
+/* 드롭다운 메뉴 항목 */
+nav .dropdown-content a {
+    padding: 8px 16px;
+    color: var(--text);
+    font-weight: 500;
+    font-size: 0.95rem;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 메뉴 항목 호버 */
+nav .dropdown-content a:hover {
+    background-color: var(--primary);
+    color: white;
+}
+
+/* AI 메뉴에 마우스 올리면 드롭다운 보이기 */
+nav .dropdown:hover > .dropdown-content {
+    display: flex;
+}
+
+/* 드롭다운 화살표표시 */
+nav .dropBtn::after {
+    content: " ▼";
+    font-size: 0.7rem;
+    color: var(--text);
+    margin-left: 4px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+/* 드롭다운 hover 및 focus-within 시 텍스트 및 화살표 색상 변경 */
+nav .dropdown:hover > .dropBtn,
+nav .dropdown:focus-within > .dropBtn {
+    color: var(--primary);
+}
+
+nav .dropdown:hover > .dropBtn::after,
+nav .dropdown:focus-within > .dropBtn::after {
+    color: var(--primary);
+    transform: rotate(180deg);
+}

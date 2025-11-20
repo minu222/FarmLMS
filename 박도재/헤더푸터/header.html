@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<header th:fragment="header" id="header">
+    <div class="header-container">
+        <a th:href="@{/main}" class="logo">UrbanGreen</a>
+
+        <nav>
+            <a th:href="@{/board/class}">강의</a>
+            <a th:href="@{/board/notice}">공지사항</a>
+            <a th:href="@{/chat}">채팅</a>
+            <div class="dropdown">
+                <a class="dropBtn">AI</a>
+                <div class="dropdown-content">
+                    <a th:href="@{/planner}">AI 플래너</a>
+                    <a th:href="@{/diagnosisPlant}">AI 진단</a>
+                </div>
+            </div>
+            <a th:href="@{/main/game}">게임</a>
+
+            <div class="user-menu">
+                <!-- 로그인 전 -->
+                <a th:if="${session.loginUser == null}" th:href="@{/login}">로그인</a>
+
+                <!-- 로그인 후 -->
+                <span th:if="${session.loginUser != null}">
+    <!-- 관리자 -->
+    <a th:if="${#strings.equalsIgnoreCase(session.loginUser.userType, 'admin')}"
+       th:href="@{/admin/adminUserManage}"
+       class="user-nickname"
+       th:text="${session.loginUser.nickname} + '님'">닉네임</a>
+
+                    <!-- 일반 회원 -->
+    <a th:if="${!#strings.equalsIgnoreCase(session.loginUser.userType, 'admin')}"
+       th:href="@{/mypage/profile}"
+       class="user-nickname"
+       th:text="${session.loginUser.nickname} + '님'">닉네임</a><br>
+
+    <a th:href="@{/logout}">로그아웃</a>
+</span>
+            </div>
+        </nav>
+    </div>
+</header>
+</body>
+</html>
