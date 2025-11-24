@@ -1,38 +1,23 @@
 package com.example.game.service;
 
-import com.example.game.dto.GameSaveRequest;
 import com.example.game.entity.GameEntity;
-import com.example.game.repository.GameRepository;
-import lombok.RequiredArgsConstructor;
+import com.example.game.repository.GameJdbcRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class GameService {
 
-    private final GameRepository gameRepository;
+    private final GameJdbcRepository repository;
 
-    // 저장
-    public void save(GameSaveRequest req) {
-
-        GameEntity entity = new GameEntity();
-
-        entity.setUserId(req.getUserId());
-        entity.setPlayerHp(req.getPlayerHp());
-        entity.setGameDay(req.getGameDay());
-        entity.setGrowthRate(req.getGrowthRate());
-        entity.setWeather(req.getWeather());
-        entity.setDailyAction(req.getDailyAction());
-        entity.setActionType(req.getActionType());
-        entity.setMiniResult(req.getMiniResult());
-        entity.setActionScore(req.getActionScore());
-        entity.setGameGrade(req.getGameGrade());
-
-        gameRepository.save(entity);
+    public GameService(GameJdbcRepository repository) {
+        this.repository = repository;
     }
 
-    // 이어하기
-    public GameEntity loadLatest(int userId) {
-        return gameRepository.findTopByUserIdOrderBySessionIdDesc(userId);
+    public void save(GameEntity entity) {
+        repository.save(entity);
+    }
+
+    public GameEntity loadLatestGame(int userId) {
+        return repository.findLatestByUserId(userId);
     }
 }
