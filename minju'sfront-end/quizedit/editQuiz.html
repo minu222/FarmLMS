@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>퀴즈 수정</title>
+    <link rel="stylesheet" href="quizstyle.css">
+</head>
+
+<body>
+    <header id="header">
+        <div class="header-container">
+            <div class="logo"><a id="logo" href="/main/urbangreen.html">UrbanGreen</a></div>
+            <nav>
+                <a href="/main/class.html">강의</a>
+                <a href="/post/free-board.html">공지사항</a>
+                <a href="/Account/login.html">채팅</a>
+                <a href="/AI/aichoice.html">AI 추천</a>
+                <a href="/main/game.html">게임</a>
+                <a href="/main/urbangreen.html">로그아웃</a>
+            </nav>
+        </div>
+    </header>
+    <main class="page">
+        <div class="tab_obj">
+
+            <h2>나의 메뉴</h2>
+            <div id="leftobj">
+                <div id="TeachProfile">
+                    <h3>My 프로필</h3>
+                    <p><span id="username">(강사명은 DB와 연결하기)</span>강사님</p>
+                    <button type="submit">로그아웃</button>
+                </div>
+
+                <!--로그아웃 후 노출되는 프로필 섹션-->
+                <div id="needLogin">
+                    <a id="loginT" href="login.html"> 로그인</a>
+                    <p style="text-align: center; margin-bottom: 10px;">로그인 후 이용 가능합니다.</p>
+                </div>
+
+                <nav id="subNavT">
+                    <a href="modifyInfoT.html">정보 수정</a>
+                    <a href="mngclass.html">강의 관리</a>
+                    <a href="#">내 댓글 관리</a>
+                    <a href="QuizMng.html">퀴즈 관리</a>
+                </nav>
+            </div>
+        </div>
+
+        <div class="uploadQuiz-container">
+            <h2>퀴즈 수정</h2>
+            <p style="color:#4caf50; font-weight: 600; margin-right: 6px;">
+                강의 제목 :<input type="text" th:value="${course.courses_name}" readonly id="coursesName">
+            </p>
+            <hr style="margin-top: 15px; margin-bottom: 15px;">
+            <form id="quizUploadForm">
+                <input type="hidden" id="coursesId" name="coursesId">
+
+                <div id="quizWrapper">
+                    <div id="quizWrapper">
+                        <div class="quiz-card">
+                            <div class="quiz-card-header">
+                                <label class="delete-check">
+                                    <input type="checkbox" class="quiz-delete-checkbox">
+                                </label>
+                            </div>
+                            <h3>Q1.</h3>
+                            <textarea class="quizCard-area" name="quiz_question" rows="2"
+                                placeholder="문제를 입력하세요"></textarea>
+                            <br><label style="font-size: large; font-weight: 600;">정답: </label>
+                            <input type="text" name="quiz_result" placeholder="정답 입력">
+
+                        </div>
+                    </div>
+                    <div id="quizWrapper">
+                        <div class="quiz-card">
+                            <div class="quiz-card-header">
+                                <label class="delete-check">
+                                    <input type="checkbox" class="quiz-delete-checkbox">
+                                </label>
+                            </div>
+                            <h3>Q1.</h3>
+                            <textarea class="quizCard-area" name="quiz_question" rows="2"
+                                placeholder="문제를 입력하세요"></textarea>
+                            <br><label style="font-size: large; font-weight: 600;">정답: </label>
+                            <input type="text" name="quiz_result" placeholder="정답 입력">
+
+                        </div>
+                    </div>
+                    <div id="quizWrapper">
+                        <div class="quiz-card">
+                            <div class="quiz-card-header">
+                                <label class="delete-check">
+                                    <input type="checkbox" class="quiz-delete-checkbox">
+                                </label>
+                            </div>
+                            <h3>Q1.</h3>
+                            <textarea class="quizCard-area" name="quiz_question" rows="2"
+                                placeholder="문제를 입력하세요"></textarea>
+                            <br><label style="font-size: large; font-weight: 600;">정답: </label>
+                            <input type="text" name="quiz_result" placeholder="정답 입력">
+
+                        </div>
+                    </div>
+                    <div id="quizWrapper">
+                        <div class="quiz-card">
+                            <div class="quiz-card-header">
+                                <label class="delete-check">
+                                    <input type="checkbox" class="quiz-delete-checkbox">
+                                </label>
+                            </div>
+                            <h3>Q1.</h3>
+                            <textarea class="quizCard-area" name="quiz_question" rows="2"
+                                placeholder="문제를 입력하세요"></textarea>
+                            <br><label style="font-size: large; font-weight: 600;">정답: </label>
+                            <input type="text" name="quiz_result" placeholder="정답 입력">
+
+                        </div>
+                    </div>
+                    <div id="quizWrapper">
+                        <div class="quiz-card">
+                            <div class="quiz-card-header">
+                                <label class="delete-check">
+                                    <input type="checkbox" class="quiz-delete-checkbox">
+                                </label>
+                            </div>
+                            <h3>Q1.</h3>
+                            <textarea class="quizCard-area" name="quiz_question" rows="2"
+                                placeholder="문제를 입력하세요"></textarea>
+                            <br><label style="font-size: large; font-weight: 600;">정답: </label>
+                            <input type="text" name="quiz_result" placeholder="정답 입력">
+
+                        </div>
+                    </div>
+
+                    <div class="uploadBtns">
+                        <button id="deleteQuiz-btn" type="button">문항 삭제</button>
+                        <button id="editQuiz-btn" type="submit">수정 완료</button>
+                        <button type="button" onclick="window.history.back()">뒤로가기</button>
+                    </div>
+            </form>
+
+        </div>
+    </main>
+    <footer th:fragment="footer" style="margin-top: 20px;">
+        <div class="footer-container">
+            <div class="footer-about">
+                <h3>UrbanGreen</h3>
+                <p>청년들을 위한 작물재배 교육 플랫폼</p>
+            </div>
+
+            <div class="footer-links">
+                <h4>서비스</h4>
+                <ul class="service-list">
+                    <li><a th:href="@{/main/class}">강의</a></li>
+                    <li><a th:href="@{/board/notice}">공지사항</a></li>
+                    <li><a th:href="@{/chat}">채팅</a></li>
+                    <li><a th:href="@{/ai/AI}">AI</a></li>
+                    <li><a th:href="@{/main/game}">게임</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h4>지원</h4>
+                <ul>
+                    <li><a th:href="@{/faq}">FAQ</a></li>
+                    <li><a th:href="@{/terms}">이용약관</a></li>
+                    <li><a th:href="@{/privacy}">개인정보처리방침</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>
+                <a href="https://map.naver.com/p/search/dw%EC%95%84%EC%B9%B4%EB%8D%B0%EB%AF%B8/place/11522853?placePath=/home?entry=pll&from=map&fromNxList=true&fromPanelNum=2&timestamp=202511171534&locale=ko&svcName=map_pcv5&searchText=dw%EC%95%84%EC%B9%B4%EB%8D%B0%EB%AF%B8&searchType=place"
+                    target="_blank" style="color: inherit; text-decoration: none;">
+                    대전광역시 중구 선화동 중앙로121번길 20 방산빌딩 3층
+                </a>
+                |
+                연락처: 0507-1422-2402 |
+                © 2025 UrbanGreen. All rights reserved.
+            </p>
+        </div>
+    </footer>
+</body>
+<script>
+    const deleteBtn = document.getElementById('deleteQuiz-btn');
+    const quizForm = document.getElementById('quizUploadForm'); // 또는 .uploadQuiz-container
+
+    let deleteMode = false;
+
+    deleteBtn.addEventListener('click', function (e) {
+        // a태그인 경우 이동 방지
+        e.preventDefault && e.preventDefault();
+
+        deleteMode = !deleteMode;
+
+        if (deleteMode) {
+            // 삭제 모드 ON → 체크박스 보이게
+            quizForm.classList.add('delete-mode');
+            deleteBtn.textContent = '선택 삭제';   // 버튼 문구 바꾸고 싶으면
+        } else {
+            // 삭제 모드 OFF → 체크박스 다시 숨김
+            quizForm.classList.remove('delete-mode');
+            deleteBtn.textContent = '문항 삭제';
+        }
+    });
+</script>
+
+</html>

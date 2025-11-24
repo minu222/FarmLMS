@@ -1,0 +1,759 @@
+   /* 기본 레이아웃 */
+   /* 전체 폰트 통일 */
+
+   :root {
+       --primary: #5cb85f;
+       --primary-dark: #4caf50;
+       --primary-light: #70c373;
+       --gray: #757575;
+       --light-gray: #f5f3ed;
+       --cream: #fcfbf8;
+       --text: #212121;
+       --bg-white: #ffffff;
+   }
+
+   * {
+       margin: 0;
+       padding: 0;
+       box-sizing: border-box;
+   }
+
+   /* 위→아래 배치 */
+   html,
+   body {
+       height: 100%;
+   }
+
+   body {
+       margin: 0;
+       min-height: 100vh;
+       /* 화면 전체 높이 확보 */
+       display: flex;
+       flex-direction: column;
+       /* 위에서 아래로 쌓기 */
+       background: #f6f7f9;
+       color: var(--text);
+       line-height: 1.6;
+       overflow-x: hidden;
+   }
+
+   .page {
+       flex: 1;
+   }
+
+   html {
+       scroll-behavior: smooth;
+   }
+
+   /* 헤더 - 심플하고 깔끔하게 */
+   header {
+       top: 0;
+       left: 0;
+       right: 0;
+       z-index: 1000;
+       background: rgba(255, 255, 255, 0.98);
+       border-bottom: 1px solid #e9ecef;
+       transition: all 0.3s ease;
+   }
+
+   header.scrolled {
+       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+   }
+
+   .header-container {
+       max-width: 1200px;
+       margin: 0 auto;
+       display: flex;
+       justify-content: space-between;
+       align-items: center;
+       padding: 1.2rem 2rem;
+   }
+
+   .logo {
+       font-size: 1.6rem;
+       font-weight: 700;
+       color: var(--primary);
+       letter-spacing: -0.5px;
+   }
+
+   #logo {
+       text-decoration: none;
+       color: var(--primary);
+   }
+
+   nav {
+       display: flex;
+       gap: 2rem;
+   }
+
+   nav a {
+       color: var(--text);
+       text-decoration: none;
+       font-weight: 500;
+       font-size: 0.95rem;
+       transition: all 0.3s;
+   }
+
+   nav a:hover {
+       color: var(--primary);
+   }
+
+   .hidden {
+       display: none;
+   }
+
+
+   /* 좌측 사이드 구성 */
+
+   .tab_obj {
+       margin-top: 50px;
+       position: fixed;
+       margin-left: 10px;
+   }
+
+   .tab_obj h2 {
+       text-align: center;
+       margin-bottom: 3rem;
+       color: var(--primary);
+   }
+
+   #leftobj {
+       border: 5px solid none;
+       width: 270px;
+       left: 5px;
+   }
+
+   #TeachProfile {
+       border: 2px solid none;
+       height: 150px;
+   }
+
+   #subNavT {
+       width: 250px;
+       background: #ffffff;
+       padding: 1rem;
+       border: 3px solid none;
+       border-radius: 6px;
+       display: flex;
+       flex-direction: column;
+       gap: 10px;
+       flex-shrink: 0;
+   }
+
+   #subNavT a {
+       display: flex;
+       margin: 8px 0;
+       padding: 0.5rem 1rem;
+       background: var(--primary-light);
+       color: white;
+       text-decoration: none;
+       border-radius: 4px;
+   }
+
+   #subNavT a:hover {
+       background: #549850;
+   }
+
+   #TeachProfile {
+       text-align: center;
+   }
+
+   #TeachProfile button {
+       margin-top: 10px;
+       padding: 5px;
+       border: 1px solid #ccc;
+       border-radius: 10px;
+       background-color: #5cb85f;
+       color: white;
+
+   }
+
+   #needLogin {
+       display: none;
+       text-align: center;
+   }
+
+   #loginT {
+       margin: 0 auto;
+       padding: 5px;
+       text-decoration: none;
+       border: 1px solid #ccc;
+       border-radius: 10px;
+       background-color: #5cb85f;
+       color: white;
+   }
+
+   #needLogin p {
+       margin-top: 16px;
+   }
+
+   /* 내 정보 수정*/
+   #info {
+       width: 480px;
+       height: 700px;
+       margin: 0 auto;
+       border: 1px solid #ccc;
+       background-color: #f5f3ed;
+       border-radius: 10px;
+       margin-top: 120px;
+   }
+
+   #form-all {
+       background-color: #f5f3ed;
+   }
+
+   #modifyInfobtn {
+       padding: 8px 16px 8px 16px;
+       background-color: #5cb85f;
+       border-radius: 10px;
+       border: 1px solid #ccc;
+       color: white;
+       margin: 50px 0 0 200px;
+   }
+
+   .field {
+       padding: 20px;
+       margin: 0 auto;
+   }
+
+   .field input {
+       padding: 10px;
+       border-radius: 10px;
+       width: 300px;
+   }
+
+   .field label {
+       padding: 10px;
+   }
+
+   .field button {
+       padding: 8px;
+       background-color: #5cb85f;
+       border-radius: 10px;
+       border: 1px solid #ccc;
+       color: white;
+
+   }
+
+   .help {
+       display: none;
+       color: red;
+   }
+
+   /* 오른쪽 컨텐츠 */
+   /* 버튼 스타일 */
+   .cta {
+       border-radius: 12px;
+       border: none;
+       background: var(--primary, #4caf50);
+       color: white;
+       font-weight: 700;
+       cursor: pointer;
+   }
+
+   .cta:hover {
+       background: var(--primary-600, #45a049);
+   }
+
+   .uploadMedia-card {
+
+       padding: 10px;
+       margin-bottom: 10px;
+       display: flex;
+       gap: 16px;
+       justify-content: flex-start;
+       align-items: center;
+
+   }
+
+   .uploadMedia-action {
+       display: flex;
+       align-items: center;
+       gap: 8px;
+       margin-bottom: 0;
+   }
+
+   .upload-btn {
+       display: inline-block;
+       padding: 8px 16px;
+       background: #ffffff;
+       color: #000000;
+       font-weight: 400;
+       font-size: 14px;
+       border-radius: 8px;
+       cursor: pointer;
+       border: 1px solid #ccc;
+       transition: all 0.3s;
+   }
+
+   .upload-btn:hover {
+       background: #f0f0f0;
+   }
+
+   .uploadBtns button {
+       width: 100px;
+       height: 50px;
+       background: var(--primary-light);
+       color: white;
+       border: none;
+       padding: 10px 16px;
+       border-radius: 8px;
+       cursor: pointer;
+       font-weight: 550;
+       font-size: 15px;
+       transition: all 0.2s ease;
+   }
+
+   .uploadBtns {
+       display: flex;
+       justify-content: flex-end;
+       gap: 10px;
+       margin-top: 16px;
+   }
+
+
+   /*uploadQuiz*/
+   .uploadQuiz-container {
+       flex: 1;
+       border: 1px solid #ccc;
+       width: 1100px;
+       padding: 24px;
+       box-sizing: border-box;
+       background: #fff;
+       border-radius: 16px;
+       margin: 0 auto;
+       margin-top: 50px;
+   }
+
+   .uploadQuiz-container p input[type="text"][readonly] {
+       width: 80%;
+       padding: 10px 14px;
+       border: 1px solid #ccc;
+       border-radius: 20px;
+       font-size: 16px;
+       outline: none;
+       transition: 0.3s;
+       background-color: #f0f0f0;
+       margin-top: 20px;
+       margin-left: 12px;
+   }
+
+   /*choiceEdit*/
+   #choiceEditBox {
+       border: 1px solid none;
+       margin: 0 auto;
+       background-color: white;
+       width: 960px;
+       border-radius: 10px 10px 0 0;
+       margin-top: 100px;
+   }
+
+   #choiceEditBox ul {
+       list-style: none;
+       font-weight: bold;
+       padding: 20px 0px 20px 20px;
+   }
+
+   #choiceEditBox ul li a {
+       text-decoration: none;
+       width: 900px;
+       padding: 10px 430px 10px 425px;
+       color: white;
+   }
+
+   #choiceEditBox ul li {
+       padding: 12px 0 12px 10px;
+       width: 900px;
+       background-color: #5cb85f;
+       border-radius: 10px;
+       margin-bottom: 10px;
+   }
+
+   #choiceEditBox ul li :hover {
+       background-color: #ccc;
+       border-radius: 10px;
+   }
+
+   #choiceEditBox ul li a:hover {
+       background-color: #549850;
+       color: white;
+       width: 900px;
+   }
+
+   /*editQuiz*/
+   .editQuiz-container {
+       flex: 1;
+       padding: 24px;
+       box-sizing: border-box;
+       background: #fff;
+       border-radius: 16px;
+   }
+
+   .quiz-card-header {
+       display: flex;
+       justify-content: space-between;
+       align-items: center;
+   }
+
+   /* 기본은 체크박스 숨김 */
+   .quiz-delete-checkbox {
+       display: none;
+   }
+
+   /* delete-mode 클래스가 붙었을 때만 보이게 */
+   .delete-mode .quiz-delete-checkbox {
+       display: inline-block;
+   }
+
+   .editQuiz-container p input[type="text"][readonly] {
+       width: 80%;
+       padding: 10px 14px;
+       border: 1px solid #ccc;
+       border-radius: 20px;
+       font-size: 16px;
+       outline: none;
+       transition: 0.3s;
+       background-color: #f0f0f0;
+   }
+
+   .quiz-card {
+       border: 1px solid #ddd;
+       border-radius: 16px;
+       padding: 1rem;
+       margin-bottom: 1.5rem;
+       background: #fafafa;
+       font-size: 16px;
+
+   }
+
+   .quiz-card h3 {
+       margin-top: 0;
+       color: #333;
+   }
+
+
+   .quizCard-area {
+       max-height: 100px;
+       resize: none;
+       margin: auto;
+       width: 97%;
+       padding: 10px;
+       margin-top: 8px;
+       border: 1px solid #ccc;
+       border-radius: 16px;
+       font-size: 16px;
+       margin-right: 10px;
+   }
+
+   .quiz-card input[type="text"] {
+       width: 50%;
+       padding: 10px;
+       margin-top: 8px;
+       border: 1px solid #ccc;
+       border-radius: 16px;
+       font-size: 16px;
+   }
+
+   .quiz-card textarea::placeholder,
+   .quiz-card input[type="text"]::placeholder {
+       font-size: 16px;
+       color: #999;
+   }
+
+
+   /*QuizMng*/
+
+   .classbox {
+       display: flex;
+       margin: 0 auto;
+       margin-top: 180px;
+       margin-bottom: 100px;
+       padding: 24px;
+       border: 1px solid none;
+       box-sizing: border-box;
+       background: #fff;
+       border-radius: 16px;
+       width: 960px;
+   }
+
+   .QuizMbtn {
+       text-decoration: none;
+       margin-left: 20%;
+       background-color: #5cb85f;
+       color: white;
+       padding: 8px;
+       border-radius: 10px;
+       font-size: 1.2em;
+   }
+
+   .QuizMbtn :hover {
+       color: #549850;
+   }
+
+   .classbox-title {
+       border: 1px solid none;
+       margin: 0 auto;
+       padding: 24px;
+       background-color: var(--primary-dark);
+       margin-bottom: 15px;
+       border-radius: 10px;
+   }
+
+   .classbox-title a {
+       text-decoration: none;
+       color: white;
+       font-weight: bold;
+   }
+
+   /* 드롭다운 컨테이너 */
+   .dropdown {
+       position: relative;
+   }
+
+   .dropbtn {
+       display: inline-block;
+       background-color: white;
+       color: #4caf50;
+       text-align: center;
+       padding: 14px 16px;
+       text-decoration: none;
+       cursor: pointer;
+       position: absolute;
+       right: 10px;
+       top: -37px;
+       border-radius: 10px;
+       border: 1px solid #ccc;
+   }
+
+   /* .open 클래스가 붙었을 때만 메뉴 열기 */
+   .dropdown.open .studentM {
+       display: table;
+       /* flex 대신 table로 동작 */
+   }
+
+   /*choiceEditQuiz*/
+   .board-container {
+       border: 1px solid none;
+       width: 1300px;
+       margin: 0 auto;
+       margin-top: 50px;
+       margin-left: 300px;
+   }
+
+   #editQh2 {
+       margin: 10px 0 15px 70px;
+   }
+
+   /* 퀴즈 수정 테이블 */
+   table {
+       width: 90%;
+       margin: auto;
+       border-collapse: collapse;
+       background: white;
+       border-radius: 10px 10px 0 0;
+   }
+
+   th,
+   td {
+       padding: 15px;
+       border-bottom: 1px solid #ddd;
+       text-align: center;
+   }
+
+   th {
+       font-weight: bold;
+       border-bottom: 2px solid black;
+   }
+
+   .editDelete {
+       display: flex;
+       width: 100px;
+   }
+
+   tr:hover {
+       background: #f1f1f1;
+   }
+
+   /* 제목 링크 스타일 */
+   .title-link {
+       text-decoration: none;
+       color: black;
+       cursor: pointer;
+   }
+
+   .title-link:hover {
+       color: #2b6f2b;
+   }
+
+   /* 게시판 테이블 칸 너비 조정 */
+   #noticeTable th:nth-child(1),
+   /* 분류 */
+   #noticeTable td:nth-child(1) {
+       width: 10%;
+   }
+
+   #noticeTable th:nth-child(2),
+   /* 제목 */
+   #noticeTable td:nth-child(2) {
+       width: 25%;
+       text-align: center;
+       padding-left: 12px;
+   }
+
+   #noticeTable th:nth-child(3),
+   /* 작성자 */
+   #noticeTable td:nth-child(3) {
+       width: 20%;
+       text-align: center;
+   }
+
+   #noticeTable th:nth-child(4),
+   /* 등록일 */
+   #noticeTable td:nth-child(4) {
+       width: 15%;
+       text-align: center;
+   }
+
+   #noticeTable th:nth-child(5),
+   #noticeTable td:nth-child(5) {
+       width: 100%;
+       margin-left: 95px;
+   }
+
+   /* 푸터 */
+   footer {
+       background: #2d3436;
+       color: white;
+       padding: 3rem 2rem 2rem;
+   }
+
+   .footer-container {
+       max-width: 1200px;
+       margin: 0 auto;
+       display: grid;
+       grid-template-columns: 2fr 1fr 1fr 1fr;
+       gap: 2rem;
+       margin-bottom: 0.9rem;
+   }
+
+   .footer-about h3 {
+       font-size: 1.3rem;
+       margin-bottom: 1rem;
+       color: var(--primary);
+   }
+
+   .footer-links h4 {
+       margin-bottom: 1rem;
+       font-weight: 600;
+   }
+
+   .footer-links ul {
+       list-style: none;
+   }
+
+   .footer-links li {
+       margin-bottom: 0.5rem;
+   }
+
+   .footer-links a {
+       color: rgba(255, 255, 255, 0.7);
+       text-decoration: none;
+       transition: color 0.3s;
+   }
+
+   .footer-links a:hover {
+       color: var(--primary);
+   }
+
+   .footer-bottom {
+       border-top: 1px solid rgba(255, 255, 255, 0.1);
+       padding-top: 1.2rem;
+       text-align: center;
+       color: rgba(255, 255, 255, 0.6);
+       font-size: 0.9rem;
+   }
+
+   .service-list {
+       display: flex;
+       flex-wrap: wrap;
+       max-width: 180px;
+       /* 필요에 따라 조정 */
+       gap: 0.3rem 1.5rem;
+       /* 행/열 간격, 디자인에 맞게 조정 가능 */
+       list-style: none;
+       padding: 0;
+   }
+
+   .service-list li {
+       width: 33.3%;
+       /* 한 줄에 2개(총 2줄, 마지막만 1칸) */
+       margin-bottom: 0.5rem;
+   }
+
+   /* 반응형 */
+   @media (max-width: 1024px) {
+       .header-container {
+           padding: 1rem 1.5rem;
+       }
+
+       .course-card {
+           min-width: calc(50% - 1rem);
+       }
+
+       .carousel-btn-prev {
+           left: 10px;
+       }
+
+       .carousel-btn-next {
+           right: 10px;
+       }
+
+       .footer-container {
+           grid-template-columns: 1fr 1fr;
+           gap: 2rem;
+       }
+   }
+
+   @media (max-width: 768px) {
+       nav {
+           display: none;
+       }
+
+       .hero {
+           padding: 4rem 1.5rem 3rem;
+       }
+
+       .course-card {
+           min-width: 100%;
+       }
+
+       .footer-container {
+           grid-template-columns: 1fr;
+       }
+
+       .path-steps {
+           grid-template-columns: 1fr;
+       }
+   }
+
+   /* 스크롤 애니메이션 */
+   @keyframes fadeInUp {
+       from {
+           opacity: 0;
+           transform: translateY(30px);
+       }
+
+       to {
+           opacity: 1;
+           transform: translateY(0);
+       }
+   }
+
+   .animate-on-scroll {
+       opacity: 0;
+       transform: translateY(30px);
+   }
+
+   .animate-on-scroll.animated {
+       animation: fadeInUp 0.6s ease forwards;
+   }
