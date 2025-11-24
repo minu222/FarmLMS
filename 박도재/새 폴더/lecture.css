@@ -1,0 +1,371 @@
+:root {
+    --primary: #5cb85f;
+    --primary-dark: #4caf50;
+    --primary-light: #70c373;
+    --gray: #757575;
+    --light-gray: #f5f3ed;
+    --cream: #fcfbf8;
+    --text: #212121;
+    --bg-white: #ffffff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: #f8f9fa;
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* ========== 페이지 헤더 ========== */
+.page-header {
+    background: white;
+    padding: 8rem 2rem 3rem;
+    margin-top: 60px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.page-header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.page-header h1 {
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+}
+
+.page-header p {
+    font-size: 1.1rem;
+    color: var(--gray);
+}
+
+/* ========== 필터 섹션 ========== */
+.filter-section {
+    background: white;
+    padding: 2rem 2rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.filter-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.search-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.search-box {
+    flex: 1;
+    min-width: 250px;
+    position: relative;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 0.8rem 1rem 0.8rem 3rem;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(92, 184, 95, 0.1);
+}
+
+.search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gray);
+}
+
+.filter-row {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.filter-tag {
+    padding: 0.6rem 1.2rem;
+    background: var(--light-gray);
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    color: var(--text);
+    border: none;
+}
+
+.filter-tag:hover {
+    background: var(--primary-light);
+    color: white;
+}
+
+.filter-tag.active {
+    background: var(--primary);
+    color: white;
+}
+
+.filter-divider {
+    width: 1px;
+    height: 24px;
+    background: #e9ecef;
+    margin: 0 0.5rem;
+}
+
+/* ========== 강의 목록 ========== */
+.courses-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+}
+
+.courses-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.courses-count {
+    font-size: 0.95rem;
+    color: var(--gray);
+}
+
+.sort-select {
+    padding: 0.6rem 1rem;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    background: white;
+    cursor: pointer;
+    color: var(--text);
+}
+
+.courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    min-height: 400px;
+}
+
+/* 강의 카드 컨테이너 */
+.course-card {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* 썸네일 영역 (비율 및 배경 설정) */
+.course-thumbnail {
+    width: 100%;
+    /* 썸네일 비율 유지 (예: 16:9) */
+    padding-bottom: 56.25%;
+    position: relative;
+    overflow: hidden;
+    background-color: #f0f0f0; /* 로딩 중 배경색 */
+    border-radius: 8px 8px 0 0;
+    display: flex; /* 이미지 없을 때 중앙 정렬을 위해 유지 */
+    align-items: center;
+    justify-content: center;
+}
+
+/* 이미지가 썸네일 영역 안에 완전히 들어오도록 조정 */
+.course-card .course-thumbnail img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* 💡 수정: 이미지가 잘리지 않고 영역 안에 맞게 축소/확대 */
+    object-fit: contain;
+    transition: transform 0.3s ease;
+    /* 이미지 자체의 배경을 흰색으로 설정하여 contain 시 배경이 비어 보이는 것을 방지 (선택 사항) */
+    background-color: var(--bg-white);
+}
+
+/* 강의 카드 링크 스타일 (밑줄 제거 및 색상 상속) */
+.course-card-link {
+    text-decoration: none; /* 링크 밑줄 제거 */
+    color: inherit; /* 부모 요소의 글자색을 상속받도록 설정 */
+    display: block; /* a 태그가 card 전체 영역을 감싸도록 설정 */
+}
+
+/* 호버 시 확대 효과 (선택 사항) */
+.course-card-link:hover .course-thumbnail img {
+    /* object-fit: contain 상태에서는 transform: scale(1.05)이 효과가 적거나 어색할 수 있음. */
+    /* 하지만 원본 스타일을 존중하여 유지합니다. */
+    transform: scale(1.05);
+}
+
+.course-info {
+    padding: 1.5rem;
+}
+
+.course-category {
+    font-size: 0.85rem;
+    color: var(--primary);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.course-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 0.8rem;
+}
+
+.course-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.4;
+    flex: 1;
+}
+
+.course-instructor-inline {
+    font-size: 0.8rem;
+    color: var(--gray);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.course-description {
+    font-size: 0.9rem;
+    color: #666; /* 설명 텍스트 색상 연하게 */
+    line-height: 1.4; /* 텍스트 줄 간격 설정 */
+    margin-top: 5px;
+    margin-bottom: 10px;
+
+    /* 텍스트가 넘칠 경우 최대 3줄로 제한하고 말줄임표 처리 */
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3; /* 최대 3줄로 제한 */
+    /* max-height: 4.2em; (line-clamp를 사용하면 max-height는 불필요) */
+}
+
+
+.course-meta-logged-out {
+    display: flex;
+    justify-content: flex-end; /* 버튼만 있으므로 오른쪽 정렬 */
+    align-items: center;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e9ecef;
+}
+
+/* 로그인 상태 관련 메타 정보 스타일 통합/정리 */
+.course-meta-logged-in {
+    padding-top: 1rem;
+    border-top: 1px solid #e9ecef;
+    text-align: right; /* 버튼을 오른쪽으로 배치 */
+}
+
+/* 수강 신청 버튼 */
+.subscribe-btn {
+    padding: 0.6rem 1.5rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.subscribe-btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+/* 💡 기존의 .course-progress, .progress-label, .progress-text,
+      .progress-percent, .progress-bar-container, .progress-bar-fill,
+      .course-price, .course-price-free 관련 스타일은 현재 HTML 구조에
+      사용되지 않으므로 제거했습니다. 필요하다면 다시 추가하세요. */
+
+
+/* ========== 페이지네이션 ========== */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 3rem;
+}
+
+.pagination-btn {
+    min-width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e9ecef;
+    background: white;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    color: var(--text);
+}
+
+.pagination-btn:hover:not(.active):not(.disabled) {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.pagination-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.pagination-btn.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.pagination-ellipsis {
+    min-width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray);
+}
