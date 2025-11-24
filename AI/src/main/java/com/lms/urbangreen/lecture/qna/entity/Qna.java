@@ -1,16 +1,24 @@
 package com.lms.urbangreen.lecture.qna.entity;
 
-import lombok.Data;
+// Lombok Import
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Getter
+@Setter
 public class Qna {
-    private int qna_id;
-    private int lecture_id;
-    private int user_id;
-    private int p_qna_id;
+    private int qnaId;
+    private int lectureId;
+    private int userId;
+    private Integer pQnaId; // null 처리를 위해 Integer로 변경
     private String content;
-    private LocalDateTime created_at;
-
+    private LocalDateTime createdAt;
 }

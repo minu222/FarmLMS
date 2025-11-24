@@ -17,6 +17,7 @@ public class LectureListResponseDto {
     private String content;
     private String img_url;
     private String instructorNickname; // 강사 닉네임
+    private int sub_count;
 
     /**
      * Lecture 엔티티와 닉네임을 받아 DTO를 생성하는 생성자
@@ -30,5 +31,6 @@ public class LectureListResponseDto {
         this.content = lecture.getContent();
         this.img_url = lecture.getImg_url();
         this.instructorNickname = instructorNickname;
+        this.sub_count = lecture.getSubs_count();
     }
 }

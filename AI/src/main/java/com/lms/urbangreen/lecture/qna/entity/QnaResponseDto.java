@@ -1,30 +1,27 @@
 package com.lms.urbangreen.lecture.qna.entity;
 
-import com.lms.urbangreen.lecture.qna.entity.Qna;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * QnA 응답 구조 (질문 + 답변 리스트 + 작성자 닉네임)
- */
 @Data
 @Builder
 public class QnaResponseDto {
     private int qnaId;
     private int userId;
-    private String authorNickname; // 작성자 닉네임
+    private String authorNickname;
     private String content;
     private LocalDateTime createdAt;
 
-    // 답변 리스트 (질문일 경우에만 사용)
-    private List<QnaResponseDto> replies;
-
-    // 이 QnA가 현재 로그인한 유저의 것인지 판별하는 필드 (프론트엔드 수정/삭제 버튼 노출용)
+    // JSON으로 나갈 때 이름을 "isCurrentUserAuthor"로 유지하라는 명령
+    @JsonProperty("isCurrentUserAuthor")
     private boolean isCurrentUserAuthor;
 
-    // 이 QnA가 강사인지 판별하는 필드 (프론트엔드 답글 입력창 노출용)
+    @JsonProperty("isAuthorInstructor")
     private boolean isAuthorInstructor;
+
+    private List<QnaResponseDto> replies;
 }

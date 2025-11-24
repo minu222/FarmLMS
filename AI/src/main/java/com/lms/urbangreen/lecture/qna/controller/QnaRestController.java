@@ -1,9 +1,9 @@
 package com.lms.urbangreen.lecture.qna.controller;
 
-import com.lms.urbangreen.lecture.entity.LectureDetailResponseDto;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lms.urbangreen.lecture.qna.entity.QnaResponseDto;
 import com.lms.urbangreen.lecture.qna.service.QnaService;
-import com.lms.urbangreen.lecture.service.LectureService;
+import com.lms.urbangreen.user.entity.User;
 import jakarta.servlet.http.HttpSession;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import com.lms.urbangreen.user.entity.User;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/qna")
@@ -24,96 +21,122 @@ import java.util.Optional;
 public class QnaRestController {
 
     private final QnaService qnaService;
-    private final LectureService lectureService; // 강사 ID 확인을 위해 사용
 
+    // --- 요청 DTO 분리 ---
+
+    // 1. 질문 등록 및 수정용 DTO (pQnaId 필드 제외)
     @Data
-    public static class LoginUserDto {
-        private int userId;
-        private String nickname;
-        private String role; // 강사(INSTRUCTOR) 여부를 확인할 때 사용
+    public static class QuestionRequest {
+        private int lectureId;
+        private String content;
+        // userId는 세션에서 가져오므로 DTO에 포함하지 않습니다. (보안 및 데이터 정합성 강화)
     }
 
-    // 요청 DTO (간결화를 위해 내부 클래스로 정의)
+    // 2. 답변 등록용 DTO (pQnaId 포함)
     @Data
-    public static class QnaContentDto {
+    public static class ReplyRequest {
         private int lectureId;
+
+        @JsonProperty("pQnaId")
+        private Integer pQnaId; // null을 받을 수 있도록 Integer로 변경
+
         private String content;
     }
 
+    // 3. 수정 요청용 DTO (Content만 필요)
     @Data
-    public static class QnaReplyDto {
-        private int lectureId;
-        private int pQnaId; // 질문 ID
+    public static class UpdateRequest {
         private String content;
     }
+
+    // ----------------------
 
     /**
-     * GET: QnA 목록 조회 (페이징 포함)
-     * URL: /api/qna/list?lectureId=1&page=0
+     * GET: QnA 목록 조회
      */
     @GetMapping("/list")
     public ResponseEntity<Page<QnaResponseDto>> getQnaList(
             @RequestParam int lectureId,
-            @RequestParam(defaultValue = "0") int page) {
+            @RequestParam(defaultValue = "0") int page,
+            HttpSession session) {
 
-        // 현재 로그인된 사용자 ID를 시큐리티 등에서 가져와야 하지만, 임시로 하드코딩 (currentUserId = 1로 가정)
-        int currentUserId = 1;
+        User loginUser = (User) session.getAttribute("loginUser");
+        int currentUserId = (loginUser != null) ? loginUser.getUserId() : -1;
 
-        // 강사 ID 확인 (Optional)
-        Optional<LectureDetailResponseDto> lectureDtoOpt = lectureService.getLectureDetailDtoById(lectureId);
-        String instructorId = lectureDtoOpt.map(LectureDetailResponseDto::getInstructorNickname).orElse(null);
+        Pageable pageable = PageRequest.of(page, 2);
+        Page<QnaResponseDto> result = qnaService.getQnaPageByLectureId(lectureId, currentUserId, pageable);
 
-        Pageable pageable = PageRequest.of(page, 2); // 2개씩 페이징 (HTML의 ITEMS_PER_PAGE와 일치)
-        Page<QnaResponseDto> qnaPage = qnaService.getQnaPageByLectureId(lectureId, currentUserId, instructorId, pageable);
-
-        return ResponseEntity.ok(qnaPage);
+        return ResponseEntity.ok(result);
     }
 
     /**
-     * POST: 질문 등록
-     * URL: /api/qna/question
+     * POST: 질문 등록 (QuestionRequest 사용)
      */
     @PostMapping("/question")
-    public ResponseEntity<QnaResponseDto> createQuestion(@RequestBody QnaContentDto dto, HttpSession session) {
-
-        // 1. 세션에서 로그인 사용자 정보(loginUser)를 가져옵니다.
+    public ResponseEntity<Void> createQuestion(@RequestBody QuestionRequest request, HttpSession session) {
         User loginUser = (User) session.getAttribute("loginUser");
-
-        // 2. 로그인 여부 확인 및 userId 추출
-        if (loginUser == null || loginUser.getUserId() <= 0) {
-            // 로그인 상태가 아니면 401 Unauthorized 에러 반환 (또는 403 Forbidden)
+        if (loginUser == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.");
         }
 
-        int userId = loginUser.getUserId(); // 세션에서 안전하게 userId를 가져옵니다.
-
-        QnaResponseDto savedDto = qnaService.createQuestion(dto.getLectureId(), userId, dto.getContent());
-        return ResponseEntity.ok(savedDto);
+        // pQnaId가 없는 순수 질문 등록
+        qnaService.createQuestion(request.getLectureId(), loginUser.getUserId(), request.getContent());
+        return ResponseEntity.ok().build();
     }
 
     /**
-     * POST: 답변 등록
-     * URL: /api/qna/reply
+     * POST: 답변 등록 (강사 전용, ReplyRequest 사용)
      */
     @PostMapping("/reply")
-    public ResponseEntity<QnaResponseDto> createReply(@RequestBody QnaReplyDto dto, HttpSession session) {
-
-        // 1. 세션에서 로그인 사용자 정보(loginUser)를 가져옵니다.
-        LoginUserDto loginUser = (LoginUserDto) session.getAttribute("loginUser");
-
-        // 2. 로그인 여부 및 강사 권한 확인
-        if (loginUser == null || loginUser.getUserId() <= 0) {
+    public ResponseEntity<String> createReply(@RequestBody ReplyRequest request, HttpSession session) {
+        User loginUser = (User) session.getAttribute("loginUser");
+        if (loginUser == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.");
         }
 
-        // 강사 권한 확인
-        if (!"INSTRUCTOR".equals(loginUser.getRole())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "답변 권한이 없습니다. (강사만 가능)");
+        // 강사 권한 체크 (TEACHER)
+        boolean isInstructor = loginUser.getUserType() != null && "TEACHER".equalsIgnoreCase(String.valueOf(loginUser.getUserType()));
+
+        if (!isInstructor) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "강사만 답변을 등록할 수 있습니다.");
         }
 
-        int instructorId = loginUser.getUserId(); // 세션에서 안전하게 강사 ID를 가져옵니다.
+        // ReplyRequest의 pQnaId (부모 ID) 사용
+        qnaService.createReply(request.getLectureId(), loginUser.getUserId(), request.getPQnaId(), request.getContent());
+        return ResponseEntity.ok("{}");
+    }
 
-        QnaResponseDto savedDto = qnaService.createReply(dto.getLectureId(), instructorId, dto.getPQnaId(), dto.getContent());
-        return ResponseEntity.ok(savedDto);
+    /**
+     * PUT: 질문/답변 수정
+     */
+    @PutMapping("/{qnaId}")
+    public ResponseEntity<Void> updateQna(@PathVariable int qnaId, @RequestBody UpdateRequest request, HttpSession session) {
+        User loginUser = (User) session.getAttribute("loginUser");
+        if (loginUser == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.");
+        }
+        try {
+            qnaService.updateQna(qnaId, loginUser.getUserId(), request.getContent());
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+        }
+    }
+
+    /**
+     * DELETE: 질문/답변 삭제
+     */
+    @DeleteMapping("/{qnaId}")
+    public ResponseEntity<Void> deleteQna(@PathVariable int qnaId, HttpSession session) {
+        User loginUser = (User) session.getAttribute("loginUser");
+        if (loginUser == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.");
+        }
+        try {
+            qnaService.deleteQna(qnaId, loginUser.getUserId());
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+        }
     }
 }

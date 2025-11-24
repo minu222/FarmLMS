@@ -5,6 +5,7 @@ import com.lms.urbangreen.lecture.entity.LectureListResponseDto;
 import com.lms.urbangreen.lecture.service.LectureService;
 import com.lms.urbangreen.lecture.video.entity.Video;
 import com.lms.urbangreen.lecture.video.service.VideoService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,10 +26,10 @@ public class LectureController {
 
     @GetMapping("/all")
     public String getLectureList(Model model) {
-        // ⭐ 수정: DTO 목록을 가져오는 새로운 서비스 메서드를 호출합니다.
+        //DTO 목록을 가져오는 새로운 서비스 메서드를 호출합니다.
         List<LectureListResponseDto> lectureDtoList = lectureService.getAllLectureDtos();
 
-        // 2. 이 데이터를 'lectures'라는 이름으로 Thymeleaf 템플릿에 전달합니다.
+        // 이 데이터를 'lectures'라는 이름으로 Thymeleaf 템플릿에 전달합니다.
         model.addAttribute("lectures", lectureDtoList);
 
         return "lecture/lecture";
@@ -36,7 +37,14 @@ public class LectureController {
 
     // 강의 상세 페이지
     @GetMapping("/lectureDetail")
-    public String getLectureDetail(@RequestParam("lectureId") int lectureId, Model model) {
+    public String getLectureDetail(@RequestParam("lectureId") int lectureId, Model model, HttpSession session) {
+
+        // 로그인 여부 판단
+        if (session.getAttribute("loginUser") == null) {
+            // 세션에 'loginUser' 정보가 없으면, 로그인 페이지로 리다이렉트합니다.
+            return "redirect:/login";
+        }
+
         // DTO를 반환하는 서비스 메서드를 사용합니다.
         Optional<LectureDetailResponseDto> lectureDtoOpt = lectureService.getLectureDetailDtoById(lectureId);
 
