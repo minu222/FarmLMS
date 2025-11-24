@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지사항 - UrbanGreen</title>
+    <link th:href="@{/css/admin/addNotice.css}" rel="stylesheet">
+    <link th:href="@{/css/fragments/header.css}" rel="stylesheet">
+    <link th:href="@{/css/fragments/footerShort.css}" rel="stylesheet">
+</head>
+
+<body>
+<!-- 헤더 -->
+<header th:replace="~{fragments/header :: header}"></header>
+
+<!-- 메인 컨테이너 -->
+<main class="main-container">
+    <!-- 페이지 헤더 -->
+    <div class="page-header">
+        <h1>공지사항 작성</h1>
+        <p>공지할 내용을 작성해주세요</p>
+    </div>
+
+    <!-- 작성 폼 -->
+    <form class="write-form"
+          id="writeForm"
+          th:action="@{/admin/notices}"
+          method="post"
+          enctype="multipart/form-data">
+
+        <!-- 카테고리 -->
+        <div class="form-group">
+            <label for="category">카테고리</label>
+            <select id="category" name="category" required>
+                <option value="">선택하세요</option>
+                <option value="fixedNotice">고정 공지</option>
+                <option value="freeNotice">자유 공지</option>
+            </select>
+        </div>
+
+        <!-- 제목 -->
+        <div class="form-group">
+            <label for="title">제목</label>
+            <input type="text"
+                   id="title"
+                   name="title"
+                   placeholder="제목을 입력하세요"
+                   required
+                   maxlength="100">
+        </div>
+
+        <!-- 내용 -->
+        <div class="form-group">
+            <label for="content">내용</label>
+            <textarea id="content"
+                      name="content"
+                      placeholder="내용을 입력하세요"
+                      required></textarea>
+        </div>
+
+        <!-- 파일 첨부 -->
+        <div class="form-group">
+            <label>파일 첨부</label>
+            <div class="file-upload-wrapper">
+                <label for="fileUpload" class="file-upload-btn">📎 파일 선택</label>
+                <input type="file"
+                       id="fileUpload"
+                       name="files"
+                       class="file-upload-input"
+                       multiple
+                       accept="image/*,.pdf,.doc,.docx">
+                <div class="file-list" id="fileList" aria-live="polite"></div>
+            </div>
+        </div>
+
+        <!-- 버튼 -->
+        <div class="button-group">
+            <a th:href="@{/admin/notices}" class="btn btn-secondary">취소</a>
+            <button type="submit" class="btn btn-primary">등록</button>
+        </div>
+    </form>
+</main>
+
+<!-- 푸터 -->
+<footer th:replace="~{fragments/footerShort :: footerShort}"></footer>
+
+<script th:inline="javascript">
+    // ===== 업로드 제한 설정 =====
+    const MAX_FILES = 10;     // 최대 업로드 개수
+    const MAX_TOTAL_MB = 50;  // 총 업로드 용량 제한
+    const MAX_FILE_MB = 10;   // 개별 파일 제한
+
+    // ===== 상태 & 엘리먼트 =====
+    let filesState = []; // { id, file }
+    let seq = 0;         // 고유 id 발급용
+
+    const fileInput = document.getElementById('fileUpload');
+    const fileListEl = document.getElementById('fileList');
+
+    // ===== 유틸 =====
+    function formatKB(bytes) {
+        return (bytes / 1024).toFixed(1) + 'KB';
+    }
+    function totalBytes() {
+        return filesState.reduce((sum, f) => sum + f.file.size, 0);
+    }
+
+    // ===== 파일 목록 렌더링 =====
+    function renderFileList() {
+        fileListEl.innerHTML = '';
+        const frag = document.createDocumentFragment();
+
+        filesState.forEach(({ id, file }) => {
+            const item = document.createElement('div');
+            item.className = 'file-item';
+            item.dataset.id = id;
+
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'file-name';
+            nameSpan.textContent = `📄 ${file.name} (${formatKB(file.size)})`;
+
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'file-remove';
+            removeBtn.dataset.id = id;
+            removeBtn.setAttribute('aria-label', `${file.name} 삭제`);
+            removeBtn.textContent = '✕';
+
+            item.appendChild(nameSpan);
+            item.appendChild(removeBtn);
+            frag.appendChild(item);
+        });
+
+        fileListEl.appendChild(frag);
+    }
+
+    // ===== 업로드 핸들러 =====
+    fileInput.addEventListener('change', (e) => {
+        const incoming = Array.from(e.target.files);
+
+        // 1) 개별 파일 크기 제한
+        const tooBig = incoming.find(f => f.size > MAX_FILE_MB * 1024 * 1024);
+        if (tooBig) {
+            alert(`${tooBig.name}은(는) ${MAX_FILE_MB}MB를 초과합니다.`);
+            e.target.value = '';
+            return;
+        }
+
+        // 2) 개수 제한
+        if (filesState.length + incoming.length > MAX_FILES) {
+            alert(`최대 ${MAX_FILES}개까지만 첨부할 수 있습니다.`);
+            e.target.value = '';
+            return;
+        }
+
+        // 3) 총 용량 제한
+        const incomingBytes = incoming.reduce((sum, f) => sum + f.size, 0);
+        if (totalBytes() + incomingBytes > MAX_TOTAL_MB * 1024 * 1024) {
+            alert(`총 첨부 용량은 ${MAX_TOTAL_MB}MB를 초과할 수 없습니다.`);
+            e.target.value = '';
+            return;
+        }
+
+        // 4) 상태에 추가(고유 id 부여)
+        incoming.forEach(file => {
+            filesState.push({ id: String(++seq), file });
+        });
+
+        renderFileList();
+        e.target.value = ''; // 동일 파일 다시 선택 가능하도록 초기화
+    });
+
+    // ===== 삭제(이벤트 위임) =====
+    fileListEl.addEventListener('click', (e) => {
+        const btn = e.target.closest('.file-remove');
+        if (!btn) return;
+        const id = btn.dataset.id;
+        filesState = filesState.filter(f => f.id !== id);
+        renderFileList();
+    });
+
+    // ===== 폼 제출 =====
+    document.getElementById('writeForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const category = document.getElementById('category').value.trim();
+        const title = document.getElementById('title').value.trim();
+        const content = document.getElementById('content').value.trim();
+
+        if (!category || !title || !content) {
+            alert('모든 필수 항목을 입력해주세요.');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('category', category);
+        formData.append('title', title);
+        formData.append('content', content);
+        filesState.forEach(({ file }) => formData.append('files', file));
+
+        const submitUrl = /*[[@{/admin/notices}]]*/ '/admin/notices';
+
+        fetch(submitUrl, {
+            method: 'POST',
+            body: formData
+        })
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('등록에 실패했습니다.');
+                }
+                return res.text();
+            })
+            .then(() => {
+                alert('게시글이 작성되었습니다!');
+                window.location.href = /*[[@{/admin/notices}]]*/ '/admin/notices';
+            })
+            .catch(err => {
+                console.error(err);
+                alert('오류가 발생했습니다: ' + err.message);
+            });
+    });
+</script>
+</body>
+
+</html>
