@@ -733,3 +733,35 @@ function deleteQna(qnaId) {
             });
     }
 }
+
+// --- 퀴즈 풀기 (100% 진도율 체크) ---
+function startQuiz() {
+    // 1. 현재 비디오 데이터 및 유효성 검사
+    if (!currentVideoData || !currentVideoData.video_time || currentVideoData.video_time <= 0) {
+        alert("현재 강의 정보가 없거나 비디오 길이가 유효하지 않아 퀴즈를 시작할 수 없습니다.");
+        return;
+    }
+
+    const totalSec = currentVideoData.video_time;
+    // maxWatchedTime은 서버에서 가져온 user_duration_sec을 기준으로 초기화되지만,
+    // 현재 페이지에서 시청한 최대 시간(maxWatchedTime)을 사용하여 정확도를 높입니다.
+    const userDurationSec = Math.max(currentVideoData.user_duration_sec || 0, maxWatchedTime);
+
+    // 2. 진도율 계산 (100%로 캡핑)
+    const progressPercentage = (totalSec > 0)
+        ? Math.min(100, Math.round(((userDurationSec / totalSec) * 100)))
+        : 0;
+
+    // 3. 100% 미만일 때 알림 표시
+    if (progressPercentage < 100) {
+        alert(` 퀴즈를 풀기 위해서는 현재 강의를 100% 시청해야 합니다. (현재 진도율: ${progressPercentage}%)`);
+        return;
+    }
+
+    // 4. 100% 시청 완료 시 퀴즈 시작 (실제 로직 구현 필요)
+    alert(" 강의를 100% 시청했습니다! 퀴즈 페이지로 이동합니다.");
+
+    // TODO: 아래 주석을 해제하고 실제 퀴즈 페이지로 이동하는 로직을 구현해야 합니다.
+    // const currentVideoId = currentVideoData.video_id;
+    // window.location.href = `/quiz/start?lectureId=${LECTURE_ID}&videoId=${currentVideoId}`;
+}
