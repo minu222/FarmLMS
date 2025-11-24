@@ -5,18 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>강의 상세 - UrbanGreen</title>
   <link rel="stylesheet" href="/css/lecture/lectureDetail.css">
+
+  <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
 </head>
 <body>
 <div th:replace="fragments/header :: header"></div>
 
 <main class="main-content">
   <input type="hidden" id="lectureId" th:value="${lecture.lecture_id}" />
-  <input type="hidden" id="currentUserId"
-         th:value="${session.loginUser != null ? session.loginUser.userId : -1}" />
+  <input type="hidden" id="currentUserId" th:value="${session.loginUser != null ? session.loginUser.userId : -1}" />
+
+  <input type="hidden" id="isInstructor"
+         th:value="${session.loginUser != null and #strings.equalsIgnoreCase(session.loginUser.userType, 'TEACHER') ? 'true' : 'false'}" />
   <div class="left-section">
     <section class="video-section">
       <div class="video-container">
-        <video controls class="course-video" id="videoPlayer">
+        <video controls
+               class="video-js vjs-default-skin course-video"
+               id="videoPlayer"
+               preload="none"
+               data-setup='{ "fluid": true, "playbackRates": [0.5, 1, 1.5, 2] }'>
           <th:block th:if="${currentVideo != null and currentVideo.video_url != null}">
             <source th:src="${currentVideo.video_url}" type="video/mp4">
           </th:block>
@@ -24,8 +32,7 @@
         </video>
 
         <th:block th:unless="${currentVideo != null and currentVideo.video_url != null}">
-          <div class="video-placeholder" id="initialPlaceholder">
-            <div class="video-placeholder-icon">🎬</div>
+          <div class="video-placeholder" id="initialPlaceholder" style="display: flex;"> <div class="video-placeholder-icon">🎬</div>
             <div class="video-placeholder-text">재생할 비디오가 없습니다.</div>
           </div>
         </th:block>
@@ -126,6 +133,7 @@
 
 <div th:replace="fragments/footer :: footer"></div>
 
+<script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
 <script src="/js/lecture/LectureDetailScript.js"></script>
 
 </body>

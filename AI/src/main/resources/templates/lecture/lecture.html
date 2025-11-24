@@ -58,6 +58,8 @@
     </div>
     <select class="sort-select" id="sortSelect">
       <option value="newest">최신순</option>
+      <option value="oldest">과거순</option>
+      <option value="popular">인기순</option>
     </select>
   </div>
 
@@ -86,9 +88,8 @@
   });
 
   // 로그인 상태 (true: 로그인, false: 비로그인)
-  const isLoggedIn = false; // true/false로 변경
+  const isLoggedIn = false;
 
-  // ⭐ 수정된 부분: lecture 객체에서 instructorNickname 필드를 사용합니다.
   const allCourses = [[${lectures}]].map(lecture => {
     // Thymeleaf 엔티티 객체를 프론트엔드 JS 객체 형식에 맞게 변환
     return {
@@ -98,14 +99,18 @@
       category: lecture.category,
       title: lecture.title,
       desc: lecture.content, // DTO의 content를 desc로 사용
-      instructor: lecture.instructorNickname, // ⭐ DTO의 닉네임 필드 사용
+      instructor: lecture.instructorNickname, // DTO의 닉네임 필드 사용
       img_url : lecture.img_url,
+      sub_count: lecture.sub_count,
+      // 최신순/오래된 순 정렬을 위해 생성 시간(혹은 ID)을 사용
+      creation_id: lecture.lecture_id
     };
   });
 
   const ITEMS_PER_PAGE = 6;
   let currentPage = 1;
   let filteredCourses = [...allCourses];
+  let currentSort = 'newest';
   let currentSub_category = 'all';
   let currentCategory = 'all';
   let currentSearch = '';
@@ -144,8 +149,11 @@
     filterAndRenderCourses();
   });
 
-  sortSelect.addEventListener('change', () => {
-    renderCourses();
+  // 정렬 선택 이벤트 리스너
+  sortSelect.addEventListener('change', (e) => {
+    currentSort = e.target.value; // 선택된 정렬 기준 업데이트
+    currentPage = 1;
+    filterAndRenderCourses(); // 필터링 후 정렬/렌더링 재실행
   });
 
   // 텍스트를 지정된 길이로 자르고 말줄임표를 추가하는 함수
@@ -160,6 +168,22 @@
     return cleanText;
   }
 
+  // 정렬 로직
+  function sortCourses(courses) {
+    if (currentSort === 'newest') {
+      // 최신순 (ID 내림차순)
+      return courses.sort((a, b) => b.creation_id - a.creation_id);
+    } else if (currentSort === 'oldest') {
+      // 오래된 순 (ID 오름차순, 최신순의 역순)
+      return courses.sort((a, b) => a.creation_id - b.creation_id);
+    } else if (currentSort === 'popular') {
+      // 인기순 (sub_count 내림차순)
+      // sub_count가 없거나 null일 경우 0으로 간주하고 비교합니다.
+      return courses.sort((a, b) => (b.sub_count || 0) - (a.sub_count || 0));
+    }
+    return courses; // 기본은 정렬하지 않음 (newest가 기본값)
+  }
+
   // 필터링 및 렌더링
   function filterAndRenderCourses() {
     filteredCourses = allCourses.filter(course => {
@@ -171,6 +195,9 @@
 
       return sub_categoryMatch && categoryMatch && searchMatch;
     });
+
+    // 필터링 후 정렬 적용
+    filteredCourses = sortCourses(filteredCourses);
 
     courseCount.textContent = filteredCourses.length;
     renderCourses();
@@ -187,7 +214,10 @@
     grid.innerHTML = coursesToShow.map(course => `
                 <a href="/lecture/lectureDetail?lectureId=${course.Lecture_id}" class="course-card-link">
                     <div class="course-card">
-                        <div class="course-thumbnail">${course.img_url}</div>
+                        <div class="course-thumbnail">
+                            <img src="${course.img_url || '/images/default-thumbnail.jpg'}"
+                                 alt="${course.title} 썸네일">
+                        </div>
                         <div class="course-info">
                             <div class="course-category">${getCategoryText(course.category)} • ${getSub_categoryText(course.sub_category)}</div>
                             <div class="course-title-row">
