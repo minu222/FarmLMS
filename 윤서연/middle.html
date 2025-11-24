@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>프론트엔드 강의 리스트</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: "Noto Sans KR", sans-serif;
+        background: #fff;
+        color: #333;
+      }
+      .wrapper {
+        width: 90%;
+        max-width: 1200px;
+        margin: auto;
+        padding: 30px 0;
+      }
+      .search-section {
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+      }
+      .search-section input {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+      }
+      .category-buttons {
+        margin: 20px 0;
+      }
+      .category-buttons button {
+        margin-right: 10px;
+        padding: 8px 16px;
+        border-radius: 20px;
+        border: 1px solid #ccc;
+        background: #f5f5f5;
+        cursor: pointer;
+      }
+      .category-buttons button.active {
+        background: #333;
+        color: white;
+      }
+      .sort-section select {
+        padding: 7px;
+        margin-bottom: 20px;
+      }
+      .card-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 28px;
+      }
+      .card {
+        background: #fafafa;
+        border-radius: 10px;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        position: relative;
+        transition: 0.25s;
+      }
+      .card:hover {
+        transform: translateY(-4px);
+      }
+      .thumb {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+      }
+      .favorite-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        font-size: 22px;
+        cursor: pointer;
+        color: #ccc;
+      }
+      .favorite-btn.active {
+        color: gold;
+      }
+      .card-body {
+        padding: 14px 16px;
+      }
+      .card-body h3 {
+        margin: 0 0 6px 0;
+        font-size: 18px;
+      }
+      .instructor {
+        font-size: 14px;
+        color: #777;
+        margin-bottom: 10px;
+      }
+      .desc {
+        font-size: 14px;
+        margin-bottom: 12px;
+      }
+      .price-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .subscribe {
+        padding: 6px 12px;
+        background: #2ecc71;
+        border: none;
+        border-radius: 6px;
+        color: white;
+        cursor: pointer;
+      }
+      .pagination {
+        text-align: center;
+        margin: 28px 0;
+      }
+      .pagination span {
+        margin: 0 4px;
+        padding: 7px 12px;
+        cursor: pointer;
+      }
+      .pagination .active-page {
+        background: #333;
+        color: white;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="search-section">
+        <label>검색</label>
+        <input
+          id="searchInput"
+          type="text"
+          placeholder="원하는 강의를 검색하세요"
+        />
+      </div>
+
+      <div class="category-buttons">
+        <button class="category active" data-filter="전체">전체</button>
+        <button class="category" data-filter="초급">초급</button>
+        <button class="category" data-filter="중급">중급</button>
+        <button class="category" data-filter="고급">고급</button>
+      </div>
+
+      <div class="sort-section">
+        <label>정렬: </label>
+        <select id="sortSelect">
+          <option value="latest">최신순</option>
+          <option value="priceLow">가격 낮은순</option>
+          <option value="priceHigh">가격 높은순</option>
+          <option value="titleAsc">제목 가나다순</option>
+          <option value="popular">인기순</option>
+        </select>
+      </div>
+
+      <div id="cardGrid" class="card-grid"></div>
+      <div id="pagination" class="pagination"></div>
+    </div>
+
+    <script>
+      // ---------------------------
+      // 1) 강의 60개 생성 + 썸네일 자동 삽입
+      // ---------------------------
+      const lectures = [];
+      const topics = [
+        "React",
+        "JavaScript",
+        "HTML/CSS",
+        "TypeScript",
+        "Next.js",
+        "UI/UX",
+        "Frontend Architecture",
+        "Styled-Components",
+        "Tailwind CSS",
+        "React Hooks",
+      ];
+      const levels = ["초급", "중급", "고급"];
+
+      function randomDesc(topic) {
+        const t = [
+          `실무 중심으로 **${topic}**를 빠르게 마스터합니다.`,
+          `프로젝트 기반으로 **${topic}** 핵심 기능을 익혀봅니다.`,
+          `${topic} 다양한 실전 예제를 직접 구현합니다.`,
+          `최신 트렌드에 맞춘 **${topic}** 개발 패턴을 학습합니다.`,
+          `서비스 개발에 필요한 **${topic}** 실무 스킬을 익힙니다.`,
+        ];
+        return t[Math.floor(Math.random() * t.length)];
+      }
+
+      for (let i = 1; i <= 60; i++) {
+        const topic = topics[i % topics.length];
+        const level = levels[i % 3];
+        const price = 20000 + (i % 6) * 5000;
+
+        // --- 썸네일 경로 자동 지정 ---
+        const ext = i <= 9 ? "jpg" : "PNG";
+        const thumbPath = `./썸네일사진/${i}.${ext}`;
+
+        lectures.push({
+          id: i,
+          title: `${topic} 완벽 마스터 ${i}`,
+          instructor: `${topic} 전문가 ${i}`,
+          desc: randomDesc(topic),
+          price,
+          priceLabel: `${price.toLocaleString()}원 / 월`,
+          level,
+          popularity: Math.floor(Math.random() * 1000),
+          favorite: false,
+          thumb: thumbPath,
+        });
+      }
+
+      // ---------------------------
+      // 2) 상태값 + 렌더링
+      // ---------------------------
+      let keyword = "",
+        currentLevel = "전체",
+        currentPage = 1,
+        perPage = 6;
+
+      function filterData() {
+        return lectures.filter((l) => {
+          const text = (l.title + l.instructor + l.desc).toLowerCase();
+          const matchSearch = text.includes(keyword);
+          const matchLevel =
+            currentLevel === "전체" || l.level === currentLevel;
+          return matchSearch && matchLevel;
+        });
+      }
+
+      function sortData(list) {
+        const type = document.getElementById("sortSelect").value;
+        switch (type) {
+          case "priceLow":
+            return [...list].sort((a, b) => a.price - b.price);
+          case "priceHigh":
+            return [...list].sort((a, b) => b.price - a.price);
+          case "titleAsc":
+            return [...list].sort((a, b) => a.title.localeCompare(b.title));
+          case "popular":
+            return [...list].sort((a, b) => b.popularity - a.popularity);
+          default:
+            return [...list].sort((a, b) => b.id - a.id);
+        }
+      }
+
+      function renderCards() {
+        let list = sortData(filterData());
+        const totalPages = Math.ceil(list.length / perPage);
+        if (currentPage > totalPages) currentPage = 1;
+
+        const start = (currentPage - 1) * perPage;
+        const pageList = list.slice(start, start + perPage);
+
+        document.getElementById("cardGrid").innerHTML = pageList
+          .map(
+            (l) => `
+    <div class="card">
+      <img class="thumb" src="${l.thumb}">
+      <div class="favorite-btn ${l.favorite ? "active" : ""}" data-id="${
+              l.id
+            }">★</div>
+      <div class="card-body">
+        <h3>${l.title}</h3>
+        <p class="instructor">${l.instructor}</p>
+        <p class="desc">${l.desc}</p>
+        <div class="price-row">
+          <span class="price">${l.priceLabel}</span>
+          <button class="subscribe">구독하기</button>
+        </div>
+      </div>
+    </div>
+  `
+          )
+          .join("");
+
+        bindFavorites();
+        renderPagination(list.length);
+      }
+
+      function bindFavorites() {
+        document.querySelectorAll(".favorite-btn").forEach((btn) => {
+          btn.onclick = () => {
+            const id = Number(btn.dataset.id);
+            const item = lectures.find((l) => l.id === id);
+            item.favorite = !item.favorite;
+            renderCards();
+          };
+        });
+      }
+
+      function renderPagination(total) {
+        const pages = Math.ceil(total / perPage);
+        let html = "";
+        for (let i = 1; i <= pages; i++) {
+          html += `<span class="${
+            i === currentPage ? "active-page" : ""
+          }" data-page="${i}">${i}</span>`;
+        }
+        document.getElementById("pagination").innerHTML = html;
+
+        document.querySelectorAll("#pagination span").forEach((p) => {
+          p.onclick = () => {
+            currentPage = Number(p.dataset.page);
+            renderCards();
+          };
+        });
+      }
+
+      document.getElementById("searchInput").oninput = (e) => {
+        keyword = e.target.value.toLowerCase();
+        currentPage = 1;
+        renderCards();
+      };
+
+      document.querySelectorAll(".category").forEach((btn) => {
+        btn.onclick = () => {
+          document
+            .querySelectorAll(".category")
+            .forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          currentLevel = btn.dataset.filter;
+          currentPage = 1;
+          renderCards();
+        };
+      });
+
+      document.getElementById("sortSelect").onchange = () => {
+        currentPage = 1;
+        renderCards();
+      };
+
+      renderCards();
+    </script>
+  </body>
+</html>
