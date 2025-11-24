@@ -33,23 +33,38 @@ CREATE TABLE IF NOT EXISTS `all_users` (
   PRIMARY KEY (`user_id`) USING BTREE,
   UNIQUE KEY `id` (`id`),
   UNIQUE KEY `nickName` (`nickname`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='모든 사용자(관리자, 강사, 일반유저)';
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='모든 사용자(관리자, 강사, 일반유저)';
 
--- 테이블 데이터 farm.all_users:~13 rows (대략적) 내보내기
+-- 테이블 데이터 farm.all_users:~8 rows (대략적) 내보내기
 INSERT INTO `all_users` (`user_id`, `user_type`, `id`, `password`, `name`, `nickname`, `birth`, `email`, `intro`) VALUES
-	(1, 'admin', 'admin', '1111', '관리자', '관리자', '2025-11-13', 'admin@admin.com', NULL),
-	(11, 'student', 'hello', 'dlalsdn123', '이민우', '킹', '2025-11-04', 'w@naver.com', '반갑다 하하하'),
-	(12, 'student', 'minu123', 'dlalsdn1', '이민구', '캉쿠쿠', '2025-10-27', 'd@nave.rocm', NULL),
-	(13, 'student', 'hihi', 'dlalsdn1', '이민', 'dlalsdn', '2025-10-27', 'd@naver.com', NULL),
-	(14, 'teacher', 'teacher', '1234', '강삼', '강사1', '2025-11-13', 'rkddh@a.d', NULL),
-	(16, 'student', 'qkrehwo123', 'pdj868312', '박도재', '박도토리', '1996-12-02', 'qkrehwo123@naver.com', NULL),
-	(17, 'student', '1234', '1234', 'test', '학생1', '2025-11-14', 'asd@123d.d', NULL),
-	(18, 'student', 'mwl21', 'dlalsdn1', '이왕우후', 'minwoo', '2025-10-26', 'dd@naver.com', NULL),
-	(19, 'student', 'ohsunjin', 'dlalsdn1', '강백호', 'zzef', '2025-10-30', 'mw@naver.com', NULL),
-	(20, 'student', 'tiger', 'dlalsdn1', '김호랑', '어흥', '2025-10-30', 'mw@naver.com', NULL),
-	(21, 'student', 'hahahaz', 'dlalsdn1', '이장쿤', '오오옼', '2025-10-30', 'sdci@NAVE.cim', NULL),
-	(22, 'student', 'hello123', 'dlalsdn1', 'fsda', '니카', '2025-10-27', 'dd@ad.com', NULL),
-	(23, 'student', 'kingz', 'dlalsdn1', 'dd', 'adminz', '2025-10-30', 'dd@naver.com', NULL);
+	(1, 'admin', 'admin', '1111', '관리자', '관리자', '2025-11-13', 'admin@admin.com', '나야 관리자.'),
+	(2, 'teacher', '1234', '1234', '강사', '강사13', '2025-11-18', 'asd@asd.asd', '테스트용 강사'),
+	(16, 'student', 'qkrehwo123', '1234', '박도재', '박도토리', '1996-12-02', 'qkrehwo123@naver.com', '안녕하세요'),
+	(25, 'student', 'hello', 'dlalsdn1', '이민우', '이황우', '2025-11-10', 'mw@naver.com', '민우님이다 음하하'),
+	(27, 'student', 'qwer1234', 'rkdrjsgh1234', '강건호', '강건호아님', '2025-11-01', 'rkdrjsgh123@naver.com', NULL),
+	(28, 'teacher', 'dkssud123', 'dlalsdn1', '앜', '뭘봐', '2025-10-31', 'dd@naver.com', NULL),
+	(31, 'student', 'iloveu', 'dlalsdn1', '김사랑', '사랑한다', '2025-10-26', 'love@naver.com', NULL),
+	(34, 'student', '123', '123', '학생', '학생33', '2025-11-20', 'ㅁㄴㅇ@ㅁ.ㅇ', '테스트용 학생'),
+	(35, 'student', 'jmj10338', 'jmj691107', '정민주', '초보농부', '1998-10-07', 'jmj10338@gmail.com', NULL);
+
+-- 테이블 farm.attachment 구조 내보내기
+CREATE TABLE IF NOT EXISTS `attachment` (
+  `attachment_id` int NOT NULL AUTO_INCREMENT COMMENT '첨부파일 ID',
+  `reference_type` enum('lecture','notice') NOT NULL COMMENT '참조 테이블 타입',
+  `reference_id` int NOT NULL COMMENT '참조 테이블의 ID',
+  `user_id` int NOT NULL COMMENT 'admin, teacher ID',
+  `original_filename` varchar(255) NOT NULL COMMENT '원본 파일명',
+  `stored_filename` varchar(255) NOT NULL COMMENT '저장된 파일명',
+  `file_path` varchar(500) NOT NULL COMMENT '파일 저장 경로',
+  `file_size` bigint NOT NULL COMMENT '파일 크기(bytes)',
+  `uploaded_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '업로드 시간',
+  PRIMARY KEY (`attachment_id`),
+  KEY `idx_reference` (`reference_type`,`reference_id`),
+  KEY `FK_attachments_user` (`user_id`),
+  CONSTRAINT `FK_attachments_user` FOREIGN KEY (`user_id`) REFERENCES `all_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='통합 첨부파일 테이블';
+
+-- 테이블 데이터 farm.attachment:~0 rows (대략적) 내보내기
 
 -- 테이블 farm.chat_member 구조 내보내기
 CREATE TABLE IF NOT EXISTS `chat_member` (
@@ -61,13 +76,18 @@ CREATE TABLE IF NOT EXISTS `chat_member` (
   KEY `room_id` (`room_id`),
   KEY `FK_chat_member_all_users` (`user_id`),
   CONSTRAINT `FK_chat_member_all_users` FOREIGN KEY (`user_id`) REFERENCES `all_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_chat_room` FOREIGN KEY (`room_id`) REFERENCES `chat_room` (`room_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='채팅방 사용자';
+  CONSTRAINT `FK_chat_room` FOREIGN KEY (`room_id`) REFERENCES `chat_room` (`room_id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='채팅방 사용자';
 
--- 테이블 데이터 farm.chat_member:~1 rows (대략적) 내보내기
+-- 테이블 데이터 farm.chat_member:~2 rows (대략적) 내보내기
 INSERT INTO `chat_member` (`member_id`, `room_id`, `user_id`, `joined_at`) VALUES
-	(30, 4, 16, '2025-11-17 08:09:34'),
-	(34, 3, 16, '2025-11-17 08:26:19');
+	(51, 13, 16, '2025-11-18 05:16:15'),
+	(52, 13, 25, '2025-11-18 05:16:27'),
+	(53, 13, 1, '2025-11-18 05:51:07'),
+	(54, 13, 2, '2025-11-24 00:01:39'),
+	(55, 13, 35, '2025-11-24 00:39:15'),
+	(56, 14, 35, '2025-11-24 00:44:28'),
+	(57, 14, 16, '2025-11-24 02:18:32');
 
 -- 테이블 farm.chat_message 구조 내보내기
 CREATE TABLE IF NOT EXISTS `chat_message` (
@@ -79,14 +99,25 @@ CREATE TABLE IF NOT EXISTS `chat_message` (
   PRIMARY KEY (`message_id`),
   KEY `FK_chat_message_all_users` (`user_id`),
   KEY `idx_room_created` (`room_id`,`created_at`),
-  CONSTRAINT `FK__chat_room` FOREIGN KEY (`room_id`) REFERENCES `chat_room` (`room_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK__chat_room` FOREIGN KEY (`room_id`) REFERENCES `chat_room` (`room_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `FK_chat_message_all_users` FOREIGN KEY (`user_id`) REFERENCES `all_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='채팅 기록';
+) ENGINE=InnoDB AUTO_INCREMENT=139 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='채팅 기록';
 
--- 테이블 데이터 farm.chat_message:~2 rows (대략적) 내보내기
+-- 테이블 데이터 farm.chat_message:~8 rows (대략적) 내보내기
 INSERT INTO `chat_message` (`message_id`, `room_id`, `user_id`, `content`, `created_at`) VALUES
-	(45, 4, 16, 'ㅋㅋㅋ', '2025-11-17 08:17:10'),
-	(46, 4, 16, 'ㅋㅋㅋ', '2025-11-17 08:55:00');
+	(126, 13, 16, 'ㅎㅇㅎㅇ', '2025-11-18 05:16:30'),
+	(127, 13, 25, '안녕하세여 ㅎㅎ', '2025-11-18 05:16:35'),
+	(128, 13, 25, '안녕하세여', '2025-11-18 05:17:19'),
+	(129, 13, 25, 'ㅎㅎ', '2025-11-18 05:17:20'),
+	(130, 13, 25, '안녕하시냐구여', '2025-11-18 05:17:33'),
+	(131, 13, 25, '저기요', '2025-11-18 05:17:40'),
+	(132, 13, 25, '여보세여', '2025-11-18 05:17:42'),
+	(133, 13, 1, '나야', '2025-11-18 05:51:14'),
+	(134, 13, 1, '거기 잘 지내니', '2025-11-18 05:51:16'),
+	(135, 13, 16, '?', '2025-11-18 06:25:15'),
+	(136, 13, 35, '캡본 따려했는데... 방을 새로 파야겠군여', '2025-11-24 00:42:49'),
+	(137, 13, 35, 'ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ', '2025-11-24 00:42:50'),
+	(138, 14, 35, '안녕하세요. 이제 막 농업에 종사하게 된 초보 농부입니다.\n문외한이라 너무 걱정되는데 농사 선배님들의 농사팁 좀 많이 배워가겠습니다!', '2025-11-24 00:44:37');
 
 -- 테이블 farm.chat_room 구조 내보내기
 CREATE TABLE IF NOT EXISTS `chat_room` (
@@ -97,60 +128,47 @@ CREATE TABLE IF NOT EXISTS `chat_room` (
   PRIMARY KEY (`room_id`) USING BTREE,
   KEY `user_id` (`user_id`),
   CONSTRAINT `FK_chat_all_users` FOREIGN KEY (`user_id`) REFERENCES `all_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='실시간 채팅방';
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='실시간 채팅방';
 
--- 테이블 데이터 farm.chat_room:~4 rows (대략적) 내보내기
+-- 테이블 데이터 farm.chat_room:~1 rows (대략적) 내보내기
 INSERT INTO `chat_room` (`room_id`, `user_id`, `room_name`, `created_at`) VALUES
-	(1, 11, '나는천재', '2025-11-13 06:35:05'),
-	(2, 11, '반갑다 음하하', '2025-11-17 02:41:24'),
-	(3, 11, 'ㅋㅋ', '2025-11-17 02:49:35'),
-	(4, 11, '어머나', '2025-11-17 02:54:42');
+	(13, 16, '새로 만든 방', '2025-11-18 05:16:15'),
+	(14, 35, '문외한도 쉽게 이해하는 기초! 토양 관리부터 수확까지!', '2025-11-24 00:44:28');
 
--- 테이블 farm.game_score 구조 내보내기
-CREATE TABLE IF NOT EXISTS `game_score` (
-  `game_score_id` int NOT NULL AUTO_INCREMENT COMMENT '게임 스코어 ID',
-  `user_id` int DEFAULT NULL COMMENT 'student ID',
-  `session_id` int DEFAULT NULL COMMENT '게임 세션 ID',
-  `game_grade` enum('S','A','B','C','D') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'D' COMMENT '현재 등급(S/A/B/C/D)',
-  `total_game_score` int DEFAULT NULL COMMENT '게임누적 총점',
-  PRIMARY KEY (`game_score_id`),
-  KEY `FK_game_score_all_users` (`user_id`),
-  KEY `FK_game_score_game_session` (`session_id`),
-  CONSTRAINT `FK_game_score_all_users` FOREIGN KEY (`user_id`) REFERENCES `all_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_game_score_game_session` FOREIGN KEY (`session_id`) REFERENCES `game_session` (`session_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='게임 총점';
-
--- 테이블 데이터 farm.game_score:~0 rows (대략적) 내보내기
-
--- 테이블 farm.game_session 구조 내보내기
-CREATE TABLE IF NOT EXISTS `game_session` (
+-- 테이블 farm.game 구조 내보내기
+CREATE TABLE IF NOT EXISTS `game` (
   `session_id` int NOT NULL AUTO_INCREMENT COMMENT '게임 세션 ID',
   `user_id` int NOT NULL COMMENT 'student ID',
-  `game_status` enum('progress','clear') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'progress' COMMENT '게임 상태',
   `player_hp` int DEFAULT '100' COMMENT '플레이어 체력',
   `game_day` int DEFAULT '0' COMMENT '현재 경과 일수',
-  `growth_rate` int DEFAULT NULL COMMENT '작물 성장률',
+  `growth_rate` decimal(5,2) DEFAULT '0.00' COMMENT '작물 성장률',
   `weather` enum('clear','hot','rain','cloudy','storm') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'clear' COMMENT '날씨(맑음/흐림 등)',
   `daily_action` int DEFAULT '2' COMMENT '행동 횟수',
-  `f_action_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '첫번째 행동유형',
-  `s_action_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '두번째 행동유형',
-  `daily_score` int DEFAULT NULL COMMENT '점수(하루단위)',
+  `action_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '첫번째 행동유형',
+  `mini_result` enum('perfect','good','bad','fail') DEFAULT NULL COMMENT '행동 결과',
+  `action_score` decimal(5,2) DEFAULT '0.00' COMMENT '점수(미니게임 단위)',
+  `game_grade` enum('S','A','B','C','D') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'D' COMMENT '현재 등급(S/A/B/C/D)',
   PRIMARY KEY (`session_id`) USING BTREE,
   KEY `FK_game_record_all_users` (`user_id`),
   CONSTRAINT `FK_game_record_all_users` FOREIGN KEY (`user_id`) REFERENCES `all_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `chk_action_score` CHECK (((`action_score` >= 0.00) and (`action_score` <= 100.00))),
   CONSTRAINT `chk_game_day_range` CHECK (((`game_day` >= 0) and (`game_day` <= 30))),
-  CONSTRAINT `chk_growth_rate` CHECK (((`growth_rate` >= 0.00) and (`growth_rate` <= 1.00))),
+  CONSTRAINT `chk_growth_rate` CHECK (((`growth_rate` >= 0.00) and (`growth_rate` <= 100.00))),
   CONSTRAINT `chk_player_hp_max` CHECK (((`player_hp` <= 100) and (`player_hp` >= 0)))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='게임 세션(하루 단위)';
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='게임';
 
--- 테이블 데이터 farm.game_session:~0 rows (대략적) 내보내기
+-- 테이블 데이터 farm.game:~3 rows (대략적) 내보내기
+INSERT INTO `game` (`session_id`, `user_id`, `player_hp`, `game_day`, `growth_rate`, `weather`, `daily_action`, `action_type`, `mini_result`, `action_score`, `game_grade`) VALUES
+	(2, 2, 80, 1, 2.30, 'clear', 1, '물주기', 'perfect', 2.30, 'D'),
+	(3, 2, 60, 1, 3.00, 'clear', 0, '잡초뽑기', 'good', 5.30, 'D'),
+	(4, 2, 100, 2, 0.00, 'rain', 2, NULL, NULL, 0.00, 'D');
 
 -- 테이블 farm.lecture 구조 내보내기
 CREATE TABLE IF NOT EXISTS `lecture` (
   `lecture_id` int NOT NULL AUTO_INCREMENT COMMENT '강의 ID',
   `user_id` int NOT NULL COMMENT 'teacher ID',
-  `category` enum('seed','grow','ship') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '카테고리 이름(모종/재배/출하)',
-  `difficulty` enum('beginner','intermediate','advanced') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '난이도(초급/중급/고급)',
+  `category` enum('gardening','field','house') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '카테고리 이름(텃밭/노지/하우스)',
+  `sub_category` enum('seed','grow','ship') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '서브 카테고리 이름(모종/재배/출하)',
   `img_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '강의에 쓰일 이미지(썸네일 등)',
   `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '제목',
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '강의 요약',
@@ -158,14 +176,20 @@ CREATE TABLE IF NOT EXISTS `lecture` (
   `created_at` timestamp NULL DEFAULT (now()) COMMENT '최초 작성시간',
   PRIMARY KEY (`lecture_id`),
   KEY `FK_lecture_all_users` (`user_id`) USING BTREE,
-  KEY `idx_category_difficulty` (`category`,`difficulty`),
+  KEY `category` (`category`),
+  KEY `sub_category` (`sub_category`),
   CONSTRAINT `FK_lecture_board_all_users` FOREIGN KEY (`user_id`) REFERENCES `all_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='강의게시판';
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='강의게시판';
 
--- 테이블 데이터 farm.lecture:~2 rows (대략적) 내보내기
-INSERT INTO `lecture` (`lecture_id`, `user_id`, `category`, `difficulty`, `img_url`, `title`, `content`, `subs_count`, `created_at`) VALUES
-	(1, 1, 'seed', 'beginner', NULL, '테스트', '1번\r\n1\r\n2번\r\n2\r\n3번\r\n3', 2, '2025-11-13 06:19:32'),
-	(2, 14, 'grow', 'intermediate', NULL, '테스트2', '### 강의 소개\r\n\r\n안녕하세요, 도시 농부 여러분!\r\n\r\n땅이 없어도, 경험이 없어도 괜찮습니다. 이 강의는 초보자도 쉽게 따라 할 수 있는 벼농사 입문 과정입니다. 작은 베란다나 옥상, 텃밭 등 어떤 공간에서도 건강한 쌀을 직접 수확하는 기쁨을 누릴 수 있도록 파종부터 수확 후 관리까지 벼농사의 모든 과정을 체계적으로 알려드립니다.\r\n\r\n이 강의를 통해 직접 키운 쌀로 지은 따뜻한 밥 한 그릇의 가치를 경험해 보세요!\r\n\r\n---\r\n\r\n### 학습 목표\r\n\r\n- 벼 재배에 필요한 기본적인 도구와 환경을 이해하고 준비할 수 있다.\r\n- 물 관리, 병충해 예방, 비료 시비 등 단계별 핵심 관리 방법을 습득한다.\r\n- 파종부터 모내기, 이삭 패기, 성공적인 수확까지 모든 재배 과정을 자신 있게 진행한다.\r\n\r\n---\r\n\r\n### 챕터 구성 (예시)\r\n\r\n1. 벼농사 기본 이해: 벼의 생애 주기, 필요한 환경 (물, 햇빛, 온도), 준비물 목록\r\n2. 파종과 모 기르기: 적절한 종자 선택, 씨앗 소독, 모판 준비 및 관리 방법\r\n3. 모내기 (이앙): 모내기 적정 시기, 작은 공간에서의 모내기 요령\r\n4. 성장기 관리: 효과적인 물 관리 기술, 비료 주는 시기와 방법 (웃거름)\r\n5. 병충해와 잡초 관리: 벼에 흔한 병충해 종류 및 친환경적 예방/방제법\r\n6. 수확과 탈곡: 벼가 익는 시기 판단, 수확 방법 및 탈곡, 건조, 저장 기술\r\n\r\n---\r\n\r\n### 이런 분들에게 추천합니다\r\n\r\n- 도시에서 나만의 쌀을 직접 키워보고 싶은 초보 농부\r\n- 아이들과 함께 자연을 체험하고 싶은 가족\r\n- 작은 공간을 활용해 새로운 취미를 찾고 싶은 분', 1456, '2025-11-14 00:15:12');
+-- 테이블 데이터 farm.lecture:~7 rows (대략적) 내보내기
+INSERT INTO `lecture` (`lecture_id`, `user_id`, `category`, `sub_category`, `img_url`, `title`, `content`, `subs_count`, `created_at`) VALUES
+	(1, 2, 'gardening', 'seed', 'https://storage.googleapis.com/dwproject2/18-Farmer-Resize.jpg', '도시 농부를 위한 모종 심기 마스터 클래스', '"첫 텃밭, 실패 없이 시작하는 비결! 초보 농부도 10단계만 따라 하면 튼튼하고 건강한 모종을 심을 수 있습니다.\r\n모종 고르기부터 성공적인 정식 후 관리까지, 도시 텃밭 가꾸기의 기본기를 확실하게 다지세요."\r\n\r\n이 시리즈는 텃밭 가꾸기의 첫 단계인 모종(苗種) 심기에 초점을 맞춥니다.\r\n모종을 고르는 안목을 기르고, 흙 만들기, 정식(定植, 옮겨 심기), 뿌리 활착 유도, 초기 관리 및 병충해 예방까지 체계적인 과정을 10개의 짧은 비디오로 구성했습니다.\r\n실습 위주의 콘텐츠로, 바로 텃밭에 적용 가능한 노하우를 제공합니다.', 11, '2025-11-13 06:19:32'),
+	(2, 2, 'field', 'grow', NULL, '1', 'asd', 2, '2025-11-20 06:54:20'),
+	(3, 31, 'house', 'ship', NULL, '2', '132', 4, '2025-11-20 06:54:33'),
+	(4, 27, 'field', 'grow', NULL, '3', '345345', 2, '2025-11-20 06:54:46'),
+	(5, 34, 'gardening', 'ship', NULL, '4', '5', 6, '2025-11-21 00:43:57'),
+	(6, 1, 'field', 'grow', NULL, '5', '6', 3, '2025-11-21 00:44:13'),
+	(7, 31, 'field', 'seed', NULL, '6', '12', 1, '2025-11-21 00:44:29');
 
 -- 테이블 farm.lecture_progress 구조 내보내기
 CREATE TABLE IF NOT EXISTS `lecture_progress` (
@@ -182,9 +206,11 @@ CREATE TABLE IF NOT EXISTS `lecture_progress` (
   CONSTRAINT `FK_lecture_progress_all_users` FOREIGN KEY (`user_id`) REFERENCES `all_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_lecture_progress_lecture` FOREIGN KEY (`lecture_id`) REFERENCES `lecture` (`lecture_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `chk_progress_range` CHECK (((`progress` >= 0.00) and (`progress` <= 1.00)))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='구독 강의 진도';
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='구독 강의 진도';
 
--- 테이블 데이터 farm.lecture_progress:~0 rows (대략적) 내보내기
+-- 테이블 데이터 farm.lecture_progress:~1 rows (대략적) 내보내기
+INSERT INTO `lecture_progress` (`progress_id`, `lecture_id`, `user_id`, `valid_until`, `progress`, `updated_at`) VALUES
+	(6, 1, 34, NULL, 0.10, '2025-11-21 08:15:55');
 
 -- 테이블 farm.lecture_qna 구조 내보내기
 CREATE TABLE IF NOT EXISTS `lecture_qna` (
@@ -201,14 +227,14 @@ CREATE TABLE IF NOT EXISTS `lecture_qna` (
   CONSTRAINT `FK_lecture_qna_all_users` FOREIGN KEY (`user_id`) REFERENCES `all_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_lecture_qna_lecture_board` FOREIGN KEY (`lecture_id`) REFERENCES `lecture` (`lecture_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_lecture_qna_lecture_qna` FOREIGN KEY (`p_qna_id`) REFERENCES `lecture_qna` (`qna_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='강의 QnA';
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='강의 QnA';
 
--- 테이블 데이터 farm.lecture_qna:~4 rows (대략적) 내보내기
+-- 테이블 데이터 farm.lecture_qna:~3 rows (대략적) 내보내기
 INSERT INTO `lecture_qna` (`qna_id`, `lecture_id`, `user_id`, `p_qna_id`, `content`, `created_at`) VALUES
-	(1, 2, 11, NULL, '질문입니다', '2025-11-14 07:03:52'),
-	(2, 2, 14, 1, '답변이요', '2025-11-14 07:04:06'),
-	(7, 2, 17, NULL, 'ㅌㅅㅌ', '2025-11-18 00:44:10'),
-	(8, 2, 14, NULL, 'xtx', '2025-11-18 00:44:39');
+	(1, 1, 1, NULL, '질문입니다', '2025-11-18 03:24:11'),
+	(24, 1, 2, 1, '흠', '2025-11-20 07:50:13'),
+	(25, 1, 2, NULL, 'ㅇㅇ', '2025-11-20 07:50:34'),
+	(29, 4, 34, NULL, 'ㅇ', '2025-11-20 07:55:56');
 
 -- 테이블 farm.lecture_video 구조 내보내기
 CREATE TABLE IF NOT EXISTS `lecture_video` (
@@ -220,35 +246,46 @@ CREATE TABLE IF NOT EXISTS `lecture_video` (
   PRIMARY KEY (`video_id`),
   KEY `FK_lecture_video_lecture` (`lecture_id`) USING BTREE,
   CONSTRAINT `FK_lecture_video_lecture` FOREIGN KEY (`lecture_id`) REFERENCES `lecture` (`lecture_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='강의 영상';
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='강의 영상';
 
--- 테이블 데이터 farm.lecture_video:~5 rows (대략적) 내보내기
+-- 테이블 데이터 farm.lecture_video:~10 rows (대략적) 내보내기
 INSERT INTO `lecture_video` (`video_id`, `lecture_id`, `video_title`, `video_url`, `video_time`) VALUES
-	(1, 1, '1강  인', 'https://storage.googleapis.com/dwproject2/2758322-uhd_3840_2160_30fps.mp4', 480),
-	(2, 1, '2강  인', NULL, 550),
-	(3, 1, '3강  인', NULL, 633),
-	(4, 2, '2424124', 'https://youtu.be/2G9pXiZ8av8?si=77i2EgKAZ8QGQVmR', 1234),
-	(5, 2, '12434', NULL, 5346);
+	(1, 1, '모종, 왜 중요할까요?', 'https://storage.googleapis.com/dwproject2/2758322-uhd_3840_2160_30fps.mp4', 34),
+	(2, 1, '튼튼한 모종 고르는 5가지 기준', 'https://storage.googleapis.com/dwproject2/3195351-uhd_3840_2160_25fps.mp4', 12),
+	(3, 1, '모종 심기 최적의 시기 및 환경 조건', NULL, 0),
+	(4, 1, '모종 심기 전, 흙 준비 마법: 상토/퇴비 배합', NULL, NULL),
+	(5, 1, '뿌리 활착을 돕는 \'물주기\' 기술', NULL, NULL),
+	(6, 1, '모종 포트 분리 & 정식 (뿌리 스트레스 최소화)', NULL, NULL),
+	(7, 1, '작물별 적정 \'심는 간격\' & 지지대 설치', NULL, NULL),
+	(8, 1, '정식 후 첫 3일: 초기 관리 골든 타임', NULL, NULL),
+	(9, 1, '웃거름 주기: 모종을 폭풍 성장시키는 영양 비법', NULL, NULL),
+	(10, 1, '모종 병충해 예방 및 초기 대처법', NULL, NULL);
 
 -- 테이블 farm.lecture_video_progress 구조 내보내기
 CREATE TABLE IF NOT EXISTS `lecture_video_progress` (
   `video_progress_id` int NOT NULL AUTO_INCREMENT COMMENT '비디오 진도 ID',
   `progress_id` int NOT NULL COMMENT '강의 진도 ID',
   `video_id` int NOT NULL COMMENT '강의 영상 ID',
+  `user_id` int NOT NULL,
   `watched_time` int DEFAULT '0' COMMENT '시청시간(초)',
   `last_position` int DEFAULT '0' COMMENT '마지막 시청위치(초)',
   `watched_at` timestamp NULL DEFAULT NULL COMMENT '마지막 시청 시간',
   `progress` decimal(3,2) NOT NULL DEFAULT '0.00' COMMENT '진도율(0.00~1.00)',
   `completed_at` timestamp NULL DEFAULT NULL COMMENT '진도율 100% 달성 시간',
   PRIMARY KEY (`video_progress_id`),
-  UNIQUE KEY `unique_progress_video` (`progress_id`,`video_id`),
+  UNIQUE KEY `unique_progress_video_user` (`user_id`,`progress_id`,`video_id`) USING BTREE,
   KEY `FK_video_progress_lecture_progress` (`progress_id`),
   KEY `FK_video_progress_video` (`video_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `FK_lecture_video_progress_all_users` FOREIGN KEY (`user_id`) REFERENCES `all_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_video_progress_lecture_progress` FOREIGN KEY (`progress_id`) REFERENCES `lecture_progress` (`progress_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_video_progress_video` FOREIGN KEY (`video_id`) REFERENCES `lecture_video` (`video_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='개별 비디오 시청 진도';
+  CONSTRAINT `FK_video_progress_video` FOREIGN KEY (`video_id`) REFERENCES `lecture_video` (`video_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `chk_video_progress_range` CHECK (((`progress` >= 0.00) and (`progress` <= 1.00)))
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='개별 비디오 시청 진도';
 
--- 테이블 데이터 farm.lecture_video_progress:~0 rows (대략적) 내보내기
+-- 테이블 데이터 farm.lecture_video_progress:~1 rows (대략적) 내보내기
+INSERT INTO `lecture_video_progress` (`video_progress_id`, `progress_id`, `video_id`, `user_id`, `watched_time`, `last_position`, `watched_at`, `progress`, `completed_at`) VALUES
+	(9, 6, 1, 34, 34, 34, '2025-11-21 08:15:03', 1.00, '2025-11-21 08:15:54');
 
 -- 테이블 farm.notice 구조 내보내기
 CREATE TABLE IF NOT EXISTS `notice` (
@@ -263,24 +300,23 @@ CREATE TABLE IF NOT EXISTS `notice` (
   PRIMARY KEY (`notice_id`),
   KEY `FK_all_users` (`user_id`),
   CONSTRAINT `FK_all_users` FOREIGN KEY (`user_id`) REFERENCES `all_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='공지사항';
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='공지사항';
 
 -- 테이블 데이터 farm.notice:~1 rows (대략적) 내보내기
 INSERT INTO `notice` (`notice_id`, `user_id`, `title`, `content`, `view_count`, `created_at`, `updated_at`, `is_pinned`) VALUES
-	(1, 1, 'd', 'xzzxc', 41, '2025-11-17 00:13:22', '2025-11-17 06:51:28', 1);
+	(1, 1, 'd', 'xzzxc', 119, '2025-11-17 00:13:22', '2025-11-24 02:28:59', 1),
+	(6, 1, '노시환 롯데 5년 120억 계약', '구란데 ㅋ', 7, '2025-11-24 02:08:35', '2025-11-24 02:29:07', 0);
 
 -- 테이블 farm.quiz 구조 내보내기
 CREATE TABLE IF NOT EXISTS `quiz` (
   `quiz_id` int NOT NULL AUTO_INCREMENT COMMENT '퀴즈 ID',
-  `quiz_category_id` int DEFAULT NULL COMMENT '퀴즈 카테고리 ID',
-  `quiz_number` int NOT NULL COMMENT '퀴즈번호',
+  `lecture_id` int DEFAULT NULL COMMENT '강의 ID',
   `img_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '퀴즈에 쓰일 이미지',
   `question` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '퀴즈 질문',
   `model_answer` text COMMENT '모범 답안',
-  `quiz_score` int NOT NULL COMMENT '해당 문제 점수',
   PRIMARY KEY (`quiz_id`),
-  KEY `FK_quiz_quiz_category` (`quiz_category_id`),
-  CONSTRAINT `FK_quiz_quiz_category` FOREIGN KEY (`quiz_category_id`) REFERENCES `quiz_category` (`quiz_category_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `FK_quiz_lecture` (`lecture_id`),
+  CONSTRAINT `FK_quiz_lecture` FOREIGN KEY (`lecture_id`) REFERENCES `lecture` (`lecture_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='퀴즈';
 
 -- 테이블 데이터 farm.quiz:~0 rows (대략적) 내보내기
@@ -290,179 +326,114 @@ CREATE TABLE IF NOT EXISTS `quiz_attempt` (
   `attempt_id` int NOT NULL AUTO_INCREMENT COMMENT '퀴즈참여 ID',
   `user_id` int NOT NULL COMMENT 'student ID',
   `quiz_id` int NOT NULL COMMENT '퀴즈 ID',
-  `attempt_number` int NOT NULL DEFAULT '1' COMMENT '응시 횟수',
   `answer_text` text NOT NULL COMMENT '유저의 주관식 답변',
-  `attempt_at` timestamp NOT NULL DEFAULT (now()) COMMENT '참여시간',
-  `graded_by` int DEFAULT NULL COMMENT 'teacher ID',
-  `grading_status` enum('pending','graded') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'pending' COMMENT '채점 상태',
-  `earned_score` int NOT NULL DEFAULT '0' COMMENT '채점 점수',
-  `graded_at` timestamp NULL DEFAULT NULL COMMENT '채점 시간',
+  `total_score` int NOT NULL DEFAULT '0' COMMENT '총점',
+  `pass` enum('pass','fail') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'fail' COMMENT '합격/불합격',
   PRIMARY KEY (`attempt_id`),
-  UNIQUE KEY `user_id_quiz_id_attempt_number` (`user_id`,`quiz_id`,`attempt_number`) USING BTREE,
   KEY `FK_quiz_attempt_quiz` (`quiz_id`),
   KEY `user_id` (`user_id`),
-  KEY `FK_quiz_attempt_all_users_2` (`graded_by`),
-  KEY `idx_grading_status` (`grading_status`),
   CONSTRAINT `FK_quiz_attempt_all_users` FOREIGN KEY (`user_id`) REFERENCES `all_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_quiz_attempt_all_users_2` FOREIGN KEY (`graded_by`) REFERENCES `all_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_quiz_attempt_quiz` FOREIGN KEY (`quiz_id`) REFERENCES `quiz` (`quiz_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='퀴즈 참여기록';
 
 -- 테이블 데이터 farm.quiz_attempt:~0 rows (대략적) 내보내기
 
--- 테이블 farm.quiz_category 구조 내보내기
-CREATE TABLE IF NOT EXISTS `quiz_category` (
-  `quiz_category_id` int NOT NULL AUTO_INCREMENT COMMENT '퀴즈 카테고리 ID',
-  `category_name` varchar(50) NOT NULL COMMENT '카테고리 이름',
-  `category_img` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '카테고리에 쓰일 이미지',
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci COMMENT '카테고리 설명',
-  `difficulty` enum('beginner','intermediate','advanced') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'beginner' COMMENT '난이도',
-  `total_quiz` int DEFAULT NULL COMMENT '총 문제 수',
-  `total_quiz_score` int DEFAULT NULL COMMENT '만점',
-  `pass_score` int DEFAULT '60' COMMENT '합격점수',
-  `time_limit` int DEFAULT NULL COMMENT '제한 시간(분)',
-  `created_at` timestamp NULL DEFAULT (now()) COMMENT '작성시간',
-  PRIMARY KEY (`quiz_category_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='퀴즈 카테고리';
-
--- 테이블 데이터 farm.quiz_category:~0 rows (대략적) 내보내기
-
--- 테이블 farm.quiz_score 구조 내보내기
-CREATE TABLE IF NOT EXISTS `quiz_score` (
-  `score_id` int NOT NULL AUTO_INCREMENT COMMENT '퀴즈 총점 ID',
-  `quiz_category_id` int NOT NULL COMMENT '퀴즈 카테고리 ID',
-  `user_id` int NOT NULL COMMENT 'student ID',
-  `total_score` int NOT NULL COMMENT '총점',
-  `pass` enum('pass','fail') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'fail' COMMENT '합격/불합격',
-  PRIMARY KEY (`score_id`),
-  UNIQUE KEY `category_id_user_id` (`quiz_category_id`,`user_id`) USING BTREE,
-  KEY `FK_quiz_score_all_users` (`user_id`),
-  KEY `category_id` (`quiz_category_id`) USING BTREE,
-  CONSTRAINT `FK_quiz_score_all_users` FOREIGN KEY (`user_id`) REFERENCES `all_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_quiz_score_quiz_category` FOREIGN KEY (`quiz_category_id`) REFERENCES `quiz_category` (`quiz_category_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='퀴즈 총점/합격 및 불합격';
-
--- 테이블 데이터 farm.quiz_score:~0 rows (대략적) 내보내기
-
--- 프로시저 farm.sp_grade_quiz_attempt 구조 내보내기
+-- 프로시저 farm.sp_manual_grade_quiz 구조 내보내기
 DELIMITER //
-CREATE PROCEDURE `sp_grade_quiz_attempt`(
+CREATE PROCEDURE `sp_manual_grade_quiz`(
 	IN `p_attempt_id` INT,
-	IN `p_graded_by` INT,
-	IN `p_earned_score` INT
+	IN `p_teacher_id` INT,
+	IN `p_manual_score` INT,
+	IN `p_feedback` TEXT
 )
 BEGIN
-    DECLARE v_user_id INT;
-    DECLARE v_quiz_id INT;
-    DECLARE v_quiz_category_id INT;
-    DECLARE v_quiz_score INT;
-    DECLARE v_current_total INT;
-    DECLARE v_pass_score INT;
-    DECLARE v_is_pass ENUM('합격', '불합격');
-    DECLARE v_existing_score_id INT;
+	 -- 수동채점 프로시저
+    DECLARE v_pass_status ENUM('pass', 'fail');
+    DECLARE v_user_type ENUM('admin','teacher','student');
     
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION
-    BEGIN
-        ROLLBACK;
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = '채점 처리 중 오류가 발생했습니다.';
-    END;
+    -- 채점자가 강사 또는 관리자인지 확인
+    SELECT user_type INTO v_user_type
+    FROM all_users
+    WHERE user_id = p_teacher_id;
     
-    START TRANSACTION;
-    
-    -- 1. 시도 정보 조회
-    SELECT user_id, quiz_id
-    INTO v_user_id, v_quiz_id
-    FROM quiz_attempt
-    WHERE attempt_id = p_attempt_id
-    AND grading_status = '채점대기';
-    
-    IF v_user_id IS NULL THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = '채점 대기 중인 시도를 찾을 수 없습니다.';
+    IF v_user_type NOT IN ('teacher', 'admin') THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = '채점 권한이 없습니다.';
     END IF;
     
-    -- 2. 퀴즈 정보 조회
-    SELECT quiz_category_id, quiz_score
-    INTO v_quiz_category_id, v_quiz_score
-    FROM quiz
-    WHERE quiz_id = v_quiz_id;
-    
-    -- 3. 점수 유효성 검증
-    IF p_earned_score < 0 OR p_earned_score > v_quiz_score THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = '유효하지 않은 점수입니다.';
+    -- 점수 유효성 검사
+    IF p_manual_score < 0 OR p_manual_score > 100 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = '점수는 0~100 사이의 값이어야 합니다.';
     END IF;
     
-    -- 4. 채점 정보 업데이트
+    -- 합격/불합격 판정
+    IF p_manual_score >= 60 THEN
+        SET v_pass_status = 'pass';
+    ELSE
+        SET v_pass_status = 'fail';
+    END IF;
+    
+    -- 채점 결과 업데이트
     UPDATE quiz_attempt
-    SET 
-        earned_score = p_earned_score,
-        graded_by = p_graded_by,
-        grading_status = '채점완료',
-        graded_at = NOW()
+    SET total_score = p_manual_score,
+        pass = v_pass_status
     WHERE attempt_id = p_attempt_id;
     
-    -- 5. 해당 카테고리의 총점 계산
-    SELECT 
-        COALESCE(SUM(qa.earned_score), 0),
-        qc.pass_score
-    INTO v_current_total, v_pass_score
-    FROM quiz_attempt qa
-    INNER JOIN quiz q ON qa.quiz_id = q.quiz_id
-    INNER JOIN quiz_category qc ON q.quiz_category_id = qc.quiz_category_id
-    WHERE qa.user_id = v_user_id
-    AND q.quiz_category_id = v_quiz_category_id
-    AND qa.grading_status = '채점완료'
-    GROUP BY qc.pass_score;
+    -- 채점 완료 메시지
+    SELECT CONCAT('채점이 완료되었습니다. 점수: ', p_manual_score, '점, 결과: ', v_pass_status) AS result;
+END//
+DELIMITER ;
+
+-- 프로시저 farm.sp_submit_quiz_answer 구조 내보내기
+DELIMITER //
+CREATE PROCEDURE `sp_submit_quiz_answer`(
+	IN `p_user_id` INT,
+	IN `p_quiz_id` INT,
+	IN `p_answer_text` TEXT,
+	OUT `p_attempt_id` INT,
+	OUT `p_auto_score` INT
+)
+BEGIN
+	 -- 퀴즈답변 제출 및 자동 채점 프로시저
+    DECLARE v_model_answer TEXT;
+    DECLARE v_keyword_score INT DEFAULT 0;
+    DECLARE v_pass_status ENUM('pass', 'fail');
     
-    -- 6. 합격 여부 판단
-    IF v_current_total >= v_pass_score THEN
-        SET v_is_pass = '합격';
+    -- 모범 답안 조회
+    SELECT model_answer INTO v_model_answer
+    FROM quiz
+    WHERE quiz_id = p_quiz_id;
+    
+    -- 기본 키워드 기반 자동 채점 (간단한 버전)
+    -- 실제로는 더 정교한 로직이나 AI API 호출로 대체 가능
+    SET v_keyword_score = fn_calculate_keyword_score(p_answer_text, v_model_answer);
+    
+    -- 합격/불합격 판정 (60점 기준)
+    IF v_keyword_score >= 60 THEN
+        SET v_pass_status = 'pass';
     ELSE
-        SET v_is_pass = '불합격';
+        SET v_pass_status = 'fail';
     END IF;
     
-    -- 7. quiz_score 테이블 업데이트 또는 삽입
-    SELECT score_id INTO v_existing_score_id
-    FROM quiz_score
-    WHERE quiz_category_id = v_quiz_category_id
-    AND user_id = v_user_id;
+    -- 답변 저장
+    INSERT INTO quiz_attempt (
+        user_id,
+        quiz_id,
+        answer_text,
+        total_score,
+        pass
+    ) VALUES (
+        p_user_id,
+        p_quiz_id,
+        p_answer_text,
+        v_keyword_score,
+        v_pass_status
+    );
     
-    IF v_existing_score_id IS NOT NULL THEN
-        -- 기존 레코드 업데이트
-        UPDATE quiz_score
-        SET 
-            total_score = v_current_total,
-            pass = v_is_pass
-        WHERE score_id = v_existing_score_id;
-    ELSE
-        -- 새 레코드 삽입
-        INSERT INTO quiz_score (
-            quiz_category_id,
-            user_id,
-            total_score,
-            pass
-        ) VALUES (
-            v_quiz_category_id,
-            v_user_id,
-            v_current_total,
-            v_is_pass
-        );
-        
-        SET v_existing_score_id = LAST_INSERT_ID();
-    END IF;
-    
-    COMMIT;
-    
-    -- 결과 반환
-    SELECT 
-        p_attempt_id AS attempt_id,
-        v_user_id AS user_id,
-        v_quiz_id AS quiz_id,
-        p_earned_score AS earned_score,
-        v_current_total AS total_score,
-        v_is_pass AS pass_status,
-        '채점이 완료되었습니다.' AS message;
-        
-        
+    -- 생성된 attempt_id 반환
+    SET p_attempt_id = LAST_INSERT_ID();
+    SET p_auto_score = v_keyword_score;
 END//
 DELIMITER ;
 
