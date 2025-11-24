@@ -1,0 +1,21 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+
+<div th:fragment="result-content" class="result-container">
+  <h2>**AI 텃밭 플래너 결과입니다!**</h2>
+
+  <p style="font-style: italic; color: #777;">
+    (입력 조건: <span th:text="${formData.residenceType}"></span> / <span th:text="${formData.space}"></span> / <span th:text="${formData.experienceLevel}"></span>)
+  </p>
+
+  <div class="ai-output" th:utext="${aiResult}">
+  </div>
+
+  <hr style="margin: 20px 0;">
+  <button onclick="location.reload()" class="back-button">다른 조건으로 다시하기</button>
+
+</div>
+
+</body>
+</html>
