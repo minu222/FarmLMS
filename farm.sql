@@ -43,8 +43,6 @@ INSERT INTO `all_users` (`user_id`, `user_type`, `id`, `password`, `name`, `nick
 	(25, 'student', 'hello', 'dlalsdn1', '이민우', '이황우', '2025-11-10', 'mw@naver.com', '민우님이다 음하하'),
 	(27, 'student', 'qwer1234', 'rkdrjsgh1234', '강건호', '강건호아님', '2025-11-01', 'rkdrjsgh123@naver.com', NULL),
 	(28, 'teacher', 'dkssud123', 'dlalsdn1', '앜', '뭘봐', '2025-10-31', 'dd@naver.com', NULL),
-	(31, 'student', 'iloveu', 'dlalsdn1', '김사랑', '사랑한다', '2025-10-26', 'love@naver.com', NULL),
-	(34, 'student', '123', '123', '학생', '학생33', '2025-11-20', 'ㅁㄴㅇ@ㅁ.ㅇ', '테스트용 학생'),
 	(35, 'student', 'jmj10338', 'jmj691107', '정민주', '초보농부', '1998-10-07', 'jmj10338@gmail.com', NULL);
 
 -- 테이블 farm.attachment 구조 내보내기
@@ -101,7 +99,7 @@ CREATE TABLE IF NOT EXISTS `chat_message` (
   KEY `idx_room_created` (`room_id`,`created_at`),
   CONSTRAINT `FK__chat_room` FOREIGN KEY (`room_id`) REFERENCES `chat_room` (`room_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `FK_chat_message_all_users` FOREIGN KEY (`user_id`) REFERENCES `all_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=139 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='채팅 기록';
+) ENGINE=InnoDB AUTO_INCREMENT=140 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='채팅 기록';
 
 -- 테이블 데이터 farm.chat_message:~8 rows (대략적) 내보내기
 INSERT INTO `chat_message` (`message_id`, `room_id`, `user_id`, `content`, `created_at`) VALUES
@@ -117,7 +115,8 @@ INSERT INTO `chat_message` (`message_id`, `room_id`, `user_id`, `content`, `crea
 	(135, 13, 16, '?', '2025-11-18 06:25:15'),
 	(136, 13, 35, '캡본 따려했는데... 방을 새로 파야겠군여', '2025-11-24 00:42:49'),
 	(137, 13, 35, 'ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ', '2025-11-24 00:42:50'),
-	(138, 14, 35, '안녕하세요. 이제 막 농업에 종사하게 된 초보 농부입니다.\n문외한이라 너무 걱정되는데 농사 선배님들의 농사팁 좀 많이 배워가겠습니다!', '2025-11-24 00:44:37');
+	(138, 14, 35, '안녕하세요. 이제 막 농업에 종사하게 된 초보 농부입니다.\n문외한이라 너무 걱정되는데 농사 선배님들의 농사팁 좀 많이 배워가겠습니다!', '2025-11-24 00:44:37'),
+	(139, 14, 16, '안녕하세요', '2025-11-24 03:16:57');
 
 -- 테이블 farm.chat_room 구조 내보내기
 CREATE TABLE IF NOT EXISTS `chat_room` (
@@ -145,7 +144,7 @@ CREATE TABLE IF NOT EXISTS `game` (
   `weather` enum('clear','hot','rain','cloudy','storm') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'clear' COMMENT '날씨(맑음/흐림 등)',
   `daily_action` int DEFAULT '2' COMMENT '행동 횟수',
   `action_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '첫번째 행동유형',
-  `mini_result` enum('perfect','good','bad','fail') DEFAULT NULL COMMENT '행동 결과',
+  `mini_result` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '행동 결과',
   `action_score` decimal(5,2) DEFAULT '0.00' COMMENT '점수(미니게임 단위)',
   `game_grade` enum('S','A','B','C','D') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'D' COMMENT '현재 등급(S/A/B/C/D)',
   PRIMARY KEY (`session_id`) USING BTREE,
@@ -155,13 +154,46 @@ CREATE TABLE IF NOT EXISTS `game` (
   CONSTRAINT `chk_game_day_range` CHECK (((`game_day` >= 0) and (`game_day` <= 30))),
   CONSTRAINT `chk_growth_rate` CHECK (((`growth_rate` >= 0.00) and (`growth_rate` <= 100.00))),
   CONSTRAINT `chk_player_hp_max` CHECK (((`player_hp` <= 100) and (`player_hp` >= 0)))
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='게임';
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='게임';
 
 -- 테이블 데이터 farm.game:~3 rows (대략적) 내보내기
 INSERT INTO `game` (`session_id`, `user_id`, `player_hp`, `game_day`, `growth_rate`, `weather`, `daily_action`, `action_type`, `mini_result`, `action_score`, `game_grade`) VALUES
-	(2, 2, 80, 1, 2.30, 'clear', 1, '물주기', 'perfect', 2.30, 'D'),
-	(3, 2, 60, 1, 3.00, 'clear', 0, '잡초뽑기', 'good', 5.30, 'D'),
-	(4, 2, 100, 2, 0.00, 'rain', 2, NULL, NULL, 0.00, 'D');
+	(16, 1, 80, 1, 0.00, 'cloudy', 1, 'Water', 'Perfect', 2.35, 'D'),
+	(17, 1, 60, 1, 0.00, 'cloudy', 0, 'Fertilize', 'Good', 1.00, 'D'),
+	(18, 1, 60, 2, 3.35, 'storm', 2, 'none', '', 0.00, 'D'),
+	(19, 1, 40, 2, 3.35, 'storm', 1, 'Water', 'Perfect', 2.35, 'D'),
+	(20, 1, 20, 2, 3.35, 'storm', 0, 'Pest', 'Good', 1.00, 'D'),
+	(21, 1, 20, 3, 6.70, 'cloudy', 2, 'none', '', 0.00, 'D'),
+	(22, 1, 80, 1, 0.00, 'storm', 1, 'Water', 'Perfect', 2.35, 'D'),
+	(23, 1, 60, 1, 0.00, 'storm', 0, 'Fertilize', 'Good', 1.00, 'D'),
+	(24, 1, 60, 2, 3.35, 'cloudy', 2, 'none', '', 0.00, 'D'),
+	(25, 1, 60, 2, 1.00, 'rain', 2, 'none', '', 0.00, 'D'),
+	(26, 1, 80, 1, 0.00, 'cloudy', 1, 'Water', 'Perfect', 2.35, 'D'),
+	(27, 1, 60, 1, 0.00, 'cloudy', 0, 'Fertilize', 'Good', 1.00, 'D'),
+	(28, 1, 60, 2, 3.35, 'rain', 2, 'none', '', 0.00, 'D'),
+	(29, 1, 40, 2, 3.35, 'rain', 1, 'Pest', 'Good', 1.00, 'D'),
+	(30, 1, 20, 2, 3.35, 'rain', 0, 'Weed', 'Perfect', 2.35, 'D'),
+	(31, 1, 80, 1, 0.00, 'hot', 1, 'Water', 'Bad', 0.00, 'D'),
+	(32, 1, 60, 1, 0.00, 'hot', 0, 'Fertilize', 'Good', 1.00, 'D'),
+	(33, 1, 60, 2, 3.35, 'cloudy', 2, 'none', '', 0.00, 'D'),
+	(34, 1, 80, 1, 0.00, 'cloudy', 1, 'Water', 'Bad', 0.00, 'D'),
+	(35, 1, 60, 1, 0.00, 'cloudy', 0, 'Pest', 'Good', 1.00, 'D'),
+	(36, 1, 60, 2, 1.00, 'storm', 2, 'none', '', 0.00, 'D'),
+	(37, 1, 80, 1, 0.00, 'rain', 1, 'Water', 'Good', 1.00, 'D'),
+	(38, 1, 60, 1, 0.00, 'rain', 0, 'Pest', 'Good', 1.00, 'D'),
+	(39, 1, 60, 2, 2.00, 'cloudy', 2, 'none', '', 0.00, 'D'),
+	(40, 1, 40, 2, 2.00, 'cloudy', 1, 'Water', 'Good', 1.00, 'D'),
+	(41, 1, 20, 2, 2.00, 'cloudy', 0, 'Fertilize', 'Good', 1.00, 'D'),
+	(42, 1, 20, 3, 4.00, 'rain', 2, 'none', '', 0.00, 'D'),
+	(43, 1, 0, 3, 4.00, 'rain', 1, 'Water', 'Good', 1.00, 'D'),
+	(44, 1, 80, 1, 0.00, 'rain', 1, 'Water', 'Good', 1.00, 'D'),
+	(45, 1, 60, 1, 0.00, 'rain', 0, 'Pest', 'Good', 1.00, 'D'),
+	(46, 1, 80, 1, 0.00, 'hot', 1, 'Water', 'Perfect', 2.35, 'D'),
+	(47, 1, 60, 1, 0.00, 'hot', 0, 'Fertilize', 'Good', 1.00, 'D'),
+	(48, 1, 60, 2, 3.35, 'hot', 2, 'none', '', 0.00, 'D'),
+	(49, 1, 60, 2, 3.35, 'cloudy', 2, 'none', '', 0.00, 'D'),
+	(50, 1, 20, 2, 3.35, 'cloudy', 0, 'Fertilize', 'Good', 1.00, 'D'),
+	(51, 1, 20, 3, 3.15, 'hot', 2, 'none', '', 0.00, 'D');
 
 -- 테이블 farm.lecture 구조 내보내기
 CREATE TABLE IF NOT EXISTS `lecture` (
@@ -185,11 +217,8 @@ CREATE TABLE IF NOT EXISTS `lecture` (
 INSERT INTO `lecture` (`lecture_id`, `user_id`, `category`, `sub_category`, `img_url`, `title`, `content`, `subs_count`, `created_at`) VALUES
 	(1, 2, 'gardening', 'seed', 'https://storage.googleapis.com/dwproject2/18-Farmer-Resize.jpg', '도시 농부를 위한 모종 심기 마스터 클래스', '"첫 텃밭, 실패 없이 시작하는 비결! 초보 농부도 10단계만 따라 하면 튼튼하고 건강한 모종을 심을 수 있습니다.\r\n모종 고르기부터 성공적인 정식 후 관리까지, 도시 텃밭 가꾸기의 기본기를 확실하게 다지세요."\r\n\r\n이 시리즈는 텃밭 가꾸기의 첫 단계인 모종(苗種) 심기에 초점을 맞춥니다.\r\n모종을 고르는 안목을 기르고, 흙 만들기, 정식(定植, 옮겨 심기), 뿌리 활착 유도, 초기 관리 및 병충해 예방까지 체계적인 과정을 10개의 짧은 비디오로 구성했습니다.\r\n실습 위주의 콘텐츠로, 바로 텃밭에 적용 가능한 노하우를 제공합니다.', 11, '2025-11-13 06:19:32'),
 	(2, 2, 'field', 'grow', NULL, '1', 'asd', 2, '2025-11-20 06:54:20'),
-	(3, 31, 'house', 'ship', NULL, '2', '132', 4, '2025-11-20 06:54:33'),
 	(4, 27, 'field', 'grow', NULL, '3', '345345', 2, '2025-11-20 06:54:46'),
-	(5, 34, 'gardening', 'ship', NULL, '4', '5', 6, '2025-11-21 00:43:57'),
-	(6, 1, 'field', 'grow', NULL, '5', '6', 3, '2025-11-21 00:44:13'),
-	(7, 31, 'field', 'seed', NULL, '6', '12', 1, '2025-11-21 00:44:29');
+	(6, 1, 'field', 'grow', NULL, '5', '6', 3, '2025-11-21 00:44:13');
 
 -- 테이블 farm.lecture_progress 구조 내보내기
 CREATE TABLE IF NOT EXISTS `lecture_progress` (
@@ -209,8 +238,6 @@ CREATE TABLE IF NOT EXISTS `lecture_progress` (
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='구독 강의 진도';
 
 -- 테이블 데이터 farm.lecture_progress:~1 rows (대략적) 내보내기
-INSERT INTO `lecture_progress` (`progress_id`, `lecture_id`, `user_id`, `valid_until`, `progress`, `updated_at`) VALUES
-	(6, 1, 34, NULL, 0.10, '2025-11-21 08:15:55');
 
 -- 테이블 farm.lecture_qna 구조 내보내기
 CREATE TABLE IF NOT EXISTS `lecture_qna` (
@@ -233,8 +260,7 @@ CREATE TABLE IF NOT EXISTS `lecture_qna` (
 INSERT INTO `lecture_qna` (`qna_id`, `lecture_id`, `user_id`, `p_qna_id`, `content`, `created_at`) VALUES
 	(1, 1, 1, NULL, '질문입니다', '2025-11-18 03:24:11'),
 	(24, 1, 2, 1, '흠', '2025-11-20 07:50:13'),
-	(25, 1, 2, NULL, 'ㅇㅇ', '2025-11-20 07:50:34'),
-	(29, 4, 34, NULL, 'ㅇ', '2025-11-20 07:55:56');
+	(25, 1, 2, NULL, 'ㅇㅇ', '2025-11-20 07:50:34');
 
 -- 테이블 farm.lecture_video 구조 내보내기
 CREATE TABLE IF NOT EXISTS `lecture_video` (
@@ -284,8 +310,6 @@ CREATE TABLE IF NOT EXISTS `lecture_video_progress` (
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='개별 비디오 시청 진도';
 
 -- 테이블 데이터 farm.lecture_video_progress:~1 rows (대략적) 내보내기
-INSERT INTO `lecture_video_progress` (`video_progress_id`, `progress_id`, `video_id`, `user_id`, `watched_time`, `last_position`, `watched_at`, `progress`, `completed_at`) VALUES
-	(9, 6, 1, 34, 34, 34, '2025-11-21 08:15:03', 1.00, '2025-11-21 08:15:54');
 
 -- 테이블 farm.notice 구조 내보내기
 CREATE TABLE IF NOT EXISTS `notice` (
@@ -293,19 +317,21 @@ CREATE TABLE IF NOT EXISTS `notice` (
   `user_id` int NOT NULL COMMENT 'admin ID',
   `title` varchar(50) NOT NULL COMMENT '공지사항 제목',
   `content` text NOT NULL COMMENT '공지사항 내용',
+  `img_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '공지에 쓰일 이미지',
   `view_count` int NOT NULL DEFAULT '0' COMMENT '조회수',
   `created_at` timestamp NULL DEFAULT (now()) COMMENT '최초 작성시간',
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '수정시간',
-  `is_pinned` tinyint DEFAULT '0' COMMENT '고정여부(고정하면 1)',
+  `is_pinned` tinyint NOT NULL DEFAULT '0' COMMENT '고정여부(고정하면 1)',
   PRIMARY KEY (`notice_id`),
   KEY `FK_all_users` (`user_id`),
   CONSTRAINT `FK_all_users` FOREIGN KEY (`user_id`) REFERENCES `all_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='공지사항';
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='공지사항';
 
 -- 테이블 데이터 farm.notice:~1 rows (대략적) 내보내기
-INSERT INTO `notice` (`notice_id`, `user_id`, `title`, `content`, `view_count`, `created_at`, `updated_at`, `is_pinned`) VALUES
-	(1, 1, 'd', 'xzzxc', 119, '2025-11-17 00:13:22', '2025-11-24 02:28:59', 1),
-	(6, 1, '노시환 롯데 5년 120억 계약', '구란데 ㅋ', 7, '2025-11-24 02:08:35', '2025-11-24 02:29:07', 0);
+INSERT INTO `notice` (`notice_id`, `user_id`, `title`, `content`, `img_url`, `view_count`, `created_at`, `updated_at`, `is_pinned`) VALUES
+	(1, 1, 'd', 'xzzxc', NULL, 125, '2025-11-17 00:13:22', '2025-11-24 04:11:15', 1),
+	(6, 1, '노시환 롯데 5년 120억 계약', '구란데 ㅋ', NULL, 16, '2025-11-24 02:08:35', '2025-11-24 03:56:03', 0),
+	(7, 1, '충격, 강백호 한화 방출', 'ㄹㅇ', NULL, 10, '2025-11-24 03:29:05', '2025-11-24 04:32:12', 0);
 
 -- 테이블 farm.quiz 구조 내보내기
 CREATE TABLE IF NOT EXISTS `quiz` (
