@@ -273,6 +273,7 @@ nav a.active::after {
 
 .video-info {
     padding: 1.5rem;
+    position: relative;
 }
 
 .video-title {
@@ -822,4 +823,29 @@ footer {
 /* E. Fullscreen 버튼은 유지하되, 전체적인 간격 조정 */
 .video-js .vjs-control.vjs-fullscreen-control {
     order: 10; /* 마지막에 배치 */
+}
+
+/* 퀴즈 */
+.quiz-start-btn {
+    position: absolute;
+    bottom: 15px; /* video-info 하단에서의 간격 조정 (약간 아래로) */
+    right: 15px; /* 오른쪽 padding 1.5rem(약 24px)에 맞춰 15px 텀을 둠 */
+
+    /* 버튼 색상을 Primary Light 계열로 변경 */
+    padding: 10px 18px; /* 패딩을 늘려서 버튼 크기를 키움 */
+    background-color: var(--primary-light); /* 기존 #4CAF50 보다 연한 색 */
+    color: var(--text); /* 배경이 밝아졌으므로 텍스트는 어두운 색으로 */
+    border: 1px solid var(--primary); /* 테두리를 주어 좀 더 명확하게 */
+    border-radius: 8px; /* 모서리를 둥글게 */
+    cursor: pointer;
+    font-size: 1rem; /* 글꼴 크기 조정 */
+    font-weight: 600;
+    transition: all 0.3s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08); /* 그림자 추가 */
+}
+
+.quiz-start-btn:hover {
+    background-color: var(--primary); /* 호버 시 primary 색상으로 진하게 */
+    color: white; /* 호버 시 텍스트는 흰색으로 변경 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* 호버 시 그림자 효과 강조 */
 }

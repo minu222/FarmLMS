@@ -313,11 +313,22 @@ body {
     background: var(--primary-dark);
     transform: translateY(-2px);
 }
+.subscribe-btn.watch-ready {
+    background: #4682b4;
+}
 
-/* 💡 기존의 .course-progress, .progress-label, .progress-text,
-      .progress-percent, .progress-bar-container, .progress-bar-fill,
-      .course-price, .course-price-free 관련 스타일은 현재 HTML 구조에
-      사용되지 않으므로 제거했습니다. 필요하다면 다시 추가하세요. */
+.subscribe-btn.watch-ready:hover {
+    background: #3a6890; /* 호버 시 더 어둡게 */
+    transform: translateY(-2px);
+}
+
+.course-meta-action {
+    display: flex;
+    justify-content: flex-end; /* 버튼을 오른쪽으로 배치 */
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid #e9ecef;
+}
 
 
 /* ========== 페이지네이션 ========== */
