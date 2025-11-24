@@ -172,6 +172,7 @@ body {
     min-height: 400px;
 }
 
+/* 강의 카드 컨테이너 */
 .course-card {
     background: white;
     border: 1px solid #e9ecef;
@@ -186,15 +187,46 @@ body {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
 
+/* 썸네일 영역 (비율 및 배경 설정) */
 .course-thumbnail {
     width: 100%;
-    height: 180px;
-    background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
-    display: flex;
+    /* 썸네일 비율 유지 (예: 16:9) */
+    padding-bottom: 56.25%;
+    position: relative;
+    overflow: hidden;
+    background-color: #f0f0f0; /* 로딩 중 배경색 */
+    border-radius: 8px 8px 0 0;
+    display: flex; /* 이미지 없을 때 중앙 정렬을 위해 유지 */
     align-items: center;
     justify-content: center;
-    font-size: 4rem;
-    position: relative;
+}
+
+/* 이미지가 썸네일 영역 안에 완전히 들어오도록 조정 */
+.course-card .course-thumbnail img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* 💡 수정: 이미지가 잘리지 않고 영역 안에 맞게 축소/확대 */
+    object-fit: contain;
+    transition: transform 0.3s ease;
+    /* 이미지 자체의 배경을 흰색으로 설정하여 contain 시 배경이 비어 보이는 것을 방지 (선택 사항) */
+    background-color: var(--bg-white);
+}
+
+/* 강의 카드 링크 스타일 (밑줄 제거 및 색상 상속) */
+.course-card-link {
+    text-decoration: none; /* 링크 밑줄 제거 */
+    color: inherit; /* 부모 요소의 글자색을 상속받도록 설정 */
+    display: block; /* a 태그가 card 전체 영역을 감싸도록 설정 */
+}
+
+/* 호버 시 확대 효과 (선택 사항) */
+.course-card-link:hover .course-thumbnail img {
+    /* object-fit: contain 상태에서는 transform: scale(1.05)이 효과가 적거나 어색할 수 있음. */
+    /* 하지만 원본 스타일을 존중하여 유지합니다. */
+    transform: scale(1.05);
 }
 
 .course-info {
@@ -233,74 +265,37 @@ body {
 
 .course-description {
     font-size: 0.9rem;
-    color: var(--gray);
-    line-height: 1.5;
-    margin-bottom: 1rem;
-}
+    color: #666; /* 설명 텍스트 색상 연하게 */
+    line-height: 1.4; /* 텍스트 줄 간격 설정 */
+    margin-top: 5px;
+    margin-bottom: 10px;
 
-.course-progress {
-    margin-bottom: 1rem;
-}
-
-.progress-label {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.5rem;
-    font-size: 0.85rem;
-}
-
-.progress-text {
-    color: var(--gray);
-}
-
-.progress-percent {
-    font-weight: 600;
-    color: var(--primary);
-}
-
-.progress-bar-container {
-    width: 100%;
-    height: 8px;
-    background: #e9ecef;
-    border-radius: 4px;
+    /* 텍스트가 넘칠 경우 최대 3줄로 제한하고 말줄임표 처리 */
     overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3; /* 최대 3줄로 제한 */
+    /* max-height: 4.2em; (line-clamp를 사용하면 max-height는 불필요) */
 }
 
-.progress-bar-fill {
-    height: 100%;
-    background: var(--primary);
-    border-radius: 4px;
-    transition: width 0.3s ease;
-}
-
-.course-meta-logged-in {
-    padding-top: 1rem;
-    border-top: 1px solid #e9ecef;
-    text-align: center;
-}
 
 .course-meta-logged-out {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end; /* 버튼만 있으므로 오른쪽 정렬 */
     align-items: center;
     gap: 1rem;
     padding-top: 1rem;
     border-top: 1px solid #e9ecef;
 }
 
-.course-price {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: var(--primary);
+/* 로그인 상태 관련 메타 정보 스타일 통합/정리 */
+.course-meta-logged-in {
+    padding-top: 1rem;
+    border-top: 1px solid #e9ecef;
+    text-align: right; /* 버튼을 오른쪽으로 배치 */
 }
 
-.course-price-free {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: var(--primary);
-}
-
+/* 수강 신청 버튼 */
 .subscribe-btn {
     padding: 0.6rem 1.5rem;
     background: var(--primary);
@@ -318,6 +313,12 @@ body {
     background: var(--primary-dark);
     transform: translateY(-2px);
 }
+
+/* 💡 기존의 .course-progress, .progress-label, .progress-text,
+      .progress-percent, .progress-bar-container, .progress-bar-fill,
+      .course-price, .course-price-free 관련 스타일은 현재 HTML 구조에
+      사용되지 않으므로 제거했습니다. 필요하다면 다시 추가하세요. */
+
 
 /* ========== 페이지네이션 ========== */
 .pagination {
@@ -367,25 +368,4 @@ body {
     align-items: center;
     justify-content: center;
     color: var(--gray);
-}
-
-.course-description {
-    /* 텍스트 줄 간격 설정 (가독성 향상) */
-    line-height: 1.4;
-
-    /* 텍스트가 넘칠 경우 숨김 처리 */
-    overflow: hidden;
-
-    /* 높이를 제한하여 최대 2~3줄만 보이게 함 (폰트 크기에 따라 조정 필요) */
-    max-height: 4.2em; /* 1.4em * 3줄 = 4.2em */
-
-    /* Webkit 기반 브라우저(Chrome, Safari)에서 여러 줄 말줄임표 적용 */
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3; /* 최대 3줄로 제한 */
-
-    /* 마진 설정 */
-    margin-top: 5px;
-    margin-bottom: 10px;
-    color: #666; /* 설명 텍스트 색상 연하게 */
 }

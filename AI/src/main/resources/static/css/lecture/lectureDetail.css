@@ -27,7 +27,9 @@ body {
     overflow-x: hidden;
 }
 
+/* ----------------------------------------------------------------------- */
 /* 헤더 */
+/* ----------------------------------------------------------------------- */
 header {
     position: fixed;
     top: 0;
@@ -90,7 +92,9 @@ nav a.active::after {
     border-radius: 2px;
 }
 
-/* 메인 컨텐츠 */
+/* ----------------------------------------------------------------------- */
+/* 메인 컨텐츠 레이아웃 */
+/* ----------------------------------------------------------------------- */
 .main-content {
     max-width: 1400px;
     margin: 80px auto 0;
@@ -107,7 +111,9 @@ nav a.active::after {
     gap: 2rem;
 }
 
+/* ----------------------------------------------------------------------- */
 /* 오른쪽 사이드바 - 강의 목차 */
+/* ----------------------------------------------------------------------- */
 .right-sidebar {
     display: flex;
     flex-direction: column;
@@ -121,6 +127,7 @@ nav a.active::after {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     position: sticky;
     top: 100px;
+    /* 헤더 아래 공간을 제외하고 최대 높이 설정 */
     max-height: calc(100vh - 120px);
     overflow-y: auto;
 }
@@ -144,33 +151,31 @@ nav a.active::after {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    color: var(--text); /* 기본 텍스트 색상 */
 }
 
+/* 강의 번호 + 제목 + 시간 정렬 구조 유지 */
 .chapter-item > span:first-child {
-    display: flex; /* 번호와 제목을 인라인으로 유지 */
+    display: flex;
     align-items: flex-start;
-    /* 강의 번호(예: 1강)가 절대 줄 바꿈되지 않도록 고정 너비와 최소 너비 설정 */
     min-width: 40px;
-    /* 제목과의 간격 */
     margin-right: 10px;
+    flex-shrink: 0;
 }
 
-/* 2. 강의 제목 <span>에 대한 스타일 */
 .chapter-item > span:nth-child(2) {
-    flex-grow: 1; /* 남은 공간을 제목이 모두 차지 */
-    /* 텍스트가 두 줄을 넘어가지 않도록 하는 핵심 스타일 */
+    flex-grow: 1;
     display: -webkit-box;
-    -webkit-line-clamp: 2; /* 최대 2줄 */
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis; /* 넘치는 텍스트는 ... 처리 */
-    line-height: 1.4; /* 줄 높이 설정 */
-    max-height: 2.8em; /* line-height * 2 (두 줄 높이) */
+    text-overflow: ellipsis;
+    line-height: 1.4;
+    max-height: 2.8em;
 }
 
-/* 3. 강의 시간은 오른쪽 정렬 및 고정 폭 유지 */
 .chapter-duration {
-    flex-shrink: 0; /* 공간이 부족해도 줄어들지 않음 */
+    flex-shrink: 0;
     margin-left: 10px;
     text-align: right;
     color: var(--gray);
@@ -186,7 +191,7 @@ nav a.active::after {
 }
 
 .chapter-item.active {
-    background: var(--primary-light);
+    background: var(--primary); /* 활성화 시 primary 색상으로 변경 */
     color: white;
 }
 
@@ -196,16 +201,27 @@ nav a.active::after {
 }
 
 .chapter-item.active .chapter-duration {
-    color: white;
+    color: white; /* 활성화 시 시간 텍스트도 흰색 */
+}
+.chapter-item.active:hover {
+    background: var(--primary-dark); /* 활성화된 상태에서 호버 시 */
+}
+.no-curriculum {
+    padding: 1rem;
+    text-align: center;
+    color: var(--gray);
+    font-size: 0.9rem;
 }
 
+
+/* ----------------------------------------------------------------------- */
 /* 영상 섹션 */
+/* ----------------------------------------------------------------------- */
 .video-section {
     background: white;
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    /* 💡 수정: video-container와 video-info가 수직으로 배치되도록 flex 설정 */
     display: flex;
     flex-direction: column;
 }
@@ -213,8 +229,8 @@ nav a.active::after {
 .video-container {
     position: relative;
     width: 100%;
-    padding-bottom: 56.25%; /* 16:9 비율 유지 */
-    background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+    height: auto;
+    background: #000;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -222,27 +238,27 @@ nav a.active::after {
 
 /* 비디오 플레이어의 크기 및 레이어 설정 */
 .course-video {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
-    height: 100%;
-    /* Controls가 보이도록 z-index 높게 설정 */
+    /* Video.js의 vjs-fluid 클래스가 높이를 조정합니다. */
     z-index: 20;
-    /* JS에서 로드 시 display:block으로 변경해야 합니다. */
-    /* 현재는 CSS에서 display:none을 제거했으므로, JS에서 display를 제어해야 합니다. */
 }
 
 /* 플레이스홀더를 .video-container 중앙에 배치 */
 .video-placeholder {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 0;
+    left: 0;
+    /* 너비와 높이를 100%로 설정하여 vjs-fluid의 크기를 따르도록 합니다. */
+    width: 100%;
+    height: 100%;
     text-align: center;
     color: white;
-    /* 비디오가 로드되면 JS에서 이 요소(플레이스홀더)를 숨겨야 합니다. */
     z-index: 10;
+    background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .video-placeholder-icon {
@@ -256,11 +272,8 @@ nav a.active::after {
 }
 
 .video-info {
-    /* 💡 수정: video-section의 flex-direction: column 덕분에 아래로 내려옴 */
     padding: 1.5rem;
 }
-/* ----------------------------------------------------------------------- */
-
 
 .video-title {
     font-size: 1.5rem;
@@ -283,7 +296,9 @@ nav a.active::after {
     gap: 0.3rem;
 }
 
+/* ----------------------------------------------------------------------- */
 /* 현재 강의 진도율 섹션 */
+/* ----------------------------------------------------------------------- */
 .current-lesson-progress {
     background: white;
     border-radius: 12px;
@@ -309,6 +324,11 @@ nav a.active::after {
     font-weight: 600;
     color: var(--text);
     font-size: 0.95rem;
+    /* 한 줄로 제한하고 말줄임표 처리 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80%;
 }
 
 .current-progress-percent {
@@ -332,7 +352,9 @@ nav a.active::after {
     transition: width 0.3s ease;
 }
 
-/* 탭 섹션 */
+/* ----------------------------------------------------------------------- */
+/* 탭 섹션 (강의 설명, QnA) */
+/* ----------------------------------------------------------------------- */
 .tabs-section {
     background: white;
     border-radius: 12px;
@@ -385,6 +407,11 @@ nav a.active::after {
     color: var(--text);
 }
 
+.pre-formatted-content {
+    /* 기존 설정 유지 */
+    white-space: pre-wrap;
+}
+
 .description-content h3 {
     font-size: 1.2rem;
     margin-bottom: 0.8rem;
@@ -408,7 +435,9 @@ nav a.active::after {
     margin-bottom: 0.5rem;
 }
 
+/* ----------------------------------------------------------------------- */
 /* QnA 섹션 */
+/* ----------------------------------------------------------------------- */
 .qna-list {
     list-style: none;
 }
@@ -445,15 +474,15 @@ nav a.active::after {
     margin-bottom: 0.5rem;
 }
 
-.qna-question-content {
-    color: var(--text);
-    font-size: 0.95rem;
-    line-height: 1.6;
+.qna-date {
+    font-size: 0.8em;
+    color: #888;
 }
 
 .qna-question-actions {
     display: flex;
     gap: 0.5rem;
+    flex-shrink: 0;
 }
 
 .qna-action-btn {
@@ -511,10 +540,24 @@ nav a.active::after {
     color: var(--primary);
 }
 
+.qna-reply-content-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
 .qna-reply-content {
     color: var(--gray);
     font-size: 0.9rem;
     line-height: 1.6;
+    flex-grow: 1;
+    margin-right: 1rem;
+}
+
+.qna-reply-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
 }
 
 /* 답글 입력 영역 */
@@ -640,7 +683,9 @@ nav a.active::after {
     background: var(--primary-dark);
 }
 
+/* ----------------------------------------------------------------------- */
 /* 푸터 */
+/* ----------------------------------------------------------------------- */
 footer {
     background: #2d3436;
     color: white;
@@ -697,19 +742,84 @@ footer {
     display: flex;
     flex-wrap: wrap;
     max-width: 180px;
-    /* 필요에 따라 조정 */
     gap: 0.3rem 1.5rem;
-    /* 행/열 간격, 디자인에 맞게 조정 가능 */
     list-style: none;
     padding: 0;
 }
 
 .service-list li {
     width: 33.3%;
-    /* 한 줄에 2개(총 2줄, 마지막만 1칸) */
     margin-bottom: 0.5rem;
 }
 
-.pre-formatted-content {
-    white-space: pre-wrap;
+/* ====================================================================
+ * Video.js LMS 스타일 오버라이드 (탐색 제한 해제)
+ * ==================================================================== */
+
+/* 1. LMS 테마 컬러 통합 및 컨트롤 바 높이 조정 */
+.video-js .vjs-control-bar {
+    /* 짙은 배경 사용 */
+    background-color: rgba(33, 33, 33, 0.9);
+    height: 3.2em; /* 컨트롤 바 높이를 약간 더 크게 */
+    font-size: 14px;
+}
+
+/* 2. 컨트롤 버튼 중앙 정렬 */
+.video-js .vjs-control-bar .vjs-control {
+    line-height: 3.2em;
+}
+
+/* 3. 재생/일시정지 버튼 크기 조정 */
+.video-js .vjs-play-control {
+    width: 3.5em;
+    font-size: 1.2em;
+}
+
+/* 4. 시간 표시 글꼴 크기 조정 */
+.video-js .vjs-time-control {
+    padding: 0 5px;
+    line-height: 3.2em;
+    font-size: 1em;
+}
+
+/* 5. 로딩 스피너 (색상을 Primary 컬러로 변경) */
+.video-js .vjs-loading-spinner {
+    border-color: var(--primary-light);
+    border-top-color: rgba(255, 255, 255, 0);
+}
+
+/* 6. 재생 막대 색상을 Primary 컬러로 변경 */
+/* 플레이된 부분 */
+.video-js .vjs-play-progress,
+.video-js .vjs-play-progress:before {
+    background-color: var(--primary);
+}
+
+/* 버퍼링된 부분 */
+.video-js .vjs-load-progress {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* 7. 탐색(Seeking) 기능 관련 CSS 제거/변경 */
+
+.video-js .vjs-progress-control {
+    pointer-events: none !important; /* 클릭, 드래그 등 모든 마우스 이벤트 무시 */
+    cursor: default !important;
+}
+
+.video-js .vjs-play-progress::after, /* 재생 헤드 */
+.video-js .vjs-mouse-display /* 마우스 오버 시 시간 툴팁 */
+{
+     display: none !important; <- 이 부분을 제거합니다.
+}
+
+
+/* D. 키보드 화살표 키를 통한 스크러빙 시각적 방지 (유지) */
+.video-js .vjs-progress-control * {
+    outline: none !important;
+}
+
+/* E. Fullscreen 버튼은 유지하되, 전체적인 간격 조정 */
+.video-js .vjs-control.vjs-fullscreen-control {
+    order: 10; /* 마지막에 배치 */
 }
