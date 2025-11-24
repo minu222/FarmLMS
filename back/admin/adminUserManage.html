@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>UrbanGreen - 관리자 회원 관리</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- 공통 레이아웃 CSS -->
+    <link rel="stylesheet" th:href="@{/css/main/main.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage/myPage.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/header.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/footer.css}">
+
+    <!-- 관리자 전용 CSS (이미 만들어둔 adminUserManage.css) -->
+    <link rel="stylesheet" th:href="@{/css/admin/adminUserManage.css}">
+</head>
+
+<body>
+<!-- 헤더 -->
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="mypage-container">
+    <!-- 사이드바 (마이페이지와 동일 스타일) -->
+    <aside class="sidebar">
+        <ul>
+            <li><a th:href="@{/admin/adminUserManage}" class="active">회원관리</a></li>
+            <li><a th:href="@{/admin/notices}">공지사항 관리</a></li>
+            <li><a th:href="@{/admin/comments}">댓글관리</a></li>
+        </ul>
+    </aside>
+
+    <!-- 메인 콘텐츠 -->
+    <div id="mypage-content">
+        <h2>회원 관리</h2>
+
+        <div class="admin-toolbar">
+        <!-- 검색 폼 -->
+        <form class="table-search-bar"
+              th:action="@{/admin/adminUserManage}"
+              method="get">
+            <input type="text"
+                   name="q"
+                   placeholder="이름 / 아이디 / 닉네임 / 이메일 검색"
+                   th:value="${keyword}">
+            <button type="submit">검색</button>
+        </form>
+            <!-- 선택삭제 버튼: 아래 deleteForm 을 submit -->
+            <button type="submit"
+                    form="deleteForm"
+                    class="delete-btn-inline">
+                선택 삭제
+            </button>
+        </div>
+        <!-- 선택 삭제 폼 -->
+        <form id="deleteForm"
+              th:action="@{/admin/adminUserManage/delete}" method="post">
+            <!-- 현재 페이지/검색어 유지용 -->
+            <input type="hidden" name="page" th:value="${currentPage}">
+            <input type="hidden" name="q" th:value="${keyword}">
+
+            <table class="admin-table">
+                <thead>
+                <tr>
+                    <th><input type="checkbox" id="check-all"></th>
+                    <th>순번</th>
+                    <th>이름</th>
+                    <th>아이디</th>
+                    <th>닉네임</th>
+                    <th>이메일</th>
+                    <th>생년월일</th>
+                    <th>구분</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <!-- 데이터 없을 때 -->
+                <tr th:if="${users == null or #lists.isEmpty(users)}">
+                    <td colspan="8" style="text-align: center;">조회된 회원이 없습니다.</td>
+                </tr>
+
+                <!-- 데이터 있을 때 -->
+                <tr th:each="user, stat : ${users}">
+                    <td>
+                        <input type="checkbox"
+                               name="userIds"
+                               th:value="${user.userId}"
+                               class="row-check">
+                    </td>
+                    <!-- 전체 순번 -->
+                    <td th:text="${(currentPage - 1) * pageSize + stat.index + 1}">1</td>
+
+                    <td th:text="${user.name}">홍길동</td>
+                    <td th:text="${user.loginId}">hong</td>
+                    <td th:text="${user.nickname}">길동</td>
+                    <td th:text="${user.email}">hong@example.com</td>
+                    <td th:text="${user.birth}">2000-01-01</td>
+
+                    <!-- user_type enum('admin','teacher','student') -->
+                    <td>
+                        <select class="role-select"
+                                th:data-user-id="${user.userId}">
+                            <option value="student"
+                                    th:selected="${user.userType == 'student'}">
+                                학생
+                            </option>
+                            <option value="teacher"
+                                    th:selected="${user.userType == 'teacher'}">
+                                강사
+                            </option>
+                            <option value="admin"
+                                    th:selected="${user.userType == 'admin'}">
+                                관리자
+                            </option>
+                        </select>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </form>
+
+        <!-- 페이징 -->
+        <div class="table-pagination" th:if="${totalPages > 1}">
+            <a th:each="pageNum : ${#numbers.sequence(1, totalPages)}"
+               th:href="@{/admin/adminUserManage(page=${pageNum}, q=${keyword})}"
+               th:text="${pageNum}"
+               th:classappend="${pageNum == currentPage} ? ' active'">
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- 푸터 -->
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+<!-- JS: 전체 선택 + 역할 변경 (역할 변경은 옵션, 나중에 써도 됨) -->
+<script th:inline="javascript">
+    const updateRoleUrl = /*[[@{/admin/adminUserManage/updateRole}]]*/ "/admin/adminUserManage/updateRole";
+
+    // 전체 선택 체크박스
+    const checkAll = document.getElementById('check-all');
+    if (checkAll) {
+        checkAll.addEventListener('change', function () {
+            const checked = this.checked;
+            document.querySelectorAll('.row-check').forEach(chk => chk.checked = checked);
+        });
+    }
+
+    // 역할 변경 AJAX (옵션 기능)
+    document.querySelectorAll('.role-select').forEach(select => {
+        select.addEventListener('change', function () {
+            const userId = this.dataset.userId;
+            const newType = this.value; // admin / teacher / student
+
+            fetch(updateRoleUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({userId: userId, userType: newType})
+            })
+                .then(res => {
+                    if (!res.ok) throw new Error("역할 변경 실패");
+                    alert("회원 구분이 변경되었습니다.");
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("변경 중 오류가 발생했습니다.");
+                });
+        });
+    });
+</script>
+
+</body>
+</html>
