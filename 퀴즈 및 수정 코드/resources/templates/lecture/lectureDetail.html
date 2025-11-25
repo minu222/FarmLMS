@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>강의 상세 - UrbanGreen</title>
+  <link rel="stylesheet" href="/css/lecture/lectureDetail.css">
+
+  <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+
+<main class="main-content">
+  <input type="hidden" id="lectureId" th:value="${lecture.lecture_id}" />
+  <input type="hidden" id="currentUserId" th:value="${session.loginUser != null ? session.loginUser.userId : -1}" />
+
+  <input type="hidden" id="isInstructor"
+         th:value="${session.loginUser != null and #strings.equalsIgnoreCase(session.loginUser.userType, 'TEACHER') ? 'true' : 'false'}" />
+  <div class="left-section">
+    <section class="video-section">
+      <div class="video-container">
+        <video controls
+               class="video-js vjs-default-skin course-video"
+               id="videoPlayer"
+               preload="none"
+               data-setup='{ "fluid": true, "playbackRates": [0.5, 1, 1.5, 2] }'>
+          <th:block th:if="${currentVideo != null and currentVideo.video_url != null}">
+            <source th:src="${currentVideo.video_url}" type="video/mp4">
+          </th:block>
+          죄송합니다. 귀하의 브라우저는 비디오 태그를 지원하지 않습니다.
+        </video>
+
+        <th:block th:unless="${currentVideo != null and currentVideo.video_url != null}">
+          <div class="video-placeholder" id="initialPlaceholder" style="display: flex;"> <div class="video-placeholder-icon">🎬</div>
+            <div class="video-placeholder-text">재생할 비디오가 없습니다.</div>
+          </div>
+        </th:block>
+      </div>
+      <div class="video-info">
+        <h1 class="video-title" id="videoTitle" th:text="${currentVideo != null ? currentVideo.video_title : '강의 제목 정보 없음'}">1강: 벼농사의 기초 이론</h1>
+        <div class="video-meta">
+          <span class="instructor-tag" th:text="|👤 ${lecture.instructorNickname}|">강사 정보 없음</span>
+          <span>•</span>
+          <span th:if="${lecture.category != null and lecture.category.name() == 'GARDENING'}">텃밭</span>
+          <span th:if="${lecture.category != null and lecture.category.name() == 'FIELD'}">노지</span>
+          <span th:if="${lecture.category != null and lecture.category.name() == 'HOUSE'}">하우스</span>
+          <span>•</span>
+          <span th:if="${lecture.sub_category != null and lecture.sub_category.name() == 'SEED'}">모종</span>
+          <span th:if="${lecture.sub_category != null and lecture.sub_category.name() == 'GROW'}">재배</span>
+          <span th:if="${lecture.sub_category != null and lecture.sub_category.name() == 'SHIP'}">출하</span>
+          <span>•</span>
+          <span id="videoDuration" th:text="${currentVideo != null ?
+    #strings.concat(
+        #numbers.formatInteger(currentVideo.video_time / 60, 2),
+        ':',
+        #numbers.formatInteger(currentVideo.video_time % 60, 2)
+    )
+    : '00:00'}">15:30</span>
+        </div>
+        <button class="quiz-start-btn" onclick="startQuiz()">
+          <span style="margin-right: 5px;"></span> 퀴즈 풀기
+        </button>
+      </div>
+    </section>
+
+    <section class="current-lesson-progress" id="currentLessonProgress" style="display: none;">
+      <h2 class="current-progress-header">이 강의 진도율</h2>
+      <div class="current-progress-info">
+        <span class="current-lesson-title" th:text="${currentVideo != null ? currentVideo.video_title : '강의 제목 정보 없음'}"></span>
+        <span class="current-progress-percent"></span>
+      </div>
+      <div class="current-progress-bar">
+        <div class="current-progress-fill" style="width: 75%"></div>
+      </div>
+    </section>
+
+    <section class="tabs-section">
+      <div class="tab-buttons">
+        <button class="tab-btn active" data-tab="description">강의 설명</button>
+        <button class="tab-btn" data-tab="qna">QnA</button>
+      </div>
+
+      <div class="tab-content">
+        <div class="tab-panel active" id="description-panel">
+          <div class="description-content">
+            <div class="pre-formatted-content" th:utext="${lecture.content}">
+              <h3 th:if="${lecture.content == null or lecture.content.isEmpty()}">강의 소개 정보가 없습니다.</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="qna-panel">
+          <ul class="qna-list" id="qnaList">
+          </ul>
+
+          <div class="qna-pagination" id="qnaPagination">
+          </div>
+
+          <div class="qna-input-area">
+            <div class="qna-input-label">질문하기</div>
+            <textarea class="qna-input" placeholder="강의와 관련된 질문을 남겨주세요..." id="questionInput"></textarea>
+            <button class="qna-submit" onclick="submitQuestion()">등록</button>
+            <div style="clear: both;"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <aside class="right-sidebar">
+    <div class="curriculum-sidebar">
+      <h2 class="curriculum-header">강의 목차</h2>
+      <ul class="chapter-list">
+        <li class="chapter-item"
+            th:each="video, stat : ${videoList}"
+            th:classappend="${currentVideo != null and video.video_id == currentVideo.video_id} ? 'active'"
+            th:data-video-id="${video.video_id}"
+            onclick="loadVideo(this)">
+          <span th:text="|${stat.count}강|"><span class="chapter-number">강의 순서</span></span>
+          <span th:text="${video.video_title}">강의 이름</span>
+          <span class="chapter-duration"
+                th:text="${#strings.concat(
+          #numbers.formatInteger(video.video_time / 60, 2),
+          ':',
+          #numbers.formatInteger(video.video_time % 60, 2)
+      )}">15:30</span>
+        </li>
+        <li th:if="${videoList == null or #lists.isEmpty(videoList)}" class="no-curriculum">
+          <span>등록된 강의 비디오가 없습니다.</span>
+        </li>
+      </ul>
+    </div>
+  </aside>
+</main>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+<script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+<script src="/js/lecture/LectureDetailScript.js"></script>
+
+</body>
+</html>
