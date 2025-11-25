@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UrbanGreen - 게임</title>
+
+    <!-- Unity 스타일 -->
+    <link rel="stylesheet" th:href="@{/game/TemplateData/style.css}"/>
+
+    <!-- 프로젝트 CSS -->
+    <link rel="stylesheet" th:href="@{/css/board/game.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/header.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/footer.css}">
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+</head>
+
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<!-- 메인 -->
+<div class="main-container">
+
+    <!-- 게임 화면 -->
+    <div class="game-screen-section">
+        <div class="game-screen">
+            <div id="gameCanvas" class="game-canvas"></div>
+        </div>
+    </div>
+
+    <!-- 설명 영역 -->
+    <div class="game-description-section">
+        <div class="game-details">
+            <div id="farming-detail" class="game-detail">
+                <div class="detail-header">
+                    <h3>작물 재배 시뮬레이터</h3>
+                </div>
+
+                <div class="game-description">
+                    <h4>게임 설명</h4>
+                    <p>
+                        씨앗을 심고, 물을 주고, 비료를 주며 작물을 키워보세요.
+                        계절과 날씨를 고려하여 최적의 재배 환경을 만들어야 합니다.
+                    </p>
+
+                    <h4>학습 목표</h4>
+                    <ul>
+                        <li>작물별 재배 조건 이해</li>
+                        <li>생육 단계별 관리 방법 학습</li>
+                        <li>병충해 예방 및 대처법 습득</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer th:replace="fragments/footer :: footer"></footer>
+<!-- Unity WebGL Loader -->
+<script th:src="@{/game/Build/WebBuild.loader.js}"
+        onload="startUnity()" defer></script>
+
+<script th:inline="javascript">
+
+    // Unity가 두 번 이상 실행되지 않도록 방지
+    let unityStarted = false;
+
+    function startUnity() {
+
+        if (unityStarted) {
+            console.log("Unity already started. Skipping duplicate start.");
+            return;
+        }
+        unityStarted = true;
+
+        console.log("Unity loader.js loaded → Unity starting");
+
+        const container = document.getElementById("gameCanvas");
+
+        container.innerHTML =
+            '<canvas id="unity-canvas" width="1920" height="1080" ' +
+            'style="width:100%; max-width:960px; height:auto; aspect-ratio:16/9;"></canvas>' +
+            '<div id="unity-loading-bar"><div id="unity-logo"></div>' +
+            '<div id="unity-progress-bar-empty"><div id="unity-progress-bar-full"></div></div></div>' +
+            '<div id="unity-warning"></div>';
+
+        const config = {
+            dataUrl: "/game/Build/WebBuild.data",
+            frameworkUrl: "/game/Build/WebBuild.framework.js",
+            codeUrl: "/game/Build/WebBuild.wasm",
+            streamingAssetsUrl: "/game/StreamingAssets",
+            companyName: "DefaultCompany",
+            productName: "FarmSimulator",
+            productVersion: "0.1",
+            matchWebGLToCanvasSize: false
+        };
+
+        createUnityInstance(document.querySelector("#unity-canvas"), config, progress => {
+            document.getElementById("unity-progress-bar-full").style.width = (progress * 100) + "%";
+        }).then(instance => {
+            document.getElementById("unity-loading-bar").style.display = "none";
+        }).catch(msg => {
+            alert(msg);
+        });
+    }
+</script>
+</body>
+</html>
