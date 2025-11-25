@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>내 정보수정</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <link rel="stylesheet" th:href="@{/css/main/main.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage/myPage.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/header.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/footerShort.css}">
+    <style>
+        /* 페이지 전용 약간의 스타일 */
+        .edit-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, .06);
+            padding: 22px 24px;
+        }
+
+        .form-row {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .form-row label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #6b7280;
+            letter-spacing: .4px;
+            text-transform: uppercase;
+        }
+
+        .form-row input, .form-row textarea {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px 12px;
+            outline: none;
+            background: #fbfdff;
+            transition: box-shadow .2s, border-color .2s;
+        }
+
+        .form-row input:focus, .form-row textarea:focus {
+            border-color: #b7d3ea;
+            box-shadow: 0 0 0 4px rgba(64, 115, 158, .12);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .alert {
+            margin-bottom: 14px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .alert-ok {
+            background: #e8f6ef;
+            color: #1b7a48;
+            border: 1px solid #bfe7cf;
+        }
+
+        .alert-error {
+            background: #fff1f1;
+            color: #b03838;
+            border: 1px solid #f0caca;
+        }
+
+        @media (max-width: 1024px) {
+            .edit-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .input-with-button {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .input-with-button input {
+            flex: 1;
+            height: 40px; /* 입력칸 높이 맞춤 */
+            font-size: 1rem;
+            padding: 0 12px;
+            box-sizing: border-box;
+        }
+
+        .input-with-button button.btn-primary {
+            height: 40px; /* 버튼 높이 맞춤 */
+            padding: 0 20px;
+            font-size: 1rem;
+            line-height: 40px;
+            box-sizing: border-box;
+        }
+
+        .btn-danger {
+            border-radius: 999px;
+            border: 1px solid #e53e3e;
+            background: #fff5f5;
+            color: #e53e3e;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background .2s, color .2s, box-shadow .2s;
+        }
+
+        .btn-danger:hover {
+            background: #e53e3e;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(229, 62, 62, .35);
+        }
+    </style>
+</head>
+<body>
+
+<!-- 헤더 -->
+<div th:replace="fragments/header :: header"></div>
+
+<div class="mypage-container">
+    <!-- 사이드 메뉴 -->
+    <aside class="sidebar">
+        <ul>
+            <li th:classappend="${active} == 'profile' ? 'active' : ''"><a th:href="@{/mypage/profile}">내 프로필</a></li>
+            <li th:classappend="${active} == 'edit' ? 'active' : ''"><a th:href="@{/mypage/edit}">내 정보수정</a></li>
+            <li th:classappend="${active} == 'subscriptions' ? 'active' : ''"><a th:href="@{/mypage/subscriptions}">내가
+                구독한 강의</a></li>
+            <li th:classappend="${active} == 'posts' ? 'active' : ''"><a th:href="@{/mypage/posts}">내 게시물</a></li>
+        </ul>
+    </aside>
+
+    <!-- 메인 -->
+    <main id="mypage-content">
+
+        <!-- 상단 메시지 -->
+        <div class="alert alert-ok" th:if="${param.success}">프로필이 저장되었습니다.</div>
+        <div class="alert alert-ok" th:if="${param.pwChanged}">비밀번호가 재설정 되었습니다.</div>
+        <div class="alert alert-error" th:if="${error}" th:text="${error}">오류</div>
+        <div class="alert alert-error" th:if="${pwError}" th:text="${pwError}">오류</div>
+
+        <div class="edit-grid">
+            <!-- 좌: 프로필 폼 -->
+            <section class="card">
+                <h2 style="margin-top:0;">프로필 정보</h2>
+                <form method="post" th:action="@{/mypage/updateProfile}">
+                    <div class="form-row">
+                        <label>아이디</label>
+                        <div class="input-with-button">
+                            <input name="id" readonly th:value="${user.id}" type="text">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label>이름</label>
+                        <input name="name" readonly th:value="${user.name}" type="text">
+                    </div>
+                    <div class="form-row">
+                        <label>닉네임</label>
+                        <div class="input-with-button">
+                            <input id="nicknameInput" name="nickname" required th:value="${user.nickname}" type="text">
+                            <button class="btn-primary" type="button" onclick="checkNickname()">중복확인</button>
+                        </div>
+                        <div id="nicknameCheckMessage" style="margin-top:4px; font-weight:600;"></div>
+                    </div>
+                    <div class="form-row">
+                        <label>이메일</label>
+                        <input name="email" readonly th:value="${user.email}" type="email">
+                    </div>
+                    <div class="form-row">
+                        <label>생년월일</label>
+                        <input name="birth" th:value="${user.birth}" type="date">
+                    </div>
+                    <div class="form-row">
+                        <label>내 소개</label>
+                        <textarea name="intro" placeholder="소개를 입력하세요" rows="5" th:text="${user.intro}"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn-primary" type="submit">저장</button>
+                        <a class="btn-ghost" th:href="@{/mypage/profile}">취소</a>
+                        <button class="btn-danger" type="button" id="btnDeleteAccount">회원탈퇴</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- 우: 비밀번호 변경 -->
+            <section class="card">
+                <h2 style="margin-top:0;">비밀번호 재설정</h2>
+                <form autocomplete="off" method="post" th:action="@{/mypage/updatePassword}">
+                    <div class="form-row">
+                        <label>현재 비밀번호</label>
+                        <input name="currentPassword" required type="password">
+                    </div>
+                    <div class="form-row">
+                        <label>새 비밀번호 (영문+숫자 8자 이상)</label>
+                        <input minlength="8" name="newPassword" pattern="(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}" required
+                               type="password">
+                    </div>
+                    <div class="form-row">
+                        <label>새 비밀번호 확인</label>
+                        <input name="confirmPassword" required type="password">
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn-outline" type="submit">비밀번호 재설정</button>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </main>
+</div>
+
+<!-- 푸터 -->
+<footer th:replace="fragments/footerShort :: footerShort"></footer>
+<script>
+    function checkNickname() {
+        const nicknameInput = document.getElementById('nicknameInput');
+        const nickname = nicknameInput.value.trim();
+        const messageDiv = document.getElementById('nicknameCheckMessage');
+
+        if (!nickname) {
+            messageDiv.textContent = "닉네임을 입력하세요.";
+            messageDiv.style.color = "red";
+            return;
+        }
+
+        fetch('/mypage/check-nickname?nickname=' + encodeURIComponent(nickname))
+            .then(response => {
+                if (!response.ok) throw new Error("네트워크 오류");
+                return response.json();
+            })
+            .then(data => {
+                if (data.available) {
+                    messageDiv.textContent = "사용 가능한 닉네임입니다.";
+                    messageDiv.style.color = "#5cb85f"; // 시그니처 초록색
+                } else {
+                    messageDiv.textContent = "이미 사용 중인 닉네임입니다.";
+                    messageDiv.style.color = "red";
+                }
+            })
+            .catch(error => {
+                messageDiv.textContent = "확인 중 오류가 발생했습니다.";
+                messageDiv.style.color = "red";
+                console.error(error);
+            });
+    }
+
+    // 🔥 회원탈퇴 버튼 클릭 처리
+    const deleteBtn = document.getElementById('btnDeleteAccount');
+    if (deleteBtn) {
+        deleteBtn.addEventListener('click', function () {
+            const ok = confirm('정말 회원탈퇴 하시겠습니까?\n탈퇴 후에는 계정을 복구할 수 없습니다.');
+            if (!ok) return;
+
+            fetch('/mypage/delete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(res => {
+                    if (res.status === 401) {
+                        alert('로그인 상태가 아닙니다. 다시 로그인 후 시도해주세요.');
+                        window.location.href = '/login';
+                        return;
+                    }
+                    if (res.status === 403) {
+                        alert('관리자 계정은 탈퇴할 수 없습니다.');
+                        return;
+                    }
+                    if (!res.ok) {
+                        throw new Error('탈퇴 처리에 실패했습니다.');
+                    }
+                    alert('회원탈퇴가 완료되었습니다.\n그동안 이용해 주셔서 감사합니다.');
+                    window.location.href = '/';
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('탈퇴 처리 중 오류가 발생했습니다.');
+                });
+        });
+    }
+</script>
+</body>
+</html>
