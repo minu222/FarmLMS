@@ -1,0 +1,224 @@
+:root {
+    --primary: #5cb85f;
+    --primary-dark: #4caf50;
+    --primary-light: #70c373;
+    --gray: #757575;
+    --light-gray: #f5f6fa;
+    --panel: #ffffff;
+    --text: #212121;
+    --font-main: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* 리셋 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-main);
+    background: var(--light-gray);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 메인 컨테이너 */
+.main-container {
+    max-width: 1200px;
+    margin: 80px auto 0;
+    padding: 2rem;
+    flex: 1;
+    background: none;
+}
+
+/* 게임 화면 박스 */
+.game-screen-section {
+    margin-bottom: 2rem;
+}
+
+.game-screen {
+    background: var(--panel);
+    border-radius: 16px;
+    box-shadow: 0 6px 24px rgba(50, 80, 50, 0.09);
+    padding: 2.5rem 2.5rem 1rem 2.5rem;
+}
+
+.game-canvas {
+    width: 100%;
+    min-height: 520px;
+    background: #eafbe7;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 14px rgba(92, 184, 95, 0.04);
+}
+
+/* 게임 설명 영역 */
+.game-description-section {
+    background: var(--panel);
+    border-radius: 16px;
+    padding: 2rem 2.2rem;
+    box-shadow: 0 2px 12px rgba(92, 184, 95, 0.10);
+    margin-bottom: 2rem;
+}
+
+.detail-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.detail-header h3 {
+    font-size: 1.6rem;
+    color: var(--primary);
+    letter-spacing: -1px;
+    font-weight: 700;
+}
+
+.game-description h4 {
+    font-size: 1.1rem;
+    color: var(--primary-dark);
+    margin-bottom: 0.8rem;
+    margin-top: 1rem;
+    font-weight: 600;
+}
+
+.game-description h4:first-child {
+    margin-top: 0;
+}
+
+.game-description p {
+    line-height: 1.7;
+    color: var(--gray);
+    margin-bottom: 1rem;
+    font-size: 1.01rem;
+}
+
+.game-description ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.game-description li {
+    padding-left: 1.4rem;
+    margin-bottom: 0.5rem;
+    position: relative;
+    color: var(--gray);
+}
+
+.game-description li:before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--primary);
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+/* 버튼 */
+.start-game-btn {
+    padding: 0.8rem 2.4rem;
+    background: linear-gradient(135deg, var(--primary-light), var(--primary));
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(92, 184, 95, 0.15);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.start-game-btn:hover {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(92, 184, 95, 0.22);
+}
+
+/* 탭, 카드형 영역 */
+.game-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.tab-btn {
+    padding: 1rem 1.5rem;
+    background: none;
+    border: none;
+    color: var(--gray);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+}
+
+.tab-btn:hover {
+    color: var(--primary);
+}
+
+.tab-btn.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+}
+
+/* 게임 상세 info fade in */
+.game-detail {
+    animation: fadeIn 0.4s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.game-placeholder {
+    text-align: center;
+    color: #6c757d;
+}
+
+.game-placeholder h2 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary-dark);
+}
+
+.game-placeholder p {
+    font-size: 1.1rem;
+}
+
+/* 반응형 */
+@media (max-width: 900px) {
+    .main-container {
+        padding: 0.8rem;
+    }
+
+    .game-screen, .game-description-section {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .game-canvas {
+        min-height: 320px;
+    }
+
+    .detail-header {
+        padding: 0.5rem 0;
+    }
+}
