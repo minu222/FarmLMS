@@ -1,0 +1,190 @@
+/* ==================================== */
+/* AI 플래너 관리 페이지 (myAiPlanners.html) 전용 스타일 */
+/* ==================================== */
+
+/* 기존 myPage.css의 변수 재정의 또는 확인 (선명도 개선) */
+:root {
+    /* --ink-1: #2f3640; (기존 유지) */
+    --ink-2: #333d4b; /* 기존 #4b5563 보다 진하게 변경 - 일반 텍스트용 */
+    --ink-3: #525f72; /* 기존 #6b7280 보다 진하게 변경 - 서브 텍스트용 */
+    --ink-sub: #7b879a; /* 기존 #9aa3af 보다 진하게 변경 - 가장 연한 텍스트용 */
+    /* --brand, --brand-strong 등은 유지 */
+}
+
+/* --- 1. 전체 레이아웃 (좌/우 패널) --- */
+.ai-planner-layout {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* --- 2. 왼쪽: 플래너 리스트 패널 (.planner-list-panel) --- */
+.planner-list-panel {
+    flex-basis: 300px;
+    flex-shrink: 0;
+    background: var(--panel);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    height: fit-content;
+    max-height: calc(100vh - 200px);
+}
+
+.planner-list-panel-header {
+    padding: 14px 20px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink-1);
+    border-bottom: 1px solid #e0e6ed;
+    background: #f7f9fa;
+}
+
+.planner-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto;
+    max-height: 500px; /* 스크롤 높이 */
+}
+
+.planner-item {
+    padding: 14px 20px;
+    border-bottom: 1px solid #f0f2f5;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.planner-item:hover, .planner-item.active {
+    background: #e9f7ea; /* 초록색 계열 배경 */
+}
+
+.planner-item:last-child {
+    border-bottom: none;
+}
+
+.planner-item-title {
+    font-weight: 600;
+    color: var(--ink-1);
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+.planner-item-date {
+    font-size: 12px;
+    color: var(--ink-sub); /* 선명해진 --ink-sub 적용 */
+    margin-top: 4px;
+}
+
+
+/* --- 3. 오른쪽: 플래너 상세 내용 패널 (.planner-detail-panel) --- */
+.planner-detail-panel {
+    flex: 1;
+    background: var(--panel);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    min-height: 400px; /* 최소 높이 설정 */
+}
+
+.planner-content-area {
+    line-height: 1.6;
+    color: var(--ink-2); /* 선명해진 --ink-2 적용 */
+}
+
+/* --- 4. AI 결과 콘텐츠 내부 스타일 (가독성 개선 부분) --- */
+
+/* 메인 제목 (h3#detailTitle) */
+.planner-content-area h3#detailTitle {
+    border-bottom: 2px solid var(--brand);
+    padding-bottom: 8px;
+    margin-top: 0;
+    margin-bottom: 25px;
+    color: var(--brand-strong);
+    font-size: 24px;
+    font-weight: 700;
+}
+
+/* 서브 제목 (AI가 생성한 내용 내부의 h4) */
+.planner-content-area h4 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink-1); /* --ink-1은 이미 진하므로 유지 */
+    margin-top: 28px;
+    margin-bottom: 12px;
+    padding-left: 10px;
+    border-left: 4px solid var(--brand);
+}
+
+/* 일반 단락 */
+.planner-content-area p {
+    margin-bottom: 15px;
+    line-height: 1.7;
+    color: var(--ink-2); /* 선명해진 --ink-2 적용 */
+}
+
+/* 목록 스타일 (재배 단계, 추천 작물 등) */
+.planner-content-area ul,
+.planner-content-area ol {
+    padding-left: 25px;
+    margin-bottom: 20px;
+    line-height: 1.8;
+}
+
+/* 목록 항목 */
+.planner-content-area li {
+    margin-bottom: 8px;
+    color: var(--ink-2); /* 선명해진 --ink-2 적용 */
+}
+
+/* 강조 표시 */
+.planner-content-area strong {
+    color: var(--ink-1);
+    font-weight: 700;
+}
+
+/* 수평선 (구분선) 스타일 */
+.planner-content-area hr {
+    border: 0;
+    border-top: 1px dashed #cccccc;
+    margin: 30px 0;
+}
+
+/* 표 (재배 달력 등) 스타일 */
+.planner-content-area table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+
+.planner-content-area th,
+.planner-content-area td {
+    border: 1px solid #e0e6ed;
+    padding: 10px;
+    text-align: left;
+    font-size: 14px;
+    color: var(--ink-2); /* 선명해진 --ink-2 적용 */
+}
+
+.planner-content-area th {
+    background-color: #f7f9fa;
+    font-weight: 600;
+    color: var(--ink-1);
+}
+
+/* --- 5. 반응형 --- */
+@media (max-width: 768px) {
+    .ai-planner-layout {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .planner-list-panel {
+        flex-basis: auto;
+        max-height: none;
+    }
+
+    .planner-list {
+        max-height: 300px;
+    }
+}

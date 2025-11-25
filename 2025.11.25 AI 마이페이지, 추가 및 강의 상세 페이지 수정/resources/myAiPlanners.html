@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>UrbanGreen - AI 플래너 관리</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+
+  <link rel="stylesheet" th:href="@{/css/main/main.css}">
+  <link rel="stylesheet" th:href="@{/css/mypage/myPage.css}">
+  <link rel="stylesheet" th:href="@{/css/mypage/myAiPlanners.css}">
+  <link rel="stylesheet" th:href="@{/css/fragments/header.css}">
+  <link rel="stylesheet" th:href="@{/css/fragments/footer.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="mypage-container">
+  <aside class="sidebar">
+    <ul>
+      <li th:classappend="${active} == 'profile' ? 'active' : ''"><a th:href="@{/mypage/profile}">내 프로필</a></li>
+      <li th:classappend="${active} == 'edit' ? 'active' : ''"><a th:href="@{/mypage/edit}">내 정보수정</a></li>
+      <li th:classappend="${active} == 'subscriptions' ? 'active' : ''"><a th:href="@{/mypage/subscriptions}">내가
+        구독한 강의</a></li>
+      <li th:classappend="${active} == 'posts' ? 'active' : ''"><a th:href="@{/mypage/posts}">내 댓글 보기</a></li>
+      <li th:classappend="${active} == 'aiplanners' ? 'active' : ''"><a th:href="@{/mypage/aiplanners}">AI 플래너 관리</a></li>
+    </ul>
+  </aside>
+
+  <div id="mypage-content">
+    <h2>AI 텃밭 플래너 관리</h2>
+
+    <div class="ai-planner-layout">
+      <aside class="planner-list-panel">
+        <div class="planner-list-panel-header">저장된 플래너 목록</div>
+        <ul class="planner-list" id="plannerList">
+          <li class="planner-item"><div class="planner-item-title">플래너를 불러오는 중...</div></li>
+        </ul>
+      </aside>
+
+      <section class="planner-detail-panel">
+        <div class="planner-content-area" id="plannerDetail">
+          <h3 id="detailTitle">플래너를 선택해 주세요.</h3>
+          <div id="detailContent">
+            <p>왼쪽 목록에서 저장된 텃밭 플래너를 선택하면 상세 내용을 확인할 수 있습니다.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  const plannerApiUrl = /*[[@{/mypage/aiplanners/api}]]*/ "/mypage/aiplanners/api";
+
+  (function () {
+    let planners = [];
+    let currentPlanner = null;
+
+    const plannerListEl = document.getElementById("plannerList");
+    const plannerDetailEl = document.getElementById("plannerDetail");
+    const detailTitleEl = document.getElementById("detailTitle");
+    const detailContentEl = document.getElementById("detailContent");
+
+    // -------- 플래너 리스트 렌더링 --------
+    function renderPlannerList() {
+      if (!planners.length) {
+        plannerListEl.innerHTML =
+                '<li class="planner-item"><div class="planner-item-title">저장된 플래너가 없습니다.</div></li>';
+        return;
+      }
+
+      plannerListEl.innerHTML = planners.map(p => `
+                <li class="planner-item${currentPlanner && currentPlanner.plannerId === p.plannerId ? " active" : ""}"
+                    data-id="${p.plannerId}">
+                    <div class="planner-item-title">${p.plannerName}</div>
+                    <div class="planner-item-date">ID: ${p.plannerId}</div>
+                </li>
+            `).join("");
+    }
+
+    // -------- 플래너 상세 내용 렌더링 --------
+    function renderPlannerDetail() {
+      if (!currentPlanner) {
+        detailTitleEl.textContent = "플래너를 선택해 주세요.";
+        detailContentEl.innerHTML = "<p>왼쪽 목록에서 저장된 텃밭 플래너를 선택하면 상세 내용을 확인할 수 있습니다.</p>";
+        return;
+      }
+
+      detailTitleEl.textContent = currentPlanner.plannerName;
+
+      // 저장된 AI 결과 (HTML)를 그대로 삽입 (th:utext 역할)
+      detailContentEl.innerHTML = currentPlanner.plannerContent;
+    }
+
+    // -------- 서버에서 플래너 목록 로드 --------
+    function loadPlanners() {
+      fetch(plannerApiUrl)
+              .then(res => {
+                if (res.status === 401) {
+                  throw new Error("로그인이 필요합니다.");
+                }
+                if (!res.ok) {
+                  throw new Error("플래너 목록 조회 실패");
+                }
+                return res.json();
+              })
+              .then(data => {
+                planners = data || [];
+
+                if (planners.length > 0) {
+                  currentPlanner = planners[0]; // 첫 번째 항목 자동 선택
+                } else {
+                  currentPlanner = null;
+                }
+
+                renderPlannerList();
+                renderPlannerDetail();
+
+              })
+              .catch(err => {
+                console.error("플래너 로드 오류:", err);
+                detailTitleEl.textContent = "오류 발생";
+                detailContentEl.innerHTML = `<p style="color: red;">${err.message || "데이터를 불러오는 중 오류가 발생했습니다."}</p>`;
+                plannerListEl.innerHTML =
+                        '<li class="planner-item"><div class="planner-item-title">목록 불러오기 실패</div></li>';
+              });
+    }
+
+    // -------- 이벤트 바인딩 --------
+    function bindEvents() {
+      // 플래너 항목 선택
+      plannerListEl.addEventListener("click", (e) => {
+        const item = e.target.closest(".planner-item");
+        if (!item) return;
+        const id = Number(item.dataset.id);
+
+        // 선택된 플래너 찾기 (API는 이미 전체 데이터를 가져옴)
+        const selected = planners.find(p => p.plannerId === id);
+        if (!selected) return;
+
+        currentPlanner = selected;
+
+        renderPlannerList(); // 목록 활성화 상태 업데이트
+        renderPlannerDetail(); // 상세 내용 표시
+      });
+    }
+
+    function init() {
+      bindEvents();
+      loadPlanners();
+    }
+
+    document.addEventListener("DOMContentLoaded", init);
+  })();
+  /*]]>*/
+</script>
+</body>
+</html>
