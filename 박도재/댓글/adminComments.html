@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>UrbanGreen - 강의 댓글 관리</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+
+    <!-- 공통 레이아웃 CSS -->
+    <link rel="stylesheet" th:href="@{/css/main/main.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/adminPage.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/header.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/footerShort.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/adminUserManage.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/adminComments.css}">
+</head>
+<body>
+
+<!-- 헤더 -->
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="mypage-container">
+    <!-- 좌측 관리자 사이드바 -->
+    <aside class="sidebar">
+        <ul>
+            <li th:classappend="${active} == 'adminUserManage' ? 'active' : ''">
+                <a th:href="@{/admin/adminUserManage}">회원관리</a>
+            </li>
+            <li th:classappend="${active} == 'notices' ? 'active' : ''">
+                <a th:href="@{/admin/notices}">공지사항 관리</a>
+            </li>
+            <li th:classappend="${active} == 'comments' ? 'active' : ''">
+                <a th:href="@{/admin/comments}">댓글 관리</a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- 메인 콘텐츠 -->
+    <div id="mypage-content">
+        <h2>강의 댓글 관리</h2>
+
+        <!-- 검색 & 분류 -->
+        <div class="lecture-filters">
+            <div>
+                <label for="searchLecture">검색</label>
+                <input type="text" id="searchLecture" placeholder="강의명 / 강사명을 입력하세요"/>
+            </div>
+            <div>
+                <label for="categoryFilter">대분류</label>
+                <select id="categoryFilter">
+                    <option value="">전체</option>
+                    <option value="gardening">텃밭</option>
+                    <option value="field">노지</option>
+                    <option value="house">하우스</option>
+                </select>
+            </div>
+            <div>
+                <label for="levelFilter">소분류</label>
+                <select id="levelFilter">
+                    <option value="">전체</option>
+                    <option value="seed">모종</option>
+                    <option value="grow">재배</option>
+                    <option value="ship">출하</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="lecture-layout">
+            <!-- 왼쪽: 강의 리스트 -->
+            <aside class="lecture-list-panel">
+                <div class="lecture-list-panel-header">강의 목록</div>
+                <ul class="lecture-list" id="lectureList"></ul>
+            </aside>
+
+            <!-- 오른쪽: 강의 상세 & 댓글 -->
+            <section class="lecture-detail-panel">
+                <div class="lecture-info" id="lectureInfo">
+                    <p>왼쪽에서 강의를 선택하세요.</p>
+                </div>
+
+                <hr class="divider"/>
+
+                <div id="commentsSection">
+                    <div class="comments-header">
+                        <h4>댓글</h4>
+                        <span id="commentCountLabel"></span>
+                    </div>
+
+                    <div class="comments-container" id="commentsContainer"></div>
+                    <div class="pagination" id="pagination"></div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<!-- 푸터 -->
+<footer th:replace="~{fragments/footerShort :: footerShort}"></footer>
+
+<script th:src="@{/js/adminComments.js}"></script>
+</body>
+</html>
