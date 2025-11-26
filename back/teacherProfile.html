@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>내 프로필 (Teacher)</title>
+    <link rel="stylesheet" th:href="@{/css/main/main.css}" />
+    <link rel="stylesheet" th:href="@{/css/teacher/teacherMyPage.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/header.css}" />
+    <link rel="stylesheet" th:href="@{/css/fragments/footerShort.css}" />
+</head>
+<body>
+
+<!-- 헤더 -->
+<div th:replace="fragments/header :: header"></div>
+
+<div class="mypage-container">
+
+    <!-- 사이드 메뉴 -->
+    <aside class="sidebar">
+        <ul>
+            <li th:classappend="${active} == 'teacherProfile' ? 'active' : ''">
+                <a th:href="@{/teacher/teacherProfile}">내 프로필</a>
+            </li>
+            <li th:classappend="${active} == 'teacherEdit' ? 'active' : ''">
+                <a th:href="@{/teacher/teacherEdit}">내 정보 수정</a>
+            </li>
+            <li th:classappend="${active} == 'lectureManage' ? 'active' : ''">
+                <a th:href="@{/teacher/lectureManage}">강의 관리</a>
+            </li>
+            <li th:classappend="${active} == 'teacherPosts' ? 'active' : ''">
+                <a th:href="@{/teacher/teacherPosts}">내 댓글 관리</a>
+            </li>
+            <li th:classappend="${active} == 'quizManage' ? 'active' : ''">
+                <a th:href="@{/teacher/quizManage}">퀴즈 관리</a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- 메인 콘텐츠 -->
+    <main id="mypage-content" role="main">
+
+        <!-- 상단 프로필 헤더 -->
+        <section class="profile-header" style="display:flex; align-items:center; gap:1rem;">
+            <div class="avatar"
+                 th:text="${not #strings.isEmpty(user.nickname)
+                           ? #strings.substring(user.nickname, 0, 1)
+                           : (not #strings.isEmpty(user.name)
+                              ? #strings.substring(user.name, 0, 1)
+                              : 'T')}">T</div>
+
+            <div class="profile-title" style="flex:1;">
+                <h1 th:text="${user.nickname != null ? user.nickname : user.name}">닉네임</h1>
+                <div class="meta" style="display:flex; align-items:center; gap:0.5rem;">
+                    <span class="badge" th:text="${user.userType}">teacher</span>
+                    <span class="dot" aria-hidden="true">•</span>
+                    <span class="email" th:text="${user.email}">teacher@email.com</span>
+                </div>
+            </div>
+
+            <a class="btn-outline" th:href="@{/teacher/teacherEdit}" role="button" aria-label="내 정보 수정">
+                정보 수정
+            </a>
+        </section>
+
+        <!-- 탭별 콘텐츠: ${active} 또는 ${tab} 변수로 컨트롤 -->
+        <section class="profile-body">
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">이름</span>
+                    <span class="info-value" th:text="${user.name}">홍길동</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">아이디</span>
+                    <span class="info-value" th:text="${user.id}">urban01</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">생년월일</span>
+                    <span class="info-value" th:text="${user.birth} ?: '-'">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">이메일</span>
+                    <span class="info-value" th:text="${user.email}">user@email.com</span>
+                </div>
+            </div>
+
+            <!-- 내소개 카드 -->
+            <!-- 읽기 전용 소개 카드 -->
+            <div class="intro-card">
+                <div class="intro-head" style="display:flex;align-items:center;gap:10px;justify-content:space-between;">
+                    <h2 style="margin:0;">내 소개</h2>
+                </div>
+                <p class="intro-readonly"
+                   th:text="${(user.intro != null && !#strings.isEmpty(user.intro)) ? user.intro : '작성된 소개가 없습니다.'}">
+                    작성된 소개가 없습니다.
+                </p>
+            </div>
+
+        </section>
+
+    </main>
+</div>
+
+<!-- 푸터 -->
+<footer th:replace="fragments/footerShort :: footerShort"></footer>
+
+</body>
+</html>

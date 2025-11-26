@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>UrbanGreen - 강사 댓글 관리</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+
+    <!-- 공통 레이아웃 CSS -->
+    <link rel="stylesheet" th:href="@{/css/main/main.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage/myPage.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage/posts.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/header.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/adminUserManage.css}">
+</head>
+<body>
+
+<!-- 헤더 -->
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="mypage-container">
+    <!-- 좌측 관리자 사이드바 -->
+    <aside class="sidebar">
+        <ul>
+            <li th:classappend="${active} == 'teacherProfile' ? 'active' : ''">
+                <a th:href="@{/teacher/teacherProfile}">내 프로필</a>
+            </li>
+            <li th:classappend="${active} == 'teacherEdit' ? 'active' : ''">
+                <a th:href="@{/teacher/teacherEdit}">내 정보 수정</a>
+            </li>
+            <li th:classappend="${active} == 'lectureManage' ? 'active' : ''">
+                <a th:href="@{/teacher/lectureManage}">강의 관리</a>
+            </li>
+            <li th:classappend="${active} == 'teacherPosts' ? 'active' : ''">
+                <a th:href="@{/teacher/teacherPosts}">내 댓글 관리</a>
+            </li>
+            <li th:classappend="${active} == 'quizManage' ? 'active' : ''">
+                <a th:href="@{/teacher/quizManage}">퀴즈 관리</a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- 메인 콘텐츠 -->
+    <div id="mypage-content">
+        <h2>내 댓글 관리</h2>
+
+        <!-- 검색 & 분류 -->
+        <div class="lecture-filters">
+            <div>
+                <label for="searchLecture">검색</label>
+                <input type="text" id="searchLecture" placeholder="강의명 / 강사명을 입력하세요"/>
+            </div>
+            <div>
+                <label for="categoryFilter">대분류</label>
+                <select id="categoryFilter">
+                    <option value="">전체</option>
+                    <option value="gardening">텃밭</option>
+                    <option value="field">노지</option>
+                    <option value="house">하우스</option>
+                </select>
+            </div>
+            <div>
+                <label for="levelFilter">소분류</label>
+                <select id="levelFilter">
+                    <option value="">전체</option>
+                    <option value="seed">모종</option>
+                    <option value="grow">재배</option>
+                    <option value="ship">출하</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="lecture-layout">
+            <!-- 왼쪽: 강의 리스트 -->
+            <aside class="lecture-list-panel">
+                <div class="lecture-list-panel-header">강의 목록</div>
+                <ul class="lecture-list" id="lectureList"></ul>
+            </aside>
+
+            <!-- 오른쪽: 강의 상세 & 댓글 -->
+            <section class="lecture-detail-panel">
+                <div class="lecture-info" id="lectureInfo">
+                    <p>왼쪽에서 강의를 선택하세요.</p>
+                </div>
+
+                <hr class="divider"/>
+
+                <div id="commentsSection">
+                    <div class="comments-header">
+                        <h4>댓글</h4>
+                        <span id="commentCountLabel"></span>
+                    </div>
+
+                    <div class="comments-container" id="commentsContainer"></div>
+                    <div class="pagination" id="pagination"></div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<!-- 푸터 -->
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    // ✅ 마이페이지 전용 로그인 사용자 댓글 관리용 API 엔드포인트
+    const lecturesApiUrl          = /*[[@{/teacher/comments/api/lectures}]]*/ "/teacher/comments/api/lectures";
+    const commentsApiBaseUrl      = /*[[@{/teacher/comments/api/lectures}]]*/ "/teacher/comments/api/lectures";
+    const deleteCommentApiBaseUrl = /*[[@{/teacher/comments/api/comments}]]*/ "/teacher/comments/api/comments";
+
+    // (답글 저장/삭제용 – 아래 3번에서 쓸 거야)
+    const addReplyApiBaseUrl      = /*[[@{/teacher/comments/api/comments}]]*/ "/teacher/comments/api/comments";
+    const deleteReplyApiBaseUrl   = /*[[@{/teacher/comments/api/replies}]]*/ "/teacher/comments/api/replies";
+
+    // 영문 -> 한글 변환 맵
+    const categoryMap = {
+        'gardening': '텃밭',
+        'field': '노지',
+        'house': '하우스'
+    };
+
+    const levelMap = {
+        'seed': '모종',
+        'grow': '재배',
+        'ship': '출하'
+    };
+
+    (function () {
+        let lectures = [];
+        let filteredLectures = [];
+        let currentLecture = null;
+        let currentPage = 1;
+        const COMMENTS_PER_PAGE = 3; // 댓글 3개씩 페이징
+
+        const lectureListEl        = document.getElementById("lectureList");
+        const lectureInfoEl        = document.getElementById("lectureInfo");
+        const commentsContainerEl  = document.getElementById("commentsContainer");
+        const paginationEl         = document.getElementById("pagination");
+        const commentCountLabelEl  = document.getElementById("commentCountLabel");
+        const searchInputEl        = document.getElementById("searchLecture");
+        const categoryFilterEl     = document.getElementById("categoryFilter");
+        const levelFilterEl        = document.getElementById("levelFilter");
+
+        // -------- 공통 유틸 --------
+        function escapeHtml(str) {
+            if (!str) return "";
+            return str.replace(/[&<>"']/g, function (m) {
+                switch (m) {
+                    case "&": return "&amp;";
+                    case "<": return "&lt;";
+                    case ">": return "&gt;";
+                    case "\"": return "&quot;";
+                    case "'": return "&#39;";
+                    default: return m;
+                }
+            });
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return "";
+            return String(dateStr).replace("T", " ").substring(0, 16);
+        }
+
+        // -------- 왼쪽 강의 리스트 렌더링 (영문->한글 변환) --------
+        function renderLectureList() {
+            if (!filteredLectures.length) {
+                lectureListEl.innerHTML =
+                    '<li class="lecture-item"><span class="lecture-item-title">조건에 맞는 강의가 없습니다.</span></li>';
+                return;
+            }
+
+            lectureListEl.innerHTML = filteredLectures.map(lec => `
+                <li class="lecture-item${currentLecture && currentLecture.id === lec.id ? " active" : ""}"
+                    data-id="${lec.id}">
+                    <div class="lecture-item-title">${escapeHtml(lec.title)}</div>
+                    <div class="lecture-item-meta">
+                        ${escapeHtml(lec.instructor || "")}
+                        · ${categoryMap[lec.category] || lec.category || ""}
+                        · ${levelMap[lec.level] || lec.level || ""}
+                        · 댓글 ${lec.commentCount ?? 0}개
+                    </div>
+                </li>
+            `).join("");
+        }
+
+        // -------- 강의 상세 정보 렌더링 (영문->한글 변환) --------
+        function renderLectureInfo() {
+            if (!currentLecture) {
+                lectureInfoEl.innerHTML = "<p>왼쪽에서 강의를 선택하세요.</p>";
+                return;
+            }
+
+            const lec = currentLecture;
+            lectureInfoEl.innerHTML = `
+                <h3>${escapeHtml(lec.title)}</h3>
+                <p>
+                    <span class="tag">${categoryMap[lec.category] || lec.category || ""}</span>
+                    <span class="tag">${levelMap[lec.level] || lec.level || ""}</span>
+                    <span class="tag">${escapeHtml(lec.status || "공개")}</span>
+                </p>
+                <p><strong>강사</strong> : ${escapeHtml(lec.instructor || "")}</p>
+                <p><strong>설명</strong> : ${escapeHtml(lec.description || "")}</p>
+            `;
+        }
+
+        // -------- 댓글 HTML 렌더링 (읽기 + 내 댓글 삭제만) --------
+        function renderCommentHtml(comment) {
+            // ✅ 답글(teacher/admin이 단 댓글) HTML
+            const repliesHtml = (comment.replies || []).map(reply => `
+        <div class="reply" data-reply-id="${reply.id}">
+          <div class="reply-header">
+            <span class="reply-author">${escapeHtml(reply.authorName)}</span>
+            <span class="reply-date">${escapeHtml(formatDate(reply.createdAt))}</span>
+          </div>
+          <div class="reply-content">${escapeHtml(reply.content)}</div>
+          <div class="reply-actions">
+            <button type="button" class="delete-reply-btn">답글 삭제</button>
+          </div>
+        </div>
+    `).join("");
+
+            // ✅ 질문(원댓글) + 답글 폼 + 답글 리스트
+            return `
+      <div class="comment" data-comment-id="${comment.id}">
+        <div class="comment-header">
+          <span class="comment-author">${escapeHtml(comment.authorName)}</span>
+          <span class="comment-date">${escapeHtml(formatDate(comment.createdAt))}</span>
+        </div>
+
+        <div class="comment-content">${escapeHtml(comment.content)}</div>
+
+        <div class="comment-actions">
+          <button type="button" class="reply-btn">답글</button>
+          <button type="button" class="delete-comment-btn">댓글 삭제</button>
+        </div>
+
+        <!-- 답글 입력 폼 -->
+        <div class="reply-form hidden">
+          <textarea
+            class="reply-textarea"
+            rows="2"
+            placeholder="답글을 입력하세요."></textarea>
+          <div class="reply-form-actions">
+            <button type="button" class="submit-reply-btn primary">등록</button>
+            <button type="button" class="cancel-reply-btn">취소</button>
+          </div>
+        </div>
+
+        <!-- 기존에 달린 답글들 -->
+        <div class="replies">
+          ${repliesHtml}
+        </div>
+      </div>
+    `;
+        }
+
+
+        // -------- 댓글 목록 + 페이지네이션 렌더링 (양방향 화살표) --------
+        function renderComments() {
+            if (!currentLecture) {
+                commentsContainerEl.innerHTML = '<p class="empty-message">강의를 먼저 선택하세요.</p>';
+                paginationEl.innerHTML = "";
+                commentCountLabelEl.textContent = "";
+                return;
+            }
+
+            const comments = currentLecture.comments || [];
+            const totalCount = comments.length;
+            const totalPages = Math.max(1, Math.ceil(totalCount / COMMENTS_PER_PAGE));
+
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            const startIndex = (currentPage - 1) * COMMENTS_PER_PAGE;
+            const pageComments = comments.slice(startIndex, startIndex + COMMENTS_PER_PAGE);
+
+            commentCountLabelEl.textContent = totalCount ? `총 ${totalCount}개` : "댓글 없음";
+
+            if (!comments.length) {
+                commentsContainerEl.innerHTML = '<p class="empty-message">아직 댓글이 없습니다.</p>';
+            } else if (!pageComments.length) {
+                commentsContainerEl.innerHTML = '<p class="empty-message">이 페이지에는 댓글이 없습니다.</p>';
+            } else {
+                commentsContainerEl.innerHTML = pageComments.map(c => renderCommentHtml(c)).join("");
+            }
+
+            // 페이지네이션 버튼 (이전/다음 화살표 포함)
+            let paginationHtml = "";
+
+            // 이전 화살표
+            if (currentPage > 1) {
+                paginationHtml += `<button class="page-btn prev" data-page="prev">&lt;</button>`;
+            }
+
+            // 페이지 번호들
+            for (let p = 1; p <= totalPages; p++) {
+                paginationHtml += `<button class="page-btn${p === currentPage ? " active" : ""}"
+                                           data-page="${p}">${p}</button>`;
+            }
+
+            // 다음 화살표
+            if (currentPage < totalPages) {
+                paginationHtml += `<button class="page-btn next" data-page="next">&gt;</button>`;
+            }
+
+            paginationEl.innerHTML = paginationHtml;
+        }
+
+        // -------- 필터 적용 (개선된 로직) --------
+        function applyFilters() {
+            const searchTerm = searchInputEl.value.trim().toLowerCase();
+            const category = categoryFilterEl.value;
+            const level = levelFilterEl.value;
+
+            filteredLectures = lectures.filter(lec => {
+                const text = ((lec.title || "") + " " + (lec.instructor || "")).toLowerCase();
+                const matchesSearch    = !searchTerm || text.includes(searchTerm);
+                const matchesCategory  = !category || (lec.category || "") === category;
+                const matchesLevel     = !level || (lec.level || "") === level;
+                return matchesSearch && matchesCategory && matchesLevel;
+            });
+
+            // 필터링된 결과가 없거나, 현재 선택된 강의가 필터 결과에 없으면
+            if (!filteredLectures.length) {
+                currentLecture = null;
+                currentPage = 1;
+                renderLectureList();
+                renderLectureInfo();
+                renderComments();
+            } else if (!currentLecture || !filteredLectures.find(l => l.id === currentLecture.id)) {
+                // 현재 강의가 없거나 필터 결과에 없으면 첫 번째 강의 선택
+                currentLecture = filteredLectures[0];
+                currentPage = 1;
+                renderLectureList();
+                renderLectureInfo();
+                loadComments(currentLecture.id);
+            } else {
+                // 현재 강의가 필터 결과에 포함되어 있으면 목록만 다시 렌더링
+                renderLectureList();
+            }
+        }
+
+        // -------- 서버에서 강의 목록 로드 (내가 댓글 단 강의만) --------
+        function loadLectures() {
+            fetch(lecturesApiUrl)
+                .then(res => {
+                    if (!res.ok) throw new Error("강의 목록 조회 실패");
+                    return res.json();
+                })
+                .then(data => {
+                    // data = [{ id, title, instructor, category, level, status, description, commentCount }, ...]
+                    lectures = data || [];
+                    filteredLectures = [...lectures];
+                    currentLecture = filteredLectures[0] || null;
+                    currentPage = 1;
+
+                    renderLectureList();
+                    renderLectureInfo();
+
+                    if (currentLecture) {
+                        loadComments(currentLecture.id);
+                    } else {
+                        renderComments();
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    lectureListEl.innerHTML =
+                        '<li class="lecture-item"><span class="lecture-item-title">강의 목록을 불러오는 중 오류가 발생했습니다.</span></li>';
+                });
+        }
+
+        // -------- 서버에서 선택 강의의 내 댓글 + 답글 로드 --------
+        function loadComments(lectureId) {
+            return fetch(`${commentsApiBaseUrl}/${lectureId}/comments`)
+                .then(res => {
+                    if (!res.ok) throw new Error("댓글 조회 실패");
+                    return res.json();
+                })
+                .then(data => {
+                    // 현재 선택된 강의가 바뀌었으면 무시
+                    if (!currentLecture || currentLecture.id !== lectureId) return;
+                    currentLecture.comments = data || [];
+                    currentPage = 1;
+                    renderLectureInfo();
+                    renderComments();
+                })
+                .catch(err => {
+                    console.error(err);
+                    commentsContainerEl.innerHTML =
+                        '<p class="empty-message">댓글을 불러오는 중 오류가 발생했습니다.</p>';
+                    commentCountLabelEl.textContent = "";
+                });
+        }
+
+
+        function addReply(commentId, content) {
+            return fetch(`${addReplyApiBaseUrl}/${commentId}/replies`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({content: content})
+            }).then(res => {
+                if (!res.ok) throw new Error("답글 등록 실패");
+            });
+        }
+
+        // -------- 댓글 삭제 (내 댓글만) --------
+        function deleteComment(commentId) {
+            return fetch(`${deleteCommentApiBaseUrl}/${commentId}`, {
+                method: "DELETE"
+            }).then(res => {
+                if (!res.ok) throw new Error("댓글 삭제 실패");
+            });
+        }
+
+        function deleteReply(replyId) {
+            return fetch(`${deleteReplyApiBaseUrl}/${replyId}`, {
+                method: "DELETE"
+            }).then(res => {
+                if (!res.ok) throw new Error("답글 삭제 실패");
+            });
+        }
+
+        // -------- 이벤트 바인딩 --------
+        function bindEvents() {
+            // 강의 선택
+            lectureListEl.addEventListener("click", (e) => {
+                const item = e.target.closest(".lecture-item");
+                if (!item) return;
+                const id = Number(item.dataset.id);
+                const selected = filteredLectures.find(lec => lec.id === id);
+                if (!selected) return;
+
+                currentLecture = selected;
+                currentPage = 1;
+
+                renderLectureList();
+                renderLectureInfo();
+                loadComments(currentLecture.id);
+            });
+
+            // 검색/필터
+            searchInputEl.addEventListener("input", applyFilters);
+            categoryFilterEl.addEventListener("change", applyFilters);
+            levelFilterEl.addEventListener("change", applyFilters);
+
+            // 댓글 영역
+            // -------- 댓글 영역 이벤트 바인딩 --------
+            commentsContainerEl.addEventListener("click", function (e) {
+                const commentEl = e.target.closest(".comment");
+                if (!commentEl || !currentLecture) return;
+
+                const commentId = Number(commentEl.dataset.commentId);
+                const comment = currentLecture.comments.find((c) => c.id === commentId);
+                if (!comment) return;
+
+                // ✅ 댓글 삭제
+                if (e.target.classList.contains("delete-comment-btn")) {
+                    if (!confirm("이 댓글을 삭제하시겠습니까?")) return;
+
+                    deleteComment(commentId)
+                        .then(() => loadComments(currentLecture.id))
+                        .catch(err => {
+                            console.error(err);
+                            alert("댓글 삭제 중 오류가 발생했습니다.");
+                        });
+                    return;
+                }
+
+                // ✅ 답글 폼 열기/닫기
+                if (e.target.classList.contains("reply-btn")) {
+                    const replyForm = commentEl.querySelector(".reply-form");
+                    if (replyForm) {
+                        replyForm.classList.toggle("hidden");
+                        const textarea = replyForm.querySelector(".reply-textarea");
+                        if (!replyForm.classList.contains("hidden") && textarea) {
+                            textarea.focus();
+                        }
+                    }
+                    return;
+                }
+
+                // ✅ 답글 등록
+                if (e.target.classList.contains("submit-reply-btn")) {
+                    const replyForm = commentEl.querySelector(".reply-form");
+                    const textarea = replyForm && replyForm.querySelector(".reply-textarea");
+                    if (!textarea) return;
+
+                    const content = textarea.value.trim();
+                    if (!content) {
+                        alert("답글 내용을 입력하세요.");
+                        return;
+                    }
+
+                    addReply(commentId, content)
+                        .then(() => {
+                            textarea.value = "";
+                            replyForm.classList.add("hidden");
+                            return loadComments(currentLecture.id);
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            alert("답글 등록 중 오류가 발생했습니다.");
+                        });
+
+                    return;
+                }
+
+                // ✅ 답글 작성 취소
+                if (e.target.classList.contains("cancel-reply-btn")) {
+                    const replyForm = commentEl.querySelector(".reply-form");
+                    if (replyForm) {
+                        replyForm.classList.add("hidden");
+                        const textarea = replyForm.querySelector(".reply-textarea");
+                        if (textarea) textarea.value = "";
+                    }
+                    return;
+                }
+
+                // (선택) 답글 삭제 버튼을 만들었을 경우
+                if (e.target.classList.contains("delete-reply-btn")) {
+                    const replyEl = e.target.closest(".reply");
+                    if (!replyEl) return;
+
+                    const replyId = Number(replyEl.dataset.replyId);
+                    if (!confirm("이 답글을 삭제하시겠습니까?")) return;
+
+                    deleteReply(replyId)
+                        .then(() => loadComments(currentLecture.id))
+                        .catch(err => {
+                            console.error(err);
+                            alert("답글 삭제 중 오류가 발생했습니다.");
+                        });
+                    return;
+                }
+            });
+
+            // 페이지네이션 (양방향 화살표 지원)
+            paginationEl.addEventListener("click", (e) => {
+                const btn = e.target.closest(".page-btn");
+                if (!btn || !currentLecture) return;
+
+                const totalPages = Math.max(
+                    1,
+                    Math.ceil((currentLecture.comments || []).length / COMMENTS_PER_PAGE)
+                );
+                const page = btn.dataset.page;
+
+                if (page === "prev") {
+                    // 이전 페이지
+                    if (currentPage > 1) {
+                        currentPage--;
+                        renderComments();
+                    }
+                } else if (page === "next") {
+                    // 다음 페이지
+                    if (currentPage < totalPages) {
+                        currentPage++;
+                        renderComments();
+                    }
+                } else {
+                    // 번호 클릭
+                    const num = Number(page);
+                    if (!isNaN(num) && num >= 1 && num <= totalPages) {
+                        currentPage = num;
+                        renderComments();
+                    }
+                }
+            });
+        }
+
+        function init() {
+            bindEvents();
+            loadLectures();
+        }
+
+        document.addEventListener("DOMContentLoaded", init);
+    })();
+    /*]]>*/
+</script>
+</body>
+</html>
