@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>UrbanGreen - 퀴즈 관리</title>
+
+    <link rel="stylesheet" th:href="@{/css/main/main.css}" />
+    <link rel="stylesheet" th:href="@{/css/mypage/myPage.css}" />
+    <link rel="stylesheet" th:href="@{/css/fragments/header.css}" />
+    <link rel="stylesheet" th:href="@{/css/fragments/footerShort.css}" />
+
+    <style>
+        :root {
+            --bg-page: #f5f6fa;
+            --panel: #ffffff;
+            --ink-1: #2f3640;
+            --ink-2: #4b5563;
+            --ink-3: #6b7280;
+            --ink-sub: #9aa3af;
+            --accent: #2f3640;
+            --shadow: 0 8px 24px rgba(0, 0, 0, .06);
+            --radius: 12px;
+
+            --brand: #A07E68;
+            --brand-strong: #85624E;
+            --brand-light: #F5F0ED;
+            --brand-text: #6E4D3A;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--ink-1);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .mypage-container {
+            display: flex;
+            min-height: 100vh;
+            background: var(--bg-page);
+            margin-top: 80px;
+            gap: 20px;
+            padding: 24px;
+            box-sizing: border-box;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: #ffffff;
+            color: #2f3640;
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 96px;
+            align-self: flex-start;
+            padding: 12px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            margin: 0;
+            padding: 6px;
+        }
+
+        .sidebar ul li {
+            margin: 4px 0;
+        }
+
+        .sidebar ul li a {
+            display: block;
+            padding: 12px 14px;
+            color: #2f3640;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            letter-spacing: 0.1px;
+            transition: transform 0.04s ease, background 0.2s ease, color 0.2s ease;
+        }
+
+        .sidebar ul li a:hover {
+            background: var(--brand);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .sidebar ul li.active a {
+            background: linear-gradient(180deg, var(--brand), var(--brand-strong));
+            color: #fff;
+        }
+
+        #mypage-content {
+            flex: 1;
+            min-width: 0;
+            background: transparent;
+            border-radius: var(--radius);
+        }
+
+        .btn-outline {
+            border: 1px solid var(--brand-light);
+            background: #fdfcfa;
+            color: var(--brand-text);
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, color 0.2s, transform 0.04s;
+        }
+
+        .btn-outline:hover {
+            background: var(--brand-light);
+            color: var(--brand-strong);
+            transform: translateY(-1px);
+        }
+
+        .btn-ghost {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: 1px solid #dbe5ef;
+            color: var(--brand-text);
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, transform 0.04s;
+        }
+
+        .btn-ghost:hover {
+            background: var(--brand-light);
+            color: var(--brand-strong);
+            transform: translateY(-1px);
+        }
+
+        .btn-register {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--brand);
+            border: 1px solid var(--brand);
+            color: #fff;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s, transform 0.04s;
+        }
+
+        .btn-register:hover {
+            background: var(--brand-strong);
+            border-color: var(--brand-strong);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline.sm,
+        .btn-ghost.sm,
+        .btn-register.sm {
+            padding: 6px 12px;
+            font-size: 13px;
+            border-radius: 8px;
+        }
+
+        .board-panel {
+            background: var(--panel);
+            border-radius: var(--radius);
+            padding: 22px 24px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .board-header {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .board-header h2 {
+            margin: 0;
+            font-size: 18px;
+            color: var(--ink-1);
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+            margin-top: 12px;
+        }
+
+        .custom-table th {
+            text-align: center;
+            padding: 14px 16px;
+            font-size: 12px;
+            color: var(--ink-sub);
+            font-weight: 700;
+            background: #f8f9fa;
+            border-bottom: 1px solid #eee;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+        }
+
+        .custom-table th:first-child {
+            text-align: left;
+            width: 30%;
+        }
+
+        .custom-table th:nth-child(2),
+        .custom-table th:nth-child(3),
+        .custom-table th:nth-child(4) {
+            width: 15%;
+        }
+
+        .custom-table th:last-child {
+            width: 25%;
+        }
+
+        .custom-table td {
+            padding: 16px;
+            color: var(--ink-1);
+            border-bottom: 1px solid #f1f3f5;
+            vertical-align: middle;
+        }
+
+        .custom-table td:first-child {
+            text-align: left;
+        }
+
+        .custom-table td:nth-child(2),
+        .custom-table td:nth-child(3),
+        .custom-table td:nth-child(4) {
+            text-align: center;
+        }
+
+        .custom-table td:last-child {
+            text-align: left;
+        }
+
+        .custom-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .custom-table tr:hover td {
+            background-color: #fdfcfa;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .mypage-container {
+                flex-direction: column;
+                padding: 16px;
+                margin-top: 60px;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: static;
+                border-radius: 12px;
+            }
+
+            #mypage-content {
+                margin: 0;
+            }
+
+            .board-panel {
+                padding: 16px;
+            }
+
+            .table-wrapper {
+                overflow-x: auto;
+            }
+
+            .custom-table {
+                min-width: 900px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div th:replace="fragments/header :: header" style="height: 80px; background: #fff; border-bottom:1px solid #eee; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #ccc;">
+        HEADER FRAGMENT PLACEHOLDER
+    </div>
+
+    <div class="mypage-container">
+        <aside class="sidebar">
+            <ul>
+                <li th:classappend="${active} == 'teacherProfile' ? 'active' : ''">
+                    <a th:href="@{/teacher/teacherProfile}">내 프로필</a>
+                </li>
+                <li th:classappend="${active} == 'teacherEdit' ? 'active' : ''">
+                    <a th:href="@{/teacher/teacherEdit}">내 정보 수정</a>
+                </li>
+                <li th:classappend="${active} == 'lectureManage' ? 'active' : ''">
+                    <a th:href="@{/teacher/lectureManage}">강의 관리</a>
+                </li>
+                <li th:classappend="${active} == 'teacherPosts' ? 'active' : ''">
+                    <a th:href="@{/teacher/teacherPosts}">내 댓글 관리</a>
+                </li>
+                <li class="active" th:classappend="${active} == 'quizManage' ? 'active' : ''">
+                    <a th:href="@{/teacher/quizManage}">퀴즈 관리</a>
+                </li>
+            </ul>
+        </aside>
+
+        <div id="mypage-content">
+            <div class="board-panel">
+                <div class="board-header">
+                    <h2>퀴즈 수정/관리</h2>
+                </div>
+
+                <div class="table-wrapper">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>강의 제목</th>
+                                <th>대분류</th>
+                                <th>소분류</th>
+                                <th>등록일</th>
+                                <th>관리</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="post : ${posts}">
+                                <td><span style="font-weight:600;">도시농업 기초 완성</span></td>
+                                <td>텃밭</td>
+                                <td>모종</td>
+                                <td class="date-cell">2025.11.18</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-register sm" onclick="window.location.href='#'">등록</button>
+                                        <button class="btn-outline sm" onclick="window.location.href='#'">수정</button>
+                                        <button class="btn-ghost sm" style="color:#e03131; border-color:#f1f3f5;">삭제</button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><span style="font-weight:600;">스마트팜 실전 가이드</span></td>
+                                <td>스마트팜</td>
+                                <td>센서 관리</td>
+                                <td class="date-cell">2025.11.20</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-register sm">등록</button>
+                                        <button class="btn-outline sm">수정</button>
+                                        <button class="btn-ghost sm" style="color:#e03131; border-color:#f1f3f5;">삭제</button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><span style="font-weight:600;">수경재배 입문과정</span></td>
+                                <td>수경재배</td>
+                                <td>양액 관리</td>
+                                <td class="date-cell">2025.11.22</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-register sm">등록</button>
+                                        <button class="btn-outline sm">수정</button>
+                                        <button class="btn-ghost sm" style="color:#e03131; border-color:#f1f3f5;">삭제</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="fragments/footerShort :: footerShort" style="margin-top: 40px; padding: 20px; text-align: center; color: #ccc;">
+        FOOTER FRAGMENT PLACEHOLDER
+    </footer>
+</body>
+</html>

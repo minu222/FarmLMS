@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>UrbanGreen - 강의 수정</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<style>
+  :root {
+    --bg-page: #f5f6fa;
+    --panel: #ffffff;
+    --ink-1: #2f3640;
+    --ink-2: #4b5563;
+    --ink-3: #6b7280;
+    --ink-sub: #9aa3af;
+    --brand: #A07E68;
+    --brand-strong: #85624E;
+    --brand-light: #F5F0ED;
+    --brand-text: #6E4D3A;
+    --border: #e2ddce;
+    --shadow: 0 8px 24px rgba(160,126,104,0.2);
+    --radius: 12px;
+  }
+
+  body {
+    margin:0;
+    font-family: 'Pretendard', sans-serif;
+    background-color: var(--bg-page);
+    color: var(--ink-1);
+  }
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  ul {
+    list-style:none;
+    padding:0;
+    margin:0;
+  }
+  button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+  }
+  .mypage-container {
+    display: flex;
+    min-height: 100vh;
+    background: var(--bg-page);
+    margin-top: 80px;
+    gap: 20px;
+    padding: 24px;
+    box-sizing: border-box;
+  }
+  .sidebar {
+    width: 240px;
+    background: var(--panel);
+    color: var(--ink-1);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 96px;
+    align-self: flex-start;
+    padding: 12px;
+    flex-shrink: 0;
+  }
+  .sidebar ul li {
+    margin: 4px 0;
+  }
+  .sidebar ul li a {
+    display: block;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1px;
+    transition: transform 0.04s ease, background 0.2s ease, color 0.2s ease;
+    color: var(--ink-1);
+  }
+  .sidebar ul li a:hover {
+    background: var(--brand);
+    color: #fff;
+    transform: translateY(-1px);
+  }
+  .sidebar ul li.active a {
+    background: linear-gradient(180deg, var(--brand), var(--brand-strong));
+    color: #fff;
+  }
+  #mypage-content {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border-radius: var(--radius);
+  }
+  .intro-card {
+    background: var(--panel);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    box-shadow: var(--shadow);
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .intro-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 12px;
+  }
+  .intro-head h2 {
+    margin: 0;
+    font-size: 18px;
+    color: var(--ink-1);
+  }
+  .hint {
+    color: var(--ink-sub);
+    font-size: 14px;
+  }
+  .course-title-box {
+    background: var(--brand-light);
+    border: 1px solid var(--brand);
+    padding: 16px;
+    border-radius: 10px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .course-title-label {
+    font-weight: 700;
+    color: var(--brand-strong);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .course-title-input {
+    border: none;
+    background: transparent;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink-1);
+    width: 100%;
+    outline: none;
+  }
+  .form-group {
+    margin-bottom: 20px;
+    width: 100%;
+  }
+  .form-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink-sub);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+  .form-row {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+  }
+  .form-input, .form-select, .form-textarea {
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 12px 14px;
+    outline: none;
+    font-size: 15px;
+    color: var(--ink-2);
+    background: #fbfdff;
+    transition: 0.2s;
+  }
+  .form-textarea {
+    min-height: 300px;
+    resize: vertical;
+    line-height: 1.6;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: var(--brand);
+    box-shadow: 0 0 0 4px rgba(92,184,95,0.12);
+  }
+  .file-upload-box {
+    width: 100%;
+    box-sizing: border-box;
+    border: 2px dashed #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    background: #fbfdff;
+    text-align: center;
+  }
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+  }
+  .btn-primary {
+    background: var(--brand);
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .btn-primary:hover {
+    background: var(--brand-strong);
+  }
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid #dbe5ef;
+    color: var(--brand-text);
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .btn-ghost:hover {
+    background: var(--brand-light);
+    color: var(--brand-strong);
+  }
+  @media (max-width: 768px) {
+    .mypage-container {
+      flex-direction: column;
+      padding: 16px;
+    }
+    .sidebar {
+      width: 100%;
+      position: static;
+      margin-bottom: 20px;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="mypage-container">
+    <aside class="sidebar">
+      <ul>
+        <li><a href="/teacher/teacherProfile">내 프로필</a></li>
+        <li><a href="/teacher/teacherEdit">내 정보 수정</a></li>
+        <li class="active"><a href="/teacher/lectureManage">강의 관리</a></li>
+        <li><a href="/teacher/teacherPosts">내 댓글 관리</a></li>
+        <li><a href="/teacher/quizManage">퀴즈 관리</a></li>
+      </ul>
+    </aside>
+    <main id="mypage-content">
+      <div class="intro-card">
+        <div class="intro-head">
+          <h2>강의 수정</h2>
+          <span class="hint">등록한 강의를 수정합니다.</span>
+        </div>
+        <form id="courseEditForm" enctype="multipart/form-data" class="intro-form">
+          <div class="form-group">
+            <label for="category1" class="form-label">대분류</label>
+            <select id="category1" name="category1" class="form-select" required>
+              <option value="">선택하세요</option>
+              <option value="vegetable_gardening">텃밭가꾸기</option>
+              <option value="indoor_garden">하우스 농사/실내정원</option>
+              <option value="farm">노지</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="category2" class="form-label">중분류</label>
+            <select id="category2" name="category2" class="form-select" required>
+              <option value="">선택하세요</option>
+              <option value="vegetable_seed">모종</option>
+              <option value="vegetable_cultivate">재배</option>
+              <option value="deliver">출하</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="courses_name" class="form-label">강의 제목</label>
+            <input id="courses_name" name="courses_name" type="text" class="form-input" placeholder="강의 제목 입력" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">강의 영상</label>
+            <div class="file-upload-box">
+              <label class="btn-ghost" style="border:1px solid #ccc; display:inline-block; cursor: pointer;">
+                <i class="fa-solid fa-video"></i> 영상 파일 선택
+                <input type="file" name="videoFile" accept="video/*" style="display:none" onchange="handleFileSelect(event)" />
+              </label>
+              <div id="videoFileName" style="margin-top:10px; font-size:14px;">선택된 파일 없음</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="description" class="form-label">강의 설명</label>
+            <textarea id="description" name="description" class="form-textarea" placeholder="강의 설명 입력" required></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn-ghost" onclick="history.back()">취소</button>
+            <button type="submit" class="btn-primary">수정 완료</button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      if(file) {
+        document.getElementById('videoFileName').innerText = file.name;
+      }
+    }
+  </script>
+</body>
+</html>
