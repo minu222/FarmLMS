@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>마이페이지 - 구독 강의</title>
+    <link rel="stylesheet" th:href="@{/css/mypage/subscriptions.css}">
+    <link rel="stylesheet" th:href="@{/css/main/main.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage/myPage.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/header.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/footer.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="mypage-container">
+    <aside class="sidebar">
+        <ul>
+            <li th:classappend="${active} == 'profile' ? 'active' : ''">
+                <a th:href="@{/mypage/profile}">내 프로필</a>
+            </li>
+            <li th:classappend="${active} == 'edit' ? 'active' : ''">
+                <a th:href="@{/mypage/edit}">내 정보수정</a>
+            </li>
+            <li th:classappend="${active} == 'subscriptions' ? 'active' : ''">
+                <a th:href="@{/mypage/subscriptions}">내가 구독한 강의</a>
+            </li>
+            <li th:classappend="${active} == 'posts' ? 'active' : ''">
+                <a th:href="@{/mypage/posts}">내 댓글 보기</a>
+            </li>
+            <li th:classappend="${active} == 'aiplanners' ? 'active' : ''">
+                <a th:href="@{/mypage/aiplanners}">AI 플래너 관리</a>
+            </li>
+        </ul>
+    </aside>
+
+    <div class="mypage-content">
+
+        <div class="lecture-list-area">
+            <div th:if="${#lists.isEmpty(lectures)}" class="empty-message">
+                <p>아직 구독한 강의가 없습니다. 새로운 강의를 구독해보세요!</p>
+                <a th:href="@{/lecture/all}" class="btn-primary">전체 강의 보러가기</a>
+            </div>
+
+            <div id="lectureContainer" th:unless="${#lists.isEmpty(lectures)}">
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script th:inline="javascript">
+    // -----------------------------------------------------------
+    // --- 데이터 초기화 ---
+    // -----------------------------------------------------------
+    const lectures = [[${lectures}]].map(lecture => {
+        return {
+            lecture_id: lecture.lecture_id,
+            sub_category: lecture.sub_category,
+            category: lecture.category,
+            title: lecture.title,
+            content: lecture.content,
+            instructorNickname: lecture.instructorNickname,
+            img_url: lecture.img_url,
+            progress: lecture.progress || 0
+        };
+    });
+
+    // -----------------------------------------------------------
+    // --- 유틸리티 함수 ---
+    // -----------------------------------------------------------
+    function truncateDescription(text, maxLength = 50) {
+        if (!text) return '';
+        const cleanText = text.replace(/\n/g, ' ').trim();
+        return cleanText.length > maxLength ? cleanText.substring(0, maxLength).trim() + '...' : cleanText;
+    }
+
+    function getSubCategoryText(sub) {
+        const map = { SEED: '모종', GROW: '재배', SHIP: '출하' };
+        return map[sub] || sub;
+    }
+
+    function getCategoryText(cat) {
+        const map = { GARDENING: '텃밭', FIELD: '노지', HOUSE: '하우스' };
+        return map[cat] || cat;
+    }
+
+    // -----------------------------------------------------------
+    // --- 렌더링 로직 (핵심 수정) ---
+    // -----------------------------------------------------------
+
+    // 단일 강의 카드 HTML 생성 함수 (변화 없음)
+    function createCardHtml(lecture, isCompleted) {
+        const linkHref = `/lecture/lectureDetail?lectureId=${lecture.lecture_id}`;
+        const buttonText = isCompleted ? '다시 보기' : '이어서 학습';
+        const buttonClass = isCompleted ? 'subscribe-btn' : 'subscribe-btn watch-ready';
+        const description = truncateDescription(lecture.content, 50);
+        const cardClass = isCompleted ? 'lecture-card course-card completed-lecture' : 'lecture-card course-card';
+
+        const progressPercent = Math.floor(lecture.progress * 100);
+        const badgeHtml = isCompleted ? '<span class="completed-badge">완료</span>' : '';
+
+        return `
+            <div class="${cardClass}" data-lecture-id="${lecture.lecture_id}">
+                <a href="${linkHref}" class="course-card-link-content">
+                    <div class="card-image-wrapper course-thumbnail">
+                        <img src="${lecture.img_url || '/images/default-thumbnail.jpg'}" alt="${lecture.title}">
+                    </div>
+                    <div class="card-info course-info">
+                        <div class="card-category course-category">
+                            ${getCategoryText(lecture.category)} • ${getSubCategoryText(lecture.sub_category)}
+                        </div>
+                        <div class="course-title-row">
+                            <h3 class="card-title course-title">${lecture.title} ${badgeHtml}</h3>
+                            <span class="card-instructor course-instructor-inline">👤 ${lecture.instructorNickname}</span>
+                        </div>
+                        <p class="course-description">${description}</p>
+                        <div style="font-size:12px; color:#666; margin-top:5px;">진도율: ${progressPercent}%</div>
+                    </div>
+                </a>
+                <div class="card-footer course-meta-action">
+                    <button class="${buttonClass}" onclick="redirectToDetail(${lecture.lecture_id})">
+                        ${buttonText}
+                    </button>
+                    <button class="unsubscribe-btn" onclick="handleUnsubscribe(${lecture.lecture_id}, '${lecture.title}')">
+                        구독 취소
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    // 전체 목록 렌더링 함수 (수정됨)
+    function renderSubscriptions() {
+        const container = document.getElementById('lectureContainer');
+        container.innerHTML = ''; // 초기화
+
+        // 1. 데이터 분리: 진도율이 1 이상이면 완료, 아니면 진행 중
+        const ongoing = lectures.filter(l => l.progress < 1);
+        const completed = lectures.filter(l => l.progress >= 1);
+
+        // 2. '수강 중인 강의' 섹션 렌더링
+        const ongoingTitle = document.createElement('div');
+        ongoingTitle.className = 'lecture-section-title';
+        ongoingTitle.innerHTML = '수강 중인 강의';
+        container.appendChild(ongoingTitle);
+
+        if (ongoing.length > 0) {
+            const grid = document.createElement('div');
+            grid.className = 'lecture-cards courses-grid';
+            grid.innerHTML = ongoing.map(l => createCardHtml(l, false)).join('');
+            container.appendChild(grid);
+        } else {
+            const emptyMsg = document.createElement('p');
+            emptyMsg.style.color = '#666';
+            emptyMsg.style.padding = '20px';
+            emptyMsg.innerText = '현재 수강 중인 강의가 없습니다.';
+            container.appendChild(emptyMsg);
+        }
+
+        // 3. '완료된 강의' 섹션 렌더링 (완료된 강의가 있을 때만 표시)
+        if (completed.length > 0) {
+            const completedTitle = document.createElement('div');
+            completedTitle.className = 'lecture-section-title';
+            completedTitle.style.marginTop = '50px'; // 간격 추가
+            completedTitle.innerHTML = '완료된 강의';
+            container.appendChild(completedTitle);
+
+            const grid = document.createElement('div');
+            grid.className = 'lecture-cards courses-grid';
+            grid.innerHTML = completed.map(l => createCardHtml(l, true)).join('');
+            container.appendChild(grid);
+        }
+    }
+
+    // -----------------------------------------------------------
+    // --- 이벤트 핸들러 (기존 로직 유지) ---
+    // -----------------------------------------------------------
+    function redirectToDetail(lectureId) {
+        window.location.href = '/lecture/lectureDetail?lectureId=' + lectureId;
+    }
+
+    function handleUnsubscribe(lectureId, lectureTitle) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        if (!confirm(`정말로 [${lectureTitle}] 강의의 구독을 취소하시겠습니까?`)) return;
+
+        fetch(`/api/subscribe/${lectureId}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' }
+        })
+            .then(response => {
+                if (response.status === 401) {
+                    alert("로그인이 필요합니다.");
+                    window.location.href = '/login';
+                    return Promise.reject('UNAUTHORIZED');
+                }
+                if (!response.ok) throw new Error('요청 실패');
+                return response.text();
+            })
+            .then(msg => {
+                alert(msg);
+                // 배열에서 삭제
+                const idx = lectures.findIndex(l => l.lecture_id === lectureId);
+                if (idx > -1) lectures.splice(idx, 1);
+
+                // 화면 재렌더링 (섹션 다시 구성)
+                if (lectures.length === 0) location.reload(); // 다 지워지면 새로고침해서 빈 화면 표시
+                else renderSubscriptions();
+            })
+            .catch(err => {
+                if (err !== 'UNAUTHORIZED') console.error(err);
+            });
+    }
+
+    // -----------------------------------------------------------
+    // --- 초기 실행 ---
+    // -----------------------------------------------------------
+    document.addEventListener('DOMContentLoaded', () => {
+        if (lectures.length > 0) {
+            renderSubscriptions();
+        }
+    });
+
+</script>
+
+</body>
+</html>
