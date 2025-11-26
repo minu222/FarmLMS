@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>마이페이지 - 구독 강의</title>
+    <link rel="stylesheet" th:href="@{/css/mypage/subscriptions.css}">
+    <link rel="stylesheet" th:href="@{/css/main/main.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage/myPage.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/header.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/footer.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="mypage-container">
+
+    <aside class="sidebar">
+        <ul>
+            <li th:classappend="${active} == 'profile' ? 'active' : ''"><a th:href="@{/mypage/profile}">내 프로필</a></li>
+            <li th:classappend="${active} == 'edit' ? 'active' : ''"><a th:href="@{/mypage/edit}">내 정보수정</a></li>
+            <li th:classappend="${active} == 'subscriptions' ? 'active' : ''"><a th:href="@{/mypage/subscriptions}">내가 구독한 강의</a></li>
+            <li th:classappend="${active} == 'posts' ? 'active' : ''"><a th:href="@{/mypage/posts}">내 댓글 보기</a></li>
+            <li th:classappend="${active} == 'aiplanners' ? 'active' : ''"><a th:href="@{/mypage/aiplanners}">AI 플래너 관리</a></li>
+        </ul>
+    </aside>
+
+
+    <div class="mypage-content">
+        <h2>내가 구독한 강의</h2>
+        <hr class="mypage-hr">
+
+        <div class="lecture-list-area">
+
+            <div th:if="${#lists.isEmpty(lectures)}" class="empty-message">
+                <p>아직 구독한 강의가 없습니다. 새로운 강의를 구독해보세요!</p>
+                <a th:href="@{/lecture/all}" class="btn-primary">전체 강의 보러가기</a>
+            </div>
+
+            <div th:unless="${#lists.isEmpty(lectures)}" class="lecture-cards courses-grid" id="subscriptionsGrid">
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script th:inline="javascript">
+    // -----------------------------------------------------------
+    // --- Thymeleaf 변수 초기화 (서버 데이터) ---
+    // -----------------------------------------------------------
+    // 구독한 강의 목록 데이터를 JavaScript 배열로 변환
+    const lectures = [[${lectures}]].map(lecture => {
+        return {
+            lecture_id: lecture.lecture_id,
+            sub_category: lecture.sub_category,
+            category: lecture.category,
+            title: lecture.title,
+            content: lecture.content,
+            instructorNickname: lecture.instructorNickname,
+            img_url: lecture.img_url
+        };
+    });
+
+    // -----------------------------------------------------------
+    // --- 유틸리티 함수 (전체 강의 페이지에서 가져옴) ---
+    // -----------------------------------------------------------
+
+    // 텍스트를 지정된 길이로 자르고 말줄임표를 추가하는 함수
+    function truncateDescription(text, maxLength = 50) {
+        if (!text) return '';
+        const cleanText = text.replace(/\n/g, ' ').trim();
+
+        if (cleanText.length > maxLength) {
+            return cleanText.substring(0, maxLength).trim() + '...';
+        }
+        return cleanText;
+    }
+
+    // 서브 카테고리 텍스트 한글 변환
+    function getSubCategoryText(sub_category) {
+        const sub_categorys = { SEED: '모종', GROW: '재배', SHIP: '출하' };
+        return sub_categorys[sub_category] || sub_category;
+    }
+
+    // 메인 카테고리 텍스트 한글 변환
+    function getCategoryText(category) {
+        const categories = {
+            GARDENING: '텃밭',
+            FIELD: '노지',
+            HOUSE: '하우스'
+        };
+        return categories[category] || category;
+    }
+
+    // -----------------------------------------------------------
+    // --- 렌더링 로직 ---
+    // -----------------------------------------------------------
+
+    // 강의 카드 렌더링
+    function renderSubscriptions() {
+        const grid = document.getElementById('subscriptionsGrid');
+
+        // 강의 카드 구조를 전체 강의 페이지와 동일하게 렌더링
+        grid.innerHTML = lectures.map(lecture => {
+            const linkHref = `/lecture/lectureDetail?lectureId=${lecture.lecture_id}`;
+            const buttonText = '시청하기';
+            const buttonClass = 'subscribe-btn watch-ready';
+            const description = truncateDescription(lecture.content, 50);
+
+            return `
+                <a href="${linkHref}" class="course-card-link"
+                   data-lecture-id="${lecture.lecture_id}">
+                    <div class="lecture-card course-card">
+                        <div class="card-image-wrapper course-thumbnail">
+                            <img src="${lecture.img_url || '/images/default-thumbnail.jpg'}"
+                                 alt="${lecture.title} 썸네일">
+                        </div>
+                        <div class="card-info course-info">
+                            <div class="card-category course-category">
+                                ${getCategoryText(lecture.category)} • ${getSubCategoryText(lecture.sub_category)}
+                            </div>
+                            <div class="course-title-row">
+                                <h3 class="card-title course-title">${lecture.title}</h3>
+                                <span class="card-instructor course-instructor-inline">👤 ${lecture.instructorNickname}</span>
+                            </div>
+                            <p class="course-description">${description}</p>
+                            <div class="card-footer course-meta-action">
+                                <button class="${buttonClass}"
+                                        onclick="event.preventDefault(); redirectToDetail(${lecture.lecture_id})">
+                                    ${buttonText}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            `;
+        }).join('');
+    }
+
+    // -----------------------------------------------------------
+    // --- 이벤트 핸들러 ---
+    // -----------------------------------------------------------
+
+    // 시청하기 버튼/카드 클릭 시 상세 페이지로 이동
+    function redirectToDetail(lectureId) {
+        // '전체 강의' 페이지와 달리, 여기서는 이미 구독했으므로 바로 이동
+        window.location.href = '/lecture/lectureDetail?lectureId=' + lectureId;
+    }
+
+    // -----------------------------------------------------------
+    // --- 초기 실행 ---
+    // -----------------------------------------------------------
+
+    document.addEventListener('DOMContentLoaded', () => {
+        if (lectures.length > 0) {
+            renderSubscriptions();
+        }
+    });
+
+</script>
+
+</body>
+</html>
