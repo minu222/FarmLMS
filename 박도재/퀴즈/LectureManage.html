@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>강의 관리</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+        /* 강사 테마 컬러 변수 */
+        :root {
+            --bg-page: #f5f6fa;
+            --panel: #ffffff;
+            --ink-1: #2f3640;
+            --ink-2: #4b5563;
+            --ink-3: #6b7280;
+            --ink-sub: #9aa3af;
+            --brand: #A07E68;
+            --brand-strong: #85624E;
+            --brand-light: #F5F0ED;
+            --brand-text: #6E4D3A;
+            --border: #e2ddce;
+            --shadow: 0 8px 24px rgba(160,126,104,0.2);
+            --radius: 12px;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Pretendard', sans-serif;
+            background-color: var(--bg-page);
+            color: var(--ink-1);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.2s;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        /* 레이아웃 */
+        .mypage-container {
+            display: flex;
+            align-items: flex-start;
+            min-height: 100vh;
+            background: var(--bg-page);
+            margin-top: 40px;
+            gap: 24px;
+            padding: 24px;
+            box-sizing: border-box;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* 사이드바 */
+        .sidebar {
+            width: 240px;
+            background: var(--panel);
+            color: var(--ink-1);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 24px;
+            align-self: flex-start;
+            padding: 12px;
+            flex-shrink: 0;
+        }
+
+        .sidebar ul li {
+            margin: 4px 0;
+        }
+
+        .sidebar ul li a {
+            display: block;
+            padding: 12px 14px;
+            color: var(--ink-1);
+            border-radius: 10px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .sidebar ul li a:hover {
+            background: var(--brand);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .sidebar ul li.active a {
+            background: linear-gradient(180deg, var(--brand), var(--brand-strong));
+            color: #fff;
+        }
+
+        /* 메인 콘텐츠 */
+        #mypage-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        /* 페이지 헤더 */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--ink-1);
+            margin: 0;
+        }
+
+        .btn-create {
+            background: var(--brand);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+
+        .btn-create:hover {
+            background: var(--brand-strong);
+            transform: translateY(-1px);
+        }
+
+        /* 강의 카드 */
+        .lecture-card {
+            background: var(--panel);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: 0.2s;
+        }
+
+        .lecture-card:hover {
+            transform: translateY(-2px);
+        }
+
+        /* 카드 헤더 */
+        .lecture-header {
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            background: var(--panel);
+            border-bottom: 1px solid transparent;
+            transition: background 0.2s;
+            color: var(--ink-1);
+        }
+
+        .lecture-header:hover {
+            background: var(--brand-light);
+        }
+
+        /* 열린 상태 */
+        .lecture-card.open .lecture-header {
+            border-bottom: 1px solid var(--border);
+            background: var(--brand-light);
+        }
+
+        .lecture-info h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--ink-1);
+        }
+
+        .lecture-meta {
+            font-size: 14px;
+            color: var(--ink-3);
+            margin-top: 4px;
+        }
+
+        /* 액션 버튼 그룹 */
+        .lecture-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-action {
+            padding: 6px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--ink-2);
+            background: #fff;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-action:hover {
+            border-color: var(--brand);
+            color: var(--brand);
+            background: #fff;
+        }
+
+        .toggle-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #f1f3f5;
+            color: var(--ink-3);
+            transition: 0.3s;
+        }
+
+        .lecture-card.open .toggle-icon {
+            transform: rotate(180deg);
+            background: var(--brand);
+            color: #fff;
+        }
+
+        /* 수강생 목록 테이블 */
+        .student-list-wrapper {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .lecture-card.open .student-list-wrapper {
+            max-height: 500px;
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .custom-table th {
+            text-align: left;
+            padding: 12px 24px;
+            background: var(--bg-page);
+            color: var(--ink-sub);
+            font-weight: 700;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .custom-table td {
+            padding: 14px 24px;
+            border-bottom: 1px solid #f1f3f5;
+            color: var(--ink-2);
+        }
+
+        .custom-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .custom-table tr:hover td {
+            background: #fafafa;
+        }
+
+        /* 상태 뱃지 */
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .status-done {
+            background: #e6f7e7;
+            color: #2d7a32;
+        }
+
+        .status-pend {
+            background: #fff4e6;
+            color: #d9480f;
+        }
+
+        @media (max-width: 768px) {
+            .mypage-container {
+                flex-direction: column;
+                padding: 16px;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: static;
+                border-radius: 12px;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="mypage-container">
+        <aside class="sidebar">
+            <ul>
+                <li><a th:href="@{/teacher/teacherProfile}">내 프로필</a></li>
+                <li><a th:href="@{/teacher/teacherEdit}">내 정보 수정</a></li>
+                <li class="active"><a th:href="@{/teacher/lectureManage}">강의 관리</a></li>
+                <li><a th:href="@{/teacher/teacherPosts}">내 댓글 관리</a></li>
+                <li><a th:href="@{/teacher/quizManage}">퀴즈 관리</a></li>
+            </ul>
+        </aside>
+
+        <div id="mypage-content">
+            <div class="page-header">
+                <h2 class="page-title">내 강의 관리</h2>
+                <a href="uploadClass.html" class="btn-create">
+                    <i class="fa-solid fa-plus"></i> 새 강의 등록
+                </a>
+            </div>
+
+            <div class="lecture-card">
+                <div class="lecture-header">
+                    <div class="lecture-info">
+                        <h3>텃밭 가꾸기 기초반</h3>
+                        <div class="lecture-meta">수강생 3명 • 2025.11.24 개설</div>
+                    </div>
+                    <div class="lecture-actions">
+                        <a href="lectureModify.html" class="btn-action" onclick="event.stopPropagation()">
+                            <i class="fa-solid fa-pen"></i> 수정
+                        </a>
+                        <a href="choiceEdit.html" class="btn-action" onclick="event.stopPropagation()">
+                            <i class="fa-solid fa-clipboard-question"></i> 퀴즈
+                        </a>
+                        <div class="toggle-icon">
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="student-list-wrapper">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>수강생명</th>
+                                <th>진도율</th>
+                                <th>퀴즈 상태</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>홍길동</td>
+                                <td>
+                                    <div style="display:flex; align-items:center; gap:8px;">
+                                        <div style="width:60px; height:6px; background:#eee; border-radius:3px; overflow:hidden;">
+                                            <div style="width:10%; height:100%; background:#ffc107;"></div>
+                                        </div>
+                                        <span>10%</span>
+                                    </div>
+                                </td>
+                                <td><span class="status-badge status-pend">미완료</span></td>
+                            </tr>
+                            <tr>
+                                <td>김철수</td>
+                                <td>
+                                    <div style="display:flex; align-items:center; gap:8px;">
+                                        <div style="width:60px; height:6px; background:#eee; border-radius:3px; overflow:hidden;">
+                                            <div style="width:70%; height:100%; background:#5cb85f;"></div>
+                                        </div>
+                                        <span>70%</span>
+                                    </div>
+                                </td>
+                                <td><span class="status-badge status-done">완료</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const cards = document.querySelectorAll('.lecture-card');
+
+            cards.forEach(card => {
+                const header = card.querySelector('.lecture-header');
+                header.addEventListener('click', () => {
+                    card.classList.toggle('open');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
