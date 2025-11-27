@@ -1,0 +1,133 @@
+:root {
+    --bg-page: #f5f6fa;
+    --panel: #ffffff;
+    --ink-1: #2f3640;
+    --ink-2: #4b5563;
+    --ink-3: #6b7280;
+    --ink-sub: #9aa3af;
+    --brand: #A07E68;
+    --brand-strong: #85624E;
+    --brand-light: #F5F0ED;
+    --brand-text: #6E4D3A;
+    --border: #e2ddce;
+    --shadow: 0 8px 24px rgba(160,126,104,0.2);
+    --radius: 12px;
+}
+
+body {
+    margin: 0;
+    font-family: 'Pretendard', sans-serif;
+    background-color: var(--bg-page);
+    color: var(--ink-1);
+}
+
+
+
+.sidebar ul {
+    list-style: none;
+    padding: 6px 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin: 6px 0;
+}
+
+.sidebar ul li a {
+    display: block;
+    padding: 10px 14px;
+    color: var(--ink-1);
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.sidebar ul li a:hover {
+    background: var(--brand);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.sidebar ul li.active a {
+    background: linear-gradient(180deg, var(--brand), var(--brand-strong));
+    color: #fff;
+}
+
+/* 메인 콘텐츠 영역 */
+#mypage-content {
+    flex: 1;
+    min-width: 0;
+    background: var(--panel);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 32px 24px;
+    box-sizing: border-box;
+}
+
+#choiceEditBox {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+#choiceEditBox p {
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: var(--ink-1);
+}
+
+#choiceEditBox ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#choiceEditBox ul li {
+    margin-bottom: 12px;
+}
+
+#choiceEditBox ul li a {
+    display: block;
+    padding: 14px 20px;
+    background: var(--brand-light);
+    border-radius: 12px;
+    color: var(--brand-text);
+    font-weight: 700;
+    font-size: 16px;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(160, 126, 104, 0.08);
+    cursor: pointer;
+}
+
+#choiceEditBox ul li a:hover {
+    background: var(--brand);
+    border-color: var(--brand-strong);
+    color: #fff;
+    box-shadow: 0 6px 16px rgba(133, 98, 78, 0.3);
+    transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+    .mypage-container {
+        flex-direction: column;
+        padding: 16px;
+        margin-top: 60px;
+    }
+
+    .sidebar {
+        width: 100%;
+        position: static;
+        margin-bottom: 20px;
+    }
+
+    #mypage-content {
+        padding: 24px 16px;
+    }
+
+    #choiceEditBox {
+        max-width: 100%;
+    }
+}

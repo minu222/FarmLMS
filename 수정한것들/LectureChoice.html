@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <link rel="stylesheet" th:href="@{/css/main/main.css}">
+    <link rel="stylesheet" th:href="@{/css/teacher/teacherMyPage.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage/posts.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/header.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/footerShort.css}">
+    <link rel="stylesheet" th:href="@{/css/teacher/lectureChoice.css}">
+    <title>강의 선택</title>
+
+    <style>
+
+    </style>
+</head>
+
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="mypage-container">
+    <aside class="sidebar">
+        <ul>
+            <li th:classappend="${active} == 'teacherProfile' ? 'active' : ''">
+                <a th:href="@{/teacher/teacherProfile}">내 프로필</a>
+            </li>
+            <li th:classappend="${active} == 'teacherEdit' ? 'active' : ''">
+                <a th:href="@{/teacher/teacherEdit}">내 정보 수정</a>
+            </li>
+            <!-- ✅ 강의 관리가 현재 메뉴 -->
+            <li th:classappend="${active} == 'lectureManage' ? 'active' : ''">
+                <a th:href="@{/teacher/lectureManage}">강의 관리</a>
+            </li>
+            <li th:classappend="${active} == 'teacherPosts' ? 'active' : ''">
+                <a th:href="@{/teacher/teacherPosts}">내 댓글 관리</a>
+            </li>
+            <li th:classappend="${active} == 'quizManage' ? 'active' : ''">
+                <a th:href="@{/teacher/quizManage/select}">퀴즈 관리</a>
+            </li>
+        </ul>
+    </aside>
+
+    <main id="mypage-content">
+        <div id="choiceEditBox">
+
+            <!-- 강의가 없을 때 -->
+            <p th:if="${#lists.isEmpty(lectures)}">
+                아직 등록된 강의가 없습니다. 먼저 강의를 생성해주세요.
+            </p>
+
+            <!-- ✅ 삭제용 폼으로 전체 강의 카드 감싸기 -->
+            <form id="lectureDeleteForm"
+                  th:action="@{/teacher/lectureManage/delete}"
+                  method="post">
+
+                <div class="lecture-header-bar">
+                    <h3>강의 관리</h3>
+                    <div class="lecture-actions">
+                        <!-- 강의 등록 -->
+                        <a th:href="@{/teacher/lectureManage/new}" class="btn-lecture-add">
+                            강의 등록
+                        </a>
+
+                        <!-- ✅ 삭제 취소 버튼 (처음엔 숨김) -->
+                        <button type="button"
+                                class="btn-lecture-cancel"
+                                id="lectureCancelBtn"
+                                style="display:none;">
+                            삭제 취소
+                        </button>
+
+                        <!-- 강의 삭제 (선택모드 토글 + 삭제 실행) -->
+                        <button type="button"
+                                class="btn-lecture-delete"
+                                id="lectureDeleteBtn">
+                            강의 삭제
+                        </button>
+                    </div>
+                </div>
+                <!-- 강의 카드 그리드 -->
+                <ul class="lecture-grid">
+                    <li class="lecture-card"
+                        th:each="lecture : ${lectures}">
+                        <!-- ✅ 선택용 체크박스 -->
+                        <input type="checkbox"
+                               class="lecture-checkbox"
+                               name="lectureIds"
+                               th:value="${lecture.lectureId}" />
+
+                        <a class="lecture-link"
+                           th:href="@{/teacher/lectureManage/{lectureId}(lectureId=${lecture.lectureId})}">
+
+                            <!-- 정사각형 썸네일 -->
+                            <div class="thumb-wrapper">
+                                <img th:if="${lecture.imgUrl != null and !#strings.isEmpty(lecture.imgUrl)}"
+                                     th:src="${lecture.imgUrl}"
+                                     alt="강의 썸네일" />
+                                <div class="thumb-placeholder"
+                                     th:if="${lecture.imgUrl == null or #strings.isEmpty(lecture.imgUrl)}">
+                                    썸네일 없음
+                                </div>
+                            </div>
+
+                            <!-- 텍스트 영역 -->
+                            <div class="lecture-body">
+                                <h3 class="lecture-title"
+                                    th:text="${lecture.title}">강의 제목</h3>
+                                <div class="lecture-meta">
+                                    <span th:text="${lecture.createdAt != null ? #temporals.format(lecture.createdAt, 'yyyy.MM.dd') : '등록일 미정'}">
+                                        2025.11.27
+                                    </span>
+                                    <span class="dot">•</span>
+                                    <span th:text="${lecture.subsCount} + '명 수강중'">0명 수강중</span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </main>
+</div>
+
+<footer th:replace="~{fragments/footerShort :: footerShort}"></footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteBtn   = document.getElementById('lectureDeleteBtn');
+        const cancelBtn   = document.getElementById('lectureCancelBtn');
+        const deleteForm  = document.getElementById('lectureDeleteForm');
+        const lectureLinks = document.querySelectorAll('.lecture-link');
+
+        let selectMode = false;
+
+        // 선택 모드일 때 카드 클릭하면 상세로 못 들어가게 막기
+        lectureLinks.forEach(link => {
+            link.addEventListener('click', function (e) {
+                if (selectMode) {
+                    e.preventDefault();
+                }
+            });
+        });
+
+        // ✅ 삭제 버튼: 첫 클릭 -> 선택 모드 / 두 번째 클릭 -> 실제 삭제
+        deleteBtn.addEventListener('click', function () {
+            // 1) 선택 모드 진입
+            if (!selectMode) {
+                selectMode = true;
+                document.body.classList.add('lecture-select-mode');
+                deleteBtn.textContent = '선택 강의 삭제';
+                cancelBtn.style.display = 'inline-flex';  // 취소 버튼 표시
+
+                alert('삭제할 강의를 선택한 후 "선택 강의 삭제" 버튼을 다시 눌러주세요.');
+                return;
+            }
+
+            // 2) 선택 모드에서 삭제 실행
+            const checked = deleteForm.querySelectorAll('.lecture-checkbox:checked');
+            if (checked.length === 0) {
+                alert('삭제할 강의를 선택해주세요.');
+                return;
+            }
+
+            if (!confirm(`선택한 ${checked.length}개 강의를 삭제하시겠습니까?`)) {
+                return;
+            }
+
+            // 실제 삭제 요청 (POST submit)
+            deleteForm.submit();
+        });
+
+        // ✅ 삭제 취소 버튼: 선택 모드 해제 + 체크 해제 + 스타일 복구
+        cancelBtn.addEventListener('click', function () {
+            // 선택 모드 해제
+            selectMode = false;
+            document.body.classList.remove('lecture-select-mode');
+
+            // 버튼 텍스트 원복
+            deleteBtn.textContent = '강의 삭제';
+
+            // 취소 버튼 숨기기
+            cancelBtn.style.display = 'none';
+
+            // 체크박스 전부 해제
+            const checkboxes = deleteForm.querySelectorAll('.lecture-checkbox');
+            checkboxes.forEach(cb => cb.checked = false);
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,413 @@
+:root {
+    --bg-page: #f5f6fa;
+    --panel: #ffffff;
+    --ink-1: #2f3640;
+    --ink-2: #4b5563;
+    --ink-3: #6b7280;
+    --ink-sub: #9aa3af;
+    --brand: #A07E68;
+    --brand-strong: #85624E;
+    --brand-light: #F5F0ED;
+    --brand-text: #6E4D3A;
+    --border: #e2ddce;
+    --shadow: 0 8px 24px rgba(160,126,104,0.2);
+    --radius: 12px;
+}
+
+body {
+    margin: 0;
+    font-family: 'Pretendard', sans-serif;
+    background-color: var(--bg-page);
+    color: var(--ink-1);
+}
+
+
+.sidebar ul {
+    list-style: none;
+    padding: 6px 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin: 6px 0;
+}
+
+.sidebar ul li a {
+    display: block;
+    padding: 10px 14px;
+    color: var(--ink-1);
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.sidebar ul li a:hover {
+    background: var(--brand);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.sidebar ul li.active a {
+    background: linear-gradient(180deg, var(--brand), var(--brand-strong));
+    color: #fff;
+}
+
+#mypage-content {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    background: var(--panel);
+    border-radius: var(--radius); /* 둥근 모서리 제거 */
+    box-shadow: none;          /* 그림자 제거 */
+    padding: 24px 0;           /* 좌우 패딩 제거해서 꽉 차게 */
+    box-sizing: border-box;
+}
+
+#choiceEditBox {
+    max-width: 100%;
+    margin: 0;
+    justify-content: flex-start;
+}
+
+#choiceEditBox p {
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: var(--ink-1);
+}
+
+#choiceEditBox ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#choiceEditBox ul li {
+    margin-bottom: 12px;
+}
+
+#choiceEditBox ul li a {
+    display: block;
+    padding: 14px 20px;
+    background: var(--brand-light);
+    border-radius: 12px;
+    color: var(--brand-text);
+    font-weight: 700;
+    font-size: 16px;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(160, 126, 104, 0.08);
+    cursor: pointer;
+}
+
+#choiceEditBox ul li a:hover {
+    background: var(--brand);
+    border-color: var(--brand-strong);
+    color: #fff;
+    box-shadow: 0 6px 16px rgba(133, 98, 78, 0.3);
+    transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+    .mypage-container {
+        flex-direction: column;
+        padding: 16px;
+    }
+
+    .sidebar {
+        width: 100%;
+        position: static;
+        border-radius: 12px;
+    }
+
+    #mypage-content {
+        margin: 0;
+    }
+
+    .profile-header {
+        grid-template-columns: 56px 1fr;
+        row-gap: 10px;
+    }
+
+    .btn-outline {
+        grid-column: 1 / -1;
+        justify-self: start;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* 강의 선택 카드 레이아웃 */
+
+/* 기존 #choiceEditBox 정의들 하나로 정리해서 이렇게 쓰면 됨 */
+#choiceEditBox {
+    width: 100%;        /* 메인컨텐트 너비 꽉 채우기 */
+    max-width: none;    /* 혹시 남아있던 max-width 제거 */
+    margin: 0; /* 가운데 정렬 없애기 */
+    padding: 20px;
+}
+
+#choiceEditBox > p {
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+/* 강의 카드 그리드 (왼쪽 정렬) */
+.lecture-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 50px;
+    padding: 0;
+    margin: 0;
+    justify-content: flex-start;  /* 왼쪽 정렬 */
+}
+
+.lecture-card {
+    list-style: none;
+}
+
+/* 카드 하나의 고정 폭 */
+.lecture-link {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.lecture-link:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+/* 정사각형 썸네일 영역 */
+.thumb-wrapper {
+    position: relative;
+    width: 100%;
+    padding-top: 100%; /* 1:1 비율 */
+    background: #f3f4f6;
+    overflow: hidden;
+}
+
+.thumb-wrapper img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.thumb-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: #9ca3af;
+}
+
+.lecture-body {
+    padding: 14px 16px 16px;
+}
+
+.lecture-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0 0 8px;
+    color: #111827;
+    line-height: 1.4;
+
+    /* 한 줄 말줄임 처리 */
+    white-space: nowrap;        /* 한 줄로만 표시 */
+    overflow: hidden;           /* 넘치는 부분 숨기기 */
+    text-overflow: ellipsis;    /* ... 표시 */
+}
+
+.lecture-meta {
+    font-size: 13px;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.lecture-meta span.dot {
+    font-size: 10px;
+}
+
+@media (max-width: 768px) {
+    #choiceEditBox {
+        padding: 0 4px;
+    }
+}
+
+
+/* 상단 강의 관리 헤더 + 버튼 영역 */
+.lecture-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.lecture-header-bar h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink-1);
+}
+
+/* 버튼 공통 */
+.lecture-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-lecture-add,
+.btn-lecture-delete {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.04s ease;
+}
+
+/* 강의 등록 버튼 (브랜드 색) */
+.btn-lecture-add {
+    background: var(--brand);
+    color: #fff;
+}
+
+.btn-lecture-add:hover {
+    background: var(--brand-strong);
+    transform: translateY(-1px);
+}
+
+/* 강의 삭제 버튼 (빨간색 + 흰 글씨) */
+.btn-lecture-delete {
+    background: #e03131;
+    color: #fff;
+}
+
+.btn-lecture-delete:hover {
+    background: #c92a2a;
+    transform: translateY(-1px);
+}
+
+/* 상단 강의 관리 헤더 + 버튼 영역 */
+.lecture-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.lecture-header-bar h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink-1);
+}
+
+.lecture-actions {
+    display: flex;
+    gap: 8px;
+}
+
+/* 버튼 공통 */
+.btn-lecture-add,
+.btn-lecture-delete {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.04s ease;
+}
+
+/* 강의 등록 버튼 */
+.btn-lecture-add {
+    background: var(--brand);
+    color: #fff;
+}
+.btn-lecture-add:hover {
+    background: var(--brand-strong);
+    transform: translateY(-1px);
+}
+
+/* 강의 삭제 버튼 (빨간색) */
+.btn-lecture-delete {
+    background: #e03131;
+    color: #fff;
+}
+.btn-lecture-delete:hover {
+    background: #c92a2a;
+    transform: translateY(-1px);
+}
+
+/* 카드에서 선택용 체크박스 */
+.lecture-card {
+    position: relative;  /* 체크박스 absolute 배치용 */
+}
+
+/* 기본은 숨김 */
+.lecture-checkbox {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    width: 18px;
+    height: 18px;
+    display: none;
+    z-index: 5;
+}
+
+/* 선택 모드일 때만 체크박스 보이기 */
+.lecture-select-mode .lecture-checkbox {
+    display: block;
+}
+
+/* 선택된 카드 강조 */
+.lecture-checkbox:checked + .lecture-link {
+    box-shadow: 0 0 0 3px var(--brand);
+}
+
+/* 삭제 취소 버튼 (중립 회색) */
+.btn-lecture-cancel {
+    background: #e9ecef;
+    color: #495057;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.04s ease;
+}
+
+.btn-lecture-cancel:hover {
+    background: #dee2e6;
+    transform: translateY(-1px);
+}
