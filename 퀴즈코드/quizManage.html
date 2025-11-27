@@ -343,30 +343,36 @@
 
                         <tbody>
                         <tr th:each="video : ${videoList}">
-                            <!-- 강의 제목: lectureTitle이 null이면 videoTitle이라도 보여주기 -->
+                            <!-- 1열: 강의 제목 + 그 영상(목차) 제목 -->
                             <td>
-            <span style="font-weight:600;"
-                  th:text="${video.lectureTitle != null ? video.lectureTitle : video.videoTitle}">
-                강의 제목
-            </span>
+                                <!-- 강의 제목 (모든 행에서 동일) -->
+                                <div style="font-weight: 600; margin-bottom: 4px;"
+                                     th:text="${video.lectureTitle}">
+                                    강의 제목
+                                </div>
+
+                                <!-- 목차(영상 제목) - 행마다 달라지는 부분 -->
+                                <div style="font-size: 13px; color: #6b7280;">
+                                    <span style="font-weight:600;">목차 :</span>
+                                    <span th:text="${video.videoTitle}">1강 영상 제목</span>
+                                </div>
                             </td>
 
-                            <!-- 대분류 -->
+                            <!-- 2열: 대분류 -->
                             <td th:text="${video.category}">텃밭</td>
 
-                            <!-- 소분류 -->
+                            <!-- 3열: 소분류 -->
                             <td th:text="${video.subCategory}">모종</td>
 
-                            <!-- 등록일 -->
+                            <!-- 4열: 등록일 -->
                             <td class="date-cell"
                                 th:text="${video.createdAt != null ? #temporals.format(video.createdAt, 'yyyy.MM.dd') : ''}">
                                 2025.11.18
                             </td>
 
-                            <!-- 관리: 맨 오른쪽 -->
+                            <!-- 5열: 관리 -->
                             <td>
                                 <div class="action-buttons">
-
                                     <!-- 아직 퀴즈 없는 경우: 출제 -->
                                     <a class="btn-register sm"
                                        th:if="${video.quizCount == 0}"
