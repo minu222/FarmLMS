@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>강의 관리</title>
+
+    <link rel="stylesheet" th:href="@{/css/main/main.css}">
+    <link rel="stylesheet" th:href="@{/css/teacher/teacherMyPage.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage/posts.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/header.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/footerShort.css}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+        :root {
+            --bg-page: #f5f6fa;
+            --panel: #ffffff;
+            --ink-1: #2f3640;
+            --ink-2: #4b5563;
+            --ink-3: #6b7280;
+            --ink-sub: #9aa3af;
+            --brand: #A07E68;
+            --brand-strong: #85624E;
+            --brand-light: #F5F0ED;
+            --brand-text: #6E4D3A;
+            --border: #e2ddce;
+            --shadow: 0 8px 24px rgba(160,126,104,0.2);
+            --radius: 12px;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Pretendard', sans-serif;
+            background-color: var(--bg-page);
+            color: var(--ink-1);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.2s;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        .mypage-container {
+            display: flex;
+            align-items: flex-start;
+            min-height: 100vh;
+            background: var(--bg-page);
+            margin-top: 40px;
+            gap: 24px;
+            padding: 24px;
+            box-sizing: border-box;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: var(--panel);
+            color: var(--ink-1);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 24px;
+            align-self: flex-start;
+            padding: 12px;
+            flex-shrink: 0;
+        }
+
+        .sidebar ul li {
+            margin: 4px 0;
+        }
+
+        .sidebar ul li a {
+            display: block;
+            padding: 12px 14px;
+            color: var(--ink-1);
+            border-radius: 10px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .sidebar ul li a:hover {
+            background: var(--brand);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .sidebar ul li.active a {
+            background: linear-gradient(180deg, var(--brand), var(--brand-strong));
+            color: #fff;
+        }
+
+        #mypage-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--ink-1);
+            margin: 0;
+        }
+
+        .btn-create {
+            background: var(--brand);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+
+        .btn-create:hover {
+            background: var(--brand-strong);
+            transform: translateY(-1px);
+        }
+
+        .lecture-card {
+            background: var(--panel);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .lecture-header {
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--panel);
+            border-bottom: 1px solid var(--border);
+            color: var(--ink-1);
+        }
+
+        .lecture-info h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--ink-1);
+        }
+
+        .lecture-meta {
+            font-size: 14px;
+            color: var(--ink-3);
+            margin-top: 4px;
+        }
+
+        .lecture-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn-action {
+            padding: 6px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--ink-2);
+            background: #fff;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-action:hover {
+            border-color: var(--brand);
+            color: var(--brand);
+            background: #fff;
+        }
+
+        .section-title {
+            padding: 16px 24px 8px;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--ink-2);
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .custom-table th {
+            text-align: left;
+            padding: 12px 24px;
+            background: var(--bg-page);
+            color: var(--ink-sub);
+            font-weight: 700;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .custom-table td {
+            padding: 14px 24px;
+            border-bottom: 1px solid #f1f3f5;
+            color: var(--ink-2);
+        }
+
+        .custom-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .custom-table tr:hover td {
+            background: #fafafa;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .status-done {
+            background: #e6f7e7;
+            color: #2d7a32;
+        }
+
+        .status-pend {
+            background: #fff4e6;
+            color: #d9480f;
+        }
+
+        /* 진도율 섹션 */
+        .progress-wrapper {
+            border-top: 1px solid #f1f3f5;
+            padding: 16px 24px 24px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .progress-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--ink-2);
+        }
+
+        .progress-section {
+            margin-top: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .mypage-container {
+                flex-direction: column;
+                padding: 16px;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: static;
+                border-radius: 12px;
+                margin-bottom: 20px;
+            }
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
+</head>
+
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="mypage-container">
+    <aside class="sidebar">
+        <ul>
+            <li th:classappend="${active} == 'teacherProfile' ? 'active' : ''">
+                <a th:href="@{/teacher/teacherProfile}">내 프로필</a>
+            </li>
+            <li th:classappend="${active} == 'teacherEdit' ? 'active' : ''">
+                <a th:href="@{/teacher/teacherEdit}">내 정보 수정</a>
+            </li>
+            <li th:classappend="${active} == 'lectureManage' ? 'active' : ''">
+                <a th:href="@{/teacher/lectureManage}">강의 관리</a>
+            </li>
+            <li th:classappend="${active} == 'teacherPosts' ? 'active' : ''">
+                <a th:href="@{/teacher/teacherPosts}">내 댓글 관리</a>
+            </li>
+            <li th:classappend="${active} == 'quizManage' ? 'active' : ''">
+                <a th:href="@{/teacher/quizManage/select}">퀴즈 관리</a>
+            </li>
+        </ul>
+    </aside>
+
+    <div id="mypage-content">
+        <div class="page-header">
+            <h2 class="page-title">내 강의 관리</h2>
+
+            <div class="header-actions">
+                <!-- 새 강의 등록 버튼 (기존 그대로, 필요하면 th:href 로 바꿔도 됨) -->
+                <a th:href="@{/teacher/lectureManage/new}" class="btn-create">
+                    <i class="fa-solid fa-plus"></i> 새 강의 등록
+                </a>
+
+            </div>
+        </div>
+
+        <!-- 선택된 강의 카드 -->
+        <div class="lecture-card">
+            <div class="lecture-header">
+                <div class="lecture-info">
+                    <!-- 강의 제목 -->
+                    <h3 th:text="${lecture.title}">텃밭 가꾸기 기초반</h3>
+
+                    <!-- 수강생 수 + 개설일 -->
+                    <div class="lecture-meta">
+                        <span th:text="|수강생 ${lecture.subsCount}명|">수강생 0명</span>
+                        <span th:if="${lecture.createdAt != null}">
+                            &nbsp;•&nbsp;
+                            <span th:text="|${#temporals.format(lecture.createdAt, 'yyyy.MM.dd')} 개설|">
+                                2025.11.24 개설
+                            </span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="lecture-actions">
+                    <!-- 강의 수정 (URL은 나중에 맞춰서 수정 가능) -->
+                    <a class="btn-action"
+                       th:href="@{/teacher/lectureManage/{lectureId}/edit(lectureId=${lecture.lectureId})}">
+                        <i class="fa-solid fa-pen"></i> 수정
+                    </a>
+
+                    <!-- 퀴즈 관리 페이지로 이동 -->
+<!--                    <a class="btn-action"-->
+<!--                       th:href="@{/teacher/quizManage/{lectureId}(lectureId=${lecture.lectureId})}">-->
+<!--                        <i class="fa-solid fa-clipboard-question"></i> 퀴즈-->
+<!--                    </a>-->
+                    <!-- ✅ 수강생 진도율 토글 버튼 -->
+                    <button type="button" id="toggleProgressBtn" class="btn-action">
+                        <i class="fa-solid fa-chart-line"></i>
+                        수강생 진도율 보기
+                    </button>
+                </div>
+            </div>
+
+            <!-- ✅ 목차 목록: 항상 보임 -->
+            <div class="section-title">목차 목록</div>
+            <table class="custom-table">
+                <thead>
+                <tr>
+                    <th>강</th>
+                    <th>목차 제목</th>
+                    <th>퀴즈 상태</th>
+                    <th>관리</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="v, stat : ${videoList}">
+                    <!-- 1강, 2강 표시 -->
+                    <td th:text="${stat.count} + '강'">1강</td>
+
+                    <!-- 목차(영상) 제목 -->
+                    <td th:text="${v.videoTitle}">영상 제목</td>
+
+                    <!-- 퀴즈 상태 -->
+                    <td th:text="${v.quizCount > 0 ? '출제 완료(' + v.quizCount + '문항)' : '미출제'}">
+                        미출제
+                    </td>
+
+                    <!-- ✅ 퀴즈 관리 버튼 (퀴즈 상태 옆) -->
+                    <td>
+                        <div style="display:flex; gap:8px; align-items:center;">
+                            <!-- 이미 퀴즈가 있는 경우: 수정 버튼 -->
+                            <a class="btn-action"
+                               th:if="${v.quizCount > 0}"
+                               th:href="@{|/teacher/quizManage/${lecture.lectureId}/video/${v.videoId}/edit|}">
+                                <i class="fa-solid fa-pen"></i> 퀴즈 수정
+                            </a>
+
+                            <!-- 아직 퀴즈가 없는 경우: 출제 버튼 -->
+                            <a class="btn-action"
+                               th:if="${v.quizCount == 0}"
+                               th:href="@{|/teacher/quizManage/${lecture.lectureId}/video/${v.videoId}/create|}">
+                                <i class="fa-solid fa-plus"></i> 퀴즈 출제
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr th:if="${#lists.isEmpty(videoList)}">
+                    <td colspan="3" style="padding:20px; text-align:center; color:#999;">
+                        등록된 목차(영상)가 없습니다.<br/>
+                        강의 편집에서 영상을 먼저 등록해주세요.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div id="progressSection"
+                 class="progress-section"
+                 style="display:none;">
+
+                <table class="custom-table">
+                    <thead>
+                    <tr>
+                        <th>수강생명</th>
+                        <th>진도율</th>
+                        <th>수강 상태</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- ✅ 진도율 리스트 루프 -->
+                    <tr th:each="p : ${progressList}">
+                        <!-- 수강생 이름 -->
+                        <td th:text="${p.studentName}">홍길동</td>
+
+                        <!-- 진도율 바 + % 표시 (0.0~1.0 → 0~100%) -->
+                        <td>
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <div style="width:60px; height:6px; background:#eee; border-radius:3px; overflow:hidden;">
+                                    <div style="height:100%; background:#5cb85f;"
+                                         th:style="|width:${p.progress * 100}%;|">
+                                    </div>
+                                </div>
+                                <span th:text="${#numbers.formatDecimal(p.progress * 100, 0, 0)} + '%'">
+                        70%
+                    </span>
+                            </div>
+                        </td>
+
+                        <!-- 진도율이 100%면 완료, 아니면 미완료로 표시 -->
+                        <td>
+                <span class="status-badge"
+                      th:classappend="${p.progress >= 1.0} ? ' status-done' : ' status-pend'"
+                      th:text="${p.progress >= 1.0} ? '완료' : '미완료'">
+                    미완료
+                </span>
+                        </td>
+                    </tr>
+
+                    <!-- 수강생이 한 명도 없을 때 -->
+                    <tr th:if="${#lists.isEmpty(progressList)}">
+                        <td colspan="3" style="padding:20px; text-align:center; color:#999;">
+                            아직 수강 중인 수강생이 없습니다.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const toggleBtn = document.getElementById('toggleProgressBtn');
+        const progressSection = document.getElementById('progressSection');
+
+        if (toggleBtn && progressSection) {
+            toggleBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+
+                const isHidden =
+                    progressSection.style.display === 'none' ||
+                    progressSection.style.display === '';
+
+                progressSection.style.display = isHidden ? 'block' : 'none';
+
+                const span = toggleBtn.querySelector('span');
+                if (span) {
+                    span.textContent = isHidden
+                        ? '수강생 진도율 닫기'
+                        : '수강생 진도율 보기';
+                }
+            });
+        }
+    });
+</script>
+
+</body>
+</html>
