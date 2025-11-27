@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>UrbanGreen - 퀴즈 수정</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        /* ===== 컬러/토큰 (강사 테마 - Terracotta Brown) ===== */
+        :root {
+            --bg-page: #f5f6fa;
+            --panel: #ffffff;
+            --ink-1: #2f3640;
+            --ink-2: #4b5563;
+            --ink-3: #6b7280;
+            --ink-sub: #9aa3af;
+            --brand: #A07E68;
+            --brand-strong: #85624E;
+            --brand-light: #F5F0ED;
+            --brand-text: #6E4D3A;
+            --border: #e2ddce;
+            --shadow: 0 8px 24px rgba(160,126,104,0.2);
+            --radius: 12px;
+        }
+        body {
+            margin: 0;
+            font-family: 'Pretendard', sans-serif;
+            background-color: var(--bg-page);
+            color: var(--ink-1);
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .mypage-container {
+            display: flex;
+            align-items: flex-start;
+            min-height: 100vh;
+            background: var(--bg-page);
+            margin-top: 40px;
+            gap: 24px;
+            padding: 24px;
+            box-sizing: border-box;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .sidebar {
+            width: 240px;
+            background: var(--panel);
+            color: var(--ink-1);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 24px;
+            align-self: flex-start;
+            padding: 12px;
+            flex-shrink: 0;
+        }
+        .sidebar ul li {
+            margin: 4px 0;
+        }
+        .sidebar ul li a {
+            display: block;
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: 0.2s;
+            color: var(--ink-1);
+        }
+        .sidebar ul li a:hover {
+            background: var(--brand);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+        .sidebar ul li.active a {
+            background: linear-gradient(180deg, var(--brand), var(--brand-strong));
+            color: #fff;
+        }
+        #mypage-content {
+            flex: 1;
+            min-width: 0;
+        }
+        .intro-card {
+            background: var(--panel);
+            border-radius: var(--radius);
+            padding: 32px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .intro-head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 16px;
+        }
+        .intro-head h2 {
+            margin: 0;
+            font-size: 22px;
+            color: var(--ink-1);
+        }
+        .hint {
+            color: var(--ink-sub);
+            font-size: 14px;
+        }
+        .course-title-box {
+            background: var(--brand-light);
+            border: 1px solid var(--brand);
+            padding: 16px;
+            border-radius: 10px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .course-title-label {
+            font-weight: 700;
+            color: var(--brand-strong);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .course-title-input {
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--ink-1);
+            width: 100%;
+            outline: none;
+        }
+        .quiz-item {
+            background: #f8f9fa;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 20px;
+            position: relative;
+            transition: 0.2s;
+        }
+        .quiz-item:focus-within {
+            border-color: var(--brand);
+            box-shadow: 0 4px 12px rgba(133, 98, 78, 0.25);
+            background: #fff9f2;
+        }
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            color: var(--brand-strong);
+        }
+        .quiz-number {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--brand);
+        }
+        .btn-remove {
+            color: #fff;
+            background: #c2410c;
+            font-size: 12px;
+            border: none;
+            border-radius: 6px;
+            padding: 5px 12px;
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(194, 65, 12, 0.25);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .btn-remove:hover {
+            background: #933b06;
+            box-shadow: 0 4px 10px rgba(194, 65, 12, 0.35);
+            transform: translateY(-1px);
+        }
+        .btn-remove:active {
+            transform: translateY(0);
+        }
+        .form-textarea, .form-input {
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 15px;
+            color: var(--ink-1);
+            background: #fff;
+            outline: none;
+            transition: 0.2s;
+            display: block;
+        }
+        .form-textarea {
+            min-height: 80px;
+            resize: vertical;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+        .form-textarea:focus, .form-input:focus {
+            border-color: var(--brand);
+        }
+        .answer-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .answer-label {
+            font-weight: 700;
+            color: var(--ink-2);
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        .form-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+        .btn-primary {
+            background: var(--brand);
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.04s;
+        }
+        .btn-primary:hover {
+            background: var(--brand-strong);
+            transform: translateY(-1px);
+        }
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid #dbe5ef;
+            color: var(--ink-2);
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, transform 0.04s;
+        }
+        .btn-ghost:hover {
+            background: var(--brand-light);
+            color: var(--brand-strong);
+            transform: translateY(-1px);
+        }
+        @media (max-width: 768px) {
+            .mypage-container {
+                flex-direction: column;
+                padding: 16px;
+            }
+            .sidebar {
+                width: 100%;
+                position: static;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="mypage-container">
+    <aside class="sidebar">
+        <ul>
+            <li><a th:href="@{/teacher/teacherProfile}">내 프로필</a></li>
+            <li><a th:href="@{/teacher/teacherEdit}">내 정보 수정</a></li>
+            <li><a th:href="@{/teacher/lectureManage}">강의 관리</a></li>
+            <li><a th:href="@{/teacher/teacherPosts}">내 댓글 관리</a></li>
+            <li class="active"><a th:href="@{/teacher/quizManage}">퀴즈 관리</a></li>
+        </ul>
+    </aside>
+    <div id="mypage-content">
+        <div class="intro-card">
+            <div class="intro-head">
+                <h2>퀴즈 수정</h2>
+                <span class="hint">등록된 퀴즈 내용을 수정하거나 삭제할 수 있습니다.</span>
+            </div>
+            <div class="course-title-box">
+                <span class="course-title-label">영상 제목 :</span>
+                <input type="text"
+                       th:value="${video.videoTitle}"
+                       readonly
+                       id="videoTitle"
+                       class="course-title-input" />
+            </div>
+            <form id="quizEditForm">
+                <input type="hidden" id="lectureId" name="lectureId" th:value="${lectureId}" />
+                <input type="hidden" id="videoId" name="videoId" th:value="${video.videoId}" />
+
+                <div id="quizWrapper">
+                    <!-- 기존 퀴즈 목록 렌더링 -->
+                    <div class="quiz-item"
+                         th:each="quiz, stat : ${quizzes}">
+                        <div class="quiz-header">
+                            <span class="quiz-number" th:text="${'Q' + stat.count + '.'}">Q1.</span>
+                            <button type="button" class="btn-remove">삭제</button>
+                        </div>
+                        <textarea class="form-textarea"
+                                  name="question"
+                                  placeholder="문제를 입력하세요"
+                                  th:text="${quiz.question}">기존 문제 내용</textarea>
+                        <div class="answer-box">
+                            <span class="answer-label">정답 :</span>
+                            <input type="text"
+                                   class="form-input"
+                                   name="modelAnswer"
+                                   placeholder="모범답안 입력"
+                                   th:value="${quiz.modelAnswer}" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-footer">
+                    <button type="button" class="btn-ghost" onclick="window.history.back()">뒤로가기</button>
+                    <button id="editQuiz-btn" type="submit" class="btn-primary">수정 완료</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    const quizWrapper = document.getElementById("quizWrapper");
+    const quizEditForm = document.getElementById("quizEditForm");
+
+    function reorderQuizzes() {
+        const items = quizWrapper.querySelectorAll(".quiz-item");
+        items.forEach((item, index) => {
+            const numberSpan = item.querySelector(".quiz-number");
+            if (numberSpan) numberSpan.textContent = `Q${index + 1}.`;
+        });
+    }
+
+    function attachDeleteListeners() {
+        const deleteButtons = quizWrapper.querySelectorAll(".btn-remove");
+        deleteButtons.forEach((button) => {
+            button.addEventListener("click", function () {
+                if (confirm("이 문제를 삭제하시겠습니까?")) {
+                    const quizItem = this.closest(".quiz-item");
+                    quizItem.remove();
+                    reorderQuizzes();
+                }
+            });
+        });
+    }
+
+    attachDeleteListeners();
+
+    const videoId = document.getElementById("videoId").value;
+    const lectureId = document.getElementById("lectureId").value;
+
+    quizEditForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const formData = new FormData(quizEditForm);
+        const quizzes = [];
+        const questions = formData.getAll("question");
+        const answers = formData.getAll("modelAnswer");
+
+        if (questions.length === 0) {
+            alert("최소 1개 이상의 문제가 필요합니다.");
+            return;
+        }
+
+        for (let i = 0; i < questions.length; i++) {
+            if (!questions[i].trim() || !answers[i].trim()) {
+                alert((i + 1) + "번 문제의 질문과 모범답안을 모두 입력해주세요.");
+                return;
+            }
+        }
+
+        const items = quizWrapper.querySelectorAll(".quiz-item");
+        items.forEach((item, index) => {
+            quizzes.push({
+                question: questions[index],
+                modelAnswer: answers[index],
+                passScore: 60
+            });
+        });
+
+        fetch("/teacher/quizManage/api/video/" + videoId, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(quizzes),
+        })
+            .then((response) => {
+                if (!response.ok) throw new Error("퀴즈 수정에 실패했습니다.");
+                return response.text();
+            })
+            .then(() => {
+                alert("퀴즈가 성공적으로 수정되었습니다.");
+                window.location.href = "/teacher/quizManage/" + lectureId;
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+                alert(error.message);
+            });
+    });
+</script>
+</body>
+</html>
