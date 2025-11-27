@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>UrbanGreen - 강의 등록</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/main/main.css}">
+    <link rel="stylesheet" th:href="@{/css/teacher/teacherMyPage.css}">
+    <link rel="stylesheet" th:href="@{/css/teacher/uploadLecture.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage/posts.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/header.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/footerShort.css}">
+
+
+</head>
+
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="mypage-container">
+    <aside class="sidebar">
+        <ul>
+            <li th:classappend="${active} == 'teacherProfile' ? 'active' : ''">
+                <a th:href="@{/teacher/teacherProfile}">내 프로필</a>
+            </li>
+            <li th:classappend="${active} == 'teacherEdit' ? 'active' : ''">
+                <a th:href="@{/teacher/teacherEdit}">내 정보 수정</a>
+            </li>
+            <li th:classappend="${active} == 'lectureManage' ? 'active' : ''">
+                <a th:href="@{/teacher/lectureManage}">강의 관리</a>
+            </li>
+            <li th:classappend="${active} == 'teacherPosts' ? 'active' : ''">
+                <a th:href="@{/teacher/teacherPosts}">내 댓글 관리</a>
+            </li>
+            <li th:classappend="${active} == 'quizManage' ? 'active' : ''">
+                <a th:href="@{/teacher/quizManage/select}">퀴즈 관리</a>
+            </li>
+        </ul>
+    </aside>
+
+    <main id="mypage-content">
+        <div class="intro-card">
+            <div class="intro-head">
+                <h2>강의 등록</h2>
+                <span class="hint">새로운 강의를 등록합니다.</span>
+            </div>
+
+            <!-- ✅ 강의 등록 폼 -->
+            <form class="intro-form" enctype="multipart/form-data" id="lectureCreateForm" method="post"
+                  th:action="@{/teacher/lectureManage/new}">
+
+                <div class="form-group">
+                    <label class="form-label" for="category1">대분류</label>
+                    <select class="form-select" id="category1" name="category1" required>
+                        <option value="">선택하세요</option>
+                        <option value="gardening">텃밭가꾸기</option>
+                        <option value="house">하우스 농사/실내정원</option>
+                        <option value="field">노지</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="category2">중분류</label>
+                    <select class="form-select" id="category2" name="category2" required>
+                        <option value="">선택하세요</option>
+                        <option value="seed">모종</option>
+                        <option value="grow">재배</option>
+                        <option value="ship">출하</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="courses_name">강의 제목</label>
+                    <input class="form-input" id="courses_name" name="courses_name" placeholder="강의 제목 입력" required
+                           type="text" />
+                </div>
+
+                <!-- 🔽 변경된 부분: 썸네일 업로드 및 미리보기 -->
+                <div class="form-group">
+                    <label class="form-label">강의 썸네일</label>
+                    <div class="file-upload-box">
+                        <!-- 미리보기 이미지 영역 -->
+                        <div id="preview-container" style="display:none; margin-bottom: 15px;">
+                            <img id="thumbnail-preview" src="" alt="썸네일 미리보기"
+                                 style="max-width: 100%; max-height: 250px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        </div>
+
+                        <label class="btn-ghost"
+                               style="border:1px solid #ccc; display:inline-block; cursor: pointer;">
+                            <!-- 아이콘 변경: video -> image -->
+                            <i class="fa-solid fa-image"></i> 썸네일 이미지 선택
+                            <!-- accept 변경: video/* -> image/*, name 변경 -->
+                            <input accept="image/*" name="thumbnailFile" onchange="handleFileSelect(event)"
+                                   style="display:none" type="file" />
+                        </label>
+                        <div id="fileName" style="margin-top:10px; font-size:14px; color: var(--ink-sub);">
+                            선택된 파일 없음
+                        </div>
+                    </div>
+                </div>
+                <!-- 🔼 변경 끝 -->
+
+                <div class="form-group">
+                    <label class="form-label" for="description">강의 설명</label>
+                    <textarea class="form-textarea" id="description" name="description" placeholder="강의 설명 입력"
+                              required></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn-ghost" onclick="history.back()" type="button">취소</button>
+                    <button class="btn-primary" type="submit">다음으로</button>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+
+<footer th:replace="~{fragments/footerShort :: footerShort}"></footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('lectureCreateForm');
+
+        if (!form) return;
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+
+            fetch('/teacher/lectureManage/new', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json()) // 서버에서 JSON 응답을 받음
+                .then(data => {
+                    if (data.redirectUrl) {
+                        alert(data.message); // "강의 기본 정보가 등록되었습니다."
+                        // ✅ 서버에서 받은 비디오 업로드 페이지 URL로 이동
+                        window.location.href = data.redirectUrl;
+                    } else {
+                        alert(data.message || '강의 등록에 실패했습니다.');
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('등록 중 오류가 발생했습니다.\n잠시 후 다시 시도해주세요.');
+                });
+        });
+    });
+
+    // (handleFileSelect 함수는 기존 그대로 유지)
+    function handleFileSelect(event) {
+        const file = event.target.files[0];
+        const fileNameDiv = document.getElementById('fileName');
+        const previewContainer = document.getElementById('preview-container');
+        const previewImg = document.getElementById('thumbnail-preview');
+
+        if (file) {
+            fileNameDiv.innerText = file.name;
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                previewImg.src = e.target.result;
+                previewContainer.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            fileNameDiv.innerText = "선택된 파일 없음";
+            previewContainer.style.display = 'none';
+            previewImg.src = "";
+        }
+    }
+</script>
+</body>
+
+</html>

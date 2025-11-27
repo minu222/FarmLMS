@@ -1,0 +1,57 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.5.7'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.lms.urbangreen'
+version = '0.0.1-SNAPSHOT'
+description = 'urbangreenProject'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // Gemini API를 위한 Google AI SDK 추가
+    implementation 'com.google.cloud:google-cloud-aiplatform:3.79.0'
+    implementation 'com.google.cloud:google-cloud-vertexai:1.38.0'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    implementation 'com.vladsch.flexmark:flexmark-all:0.64.8'
+
+    //구글 스토리지 클라우드
+    implementation 'com.google.cloud:google-cloud-storage:2.60.0'
+
+    // j코덱 비디오 길이 측정
+    implementation 'org.jcodec:jcodec:0.2.5'
+    implementation 'org.jcodec:jcodec-javase:0.2.5'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
