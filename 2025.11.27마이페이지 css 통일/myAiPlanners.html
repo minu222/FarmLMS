@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>UrbanGreen - AI 플래너 관리</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+
+  <link rel="stylesheet" th:href="@{/css/main/main.css}">
+  <link rel="stylesheet" th:href="@{/css/mypage/myPage.css}">
+  <link rel="stylesheet" th:href="@{/css/mypage/myAiPlanners.css}">
+  <link rel="stylesheet" th:href="@{/css/fragments/header.css}">
+  <link rel="stylesheet" th:href="@{/css/fragments/footer.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="mypage-container">
+  <aside class="sidebar">
+    <ul>
+      <li th:classappend="${active} == 'profile' ? 'active' : ''"><a th:href="@{/mypage/profile}">내 프로필</a></li>
+      <li th:classappend="${active} == 'edit' ? 'active' : ''"><a th:href="@{/mypage/edit}">내 정보수정</a></li>
+      <li th:classappend="${active} == 'subscriptions' ? 'active' : ''"><a th:href="@{/mypage/subscriptions}">내가
+        구독한 강의</a></li>
+      <li th:classappend="${active} == 'posts' ? 'active' : ''"><a th:href="@{/mypage/posts}">내 댓글 보기</a></li>
+      <li th:classappend="${active} == 'aiplanners' ? 'active' : ''"><a th:href="@{/mypage/aiplanners}">AI 플래너 관리</a></li>
+    </ul>
+  </aside>
+
+  <div id="mypage-content">
+    <h2>AI 텃밭 플래너 관리</h2>
+
+    <div class="ai-planner-layout">
+      <aside class="planner-list-panel">
+        <div class="planner-list-panel-header">저장된 플래너 목록</div>
+        <ul class="planner-list" id="plannerList">
+          <li class="planner-item"><div class="planner-item-title">플래너를 불러오는 중...</div></li>
+        </ul>
+      </aside>
+
+      <section class="planner-detail-panel">
+        <div class="planner-content-area" id="plannerDetail">
+          <h3 id="detailTitle">플래너를 선택해 주세요.</h3>
+
+          <div id="actionArea" style="text-align: right; margin-bottom: 15px; display: none;">
+            <button id="deletePlannerButton" class="mypage-delete-btn" type="button">
+              이 플래너 삭제
+            </button>
+          </div>
+
+          <div id="detailContent">
+            <p>왼쪽 목록에서 저장된 텃밭 플래너를 선택하면 상세 내용을 확인할 수 있습니다.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+<script>
+  const isLoggedIn = true;
+</script>
+
+<script th:src="@{/js/lecture/Lecture-Common.js}"></script>
+
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  const plannerApiUrl = /*[[@{/mypage/aiplanners/api}]]*/ "/mypage/aiplanners/api";
+  const deletePlannerUrlTemplate = "/mypage/aiplanners/"; // DELETE 요청을 보낼 URL 템플릿
+
+  (function () {
+    let planners = [];
+    let currentPlanner = null;
+
+    const plannerListEl = document.getElementById("plannerList");
+    const plannerDetailEl = document.getElementById("plannerDetail");
+    const detailTitleEl = document.getElementById("detailTitle");
+    const detailContentEl = document.getElementById("detailContent");
+
+    //삭제 버튼 요소 정의
+    const actionAreaEl = document.getElementById("actionArea");
+    const deleteButtonEl = document.getElementById("deletePlannerButton");
+
+
+    // -------- 플래너 리스트 렌더링 --------
+    function renderPlannerList() {
+      if (!planners.length) {
+        plannerListEl.innerHTML =
+                '<li class="planner-item"><div class="planner-item-title">저장된 플래너가 없습니다.</div></li>';
+        return;
+      }
+
+      // active 클래스, data-id, 제목, 날짜(ID) 표시
+      plannerListEl.innerHTML = planners.map(p => `
+                <li class="planner-item${currentPlanner && currentPlanner.plannerId === p.plannerId ? " active" : ""}"
+                    data-id="${p.plannerId}">
+                    <div class="planner-item-title">${p.plannerName}</div>
+                    <div class="planner-item-meta">ID: ${p.plannerId}</div>
+                </li>
+            `).join(""); // 기존 date 대신 meta 클래스 적용
+    }
+
+    // -------- 플래너 상세 내용 렌더링 --------
+    function renderPlannerDetail() {
+      if (!currentPlanner) {
+        detailTitleEl.textContent = "플래너를 선택해 주세요.";
+        detailContentEl.innerHTML = "<p>왼쪽 목록에서 저장된 텃밭 플래너를 선택하면 상세 내용을 확인할 수 있습니다.</p>";
+        actionAreaEl.style.display = 'none'; // 버튼 숨김
+        return;
+      }
+
+      detailTitleEl.textContent = currentPlanner.plannerName;
+      // AI 플래너 내용은 HTML 형식으로 저장되므로 innerHTML 사용
+      detailContentEl.innerHTML = currentPlanner.plannerContent;
+
+      // 버튼 표시 및 데이터 속성 설정
+      actionAreaEl.style.display = 'block';
+      deleteButtonEl.dataset.id = currentPlanner.plannerId;
+      deleteButtonEl.dataset.name = currentPlanner.plannerName;
+    }
+
+    // (이하 loadPlanners, deletePlanner, bindEvents, init 함수는 기존과 동일)
+
+    // -------- 서버에서 플래너 목록 로드 --------
+    function loadPlanners() {
+      fetch(plannerApiUrl)
+              .then(res => {
+                if (res.status === 401) {
+                  throw new Error("로그인이 필요합니다.");
+                }
+                if (!res.ok) {
+                  throw new Error("플래너 목록 조회 실패");
+                }
+                return res.json();
+              })
+              .then(data => {
+                planners = data || [];
+
+                if (planners.length > 0) {
+                  // 현재 선택된 플래너가 사라졌거나 없을 경우 첫 번째 항목을 선택
+                  if (!currentPlanner || !planners.find(p => p.plannerId === currentPlanner.plannerId)) {
+                    currentPlanner = planners[0];
+                  }
+                } else {
+                  currentPlanner = null;
+                }
+
+                renderPlannerList();
+                renderPlannerDetail();
+
+              })
+              .catch(err => {
+                console.error("플래너 로드 오류:", err);
+                detailTitleEl.textContent = "오류 발생";
+                detailContentEl.innerHTML = `<p style="color: red;">${err.message || "데이터를 불러오는 중 오류가 발생했습니다."}</p>`;
+                plannerListEl.innerHTML =
+                        '<li class="planner-item"><div class="planner-item-title">목록 불러오기 실패</div></li>';
+              });
+    }
+
+    // -------- 플래너 삭제 함수 (DELETE API 호출) ⭐ [추가 함수] --------
+    function deletePlanner(plannerId, plannerName) {
+      if (!confirm(`정말로 [${plannerName}] 플래너를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.`)) {
+        return;
+      }
+
+      fetch(deletePlannerUrlTemplate + plannerId, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' }
+      })
+              .then(res => {
+                if (res.status === 401) {
+                  alert("로그인 세션이 만료되었습니다. 다시 로그인해주세요.");
+                  window.location.href = '/login';
+                  return Promise.reject(new Error("인증 실패"));
+                }
+                if (!res.ok) {
+                  // 403 Forbidden 등 권한/찾을 수 없음 오류 응답 처리
+                  return res.text().then(text => {
+                    throw new Error(text || "삭제 요청 처리 중 오류가 발생했습니다.");
+                  });
+                }
+                return res.text();
+              })
+              .then(message => {
+                alert(message);
+                currentPlanner = null; // 현재 선택된 플래너 초기화
+                loadPlanners(); // 목록을 다시 로드하여 갱신
+              })
+              .catch(err => {
+                console.error("삭제 오류:", err);
+                alert(err.message || "플래너 삭제 중 예상치 못한 오류가 발생했습니다.");
+              });
+    }
+
+    // -------- 이벤트 바인딩 --------
+    function bindEvents() {
+      // 플래너 항목 선택
+      plannerListEl.addEventListener("click", (e) => {
+        const item = e.target.closest(".planner-item");
+        if (!item) return;
+        const id = Number(item.dataset.id);
+
+        const selected = planners.find(p => p.plannerId === id);
+        if (!selected) return;
+
+        currentPlanner = selected;
+
+        renderPlannerList();
+        renderPlannerDetail();
+      });
+
+      // 삭제 버튼 클릭 이벤트
+      deleteButtonEl.addEventListener("click", (e) => {
+        const id = Number(e.currentTarget.dataset.id);
+        const name = e.currentTarget.dataset.name;
+        if (id) {
+          deletePlanner(id, name);
+        }
+      });
+    }
+
+    function init() {
+      bindEvents();
+      loadPlanners();
+    }
+
+    document.addEventListener("DOMContentLoaded", init);
+  })();
+  /*]]>*/
+</script>
+</body>
+</html>

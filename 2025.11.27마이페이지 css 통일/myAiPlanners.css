@@ -1,0 +1,252 @@
+/* ==================================== */
+/* AI 플래너 관리 페이지 (myAiPlanners.html) 전용 스타일 (posts.css 통일 버전) */
+/* ==================================== */
+
+/* posts.css 기반으로 색상 정의 */
+:root {
+    --brand: #5cb85f; /* 기본 초록색 (댓글 관리 페이지) */
+    --brand-strong: #4caf50; /* 진한 초록색 */
+    --ink-1: #1f2937; /* 가장 진한 텍스트 */
+    --ink-2: #374151; /* 일반 텍스트 */
+    --ink-sub: #6b7280; /* 서브 텍스트 */
+    --bg-light: #f9fafb; /* 연한 배경 */
+    --bg-white: #fff; /* 흰색 배경 */
+    --border-color: #e5e7eb; /* 기본 경계선 */
+    --hover-bg: #f0f9f0; /* 호버 배경 (연한 초록) */
+    --active-bg: #e8f5e9; /* 활성 배경 (좀 더 진한 연한 초록) */
+}
+
+/* --- 1. 전체 콘텐츠 영역 (댓글 관리 페이지와 동일) --- */
+#mypage-content {
+    /* 내 게시글 관리 페이지 (posts.css)의 기본 스타일을 따름 */
+    padding: 20px 24px;
+    flex-grow: 1;
+    border: 1px solid var(--border-color); /* 외곽선 추가 */
+    border-radius: 10px; /* 모서리 둥글게 */
+    background-color: var(--bg-white); /* 흰색 배경으로 감싸기 */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05); /* 그림자 추가 */
+    margin-top: 0;
+}
+
+#mypage-content h2 {
+    font-size: 22px;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-weight: 700;
+    color: #333;
+    /* 내 댓글 관리 페이지는 h2 아래 별도의 구분선이 없습니다. */
+}
+
+/* --- 2. AI 플래너 레이아웃 (lecture-layout 스타일 적용) --- */
+.ai-planner-layout {
+    display: grid;
+    grid-template-columns: 300px minmax(0, 1fr);
+    gap: 20px;
+    min-height: 500px;
+    height: calc(100vh - 180px);
+}
+
+/* --- 3. 왼쪽: 플래너 리스트 패널 (.planner-list-panel) --- */
+.planner-list-panel {
+    /* lecture-list-panel 스타일 적용 */
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background-color: var(--bg-white);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.planner-list-panel-header {
+    /* lecture-list-panel-header 스타일 적용 */
+    padding: 14px 16px;
+    border-bottom: 2px solid var(--brand);
+    font-size: 15px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-strong) 100%);
+    color: white;
+}
+
+.planner-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto;
+    /* header 높이(46px)를 제외한 나머지 높이 사용 */
+    height: 100%;
+}
+
+.planner-item {
+    /* lecture-item 스타일 적용 */
+    padding: 14px 16px;
+    border-bottom: 1px solid #f3f4f6;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.planner-item:last-child {
+    border-bottom: none;
+}
+
+.planner-item:hover {
+    background-color: var(--hover-bg); /* #f0f9f0 */
+}
+
+.planner-item.active {
+    background-color: var(--active-bg); /* #e8f5e9 */
+    border-left: 4px solid var(--brand);
+}
+
+.planner-item-title {
+    /* lecture-item-title 스타일 적용 */
+    font-weight: 600;
+    color: var(--ink-1);
+    font-size: 14px;
+    line-height: 1.4;
+    margin-bottom: 6px;
+}
+
+.planner-item-meta {
+    /* lecture-item-meta 스타일 적용 */
+    font-size: 12px;
+    color: var(--ink-sub);
+}
+
+
+/* --- 4. 오른쪽: 플래너 상세 내용 패널 (.planner-detail-panel) --- */
+.planner-detail-panel {
+    /* lecture-detail-panel 스타일 적용 */
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background-color: var(--bg-white);
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    height: 100%; /* 부모에 맞춤 */
+    overflow-y: auto; /* 내용이 넘칠 경우 스크롤 */
+}
+
+.planner-content-area {
+    line-height: 1.6;
+    color: var(--ink-2);
+    /* detailTitle, detailContent 영역 분리 */
+    flex-grow: 1;
+}
+
+/* --- 5. AI 결과 콘텐츠 내부 스타일 (가독성 개선 부분 - posts.css 유사) --- */
+
+/* 메인 제목 (h3#detailTitle) - 강의 상세 정보 h3와 유사하게 조정 */
+.planner-content-area h3#detailTitle {
+    margin: 0 0 15px;
+    font-size: 20px;
+    color: var(--ink-1);
+    font-weight: 700;
+
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px; /* 선과 내용 사이 간격 */
+    margin-bottom: 15px; /* 삭제 버튼 영역과의 간격 */
+
+
+}
+
+/* 서브 제목 (AI가 생성한 내용 내부의 h4) */
+.planner-content-area h4 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--brand-strong); /* 강조를 위해 브랜드 색상 사용 */
+    margin-top: 28px;
+    margin-bottom: 12px;
+    padding-left: 0;
+    border-left: none;
+    /* 필요 시 구분선 스타일 추가: border-bottom: 1px solid #e0e6ed; */
+}
+
+/* 일반 단락 */
+.planner-content-area p {
+    margin-bottom: 15px;
+    line-height: 1.7;
+    color: var(--ink-2);
+}
+
+/* 목록 스타일 (재배 단계, 추천 작물 등) */
+.planner-content-area ul,
+.planner-content-area ol {
+    padding-left: 25px;
+    margin-bottom: 20px;
+    line-height: 1.8;
+}
+
+/* 목록 항목 */
+.planner-content-area li {
+    margin-bottom: 8px;
+    color: var(--ink-2);
+}
+
+/* 강조 표시 */
+.planner-content-area strong {
+    color: var(--ink-1);
+    font-weight: 700;
+}
+
+/* 수평선 (구분선) 스타일 - 댓글 관리 페이지의 divider 스타일 적용 */
+.planner-content-area hr {
+    height: 1px;
+    border: none;
+    background-color: var(--border-color);
+    margin: 18px 0;
+}
+
+/* 표 (재배 달력 등) 스타일 */
+.planner-content-area table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+
+.planner-content-area th,
+.planner-content-area td {
+    /* posts.css의 테이블 스타일과 유사하게 조정 */
+    border: 1px solid #e0e6ed;
+    padding: 10px;
+    text-align: left;
+    font-size: 14px;
+    color: var(--ink-2);
+}
+
+.planner-content-area th {
+    background-color: #f7f9fa;
+    font-weight: 600;
+    color: var(--ink-1);
+}
+
+/* --- 6. 삭제 버튼 스타일 (posts.css의 delete-comment-btn 기반) --- */
+.mypage-delete-btn {
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.mypage-delete-btn:hover {
+    background-color: #dc2626; /* 빨간색 */
+    color: white;
+    border-color: #dc2626;
+}
+
+
+/* --- 7. 반응형 (댓글 관리 페이지와 동일) --- */
+@media (max-width: 900px) {
+    .ai-planner-layout {
+        grid-template-columns: 1fr;
+        height: auto; /* 모바일에서는 높이 자동 */
+        min-height: auto;
+    }
+}
