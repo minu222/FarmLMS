@@ -107,8 +107,7 @@ public class QuizService {
         }
 
         // *주의*: 정수 나눗셈 때문에 100점이 안 될 수 있으므로, 100점을 초과하지 않도록 보장
-        // (이 로직은 나머지 점수 분배로 인해 100점을 정확히 맞추도록 설계되었으나, 만약을 위해.)
-        // totalEarnedScore = Math.min(totalEarnedScore, 100);
+        totalEarnedScore = Math.min(totalEarnedScore, 100);
 
         // 5. 최종 결과(Pass/Fail) 판단 (기존 로직 유지)
         QuizScore.pass passStatus = (totalEarnedScore >= passThreshold)
