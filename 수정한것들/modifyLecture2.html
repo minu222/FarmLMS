@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>UrbanGreen - 영상 수정</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/main/main.css}">
+    <link rel="stylesheet" th:href="@{/css/teacher/teacherMyPage.css}">
+    <link rel="stylesheet" th:href="@{/css/teacher/modifyLecture2.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage/posts.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/header.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/footerShort.css}">
+
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="mypage-container">
+    <aside class="sidebar">
+        <ul>
+            <li th:classappend="${active} == 'teacherProfile' ? 'active' : ''">
+                <a th:href="@{/teacher/teacherProfile}">내 프로필</a>
+            </li>
+            <li th:classappend="${active} == 'teacherEdit' ? 'active' : ''">
+                <a th:href="@{/teacher/teacherEdit}">내 정보 수정</a>
+            </li>
+            <li th:classappend="${active} == 'lectureManage' ? 'active' : ''">
+                <a th:href="@{/teacher/lectureManage}">강의 관리</a>
+            </li>
+            <li th:classappend="${active} == 'teacherPosts' ? 'active' : ''">
+                <a th:href="@{/teacher/teacherPosts}">내 댓글 관리</a>
+            </li>
+            <li th:classappend="${active} == 'quizManage' ? 'active' : ''">
+                <a th:href="@{/teacher/quizManage/select}">퀴즈 관리</a>
+            </li>
+        </ul>
+    </aside>
+
+    <div id="mypage-content">
+        <div class="intro-card">
+            <div class="intro-head">
+                <h2>영상 수정 및 추가</h2>
+                <span class="hint">기존 영상을 수정/삭제하거나, 새로운 영상을 추가할 수 있습니다.</span>
+            </div>
+
+            <form id="videoUploadForm" enctype="multipart/form-data" th:action="@{/teacher/lectureManage/video/update}" method="post">
+                <input type="hidden" id="lectureId" name="lectureId" th:value="${lectureId}" />
+
+                <div id="videoWrapper">
+
+                    <div class="video-item" th:each="video, stat : ${existingVideos}">
+                        <div class="video-header">
+                            <span class="video-number" th:text="|Video ${stat.count}.|">Video 1.</span>
+                            <button type="button" class="btn-remove"
+                                    th:data-video-id="${video.video_id}">삭제</button>
+                        </div>
+
+                        <input type="hidden" name="videoId" th:value="${video.video_id}" />
+                        <input type="hidden" name="existingUrl" th:value="${video.video_url}" />
+
+                        <div class="form-group">
+                            <label class="form-label">영상 제목</label>
+                            <input type="text" name="videoTitle" class="form-input" placeholder="영상 제목 입력" required
+                                   th:value="${video.video_title}" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">파일 업로드 (새 파일 선택 시 교체됩니다)</label>
+                            <div class="file-upload-box">
+                                <div class="video-preview" style="margin-bottom: 10px;">
+                                    <span style="font-size: 14px; color: #6b7280;">
+                                        [기존 영상: [[${#numbers.formatInteger(video.video_time / 60, 0)}]]:[[${#numbers.formatInteger(video.video_time % 60, 0)}]] ]
+                                    </span>
+                                </div>
+
+                                <label class="btn-upload-trigger">
+                                    <i class="fa-solid fa-video"></i> 새 파일 선택
+                                    <input type="file" name="videoFile" accept="video/*"
+                                           style="display:none" onchange="handleFileSelect(this)" />
+                                </label>
+                                <div class="file-name-display" style="font-weight: bold; color: var(--brand-strong);">
+                                    기존 파일 유지
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="newVideoPlaceholder">
+                        <th:block th:if="${#lists.isEmpty(existingVideos)}">
+                            <div class="video-item">
+                                <div class="video-header">
+                                    <span class="video-number">Video 1.</span>
+                                </div>
+                                <input type="hidden" name="videoId" value="0" /> <input type="hidden" name="existingUrl" value="" />
+                                <div class="form-group">
+                                    <label class="form-label">영상 제목</label>
+                                    <input type="text" name="videoTitle" class="form-input" placeholder="영상 제목 입력" required />
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">파일 업로드</label>
+                                    <div class="file-upload-box">
+                                        <label class="btn-upload-trigger">
+                                            <i class="fa-solid fa-video"></i> 파일 선택
+                                            <input type="file" name="videoFile" accept="video/*"
+                                                   style="display:none" onchange="handleFileSelect(this)" required />
+                                        </label>
+                                        <div class="file-name-display">선택된 파일 없음</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+                </div>
+
+                <div class="video-actions">
+                    <button id="addVideoBtn" type="button" class="btn-add">
+                        <i class="fa-solid fa-plus"></i> 영상 추가하기 (최대 10개)
+                    </button>
+                </div>
+
+                <div class="form-footer">
+                    <button type="button" class="btn-ghost" onclick="history.back()">취소</button>
+                    <button type="submit" class="btn-primary">수정 완료</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/footerShort :: footerShort}"></footer>
+
+<script th:inline="javascript">
+    const videoWrapper = document.getElementById("videoWrapper");
+    const addVideoBtn = document.getElementById("addVideoBtn");
+    // 초기 비디오 개수 설정
+    const initialVideoCount = [[${#lists.size(existingVideos)}]];
+    let videoCounter = initialVideoCount > 0 ? initialVideoCount : 0;
+
+    // 파일명 표시 함수
+    function handleFileSelect(input) {
+        const file = input.files[0];
+        if (file) {
+            const display = input.closest('.file-upload-box').querySelector('.file-name-display');
+            display.innerText = file.name;
+            display.style.color = "#A07E68";
+            display.style.fontWeight = "bold";
+
+            // 새 파일을 선택하면 기존 URL 숨김 필드를 비웁니다. (선택 사항이지만 안전성 증가)
+            const existingUrlInput = input.closest('.video-item').querySelector('input[name="existingUrl"]');
+            if (existingUrlInput) {
+                existingUrlInput.value = '';
+            }
+        }
+    }
+
+    // 번호 재정렬 (Video 1, Video 2...)
+    function reorderVideos() {
+        const items = videoWrapper.querySelectorAll(".video-item");
+        items.forEach((item, index) => {
+            const num = item.querySelector(".video-number");
+            if (num) num.innerText = `Video ${index + 1}.`;
+        });
+        videoCounter = items.length;
+    }
+
+    // 새 영상 아이템 생성 함수
+    function createNewVideoItem() {
+        const nextNum = videoWrapper.querySelectorAll(".video-item").length + 1;
+
+        const div = document.createElement("div");
+        div.className = "video-item";
+        div.innerHTML = `
+            <div class="video-header">
+                <span class="video-number">Video ${nextNum}.</span>
+                <button type="button" class="btn-remove">삭제</button>
+            </div>
+            <input type="hidden" name="videoId" value="0" />
+            <input type="hidden" name="existingUrl" value="" />
+
+            <div class="form-group">
+                <label class="form-label">영상 제목</label>
+                <input type="text" name="videoTitle" class="form-input" placeholder="영상 제목 입력" required />
+            </div>
+            <div class="form-group">
+                <label class="form-label">파일 업로드</label>
+                <div class="file-upload-box">
+                    <label class="btn-upload-trigger">
+                        <i class="fa-solid fa-video"></i> 파일 선택
+                        <input type="file" name="videoFile" accept="video/*"
+                               style="display:none" onchange="handleFileSelect(this)" required />
+                    </label>
+                    <div class="file-name-display">선택된 파일 없음</div>
+                </div>
+            </div>
+        `;
+
+        div.querySelector(".btn-remove").addEventListener("click", function() {
+            // 삭제 시 폼에서 완전히 제거
+            div.remove();
+            reorderVideos();
+        });
+
+        // 새 비디오는 #newVideoPlaceholder 내부에 추가
+        document.getElementById("newVideoPlaceholder").appendChild(div);
+
+        reorderVideos();
+        return div;
+    }
+
+
+    // 기존 영상 삭제 버튼 이벤트 리스너 등록 (Thymeleaf 반복문으로 생성된 버튼에 적용)
+    videoWrapper.querySelectorAll('.btn-remove').forEach(btn => {
+        btn.addEventListener("click", function() {
+            // 이 버튼은 기존 비디오를 삭제하는 버튼입니다.
+            const item = btn.closest('.video-item');
+
+            // [중요] DB에서 삭제할 videoId를 Hidden 필드로 남겨두는 대신,
+            // 여기서는 폼 제출 시 videoId와 videoTitle 쌍이 유효하지 않으면 서버에서 삭제하도록 로직을 구현했습니다.
+            // 따라서 해당 비디오 아이템만 폼에서 제거합니다.
+
+            if (confirm("이 영상을 강의 목록에서 완전히 삭제하시겠습니까? (삭제 후 복구 불가)")) {
+                item.remove();
+                reorderVideos();
+            }
+        });
+    });
+
+
+    // 영상 추가 버튼 동작
+    addVideoBtn.addEventListener("click", function() {
+        const currentCount = videoWrapper.querySelectorAll(".video-item").length;
+        if (currentCount >= 10) {
+            alert("한 번에 최대 10개까지만 등록 가능합니다.");
+            return;
+        }
+
+        const newDiv = createNewVideoItem();
+        newDiv.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+
+    // 폼 제출 (서버 전송)
+    document.getElementById("videoUploadForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        // [최종 유효성 검사]
+        const videoItems = videoWrapper.querySelectorAll(".video-item");
+        if (videoItems.length === 0) {
+            alert("최소 1개 이상의 영상이 등록되어야 합니다.");
+            return;
+        }
+
+        // 새 비디오 파일 유효성 검사 (videoId=0 인데 videoFile이 없는 경우)
+        let isValid = true;
+        videoItems.forEach(item => {
+            const videoId = item.querySelector('input[name="videoId"]').value;
+            const videoFile = item.querySelector('input[name="videoFile"]').files[0];
+
+            // 비디오 등록/수정 시 제목이 비어있는지 확인
+            const videoTitle = item.querySelector('input[name="videoTitle"]').value.trim();
+            if (videoTitle === "") {
+                alert("비디오 제목을 입력해 주세요.");
+                isValid = false;
+                return;
+            }
+
+            // 새 비디오(videoId=0)인데 파일이 선택되지 않은 경우
+            if (videoId === '0' && !videoFile) {
+                alert("새로 추가된 비디오는 파일을 선택해야 합니다.");
+                isValid = false;
+                return;
+            }
+        });
+
+        if (!isValid) return;
+
+
+        const formData = new FormData(this);
+        const btn = this.querySelector("button[type='submit']");
+        const originalText = btn.innerText;
+
+        btn.disabled = true;
+        btn.innerText = "업로드 및 저장 중...";
+
+        // ✅ 수정 전용 엔드포인트로 변경
+        fetch('/teacher/lectureManage/video/update', {
+            method: 'POST',
+            body: formData
+        })
+            .then(res => {
+                if (!res.ok) {
+                    return res.json().then(error => {
+                        throw new Error(error.message || "영상 수정/업로드에 실패했습니다.");
+                    });
+                }
+                return res.json();
+            })
+            .then((data) => {
+                alert(data.message);
+                // 최종 완료 후 강의 관리 페이지로 이동
+                window.location.href = data.redirectUrl;
+            })
+            .catch(err => {
+                console.error(err);
+                alert("오류가 발생했습니다.\n" + err.message);
+                btn.disabled = false;
+                btn.innerText = originalText;
+            });
+    });
+</script>
+</body>
+</html>

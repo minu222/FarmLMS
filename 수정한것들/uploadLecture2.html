@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>UrbanGreen - 영상 등록</title>
+
+    <!-- 폰트어썸 아이콘 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- 기존 CSS 파일들 -->
+    <link rel="stylesheet" th:href="@{/css/main/main.css}">
+    <link rel="stylesheet" th:href="@{/css/teacher/teacherMyPage.css}">
+    <link rel="stylesheet" th:href="@{/css/teacher/uploadLecture2.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/header.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/footerShort.css}">
+
+    <style>
+
+    </style>
+</head>
+<body>
+
+<!-- 헤더 -->
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="mypage-container">
+    <!-- 사이드바 -->
+    <aside class="sidebar">
+        <ul>
+            <li><a th:href="@{/teacher/teacherProfile}">내 프로필</a></li>
+            <li><a th:href="@{/teacher/teacherEdit}">내 정보 수정</a></li>
+            <li class="active"><a th:href="@{/teacher/lectureManage}">강의 관리</a></li>
+            <li><a th:href="@{/teacher/teacherPosts}">내 댓글 관리</a></li>
+            <li><a th:href="@{/teacher/quizManage/select}">퀴즈 관리</a></li>
+        </ul>
+    </aside>
+
+    <!-- 메인 콘텐츠 -->
+    <div id="mypage-content">
+        <div class="intro-card">
+            <div class="intro-head">
+                <h2>영상 등록</h2>
+                <span class="hint">강의에 포함될 영상 컨텐츠를 등록하세요.</span>
+            </div>
+
+            <form id="videoUploadForm" enctype="multipart/form-data">
+                <!-- 이전 페이지에서 받은 lectureId -->
+                <input type="hidden" id="lectureId" name="lectureId" th:value="${lectureId}" />
+
+                <div id="videoWrapper">
+                    <!-- 기본 영상 입력 1개 -->
+                    <div class="video-item">
+                        <div class="video-header">
+                            <span class="video-number">Video 1.</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">영상 제목</label>
+                            <input type="text" name="videoTitle" class="form-input" placeholder="영상 제목 입력" required />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">파일 업로드</label>
+                            <div class="file-upload-box">
+                                <label class="btn-upload-trigger">
+                                    <i class="fa-solid fa-video"></i> 파일 선택
+                                    <input type="file" name="videoFile" accept="video/*"
+                                           style="display:none" onchange="handleFileSelect(this)" required />
+                                </label>
+                                <div class="file-name-display">선택된 파일 없음</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 영상 추가 버튼 -->
+                <div class="video-actions">
+                    <button id="addVideoBtn" type="button" class="btn-add">
+                        <i class="fa-solid fa-plus"></i> 영상 추가하기 (최대 10개)
+                    </button>
+                </div>
+
+                <div class="form-footer">
+                    <button type="button" class="btn-ghost" onclick="history.back()">이전</button>
+                    <button type="submit" class="btn-primary">등록 완료</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- 푸터 -->
+<footer th:replace="~{fragments/footerShort :: footerShort}"></footer>
+
+<script>
+    const videoWrapper = document.getElementById("videoWrapper");
+    const addVideoBtn = document.getElementById("addVideoBtn");
+
+    // 파일명 표시 함수
+    function handleFileSelect(input) {
+        const file = input.files[0];
+        if (file) {
+            const display = input.closest('.file-upload-box').querySelector('.file-name-display');
+            display.innerText = file.name;
+            display.style.color = "#A07E68";
+            display.style.fontWeight = "bold";
+        }
+    }
+
+    // 번호 재정렬 (Video 1, Video 2...)
+    function reorderVideos() {
+        const items = videoWrapper.querySelectorAll(".video-item");
+        items.forEach((item, index) => {
+            const num = item.querySelector(".video-number");
+            if (num) num.innerText = `Video ${index + 1}.`;
+        });
+    }
+
+    // 영상 추가 버튼 동작
+    addVideoBtn.addEventListener("click", function() {
+        const currentCount = videoWrapper.querySelectorAll(".video-item").length;
+        if (currentCount >= 10) {
+            alert("한 번에 최대 10개까지만 등록 가능합니다.");
+            return;
+        }
+
+        const nextNum = currentCount + 1;
+        const div = document.createElement("div");
+        div.className = "video-item";
+        div.innerHTML = `
+            <div class="video-header">
+                <span class="video-number">Video ${nextNum}.</span>
+                <button type="button" class="btn-remove">삭제</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">영상 제목</label>
+                <input type="text" name="videoTitle" class="form-input" placeholder="영상 제목 입력" required />
+            </div>
+            <div class="form-group">
+                <label class="form-label">파일 업로드</label>
+                <div class="file-upload-box">
+                    <label class="btn-upload-trigger">
+                        <i class="fa-solid fa-video"></i> 파일 선택
+                        <input type="file" name="videoFile" accept="video/*"
+                               style="display:none" onchange="handleFileSelect(this)" required />
+                    </label>
+                    <div class="file-name-display">선택된 파일 없음</div>
+                </div>
+            </div>
+        `;
+
+        div.querySelector(".btn-remove").addEventListener("click", function() {
+            div.remove();
+            reorderVideos();
+        });
+
+        videoWrapper.appendChild(div);
+        div.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+
+    // 폼 제출 (서버 전송)
+    document.getElementById("videoUploadForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const btn = this.querySelector("button[type='submit']");
+        const originalText = btn.innerText;
+
+        btn.disabled = true;
+        btn.innerText = "업로드 중...";
+
+        // [주의] 다중 파일 업로드용 컨트롤러 주소로 수정 필요
+        fetch('/teacher/lectureManage/video/uploadMulti', {
+            method: 'POST',
+            body: formData
+        })
+            .then(res => {
+                if (!res.ok) throw new Error("업로드 실패");
+                return res.text();
+            })
+            .then(() => {
+                alert("모든 영상이 등록되었습니다.");
+                window.location.href = "/teacher/lectureManage";
+            })
+            .catch(err => {
+                console.error(err);
+                alert("오류가 발생했습니다.");
+                btn.disabled = false;
+                btn.innerText = originalText;
+            });
+    });
+</script>
+</body>
+</html>

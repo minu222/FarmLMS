@@ -1,0 +1,305 @@
+/* ===== 강사 테마 (Terracotta Brown) ===== */
+:root {
+    --bg-page: #f5f6fa;
+    --panel: #ffffff;
+    --ink-1: #2f3640;
+    --ink-2: #4b5563;
+    --ink-3: #6b7280;
+    --ink-sub: #9aa3af;
+    --brand: #A07E68;
+    --brand-strong: #85624E;
+    --brand-light: #F5F0ED;
+    --brand-text: #6E4D3A;
+    --border: #e2ddce;
+    --shadow: 0 8px 24px rgba(160,126,104,0.2);
+    --radius: 12px;
+}
+
+body {
+    margin: 0;
+    font-family: 'Pretendard', sans-serif;
+    background-color: var(--bg-page);
+    color: var(--ink-1);
+}
+a {
+    text-decoration: none;
+    color: inherit;
+}
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+}
+
+/* 레이아웃 */
+.mypage-container {
+    display: flex;
+    min-height: 100vh;
+    background: var(--bg-page);
+    margin-top: 80px;
+    gap: 20px;
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+.sidebar {
+    width: 240px;
+    background: var(--panel);
+    color: var(--ink-1);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 96px;
+    align-self: flex-start;
+    padding: 12px;
+    flex-shrink: 0;
+}
+
+.sidebar ul li {
+    margin: 4px 0;
+}
+
+.sidebar ul li a {
+    display: block;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1px;
+    transition: transform 0.04s ease, background 0.2s ease, color 0.2s ease;
+    color: var(--ink-1);
+}
+
+.sidebar ul li a:hover {
+    background: var(--brand);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.sidebar ul li.active a {
+    background: linear-gradient(180deg, var(--brand), var(--brand-strong));
+    color: #fff;
+}
+
+#mypage-content {
+    flex: 1;
+    min-width: 0;
+    background: var(--panel);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 32px 24px;
+    box-sizing: border-box;
+}
+.intro-card {
+    background: var(--panel);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    box-shadow: var(--shadow);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.intro-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 12px;
+}
+
+.intro-head h2 {
+    margin: 0;
+    font-size: 18px;
+    color: var(--ink-1);
+}
+
+.hint {
+    color: var(--ink-sub);
+    font-size: 14px;
+}
+
+/* 폼 스타일 */
+.form-group {
+    margin-bottom: 20px;
+}
+.form-label {
+    display: block;
+    font-weight: 700;
+    color: var(--ink-2);
+    margin-bottom: 8px;
+    font-size: 15px;
+}
+.form-input {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 15px;
+    color: var(--ink-1);
+    background: #fff;
+    outline: none;
+    transition: 0.2s;
+}
+.form-input:focus {
+    border-color: var(--brand);
+}
+
+/* 파일 업로드 박스 */
+.file-upload-box {
+    width: 100%;
+    box-sizing: border-box;
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    padding: 30px 20px;
+    background: #fbfdff;
+    text-align: center;
+    transition: 0.2s;
+}
+.file-upload-box:hover {
+    border-color: var(--brand);
+    background: var(--brand-light);
+}
+.btn-upload-trigger {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #fff;
+    color: var(--brand-strong);
+    border: 1px solid var(--brand);
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.btn-upload-trigger:hover {
+    background: var(--brand);
+    color: #fff;
+}
+.file-name-display {
+    margin-top: 12px;
+    font-size: 14px;
+    color: var(--ink-2);
+    font-weight: 500;
+}
+
+/* 영상 아이템 카드 (반복되는 부분) */
+.video-item {
+    background: #f8f9fa;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 20px;
+    position: relative;
+    transition: 0.2s;
+}
+.video-item:focus-within {
+    border-color: var(--brand);
+    box-shadow: 0 4px 12px rgba(133, 98, 78, 0.25);
+    background: #fff9f2;
+}
+.video-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    color: var(--brand-strong);
+}
+.video-number {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--brand);
+}
+
+/* 삭제 버튼 */
+.btn-remove {
+    color: #fff;
+    background: #c2410c;
+    font-size: 12px;
+    border: none;
+    border-radius: 6px;
+    padding: 5px 12px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(194, 65, 12, 0.25);
+    transition: all 0.2s ease;
+}
+.btn-remove:hover {
+    background: #933b06;
+    transform: translateY(-1px);
+}
+
+/* 추가 버튼 영역 */
+.video-actions {
+    display: flex;
+    justify-content: center;
+    margin: 24px 0;
+}
+.btn-add {
+    width: 100%;
+    padding: 14px;
+    border: 2px dashed var(--border);
+    background: var(--brand-light);
+    color: var(--ink-3);
+    font-weight: 700;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.btn-add:hover {
+    border-color: var(--brand);
+    color: var(--brand);
+    background: #fef7ed;
+}
+
+/* 폼 하단 버튼 */
+.form-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    margin-top: 20px;
+}
+.btn-primary {
+    background: var(--brand);
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: 700;
+    transition: 0.2s;
+}
+.btn-primary:hover {
+    background: var(--brand-strong);
+    transform: translateY(-1px);
+}
+.btn-ghost {
+    background: transparent;
+    border: 1px solid #dbe5ef;
+    color: var(--ink-2);
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: 700;
+    transition: 0.2s;
+}
+.btn-ghost:hover {
+    background: var(--brand-light);
+    color: var(--brand-strong);
+    transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+    .mypage-container {
+        flex-direction: column;
+        padding: 16px;
+    }
+    .sidebar {
+        width: 100%;
+        position: static;
+        margin-bottom: 20px;
+    }
+}

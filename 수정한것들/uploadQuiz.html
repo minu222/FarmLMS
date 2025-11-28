@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>UrbanGreen - 퀴즈 출제</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <link rel="stylesheet" th:href="@{/css/main/main.css}">
+    <link rel="stylesheet" th:href="@{/css/teacher/teacherMyPage.css}">
+    <link rel="stylesheet" th:href="@{/css/teacher/uploadQuiz.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage/posts.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/header.css}">
+    <link rel="stylesheet" th:href="@{/css/fragments/footerShort.css}">
+</head>
+
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="mypage-container">
+    <aside class="sidebar">
+        <ul>
+            <li th:classappend="${active} == 'teacherProfile' ? 'active' : ''">
+                <a th:href="@{/teacher/teacherProfile}">내 프로필</a>
+            </li>
+            <li th:classappend="${active} == 'teacherEdit' ? 'active' : ''">
+                <a th:href="@{/teacher/teacherEdit}">내 정보 수정</a>
+            </li>
+            <li th:classappend="${active} == 'lectureManage' ? 'active' : ''">
+                <a th:href="@{/teacher/lectureManage}">강의 관리</a>
+            </li>
+            <li th:classappend="${active} == 'teacherPosts' ? 'active' : ''">
+                <a th:href="@{/teacher/teacherPosts}">내 댓글 관리</a>
+            </li>
+            <li th:classappend="${active} == 'quizManage' ? 'active' : ''">
+                <a th:href="@{/teacher/quizManage}">퀴즈 관리</a>
+            </li>
+        </ul>
+    </aside>
+
+<div id="mypage-content">
+    <div class="intro-card">
+        <div class="intro-head">
+            <h2>퀴즈 출제</h2>
+            <span class="hint">수강생들의 이해도를 확인할 퀴즈를 등록하세요.</span>
+        </div>
+
+        <!-- 강의/영상 제목 표시 -->
+        <div class="course-title-box">
+            <span class="course-title-label">영상 제목 :</span>
+            <input type="text"
+                   th:value="${video.videoTitle}"
+                   readonly
+                   id="videoTitle"
+                   class="course-title-input" />
+        </div>
+
+        <form id="quizUploadForm">
+            <!-- lectureId, videoId hidden -->
+            <input type="hidden" id="lectureId" name="lectureId" th:value="${lectureId}" />
+            <input type="hidden" id="videoId" name="videoId" th:value="${video.videoId}" />
+
+            <div id="quizWrapper">
+                <!-- 기본 1문항 -->
+                <div class="quiz-item">
+                    <div class="quiz-header">
+                        <span class="quiz-number">Q1.</span>
+                    </div>
+                    <textarea class="form-textarea"
+                              name="question"
+                              placeholder="문제를 입력하세요"></textarea>
+                    <div class="answer-box">
+                        <span class="answer-label">정답 :</span>
+                        <input type="text"
+                               class="form-input"
+                               name="modelAnswer"
+                               placeholder="모범답안을 입력하세요" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-actions">
+                <button id="addQuiz-btn" type="button" class="btn-add">
+                    <i class="fa-solid fa-plus"></i> 문항 추가하기 (최대 5개)
+                </button>
+            </div>
+
+            <div class="form-footer">
+                <button type="button" class="btn-ghost" onclick="window.history.back()">취소</button>
+                <button id="uploadQuiz-btn" type="submit" class="btn-primary">출제 완료</button>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+
+<footer th:replace="~{fragments/footerShort :: footerShort}"></footer>
+
+<script th:inline="javascript">
+    const quizWrapper = document.getElementById("quizWrapper");
+    const addQuizBtn = document.getElementById("addQuiz-btn");
+    const quizUploadForm = document.getElementById("quizUploadForm");
+
+    function getQuizCount() {
+        return quizWrapper.querySelectorAll(".quiz-item").length;
+    }
+
+    function reorderQuizzes() {
+        const items = quizWrapper.querySelectorAll(".quiz-item");
+        items.forEach((item, index) => {
+            const numberSpan = item.querySelector(".quiz-number");
+            if (numberSpan) numberSpan.textContent = `Q${index + 1}.`;
+        });
+    }
+
+    const videoIdInput = document.getElementById("videoId");
+    const lectureIdInput = document.getElementById("lectureId");
+    const videoId = videoIdInput ? videoIdInput.value : null;
+    const lectureId = lectureIdInput ? lectureIdInput.value : null;
+
+    addQuizBtn.addEventListener("click", () => {
+        const currentCount = getQuizCount();
+        if (currentCount >= 5) {
+            alert("최대 5문제까지 출제 가능합니다.");
+            return;
+        }
+
+        const nextNum = currentCount + 1;
+        const newCard = document.createElement("div");
+        newCard.className = "quiz-item";
+
+        newCard.innerHTML = `
+            <div class="quiz-header">
+                <span class="quiz-number">Q${nextNum}.</span>
+                <button type="button" class="btn-remove">삭제</button>
+            </div>
+            <textarea class="form-textarea" name="question" placeholder="문제를 입력하세요"></textarea>
+            <div class="answer-box">
+                <span class="answer-label">정답 :</span>
+                <input type="text" class="form-input" name="modelAnswer" placeholder="모범답안을 입력하세요">
+            </div>
+        `;
+
+        newCard.querySelector(".btn-remove").addEventListener("click", function () {
+            newCard.remove();
+            reorderQuizzes();
+        });
+
+        quizWrapper.appendChild(newCard);
+        newCard.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+
+    quizUploadForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const formData = new FormData(quizUploadForm);
+        const quizzes = [];
+        const questions = formData.getAll("question");
+        const answers = formData.getAll("modelAnswer");
+
+        if (questions.length === 0) {
+            alert("최소 1개 이상의 문제를 출제해주세요.");
+            return;
+        }
+
+        for (let i = 0; i < questions.length; i++) {
+            if (!questions[i].trim() || !answers[i].trim()) {
+                alert((i + 1) + "번 문제의 질문과 모범답안을 모두 입력해주세요.");
+                return;
+            }
+        }
+
+        for (let i = 0; i < questions.length; i++) {
+            quizzes.push({
+                question: questions[i],
+                modelAnswer: answers[i],
+                passScore: 60   // 일단 전부 60점 기준
+            });
+        }
+
+        fetch("/teacher/quizManage/api/video/" + videoId, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(quizzes),
+        })
+            .then((response) => {
+                if (!response.ok) throw new Error("퀴즈 출제에 실패했습니다.");
+                return response.text();
+            })
+            .then(() => {
+                alert("퀴즈 출제가 완료되었습니다.");
+                window.location.href = "/teacher/quizManage/" + lectureId;
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+                alert(error.message);
+            });
+    });
+</script>
+</body>
+</html>
