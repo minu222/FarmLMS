@@ -272,3 +272,30 @@ button {
     align-items: center;
     gap: 8px;
 }
+
+
+/* 진도율 막대 공통 스타일 */
+.progress-bar-outer {
+    width: 60px;
+    height: 6px;
+    background: #eee;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-bar-inner {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.25s ease;
+}
+
+/* 퍼센트 구간별 색상 */
+.progress-bar-inner.low {
+    background: #ed8585;   /* 빨강 (0~29%) */
+}
+.progress-bar-inner.mid {
+    background: #f59f00;   /* 노랑 (30~69%) */
+}
+.progress-bar-inner.high {
+    background: #2f9e44;   /* 초록 (70% 이상) */
+}

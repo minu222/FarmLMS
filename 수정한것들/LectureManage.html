@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>강의 관리</title>
 
     <link rel="stylesheet" th:href="@{/css/main/main.css}">
@@ -13,7 +13,7 @@
     <link rel="stylesheet" th:href="@{/css/teacher/lectureManage.css}">
 
     <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 
     <style>
 
@@ -84,10 +84,10 @@
                     </a>
 
                     <!-- 퀴즈 관리 페이지로 이동 -->
-<!--                    <a class="btn-action"-->
-<!--                       th:href="@{/teacher/quizManage/{lectureId}(lectureId=${lecture.lectureId})}">-->
-<!--                        <i class="fa-solid fa-clipboard-question"></i> 퀴즈-->
-<!--                    </a>-->
+                    <!--                    <a class="btn-action"-->
+                    <!--                       th:href="@{/teacher/quizManage/{lectureId}(lectureId=${lecture.lectureId})}">-->
+                    <!--                        <i class="fa-solid fa-clipboard-question"></i> 퀴즈-->
+                    <!--                    </a>-->
                     <!-- ✅ 수강생 진도율 토글 버튼 -->
                     <button type="button" id="toggleProgressBtn" class="btn-action">
                         <i class="fa-solid fa-chart-line"></i>
@@ -169,15 +169,21 @@
 
                         <!-- 진도율 바 + % 표시 (0.0~1.0 → 0~100%) -->
                         <td>
-                            <div style="display:flex; align-items:center; gap:8px;">
-                                <div style="width:60px; height:6px; background:#eee; border-radius:3px; overflow:hidden;">
-                                    <div style="height:100%; background:#5cb85f;"
-                                         th:style="|width:${p.progress * 100}%;|">
+                            <div style="display:flex; align-items:center; gap:8px;"
+                                 th:with="percent=${p.progress * 100}">
+                                <!-- 막대 -->
+                                <div class="progress-bar-outer">
+                                    <div class="progress-bar-inner"
+                                         th:style="|width:${percent}%;|"
+                                         th:classappend="${percent} < 30 ? ' low'
+                                  : (${percent} < 70 ? ' mid' : ' high')">
                                     </div>
                                 </div>
-                                <span th:text="${#numbers.formatDecimal(p.progress * 100, 0, 0)} + '%'">
-                        70%
-                    </span>
+
+                                <!-- % 숫자 -->
+                                <span th:text="${#numbers.formatDecimal(percent, 0, 0)} + '%'">
+                                       70%
+                                </span>
                             </div>
                         </td>
 
