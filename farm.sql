@@ -29,13 +29,13 @@ CREATE TABLE IF NOT EXISTS `ai_planner` (
   PRIMARY KEY (`planner_id`),
   KEY `FK_ai_planner_all_users` (`user_id`),
   CONSTRAINT `FK_ai_planner_all_users` FOREIGN KEY (`user_id`) REFERENCES `all_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='AI 플래너';
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='AI 플래너';
 
--- 테이블 데이터 farm.ai_planner:~5 rows (대략적) 내보내기
+-- 테이블 데이터 farm.ai_planner:~2 rows (대략적) 내보내기
 INSERT INTO `ai_planner` (`planner_id`, `user_id`, `planner_name`, `planner_content`, `created_at`) VALUES
 	(4, 16, '베란다', '<p>안녕하세요! 주말농장 성공 플래너 AI입니다. 고객님의 소중한 정보를 바탕으로 가장 성공 가능성이 높고 흥미로운 텃밭 설계 및 초기 재배 계획을 세워드릴게요. 베란다에서 나만의 신선한 채소와 열매를 수확하는 즐거움을 곧 경험하실 수 있을 거예요!</p>\n<h2>1. 최적 텃밭 모델: 콤팩트 베란다 홈팜</h2>\n<p>고객님께서는 아파트 베란다 공간과 3~6시간의 일조량을 가지고 계시네요. 예산과 경험 수준을 고려했을 때, 공간 효율성을 극대화하고 다양한 작물을 키울 수 있는 <strong>\'콤팩트 베란다 홈팜\'</strong> 모델을 추천합니다.</p>\n<ul>\n<li><strong>다단 화분 스탠드 (수직형):</strong> 좁은 공간에서도 여러 종류의 쌈채소를 층층이 키울 수 있어 매우 효율적입니다. 햇빛을 골고루 받을 수 있도록 회전형이나 이동식 바퀴가 달린 제품을 선택하면 더욱 편리해요.</li>\n<li><strong>개별 대형 플랜터 (열매 채소용):</strong> 방울토마토와 같은 열매 채소는 뿌리가 깊게 뻗고 많은 영양분을 필요로 하므로, 충분한 크기의 개별 화분에 심는 것이 좋습니다. 햇빛이 가장 잘 드는 곳에 배치해 주세요.</li>\n<li><strong>배치 아이디어:</strong> 베란다 창가에 다단 화분 스탠드를 두고, 그 옆이나 앞쪽에 개별 플랜터를 두어 햇빛을 최대한 활용하는 구조를 추천합니다.</li>\n</ul>\n<p><strong>성공 포인트:</strong> 콤팩트 홈팜은 작은 공간에서도 다양한 작물을 키우는 기쁨을 선사하며, 이동이 쉬워 햇빛 방향에 따라 조절하기도 용이합니다.</p>\n<h2>2. 추천 작물: 베란다 초보 농부 맞춤 쌈채소 &amp; 방울토마토</h2>\n<p>고객님의 텃밭 목적(식용 쌈채소/열매)과 초보 경험, 그리고 베란다 일조량을 고려하여 쉽고 빠르게 수확의 기쁨을 느낄 수 있는 작물들을 선정했습니다.</p>\n<ul>\n<li><strong>상추 (쌈채소):</strong>\n<ul>\n<li><strong>특징:</strong> 가장 대표적인 쌈채소로, 씨앗 발아율이 좋고 병충해에 강해 초보자도 쉽게 키울 수 있습니다. 겉잎을 따서 수확하는 방식으로 꾸준히 신선한 쌈채소를 즐길 수 있어요.</li>\n<li><strong>재배 난이도:</strong> ★☆☆☆☆ (매우 쉬움)</li>\n<li><strong>수확 속도:</strong> 20~30일 후 첫 수확 가능</li>\n</ul>\n</li>\n<li><strong>청경채 (쌈채소):</strong>\n<ul>\n<li><strong>특징:</strong> 아삭한 식감과 부드러운 맛으로 샐러드나 볶음 요리에 활용하기 좋습니다. 상추와 마찬가지로 키우기 쉽고 비교적 빠르게 자랍니다.</li>\n<li><strong>재배 난이도:</strong> ★☆☆☆☆ (매우 쉬움)</li>\n<li><strong>수확 속도:</strong> 25~35일 후 첫 수확 가능</li>\n</ul>\n</li>\n<li><strong>방울토마토 (열매 채소):</strong>\n<ul>\n<li><strong>특징:</strong> 베란다 텃밭에서 열매 수확의 즐거움을 느끼기에 가장 좋은 작물 중 하나입니다. 햇빛만 충분하면 튼튼하게 자라 달콤한 열매를 선사합니다. 모종으로 시작하면 더욱 쉽게 키울 수 있어요.</li>\n<li><strong>재배 난이도:</strong> ★★☆☆☆ (쉬움)</li>\n<li><strong>수확 속도:</strong> 모종 심은 후 60~80일 후 첫 수확 가능</li>\n</ul>\n</li>\n</ul>\n<p><strong>성공 포인트:</strong> 이 작물들은 베란다 환경에 잘 적응하고, 비교적 적은 햇빛에도 잘 자라며, 초보자도 실패 없이 키울 확률이 매우 높습니다.</p>\n<h2>3. 초기 투자 재료 리스트: 5만원 이하 알뜰 꾸러미</h2>\n<p>고객님의 예산(5만원 이하)을 준수하면서도 성공적인 텃밭을 위한 필수 재료들을 엄선했습니다.</p>\n<table>\n<thead>\n<tr><th align="left">품목 분류</th><th align="left">추천 품목</th><th align="left">예상 가격대 (원)</th><th align="left">비고</th></tr>\n</thead>\n<tbody>\n<tr><td align="left"><strong>용기</strong></td><td align="left">다단 화분 스탠드 (3단)</td><td align="left">15,000 ~ 20,000</td><td align="left">쌈채소용, 공간 효율성 최고!</td></tr>\n<tr><td align="left"> </td><td align="left">대형 플랜터/화분 (지름 25cm 이상) 1개</td><td align="left">5,000 ~ 8,000</td><td align="left">방울토마토용, 뿌리 성장에 충분한 공간 확보</td></tr>\n<tr><td align="left"><strong>흙/비료</strong></td><td align="left">베란다 텃밭용 상토 (10L)</td><td align="left">5,000 ~ 7,000</td><td align="left">배수와 보수성이 좋은 전용 흙</td></tr>\n<tr><td align="left"> </td><td align="left">유기농 액비 (소용량)</td><td align="left">3,000 ~ 5,000</td><td align="left">작물 성장 촉진, 한 달에 1~2회 사용</td></tr>\n<tr><td align="left"><strong>씨앗/모종</strong></td><td align="left">상추 씨앗 1봉</td><td align="left">1,000 ~ 2,000</td><td align="left">다양한 품종 중 1가지 선택</td></tr>\n<tr><td align="left"> </td><td align="left">청경채 씨앗 1봉</td><td align="left">1,000 ~ 2,000</td><td align="left"> </td></tr>\n<tr><td align="left"> </td><td align="left">방울토마토 모종 1개</td><td align="left">3,000 ~ 5,000</td><td align="left">씨앗보다 모종이 초보에게 훨씬 유리</td></tr>\n<tr><td align="left"><strong>필수 도구</strong></td><td align="left">미니 모종삽 &amp; 갈퀴 세트</td><td align="left">5,000 ~ 8,000</td><td align="left">흙을 다루고 모종 심을 때 필수</td></tr>\n<tr><td align="left"> </td><td align="left">물뿌리개 (1~2L)</td><td align="left">3,000 ~ 5,000</td><td align="left">섬세한 물 주기 가능</td></tr>\n<tr><td align="left"> </td><td align="left">면장갑</td><td align="left">1,000 ~ 2,000</td><td align="left">흙으로부터 손 보호</td></tr>\n<tr><td align="left"><strong>합계</strong></td><td align="left"> </td><td align="left"><strong>약 42,000 ~ 59,000원</strong></td><td align="left">(예산 범위 내에서 선택)</td></tr>\n</tbody>\n</table>\n<p><strong>성공 포인트:</strong> 위 리스트는 최소한의 투자로 최대의 효과를 볼 수 있도록 구성되었습니다. 필요한 품목들을 한 번에 구매하여 배송비를 절약하는 것도 좋은 방법입니다.</p>\n<h2>4. LMS 추천 강의: 초보 농부를 위한 성공 가이드</h2>\n<p>고객님의 성공적인 첫 텃밭 경험을 위해 주말농장 LMS의 맞춤형 강의들을 추천해 드립니다!</p>\n<ul>\n<li><strong>[무료] 처음 시작하는 베란다 텃밭 가이드:</strong>\n<ul>\n<li>내용: 베란다 텃밭의 기본 개념, 공간 활용법, 작물 선택 노하우 등 초보자가 알아야 할 모든 것을 담았습니다.</li>\n<li>추천 이유: 텃밭을 시작하기 전 전체적인 그림을 그리는 데 큰 도움이 됩니다.</li>\n</ul>\n</li>\n<li><strong>[챌린지] 초보도 성공하는 쌈채소 재배법 30일 챌린지:</strong>\n<ul>\n<li>내용: 상추, 청경채 등 쌈채소 씨앗 파종부터 수확까지 일자별 미션과 전문가 피드백을 제공합니다.</li>\n<li>추천 이유: 추천 작물인 쌈채소를 직접 키우며 실전 경험을 쌓고, 꾸준히 동기를 부여받을 수 있습니다.</li>\n</ul>\n</li>\n<li><strong>[유료] 우리 집 방울토마토 달콤하게 키우기 (모종 편):</strong>\n<ul>\n<li>내용: 방울토마토 모종 심기, 물 주기, 영양 관리, 지지대 세우기, 병충해 예방 등 열매 수확을 위한 핵심 노하우를 상세히 알려드립니다.</li>\n<li>추천 이유: 베란다에서 방울토마토를 성공적으로 키우기 위한 전문적인 지식을 습득할 수 있습니다.</li>\n</ul>\n</li>\n<li><strong>[무료] 흙이 건강해야 작물도 건강! 상토 선택 및 관리법:</strong>\n<ul>\n<li>내용: 텃밭 흙의 중요성, 베란다 텃밭에 적합한 상토 선택법, 영양분 관리법 등 건강한 흙 만들기에 대한 기초 지식입니다.</li>\n<li>추천 이유: 작물 성장의 가장 기본이 되는 흙 관리에 대한 이해를 높여줍니다.</li>\n</ul>\n</li>\n</ul>\n<p><strong>성공 포인트:</strong> 이 강의들을 통해 텃밭 가꾸기의 기본기를 다지고, 작물별 맞춤 관리법을 익히면 분명 멋진 수확의 기쁨을 누리실 수 있을 거예요!</p>\n<p>고객님의 베란다 텃밭 성공을 진심으로 응원합니다! 궁금한 점이 있다면 언제든지 다시 찾아주세요.</p>\n', '2025-11-25 08:08:14'),
-	(6, 27, '123234234', '<h2>안녕하세요! 주말농장 성공 플래너 AI입니다. 고객님의 베란다 텃밭 성공을 위해 특별히 맞춤형 계획을 설계해 드릴게요! 🏡💚</h2>\n<p>아파트 베란다에서 쌈채소를 직접 키우는 즐거움은 정말 특별하답니다. 초보자도 쉽게 시작하고 맛있는 수확의 기쁨을 누릴 수 있도록 도와드릴게요!</p>\n<h2>1. 최적 텃밭 모델: \'미니 컨테이너 베란다 텃밭\'</h2>\n<p>고객님께서는 아파트 베란다에서 하루 3~6시간의 일조량을 가지고 계시며, 식용 쌈채소를 목표로 하시는 초보자이시네요. 이러한 조건에서는 **\'미니 컨테이너 베란다 텃밭\'**이 가장 적합합니다.</p>\n<ul>\n<li><strong>모델 특징:</strong>\n<ul>\n<li><strong>공간 효율성:</strong> 좁은 베란다 공간을 최대한 활용할 수 있는 소형 화분이나 재배 용기를 이용합니다.</li>\n<li><strong>이동 용이성:</strong> 일조량 변화에 따라 화분의 위치를 쉽게 옮길 수 있어 작물 생장에 유리합니다.</li>\n<li><strong>쉬운 관리:</strong> 물 주기, 흙 갈기 등 초기 관리가 비교적 간단하여 초보자에게 적합합니다.</li>\n<li><strong>비용 효율성:</strong> 5만원 이하 예산으로도 충분히 시작할 수 있습니다.</li>\n</ul>\n</li>\n<li><strong>추천 배치:</strong> 베란다 난간 가까이 햇빛이 가장 잘 드는 곳에 1~3개 정도의 화분을 배치하는 것을 추천합니다.</li>\n</ul>\n<h2>2. 추천 작물: \'초보자도 성공하는 쌈채소 3총사\'</h2>\n<p>고객님의 텃밭 목적(식용 쌈채소)과 초보자 경험 수준, 그리고 베란다 일조량을 고려하여 빠르고 쉽게 수확의 기쁨을 느낄 수 있는 작물들을 추천합니다.</p>\n<ul>\n<li><strong>상추 (로메인 상추, 청상추 등):</strong>\n<ul>\n<li><strong>재배 난이도:</strong> ★☆☆☆☆ (매우 쉬움)</li>\n<li><strong>특징:</strong> 씨앗이나 모종으로 쉽게 키울 수 있으며, 비교적 짧은 시간에 수확이 가능합니다. 한 번 심으면 여러 번 잎을 따서 먹을 수 있어 가성비가 좋습니다.</li>\n<li><strong>일조량:</strong> 햇빛을 좋아하지만 반그늘에서도 잘 자라 베란다 환경에 적합합니다.</li>\n</ul>\n</li>\n<li><strong>쑥갓:</strong>\n<ul>\n<li><strong>재배 난이도:</strong> ★★☆☆☆ (쉬움)</li>\n<li><strong>특징:</strong> 독특한 향과 맛으로 요리에 활용도가 높습니다. 생장 속도가 빨라 초보자도 성장의 재미를 느낄 수 있습니다.</li>\n<li><strong>일조량:</strong> 상추와 비슷하게 반그늘에서도 잘 자라며, 너무 강한 햇빛보다는 적당한 햇빛이 좋습니다.</li>\n</ul>\n</li>\n<li><strong>치커리 (적치커리, 쌈치커리):</strong>\n<ul>\n<li><strong>재배 난이도:</strong> ★★☆☆☆ (쉬움)</li>\n<li><strong>특징:</strong> 쌉쌀한 맛이 일품인 쌈채소로, 상추와 함께 곁들이면 맛의 균형을 이룹니다. 병충해에 강한 편이라 키우기 수월합니다.</li>\n<li><strong>일조량:</strong> 역시 반그늘에서도 잘 자라며, 베란다 환경에서 무난하게 키울 수 있습니다.</li>\n</ul>\n</li>\n</ul>\n<h2>3. 초기 투자 재료 리스트 (예산 5만원 이하)</h2>\n<p>고객님의 5만원 이하 예산에 맞춰 꼭 필요한 필수 재료들로 리스트를 구성했습니다. 최소한의 투자로 최대의 효과를 내보세요!</p>\n<table>\n<thead>\n<tr><th align="left">카테고리</th><th align="left">품목</th><th align="left">예상 가격 (원)</th><th align="left">비고</th></tr>\n</thead>\n<tbody>\n<tr><td align="left"><strong>필수 도구</strong></td><td align="left">미니 모종삽/손삽</td><td align="left">5,000</td><td align="left">흙을 다루고 모종을 심을 때 사용</td></tr>\n<tr><td align="left"> </td><td align="left">작은 물뿌리개</td><td align="left">7,000</td><td align="left">섬세한 물 주기 및 영양제 희석용</td></tr>\n<tr><td align="left"><strong>흙/비료</strong></td><td align="left">베란다용 상토 (10L)</td><td align="left">10,000</td><td align="left">작물 생장에 필수적인 영양분이 포함된 흙</td></tr>\n<tr><td align="left"><strong>씨앗/모종</strong></td><td align="left">상추, 쑥갓, 치커리 씨앗 또는 모종</td><td align="left">15,000</td><td align="left">씨앗은 더 저렴하지만, 모종은 바로 키울 수 있어 초보에게 유리</td></tr>\n<tr><td align="left"><strong>용기</strong></td><td align="left">플라스틱 화분 또는 재배 용기 (3개)</td><td align="left">10,000</td><td align="left">배수 구멍이 있는 가벼운 용기 선택</td></tr>\n<tr><td align="left"><strong>총 예상 비용</strong></td><td align="left"><strong>47,000</strong></td><td align="left"> </td><td align="left">예산 범위 내에서 충분히 시작 가능</td></tr>\n</tbody>\n</table>\n<ul>\n<li><strong>팁:</strong> 씨앗 대신 작은 모종을 구입하면 초기 실패율을 줄이고 빠르게 수확을 경험할 수 있습니다. 인터넷 쇼핑몰이나 가까운 화원, 종묘사에서 저렴하게 구매할 수 있습니다.</li>\n</ul>\n<h2>4. LMS 추천 강의</h2>\n<p>고객님의 \'미니 컨테이너 베란다 텃밭\'과 \'초보 가드닝\'에 딱 맞는 강의들을 LMS에서 찾아봤어요. 이 강의들을 통해 더욱 쉽고 재미있게 텃밭 생활을 시작해 보세요!</p>\n<h2>4. LMS 추천 강의</h2>\n<p>고객님의 \'미니 컨테이너 베란다 텃밭\'과 \'초보 가드닝\'에 딱 맞는 강의들을 LMS에서 찾아봤어요. 이 강의들을 통해 더욱 쉽고 재미있게 텃밭 생활을 시작해 보세요!</p>\n<p>아쉽게도 현재 \'텃밭 기초\'에 대한 직접적인 강의는 없지만, 베란다 텃밭 시작에 가장 중요한 \'씨앗 파종\'에 대한 유료 강의가 있어 추천해 드립니다.</p>\n<ul>\n<li><strong><a href="javascript:void(0);" onclick="handleCourseClick(31, \'미니 텃밭 씨앗 파종 기초: 발아율 100% 도전 보러가기\', false); return false;">미니 텃밭 씨앗 파종 기초: 발아율 100% 도전 보러가기</a></strong>\n<ul>\n<li><strong>강사:</strong> 베란다정원사</li>\n<li><strong>내용:</strong> 베란다 텃밭의 첫걸음인 씨앗 파종에 대한 모든 것을 알려주는 강의입니다. 씨앗을 심고 싹을 틔우는 기초 방법을 상세히 배울 수 있어 초보자에게 큰 도움이 될 거예요!</li>\n</ul>\n</li>\n</ul>\n<p>추후 \'베란다 텃밭 관리\'나 \'초보 쌈채소 재배\'와 관련된 무료 또는 챌린지 강의도 업데이트될 예정이니, LMS 웹사이트를 자주 방문하여 확인해 주세요! 지금부터 시작하는 고객님의 텃밭 여정을 응원합니다! 😊</p>\n', '2025-11-26 06:47:42'),
-	(7, 27, '3463463456', '<p>안녕하세요! 주말농장 성공 플래너 AI입니다. 고객님의 소중한 텃밭 꿈을 응원하며, 성공적인 베란다 텃밭을 위한 맞춤형 플래너를 제안해 드릴게요!</p>\n<h2>1. 최적 텃밭 모델</h2>\n<p>고객님께서는 아파트 베란다/발코니에서 오전/오후 3~6시간의 일조량을 가지고 계시고, 5만원 이하의 예산으로 초보자로서 식용 쌈채소/열매를 재배하고 싶어 하십니다. 이러한 조건을 고려했을 때, <strong>\'미니 컨테이너 텃밭\'</strong> 모델이 가장 적합합니다!</p>\n<ul>\n<li><strong>모델 특징:</strong> 공간 활용도가 높고, 이동이 쉬워 햇볕을 따라 놓아줄 수 있습니다. 또한, 초기 비용 부담이 적어 초보자분들도 부담 없이 시작하기 좋습니다.</li>\n<li><strong>추천 용기:</strong> 플라스틱 화분, 재활용 스티로폼 박스, 다단형 플랜터 등을 활용하여 좁은 공간에서도 다양한 작물을 키울 수 있습니다.</li>\n<li><strong>배치 팁:</strong> 햇볕이 가장 잘 드는 시간대에 맞춰 용기를 옮겨주면 작물 성장에 더욱 도움이 됩니다.</li>\n</ul>\n<h2>2. 추천 작물</h2>\n<p>고객님의 텃밭 목적(식용 쌈채소/열매), 일조량, 초보 경험 수준 및 예산을 고려하여, 텃밭 성공률을 높여줄 작물을 추천합니다.</p>\n<ul>\n<li><strong>[필수 추천] 잎채소:</strong>\n<ul>\n<li><strong>상추:</strong> 키우기 매우 쉽고 수확량이 풍부하여 초보자에게 가장 인기 있는 작물입니다. 약 30일이면 첫 수확이 가능하며, 잎을 따내도 계속 자라 오랫동안 즐길 수 있습니다.</li>\n<li><strong>깻잎:</strong> 특유의 향으로 다양한 요리에 활용되며, 상추와 마찬가지로 키우기 쉬워 초보자도 쉽게 성공할 수 있습니다.</li>\n</ul>\n</li>\n<li><strong>[선택 추천] 열매채소:</strong>\n<ul>\n<li><strong>방울토마토:</strong> 3~6시간의 일조량이라면 재배가 가능합니다. 초보자도 열매를 수확하는 기쁨을 느낄 수 있으며, 성장하는 모습을 관찰하는 재미가 큽니다. (단, 햇볕이 부족하면 열매가 잘 맺히지 않을 수 있으니 주의 깊은 관리가 필요합니다.)</li>\n</ul>\n</li>\n</ul>\n<h2>3. 초기 투자 재료 리스트</h2>\n<p>5만원 이하의 예산으로 효율적인 베란다 텃밭을 시작하실 수 있도록 최소한의 필수 재료 리스트를 제안합니다.</p>\n<ul>\n<li><strong>필수 도구 (약 1만원):</strong>\n<ul>\n<li>작은 모종삽 1개</li>\n<li>물뿌리개 1개 (소형)</li>\n</ul>\n</li>\n<li><strong>흙/비료 (약 2만원):</strong>\n<ul>\n<li>친환경 배양토(상토) 10L: 약 1만 5천원</li>\n<li>유기질 비료 또는 지렁이 분변토 (소량): 약 5천원</li>\n</ul>\n</li>\n<li><strong>씨앗/모종 (약 1만원):</strong>\n<ul>\n<li>상추 씨앗 또는 모종 2~3개: 약 3천원</li>\n<li>깻잎 씨앗 또는 모종 2~3개: 약 3천원</li>\n<li>방울토마토 모종 1개 (선택): 약 4천원</li>\n</ul>\n</li>\n<li><strong>재배 용기 (약 1만원, 재활용 시 0원):</strong>\n<ul>\n<li>플라스틱 화분 (중형 3~4개) 또는 재활용 스티로폼 박스/페트병 등을 활용하면 비용 절감에 큰 도움이 됩니다.</li>\n</ul>\n</li>\n</ul>\n<p>총 예상 비용: 약 4~5만원 (용기 재활용 여부에 따라 변동 가능)</p>\n<h2>4. LMS 추천 강의</h2>\n<p>고객님의 베란다 컨테이너 텃밭 성공을 위해 관련 강의를 추천해 드립니다!</p>\n<ul>\n<li>\n<p><strong>베란다 텃밭 첫걸음을 위한 기초 강의:</strong></p>\n<ul>\n<li><a href="javascript:void(0);" onclick="handleCourseClick(31, \'미니 텃밭 씨앗 파종 기초: 발아율 100% 도전 보러가기\', false); return false;">미니 텃밭 씨앗 파종 기초: 발아율 100% 도전 보러가기</a> - 씨앗부터 건강하게 싹 틔우는 노하우를 배울 수 있습니다.</li>\n<li><a href="javascript:void(0);" onclick="handleCourseClick(1, \'도시 농부를 위한 모종 심기 마스터 클래스 보러가기\', false); return false;">도시 농부를 위한 모종 심기 마스터 클래스 보러가기</a> - 모종을 심는 가장 기본적인 방법을 알려주어 초보자에게 안성맞춤입니다.</li>\n<li><a href="javascript:void(0);" onclick="handleCourseClick(4, \'저예산으로 시작하는 쌈채소 수직 텃밭 설계 보러가기\', false); return false;">저예산으로 시작하는 쌈채소 수직 텃밭 설계 보러가기</a> - 저예산으로 쌈채소 텃밭을 구성하는 아이디어를 얻을 수 있습니다.</li>\n</ul>\n</li>\n<li>\n<p><strong>추천 작물 재배 및 관리 강의:</strong></p>\n<ul>\n<li><a href="javascript:void(0);" onclick="handleCourseClick(11, \'베란다 쌈채소의 신선한 수확과 장기 저장법 보러가기\', false); return false;">베란다 쌈채소의 신선한 수확과 장기 저장법 보러가기</a> - 수확한 쌈채소를 더욱 신선하게 즐기는 방법을 배울 수 있습니다.</li>\n<li><a href="javascript:void(0);" onclick="handleCourseClick(2, \'아이와 함께 하는 상추 &amp; 바질 모종 심기 보러가기\', false); return false;">아이와 함께 하는 상추 &amp; 바질 모종 심기 보러가기</a> - 상추 모종 심기에 대한 실질적인 도움을 받을 수 있습니다.</li>\n<li><a href="javascript:void(0);" onclick="handleCourseClick(6, \'베란다 토마토 재배: 곁순 제거와 열매 관리 심화 보러가기\', false); return false;">베란다 토마토 재배: 곁순 제거와 열매 관리 심화 보러가기</a> - 방울토마토 재배 시 중요한 곁순 제거와 열매 관리 방법을 익힐 수 있습니다.</li>\n</ul>\n</li>\n</ul>\n<p>이 플래너와 함께 고객님의 베란다 텃밭이 풍성한 수확의 기쁨으로 가득 차기를 바랍니다! 궁금한 점이 있다면 언제든지 다시 물어봐 주세요!</p>\n', '2025-11-26 07:04:40');
+	(7, 27, '3463463456', '<p>안녕하세요! 주말농장 성공 플래너 AI입니다. 고객님의 소중한 텃밭 꿈을 응원하며, 성공적인 베란다 텃밭을 위한 맞춤형 플래너를 제안해 드릴게요!</p>\n<h2>1. 최적 텃밭 모델</h2>\n<p>고객님께서는 아파트 베란다/발코니에서 오전/오후 3~6시간의 일조량을 가지고 계시고, 5만원 이하의 예산으로 초보자로서 식용 쌈채소/열매를 재배하고 싶어 하십니다. 이러한 조건을 고려했을 때, <strong>\'미니 컨테이너 텃밭\'</strong> 모델이 가장 적합합니다!</p>\n<ul>\n<li><strong>모델 특징:</strong> 공간 활용도가 높고, 이동이 쉬워 햇볕을 따라 놓아줄 수 있습니다. 또한, 초기 비용 부담이 적어 초보자분들도 부담 없이 시작하기 좋습니다.</li>\n<li><strong>추천 용기:</strong> 플라스틱 화분, 재활용 스티로폼 박스, 다단형 플랜터 등을 활용하여 좁은 공간에서도 다양한 작물을 키울 수 있습니다.</li>\n<li><strong>배치 팁:</strong> 햇볕이 가장 잘 드는 시간대에 맞춰 용기를 옮겨주면 작물 성장에 더욱 도움이 됩니다.</li>\n</ul>\n<h2>2. 추천 작물</h2>\n<p>고객님의 텃밭 목적(식용 쌈채소/열매), 일조량, 초보 경험 수준 및 예산을 고려하여, 텃밭 성공률을 높여줄 작물을 추천합니다.</p>\n<ul>\n<li><strong>[필수 추천] 잎채소:</strong>\n<ul>\n<li><strong>상추:</strong> 키우기 매우 쉽고 수확량이 풍부하여 초보자에게 가장 인기 있는 작물입니다. 약 30일이면 첫 수확이 가능하며, 잎을 따내도 계속 자라 오랫동안 즐길 수 있습니다.</li>\n<li><strong>깻잎:</strong> 특유의 향으로 다양한 요리에 활용되며, 상추와 마찬가지로 키우기 쉬워 초보자도 쉽게 성공할 수 있습니다.</li>\n</ul>\n</li>\n<li><strong>[선택 추천] 열매채소:</strong>\n<ul>\n<li><strong>방울토마토:</strong> 3~6시간의 일조량이라면 재배가 가능합니다. 초보자도 열매를 수확하는 기쁨을 느낄 수 있으며, 성장하는 모습을 관찰하는 재미가 큽니다. (단, 햇볕이 부족하면 열매가 잘 맺히지 않을 수 있으니 주의 깊은 관리가 필요합니다.)</li>\n</ul>\n</li>\n</ul>\n<h2>3. 초기 투자 재료 리스트</h2>\n<p>5만원 이하의 예산으로 효율적인 베란다 텃밭을 시작하실 수 있도록 최소한의 필수 재료 리스트를 제안합니다.</p>\n<ul>\n<li><strong>필수 도구 (약 1만원):</strong>\n<ul>\n<li>작은 모종삽 1개</li>\n<li>물뿌리개 1개 (소형)</li>\n</ul>\n</li>\n<li><strong>흙/비료 (약 2만원):</strong>\n<ul>\n<li>친환경 배양토(상토) 10L: 약 1만 5천원</li>\n<li>유기질 비료 또는 지렁이 분변토 (소량): 약 5천원</li>\n</ul>\n</li>\n<li><strong>씨앗/모종 (약 1만원):</strong>\n<ul>\n<li>상추 씨앗 또는 모종 2~3개: 약 3천원</li>\n<li>깻잎 씨앗 또는 모종 2~3개: 약 3천원</li>\n<li>방울토마토 모종 1개 (선택): 약 4천원</li>\n</ul>\n</li>\n<li><strong>재배 용기 (약 1만원, 재활용 시 0원):</strong>\n<ul>\n<li>플라스틱 화분 (중형 3~4개) 또는 재활용 스티로폼 박스/페트병 등을 활용하면 비용 절감에 큰 도움이 됩니다.</li>\n</ul>\n</li>\n</ul>\n<p>총 예상 비용: 약 4~5만원 (용기 재활용 여부에 따라 변동 가능)</p>\n<h2>4. LMS 추천 강의</h2>\n<p>고객님의 베란다 컨테이너 텃밭 성공을 위해 관련 강의를 추천해 드립니다!</p>\n<ul>\n<li>\n<p><strong>베란다 텃밭 첫걸음을 위한 기초 강의:</strong></p>\n<ul>\n<li><a href="javascript:void(0);" onclick="handleCourseClick(31, \'미니 텃밭 씨앗 파종 기초: 발아율 100% 도전 보러가기\', false); return false;">미니 텃밭 씨앗 파종 기초: 발아율 100% 도전 보러가기</a> - 씨앗부터 건강하게 싹 틔우는 노하우를 배울 수 있습니다.</li>\n<li><a href="javascript:void(0);" onclick="handleCourseClick(1, \'도시 농부를 위한 모종 심기 마스터 클래스 보러가기\', false); return false;">도시 농부를 위한 모종 심기 마스터 클래스 보러가기</a> - 모종을 심는 가장 기본적인 방법을 알려주어 초보자에게 안성맞춤입니다.</li>\n<li><a href="javascript:void(0);" onclick="handleCourseClick(4, \'저예산으로 시작하는 쌈채소 수직 텃밭 설계 보러가기\', false); return false;">저예산으로 시작하는 쌈채소 수직 텃밭 설계 보러가기</a> - 저예산으로 쌈채소 텃밭을 구성하는 아이디어를 얻을 수 있습니다.</li>\n</ul>\n</li>\n<li>\n<p><strong>추천 작물 재배 및 관리 강의:</strong></p>\n<ul>\n<li><a href="javascript:void(0);" onclick="handleCourseClick(11, \'베란다 쌈채소의 신선한 수확과 장기 저장법 보러가기\', false); return false;">베란다 쌈채소의 신선한 수확과 장기 저장법 보러가기</a> - 수확한 쌈채소를 더욱 신선하게 즐기는 방법을 배울 수 있습니다.</li>\n<li><a href="javascript:void(0);" onclick="handleCourseClick(2, \'아이와 함께 하는 상추 &amp; 바질 모종 심기 보러가기\', false); return false;">아이와 함께 하는 상추 &amp; 바질 모종 심기 보러가기</a> - 상추 모종 심기에 대한 실질적인 도움을 받을 수 있습니다.</li>\n<li><a href="javascript:void(0);" onclick="handleCourseClick(6, \'베란다 토마토 재배: 곁순 제거와 열매 관리 심화 보러가기\', false); return false;">베란다 토마토 재배: 곁순 제거와 열매 관리 심화 보러가기</a> - 방울토마토 재배 시 중요한 곁순 제거와 열매 관리 방법을 익힐 수 있습니다.</li>\n</ul>\n</li>\n</ul>\n<p>이 플래너와 함께 고객님의 베란다 텃밭이 풍성한 수확의 기쁨으로 가득 차기를 바랍니다! 궁금한 점이 있다면 언제든지 다시 물어봐 주세요!</p>\n', '2025-11-26 07:04:40'),
+	(9, 27, 'ㅇㅇ', '<h2>1. 최적 텃밭 모델</h2>\n<p>고객님의 <strong>옥상 공간</strong>과 <strong>오전 3시간 미만의 일조량</strong>, 그리고 <strong>교육용 목적</strong>을 고려하여, **\'모듈형 상자 텃밭\'**을 추천합니다!</p>\n<p>모듈형 상자 텃밭은 다음과 같은 장점이 있습니다:</p>\n<ul>\n<li><strong>공간 활용:</strong> 옥상 환경에 맞게 유연하게 배치할 수 있으며, 필요에 따라 확장이 용이합니다.</li>\n<li><strong>교육 효과:</strong> 각 상자에 다른 작물을 심어 아이들이 비교 관찰하고 학습하기에 좋습니다. 분리된 공간으로 작물 관리가 명확해져 교육적 효과가 높습니다.</li>\n<li><strong>낮은 일조량 대응:</strong> 이동이 가능한 상자에 빛이 잘 드는 방향으로 배치하거나, 그늘에 강한 작물 위주로 구성하여 햇빛 부족 문제를 극복할 수 있습니다.</li>\n<li><strong>관리 용이성:</strong> 개별 상자 관리가 쉬워 초중급자도 부담 없이 시작하고 유지할 수 있습니다.</li>\n</ul>\n<h2>2. 추천 작물</h2>\n<p>고객님의 <strong>교육용 목적</strong>, <strong>오전 3시간 미만의 일조량</strong>, 그리고 <strong>중급 경험 수준</strong>을 바탕으로, 아이들이 흥미를 느끼고 성공적으로 재배할 수 있는 작물을 추천합니다.</p>\n<ul>\n<li><strong>상추, 깻잎:</strong> 재배 난이도가 낮고, 비교적 그늘에서도 잘 자라며, 수확 시기가 빨라 아이들이 성취감을 느끼기 좋습니다.</li>\n<li><strong>시금치, 청경채:</strong> 역시 그늘에 강하고 생장이 빠른 엽채류로, 다양한 요리에 활용할 수 있어 교육적인 면에서도 좋습니다.</li>\n<li><strong>민트 (페퍼민트, 스피어민트):</strong> 향이 좋고 비교적 관리가 쉬워 아이들이 오감으로 식물을 경험하기에 좋습니다. 그늘에서도 잘 자라며, 번식력이 좋아 쉽게 키울 수 있습니다.</li>\n<li><strong>방울토마토 (그늘 재배 품종):</strong> 일부 품종은 일반 토마토보다 적은 햇빛으로도 재배 가능하며, 열매가 열리는 과정을 관찰하며 교육 효과를 높일 수 있습니다. (단, 햇빛이 부족할 경우 수확량이 적을 수 있습니다.)</li>\n</ul>\n<h2>3. 초기 투자 재료 리스트</h2>\n<p><strong>5만원에서 10만원 예산</strong> 내에서 <strong>모듈형 상자 텃밭</strong>과 <strong>추천 작물 재배</strong>에 필요한 필수 재료 리스트입니다.</p>\n<table>\n<thead>\n<tr><th align="left">구분</th><th align="left">품목</th><th align="left">예상 가격 (원)</th><th align="left">비고</th></tr>\n</thead>\n<tbody>\n<tr><td align="left"><strong>필수 도구</strong></td><td align="left">상자 텃밭 (중형 3~4개 세트)</td><td align="left">30,000~50,000</td><td align="left">플라스틱 또는 재활용 목재 소재, 바퀴 달린 제품 고려</td></tr>\n<tr><td align="left"> </td><td align="left">모종삽, 작은 갈퀴, 물뿌리개</td><td align="left">10,000~20,000</td><td align="left">아이들도 사용하기 좋은 안전한 제품 선택</td></tr>\n<tr><td align="left"><strong>흙/비료</strong></td><td align="left">상토 (배양토) 20~30L</td><td align="left">10,000~15,000</td><td align="left">배수가 잘 되고 영양분이 풍부한 원예용 상토</td></tr>\n<tr><td align="left"> </td><td align="left">유기농 퇴비/액비 (소량)</td><td align="left">5,000~10,000</td><td align="left">작물 생장에 필요한 영양분 공급, 아이들이 다루기 안전한 제품</td></tr>\n<tr><td align="left"><strong>씨앗/모종</strong></td><td align="left">상추, 깻잎, 시금치, 민트 모종 또는 씨앗</td><td align="left">5,000~10,000</td><td align="left">다양한 종류를 소량씩 구매하여 실험해보기 좋음</td></tr>\n<tr><td align="left"><strong>합계</strong></td><td align="left"> </td><td align="left"><strong>60,000~105,000</strong></td><td align="left">예산 범위 내에서 유연하게 조절 가능합니다.</td></tr>\n</tbody>\n</table>\n<h2>4. LMS 추천 강의</h2>\n<p>고객님의 <strong>교육용 텃밭 목적</strong>, <strong>옥상 공간</strong> 및 <strong>낮은 일조량</strong> 환경에 맞는 강의를 추천합니다. 아래 강의들을 통해 성공적인 텃밭 가꾸기를 시작해 보세요!</p>\n<h3>교육용 텃밭: 씨앗 준비편</h3>\n<ul>\n<li><a href="javascript:void(0);" onclick="handleCourseClick(3, \'교육용 텃밭: 씨앗 준비편 보러가기\', false); return false;">교육용 텃밭: 씨앗 준비편 보러가기</a>\n<ul>\n<li><strong>카테고리:</strong> gardening (원예)</li>\n<li><strong>강사:</strong> 베란다정원사</li>\n<li><strong>설명:</strong> 교육용 텃밭을 위한 씨앗 준비의 모든 것을 배울 수 있습니다. 아이들과 함께 시작하는 텃밭 활동에 큰 도움이 될 거예요!</li>\n</ul>\n</li>\n</ul>\n<p>현재 데이터베이스에는 \'그늘 작물\'에 대한 직접적인 강의는 없지만, 위의 \'교육용 텃밭\' 강의를 통해 기초를 다지신 후, 추천드린 작물들의 특성을 이해하고 키워보시면 충분히 성공적인 교육용 텃밭을 만드실 수 있을 겁니다. 궁금한 점은 언제든지 다시 질문해주세요!</p>\n', '2025-12-01 01:40:14');
 
 -- 테이블 farm.all_users 구조 내보내기
 CREATE TABLE IF NOT EXISTS `all_users` (
@@ -51,15 +51,15 @@ CREATE TABLE IF NOT EXISTS `all_users` (
   PRIMARY KEY (`user_id`) USING BTREE,
   UNIQUE KEY `id` (`id`),
   UNIQUE KEY `nickName` (`nickname`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='모든 사용자(관리자, 강사, 일반유저)';
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='모든 사용자(관리자, 강사, 일반유저)';
 
--- 테이블 데이터 farm.all_users:~8 rows (대략적) 내보내기
+-- 테이블 데이터 farm.all_users:~14 rows (대략적) 내보내기
 INSERT INTO `all_users` (`user_id`, `user_type`, `id`, `password`, `name`, `nickname`, `birth`, `email`, `intro`) VALUES
 	(1, 'admin', 'admin', '1111', '관리자', '관리자', '2025-11-13', 'admin@admin.com', '나야 관리자.'),
-	(2, 'teacher', '1234', '1234', 'AI더미강사', '미래농부', '2025-11-18', 'dummy.ai@email.com', 'AI 플래너 연동 테스트를 위한 더미 강사 계정입니다.'),
+	(2, 'teacher', '1234', '1234', 'AI더미강사', '미래농부민우님', '2025-11-18', 'dummy.ai@email.com', 'AI 플래너 연동 테스트를 위한 더미 강사 계정입니다.'),
 	(16, 'student', 'qkrehwo123', '1234', '박도재', '박도토리', '1996-12-02', 'qkrehwo123@naver.com', '안녕하세요'),
 	(25, 'student', 'hello', 'dlalsdn1', '이민우', '이황우', '2025-11-10', 'mw@naver.com', '민우님이다 음하하'),
-	(27, 'student', '123', '123', '강건호', '강건호아님', '2025-11-01', 'rkdrjsgh123@naver.com', NULL),
+	(27, 'student', '123', '123', '강건호', 'kkh', '2025-11-01', 'rkdrjsgh123@naver.com', NULL),
 	(35, 'student', 'jmj10338', 'jmj691107', '정민주', '초보농부', '1998-10-07', 'jmj10338@gmail.com', NULL),
 	(37, 'student', 'tkdduq', '1234', '김상엽', '김상엽', '2025-11-25', 'tkdduq@naver.com', NULL),
 	(39, 'teacher', 'imteacher', 'dlalsdn1', '이선생', '난티처', '2025-10-29', 'mw@naver.com', NULL),
@@ -98,19 +98,15 @@ CREATE TABLE IF NOT EXISTS `chat_member` (
   KEY `room_id` (`room_id`),
   KEY `FK_chat_member_all_users` (`user_id`),
   CONSTRAINT `FK_chat_member_all_users` FOREIGN KEY (`user_id`) REFERENCES `all_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_chat_room` FOREIGN KEY (`room_id`) REFERENCES `chat_room` (`room_id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='채팅방 사용자';
+  CONSTRAINT `FK_chat_room` FOREIGN KEY (`room_id`) REFERENCES `chat_room` (`room_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='채팅방 사용자';
 
--- 테이블 데이터 farm.chat_member:~7 rows (대략적) 내보내기
+-- 테이블 데이터 farm.chat_member:~4 rows (대략적) 내보내기
 INSERT INTO `chat_member` (`member_id`, `room_id`, `user_id`, `joined_at`) VALUES
-	(51, 13, 16, '2025-11-18 05:16:15'),
-	(52, 13, 25, '2025-11-18 05:16:27'),
 	(56, 14, 35, '2025-11-24 00:44:28'),
-	(57, 14, 16, '2025-11-24 02:18:32'),
-	(59, 13, 1, '2025-11-24 06:18:34'),
 	(61, 14, 25, '2025-11-25 00:45:25'),
-	(62, 15, 25, '2025-11-25 03:42:58'),
-	(63, 15, 2, '2025-11-26 02:40:55');
+	(68, 14, 41, '2025-11-28 04:56:43'),
+	(81, 14, 37, '2025-11-28 08:39:13');
 
 -- 테이블 farm.chat_message 구조 내보내기
 CREATE TABLE IF NOT EXISTS `chat_message` (
@@ -122,31 +118,22 @@ CREATE TABLE IF NOT EXISTS `chat_message` (
   PRIMARY KEY (`message_id`),
   KEY `FK_chat_message_all_users` (`user_id`),
   KEY `idx_room_created` (`room_id`,`created_at`),
-  CONSTRAINT `FK__chat_room` FOREIGN KEY (`room_id`) REFERENCES `chat_room` (`room_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `FK__chat_room` FOREIGN KEY (`room_id`) REFERENCES `chat_room` (`room_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_chat_message_all_users` FOREIGN KEY (`user_id`) REFERENCES `all_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=145 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='채팅 기록';
+) ENGINE=InnoDB AUTO_INCREMENT=173 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='채팅 기록';
 
--- 테이블 데이터 farm.chat_message:~16 rows (대략적) 내보내기
+-- 테이블 데이터 farm.chat_message:~8 rows (대략적) 내보내기
 INSERT INTO `chat_message` (`message_id`, `room_id`, `user_id`, `content`, `created_at`) VALUES
-	(126, 13, 16, 'ㅎㅇㅎㅇ', '2025-11-18 05:16:30'),
-	(127, 13, 25, '안녕하세여 ㅎㅎ', '2025-11-18 05:16:35'),
-	(128, 13, 25, '안녕하세여', '2025-11-18 05:17:19'),
-	(129, 13, 25, 'ㅎㅎ', '2025-11-18 05:17:20'),
-	(130, 13, 25, '안녕하시냐구여', '2025-11-18 05:17:33'),
-	(131, 13, 25, '저기요', '2025-11-18 05:17:40'),
-	(132, 13, 25, '여보세여', '2025-11-18 05:17:42'),
-	(133, 13, 1, '나야', '2025-11-18 05:51:14'),
-	(134, 13, 1, '거기 잘 지내니', '2025-11-18 05:51:16'),
-	(135, 13, 16, '?', '2025-11-18 06:25:15'),
-	(136, 13, 35, '캡본 따려했는데... 방을 새로 파야겠군여', '2025-11-24 00:42:49'),
-	(137, 13, 35, 'ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ', '2025-11-24 00:42:50'),
 	(138, 14, 35, '안녕하세요. 이제 막 농업에 종사하게 된 초보 농부입니다.\n문외한이라 너무 걱정되는데 농사 선배님들의 농사팁 좀 많이 배워가겠습니다!', '2025-11-24 00:44:37'),
 	(139, 14, 16, '안녕하세요', '2025-11-24 03:16:57'),
 	(140, 14, 2, '네 안녕', '2025-11-24 06:13:27'),
 	(141, 14, 2, '?', '2025-11-24 06:13:28'),
 	(142, 14, 35, '반갑습니다!', '2025-11-24 06:33:13'),
-	(143, 15, 25, 'ㅎㅇㅎㅇ', '2025-11-25 03:43:03'),
-	(144, 15, 2, 'ㅎㅇㅎㅇ는 반말이고', '2025-11-26 02:41:04');
+	(146, 14, 41, 'ㅎㅇ', '2025-11-28 04:56:47'),
+	(163, 14, 37, '안녕하세요', '2025-11-28 09:03:42'),
+	(165, 14, 25, 'ㅎㅇㅎㅇ', '2025-12-01 01:56:10'),
+	(169, 14, 25, '안녕하세요', '2025-12-01 02:42:04'),
+	(170, 14, 25, 'ㅎㅎ', '2025-12-01 02:42:07');
 
 -- 테이블 farm.chat_room 구조 내보내기
 CREATE TABLE IF NOT EXISTS `chat_room` (
@@ -157,13 +144,11 @@ CREATE TABLE IF NOT EXISTS `chat_room` (
   PRIMARY KEY (`room_id`) USING BTREE,
   KEY `user_id` (`user_id`),
   CONSTRAINT `FK_chat_all_users` FOREIGN KEY (`user_id`) REFERENCES `all_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='실시간 채팅방';
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='실시간 채팅방';
 
--- 테이블 데이터 farm.chat_room:~1 rows (대략적) 내보내기
+-- 테이블 데이터 farm.chat_room:~2 rows (대략적) 내보내기
 INSERT INTO `chat_room` (`room_id`, `user_id`, `room_name`, `created_at`) VALUES
-	(13, 16, '새로 만든 방', '2025-11-18 05:16:15'),
-	(14, 35, '문외한도 쉽게 이해하는 기초! 토양 관리부터 수확까지!', '2025-11-24 00:44:28'),
-	(15, 25, '반갑다 음하하', '2025-11-25 03:42:58');
+	(14, 35, '문외한도 쉽게 이해하는 기초! 토양 관리부터 수확까지!', '2025-11-24 00:44:28');
 
 -- 함수 farm.fn_calculate_keyword_score 구조 내보내기
 DELIMITER //
@@ -172,6 +157,7 @@ CREATE FUNCTION `fn_calculate_keyword_score`(
 	`p_model_answer` TEXT
 ) RETURNS int
     DETERMINISTIC
+    SQL SECURITY INVOKER
 BEGIN
     DECLARE v_score INT DEFAULT 0;
     DECLARE v_answer_length INT;
@@ -214,7 +200,7 @@ CREATE TABLE IF NOT EXISTS `game` (
   CONSTRAINT `chk_growth_rate` CHECK (((`growth_rate` >= 0.00) and (`growth_rate` <= 100.00)))
 ) ENGINE=InnoDB AUTO_INCREMENT=144 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='게임';
 
--- 테이블 데이터 farm.game:~2 rows (대략적) 내보내기
+-- 테이블 데이터 farm.game:~0 rows (대략적) 내보내기
 
 -- 테이블 farm.lecture 구조 내보내기
 CREATE TABLE IF NOT EXISTS `lecture` (
@@ -232,42 +218,40 @@ CREATE TABLE IF NOT EXISTS `lecture` (
   KEY `category` (`category`),
   KEY `sub_category` (`sub_category`),
   CONSTRAINT `FK_lecture_board_all_users` FOREIGN KEY (`user_id`) REFERENCES `all_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='강의게시판';
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='강의게시판';
 
--- 테이블 데이터 farm.lecture:~8 rows (대략적) 내보내기
+-- 테이블 데이터 farm.lecture:~30 rows (대략적) 내보내기
 INSERT INTO `lecture` (`lecture_id`, `user_id`, `category`, `sub_category`, `img_url`, `title`, `content`, `subs_count`, `created_at`) VALUES
-	(1, 41, 'gardening', 'seed', 'https://storage.googleapis.com/dwproject2/18-Farmer-Resize.jpg', '도시 농부를 위한 모종 심기 마스터 클래스', '"첫 텃밭, 실패 없이 시작하는 비결! 초보 농부도 10단계만 따라 하면 튼튼하고 건강한 모종을 심을 수 있습니다.\r\n모종 고르기부터 성공적인 정식 후 관리까지, 도시 텃밭 가꾸기의 기본기를 확실하게 다지세요."\r\n\r\n이 시리즈는 텃밭 가꾸기의 첫 단계인 모종(苗種) 심기에 초점을 맞춥니다.\r\n모종을 고르는 안목을 기르고, 흙 만들기, 정식(定植, 옮겨 심기), 뿌리 활착 유도, 초기 관리 및 병충해 예방까지 체계적인 과정을 10개의 짧은 비디오로 구성했습니다.\r\n실습 위주의 콘텐츠로, 바로 텃밭에 적용 가능한 노하우를 제공합니다.', 16, '2025-11-13 06:19:32'),
-	(2, 41, 'gardening', 'seed', '[img_url_채우기]', '아이와 함께 하는 상추 & 바질 모종 심기', '자녀 교육 목적에 특화된 강의입니다. 아이들과 함께 쉽게 다룰 수 있는 상추와 허브(바질)의 모종을 베란다 화분에 심는 과정과 관찰 일지 작성법을 배웁니다.', 0, '2025-11-26 05:23:18'),
-	(3, 41, 'gardening', 'seed', '[img_url_채우기]', '교육용 텃밭: 씨앗 준비편', '자녀 교육 목적으로 텃밭을 시작하는 부모님을 위한 강의. 아이들이 쉽게 관찰할 수 있는 작물(강낭콩, 해바라기 등)의 씨앗 준비 및 심기 방법을 다룹니다.', 0, '2025-11-26 05:23:18'),
-	(4, 41, 'gardening', 'seed', '[img_url_채우기]', '저예산으로 시작하는 쌈채소 수직 텃밭 설계', '5만원 이하의 예산으로 페트병, 목재 등을 활용하여 베란다에 설치하는 수직 텃밭 모델 설계법과 쌈채소 모종 심기 노하우를 제공합니다.', 0, '2025-11-26 05:23:18'),
-	(5, 41, 'gardening', 'seed', '[img_url_채우기]', '분갈이 흙 믹스 비율: 화분 속 토양 개량 기초', '성공적인 텃밭을 위한 흙 만들기가 핵심입니다. 마사토, 피트모스, 상토의 최적 비율을 제시하고, 텃밭 목적에 맞는 흙을 만드는 방법을 배웁니다.', 0, '2025-11-26 05:23:18'),
-	(6, 43, 'gardening', 'grow', '[img_url_채우기]', '베란다 토마토 재배: 곁순 제거와 열매 관리 심화', '중급 재배자를 위한 열매채소 관리 강의. 방울토마토, 고추 등의 곁순 제거(순지르기) 타이밍과 열매가 맺힌 후의 비료 관리법을 심도 있게 다룹니다.', 0, '2025-11-26 05:23:18'),
-	(7, 41, 'gardening', 'grow', '[img_url_채우기]', '실내 허브 수확 후 영양제 및 물주기 노하우', '관상용/치유 목적의 허브(로즈마리, 민트 등)를 오랫동안 건강하게 키우는 관리법입니다. 수확 후 관리, 액체 비료 사용법, 겨울철 실내 월동 준비를 배웁니다.', 0, '2025-11-26 05:23:18'),
-	(8, 43, 'gardening', 'grow', '[img_url_채우기]', '친환경 천연 살충제 제조 및 사용법', '농약을 사용하지 않고 베이킹소다, 식초 등을 활용하여 텃밭의 흔한 병충해(진딧물, 흰가루병)를 예방하고 방제하는 중급 기술 강의입니다.', 0, '2025-11-26 05:23:18'),
-	(9, 43, 'gardening', 'grow', '[img_url_채우기]', '수직 텃밭 자동 관수 시스템 DIY (중급)', '베란다/옥상의 수직 텃밭 효율화를 위한 자가 제작 자동 관수 장치 설치 강의입니다. 시간당 급수량 계산법과 타이머 설정법을 실습합니다.', 0, '2025-11-26 05:23:18'),
-	(10, 43, 'gardening', 'grow', '[img_url_채우기]', '화분 속 뿌리 활착 최적화 비료 사용 가이드', '작물이 잘 자라지 않을 때 필요한 맞춤 영양제 사용법입니다. 질소, 인산, 칼륨의 역할을 이해하고 작물 생육 단계별로 필요한 비료를 투입하는 방법을 배웁니다.', 0, '2025-11-26 05:23:18'),
-	(11, 45, 'gardening', 'ship', '[img_url_채우기]', '베란다 쌈채소의 신선한 수확과 장기 저장법', '식용 목적 텃밭에서 쌈채소(상추, 깻잎)를 가장 맛있을 때 수확하는 타이밍과, 냉장 보관 시 신선도를 최대화하는 비법을 공개합니다.', 0, '2025-11-26 05:23:18'),
-	(12, 45, 'gardening', 'ship', '[img_url_채우기]', '텃밭 작물로 만드는 홈메이드 피클 & 잼 레시피', '수확한 오이, 토마토, 베리류 등을 활용하여 건강하고 맛있는 피클과 잼을 만드는 가공 레시피 강의입니다.', 0, '2025-11-26 05:23:18'),
-	(13, 45, 'gardening', 'ship', '[img_url_채우기]', '허브 건조 및 오일 추출 활용법 (관상용/치유)', '수확한 허브(로즈마리, 라벤더)를 건조하여 포푸리나 허브 오일을 추출하는 방법을 배웁니다. 힐링 및 관상용 목적에 적합합니다.', 0, '2025-11-26 05:23:18'),
-	(14, 45, 'gardening', 'ship', '[img_url_채우기]', '작은 텃밭 생산물의 이웃 나눔을 위한 포장 디자인', '이웃이나 지인에게 수확물을 선물할 때, 신선도를 유지하면서 예쁘게 포장하는 디자인 및 포장재 선택 노하우를 다룹니다.', 0, '2025-11-26 05:23:18'),
-	(15, 45, 'gardening', 'ship', '[img_url_채우기]', '텃밭 폐기물을 활용한 친환경 퇴비 만들기', '작물 찌꺼기, 잡초, 채소 껍질 등을 활용하여 다음 재배기를 위한 퇴비를 만드는 순환 농법의 기초를 배웁니다.', 0, '2025-11-26 05:23:18'),
-	(16, 42, 'field', 'seed', '[img_url_채우기]', '공동 텃밭 최적 구획 설계 및 작물 배치 전략', '넓은 노지 공동 텃밭을 효율적으로 나누어 사용하는 방법을 배웁니다. 연작 장애 방지를 위한 작물 배치 계획 수립에 중점을 둡니다.', 0, '2025-11-26 05:23:18'),
-	(17, 39, 'gardening', 'grow', NULL, '재밌는 농사 짓기', 'ㄵ', 0, '2025-11-26 05:21:50'),
-	(18, 42, 'field', 'seed', '[img_url_채우기]', '고추, 가지 등 대형 작물 모종의 노지 정식 시기', '노지 재배의 핵심인 모종 정식 시기를 결정하는 방법(늦서리 위험 분석 포함)과, 뿌리가 잘 내리도록 심는 기술을 배웁니다.', 0, '2025-11-26 05:23:18'),
-	(19, 42, 'field', 'seed', '[img_url_채우기]', '밭 주변 풀(잡초) 관리를 위한 멀칭(Mulching) 심화', '잡초를 막고 토양의 수분과 온도를 유지하는 멀칭 작업의 중요성과, 작물별로 적합한 멀칭 재료(비닐, 짚)를 선택하는 방법을 배웁니다.', 0, '2025-11-26 05:23:18'),
-	(20, 42, 'field', 'seed', '[img_url_채우기]', '태양열 소독을 활용한 노지 밭 병충해 예방', '노지 밭의 초기 단계에서 토양 속 병원균과 해충을 예방하기 위해 태양열 소독(피복)을 실시하는 방법을 상세히 다룹니다.', 0, '2025-11-26 05:23:18'),
-	(21, 43, 'field', 'ship', '[img_url_채우기]', '김장용 배추 대량 수확 및 품질 검사 노하우', '노지에서 재배한 배추를 김장철에 맞춰 대량 수확하는 적정 시기 판별법과, 상품성 확보를 위한 품질 검사 기준을 배웁니다.', 0, '2025-11-26 05:23:18'),
-	(22, 2, 'field', 'ship', '[img_url_채우기]', '노지 작물의 유통: 산지 직거래 포장 및 운송 전략', '직접 재배한 농산물을 소비자에게 직거래하거나 소규모 마켓에 판매하기 위한 포장 기술 및 운송 중 신선도 유지 방법을 숙련자 관점에서 다룹니다.', 0, '2025-11-26 05:23:18'),
-	(23, 43, 'field', 'ship', '[img_url_채우기]', '저장고 없이 작물 보관하는 땅속 저장 기술', '감자, 고구마, 무 등 뿌리채소를 장기간 신선하게 저장하기 위한 전통적인 땅속 저장 기술(움 만들기)과 현대적인 보관법을 비교 분석합니다.', 0, '2025-11-26 05:23:18'),
-	(24, 43, 'field', 'ship', '[img_url_채우기]', '노지 열매채소(고추/가지)의 최적 수확 시기와 후속 관리', '고추, 가지 등 열매채소의 품질과 수확량을 극대화하는 수확 타이밍과, 수확 후 다음 수확까지 작물 관리를 이어가는 방법을 배웁니다.', 0, '2025-11-26 05:23:18'),
-	(25, 43, 'field', 'ship', '[img_url_채우기]', '농업 부산물을 활용한 퇴비 생산 및 판매', '수확 후 남은 농업 부산물을 고품질 퇴비로 만들어 재판매하거나 다음 해 농사에 활용하는 자원 순환 노하우를 다룹니다.', 0, '2025-11-26 05:23:18'),
-	(26, 44, 'house', 'grow', '[img_url_채우기]', '스마트 하우스 환경: 온도, 습도, CO2 정밀 제어 심화', '전문적인 하우스 재배자를 위한 강의. 난방, 환기, 가습 시스템을 통합하여 작물 생육 최적의 조건을 유지하는 환경 제어 기술을 다룹니다.', 0, '2025-11-26 05:23:18'),
-	(27, 44, 'house', 'grow', '[img_url_채우기]', '수경재배 기초: NFT(박막 수경) 시스템 설치 및 관리', '하우스 또는 베란다 시설 재배를 위한 수경재배 시스템 설치 강의입니다. NFT(Nutrient Film Technique) 원리를 이해하고 양액 관리법을 배웁니다.', 0, '2025-11-26 05:23:18'),
-	(28, 44, 'house', 'grow', '[img_url_채우기]', '하우스 내 특수 작물(버섯, 새싹삼) 재배 기초', '일반적인 채소 외에 버섯, 새싹삼 등 높은 투자와 기술을 요하는 특수 작물을 하우스에서 재배하는 환경 조성 및 초기 관리법을 배웁니다.', 0, '2025-11-26 05:23:18'),
-	(29, 44, 'house', 'ship', '[img_url_채우기]', '하우스 고품질 딸기의 계절 외 출하 전략', '딸기 등 고수익 작물을 계절과 무관하게 재배하여 안정적으로 출하하는 기술입니다. 품종 선택부터 포장 및 판매 전략을 숙련자 관점에서 다룹니다.', 0, '2025-11-26 05:23:18'),
-	(30, 44, 'house', 'ship', '[img_url_채우기]', '하우스 자동화 수확 시스템 효율 분석 및 도입 가이드', '대규모 하우스 운영자를 위한 강의. 자동화된 수확 및 선별 장비의 도입 비용, 효율, 유지보수 노하우 등을 비교 분석합니다.', 0, '2025-11-26 05:23:18'),
-	(31, 41, 'gardening', 'seed', '[img_url_채우기]', '미니 텃밭 씨앗 파종 기초: 발아율 100% 도전', '아파트 베란다 텃밭을 위한 씨앗 파종의 정석. 어떤 흙을 써야 하는지, 물주기 타이밍, 발아 온도 관리 등 기초 중의 기초를 초보자 맞춤으로 설명합니다.', 0, '2025-11-26 05:23:18'),
-	(32, 42, 'field', 'seed', '[img_url_채우기]', '퇴비와 석회를 이용한 노지 밭 토양 개량 실습', '노지 밭을 처음 시작하는 분들을 위한 필수 강의입니다. 토양 산도(pH) 측정법과, 퇴비 및 석회를 활용하여 토양을 개량하는 실제 노하우를 다룹니다.', 0, '2025-11-26 05:23:18');
+	(1, 41, 'gardening', 'seed', 'https://storage.googleapis.com/dwproject2/thumbnail/18-Farmer-Resize.jpg', '도시 농부를 위한 모종 심기 마스터 클래스', '"첫 텃밭, 실패 없이 시작하는 비결! 초보 농부도 10단계만 따라 하면 튼튼하고 건강한 모종을 심을 수 있습니다.\r\n모종 고르기부터 성공적인 정식 후 관리까지, 도시 텃밭 가꾸기의 기본기를 확실하게 다지세요."\r\n\r\n이 시리즈는 텃밭 가꾸기의 첫 단계인 모종(苗種) 심기에 초점을 맞춥니다.\r\n모종을 고르는 안목을 기르고, 흙 만들기, 정식(定植, 옮겨 심기), 뿌리 활착 유도, 초기 관리 및 병충해 예방까지 체계적인 과정을 10개의 짧은 비디오로 구성했습니다.\r\n실습 위주의 콘텐츠로, 바로 텃밭에 적용 가능한 노하우를 제공합니다.', 17, '2025-11-13 06:19:32'),
+	(2, 41, 'gardening', 'seed', 'https://storage.googleapis.com/dwproject2/thumbnail/2%20hispanic-mother-daughter-harvesting-vegetables-together-garden.jpg', '아이와 함께 하는 상추 & 바질 모종 심기', '자녀 교육 목적에 특화된 강의입니다. 아이들과 함께 쉽게 다룰 수 있는 상추와 허브(바질)의 모종을 베란다 화분에 심는 과정과 관찰 일지 작성법을 배웁니다.', 1, '2025-11-26 05:23:18'),
+	(3, 41, 'gardening', 'seed', 'https://storage.googleapis.com/dwproject2/thumbnail/3%20seed.jpg', '교육용 텃밭: 씨앗 준비편', '자녀 교육 목적으로 텃밭을 시작하는 부모님을 위한 강의. 아이들이 쉽게 관찰할 수 있는 작물(강낭콩, 해바라기 등)의 씨앗 준비 및 심기 방법을 다룹니다.', 0, '2025-11-26 05:23:18'),
+	(4, 41, 'gardening', 'seed', 'https://storage.googleapis.com/dwproject2/thumbnail/4%20leafy-greens.jpg', '저예산으로 시작하는 쌈채소 수직 텃밭 설계', '5만원 이하의 예산으로 페트병, 목재 등을 활용하여 베란다에 설치하는 수직 텃밭 모델 설계법과 쌈채소 모종 심기 노하우를 제공합니다.', 2, '2025-11-26 05:23:18'),
+	(5, 41, 'gardening', 'seed', 'https://storage.googleapis.com/dwproject2/thumbnail/5%20maxresdefault.jpg', '분갈이 흙 믹스 비율: 화분 속 토양 개량 기초', '성공적인 텃밭을 위한 흙 만들기가 핵심입니다. 마사토, 피트모스, 상토의 최적 비율을 제시하고, 텃밭 목적에 맞는 흙을 만드는 방법을 배웁니다.', 0, '2025-11-26 05:23:18'),
+	(6, 43, 'gardening', 'grow', 'https://storage.googleapis.com/dwproject2/thumbnail/6%20150424_veranda_03.jpg', '베란다 토마토 재배: 곁순 제거와 열매 관리 심화', '중급 재배자를 위한 열매채소 관리 강의. 방울토마토, 고추 등의 곁순 제거(순지르기) 타이밍과 열매가 맺힌 후의 비료 관리법을 심도 있게 다룹니다.', 0, '2025-11-26 05:23:18'),
+	(7, 41, 'gardening', 'grow', 'https://storage.googleapis.com/dwproject2/thumbnail/7%20%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.jpg', '실내 허브 수확 후 영양제 및 물주기 노하우', '관상용/치유 목적의 허브(로즈마리, 민트 등)를 오랫동안 건강하게 키우는 관리법입니다. 수확 후 관리, 액체 비료 사용법, 겨울철 실내 월동 준비를 배웁니다.', 0, '2025-11-26 05:23:18'),
+	(8, 43, 'gardening', 'grow', 'https://storage.googleapis.com/dwproject2/thumbnail/8%20farmer-spraying-vegetables-garden-with-herbicides-man-black-apron.jpg', '친환경 천연 살충제 제조 및 사용법', '농약을 사용하지 않고 베이킹소다, 식초 등을 활용하여 텃밭의 흔한 병충해(진딧물, 흰가루병)를 예방하고 방제하는 중급 기술 강의입니다.', 0, '2025-11-26 05:23:18'),
+	(9, 43, 'gardening', 'grow', 'https://storage.googleapis.com/dwproject2/thumbnail/9%20maxresdefault.jpg', '수직 텃밭 자동 관수 시스템 DIY (중급)', '베란다/옥상의 수직 텃밭 효율화를 위한 자가 제작 자동 관수 장치 설치 강의입니다. 시간당 급수량 계산법과 타이머 설정법을 실습합니다.', 0, '2025-11-26 05:23:18'),
+	(10, 43, 'gardening', 'grow', 'https://storage.googleapis.com/dwproject2/thumbnail/10%2020945002.jpg', '화분 속 뿌리 활착 최적화 비료 사용 가이드', '작물이 잘 자라지 않을 때 필요한 맞춤 영양제 사용법입니다. 질소, 인산, 칼륨의 역할을 이해하고 작물 생육 단계별로 필요한 비료를 투입하는 방법을 배웁니다.', 0, '2025-11-26 05:23:18'),
+	(11, 45, 'gardening', 'ship', 'https://storage.googleapis.com/dwproject2/thumbnail/11%20250_shop1_527503.jpg', '베란다 쌈채소의 신선한 수확과 장기 저장법', '식용 목적 텃밭에서 쌈채소(상추, 깻잎)를 가장 맛있을 때 수확하는 타이밍과, 냉장 보관 시 신선도를 최대화하는 비법을 공개합니다.', 0, '2025-11-26 05:23:18'),
+	(12, 45, 'gardening', 'ship', 'https://storage.googleapis.com/dwproject2/thumbnail/12%20homemade-preserved-vegetables-assortment.jpg', '텃밭 작물로 만드는 홈메이드 피클 & 잼 레시피', '수확한 오이, 토마토, 베리류 등을 활용하여 건강하고 맛있는 피클과 잼을 만드는 가공 레시피 강의입니다.', 0, '2025-11-26 05:23:18'),
+	(13, 45, 'gardening', 'ship', 'https://storage.googleapis.com/dwproject2/thumbnail/13%2070a2c3843c19bdb48b03e565e0cdb288.jpg', '허브 건조 및 오일 추출 활용법 (관상용/치유)', '수확한 허브(로즈마리, 라벤더)를 건조하여 포푸리나 허브 오일을 추출하는 방법을 배웁니다. 힐링 및 관상용 목적에 적합합니다.', 0, '2025-11-26 05:23:18'),
+	(14, 45, 'gardening', 'ship', 'https://storage.googleapis.com/dwproject2/thumbnail/14%20ufdi_dofe_201111.jpg', '작은 텃밭 생산물의 이웃 나눔을 위한 포장 디자인', '이웃이나 지인에게 수확물을 선물할 때, 신선도를 유지하면서 예쁘게 포장하는 디자인 및 포장재 선택 노하우를 다룹니다.', 0, '2025-11-26 05:23:18'),
+	(15, 45, 'gardening', 'ship', 'https://storage.googleapis.com/dwproject2/thumbnail/15%20hq720.jpg', '텃밭 폐기물을 활용한 친환경 퇴비 만들기', '작물 찌꺼기, 잡초, 채소 껍질 등을 활용하여 다음 재배기를 위한 퇴비를 만드는 순환 농법의 기초를 배웁니다.', 0, '2025-11-26 05:23:18'),
+	(16, 42, 'field', 'seed', 'https://storage.googleapis.com/dwproject2/thumbnail/16%20%EB%B0%B4%EC%BF%A0%EB%B2%84%20%EB%8F%84%EC%8B%9C%EB%86%8D%EC%97%85%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8_2.jpg', '공동 텃밭 최적 구획 설계 및 작물 배치 전략', '넓은 노지 공동 텃밭을 효율적으로 나누어 사용하는 방법을 배웁니다. 연작 장애 방지를 위한 작물 배치 계획 수립에 중점을 둡니다.', 0, '2025-11-26 05:23:18'),
+	(19, 42, 'field', 'seed', 'https://storage.googleapis.com/dwproject2/thumbnail/19%20art_16127576785327_fbde73.jpg', '밭 주변 풀(잡초) 관리를 위한 멀칭(Mulching) 심화', '잡초를 막고 토양의 수분과 온도를 유지하는 멀칭 작업의 중요성과, 작물별로 적합한 멀칭 재료(비닐, 짚)를 선택하는 방법을 배웁니다.', 1, '2025-11-26 05:23:18'),
+	(20, 42, 'field', 'seed', 'https://storage.googleapis.com/dwproject2/thumbnail/20%20images.jpg', '태양열 소독을 활용한 노지 밭 병충해 예방', '노지 밭의 초기 단계에서 토양 속 병원균과 해충을 예방하기 위해 태양열 소독(피복)을 실시하는 방법을 상세히 다룹니다.', 0, '2025-11-26 05:23:18'),
+	(21, 43, 'field', 'ship', 'https://storage.googleapis.com/dwproject2/thumbnail/21%20img.png', '김장용 배추 대량 수확 및 품질 검사 노하우', '노지에서 재배한 배추를 김장철에 맞춰 대량 수확하는 적정 시기 판별법과, 상품성 확보를 위한 품질 검사 기준을 배웁니다.', 0, '2025-11-26 05:23:18'),
+	(22, 2, 'field', 'ship', 'https://storage.googleapis.com/dwproject2/thumbnail/22%20img_top.jpg', '노지 작물의 유통: 산지 직거래 포장 및 운송 전략', '직접 재배한 농산물을 소비자에게 직거래하거나 소규모 마켓에 판매하기 위한 포장 기술 및 운송 중 신선도 유지 방법을 숙련자 관점에서 다룹니다.', 0, '2025-11-26 05:23:18'),
+	(23, 43, 'field', 'ship', 'https://storage.googleapis.com/dwproject2/thumbnail/23%2020231216%EF%BC%BF170536.jpg', '저장고 없이 작물 보관하는 땅속 저장 기술', '감자, 고구마, 무 등 뿌리채소를 장기간 신선하게 저장하기 위한 전통적인 땅속 저장 기술(움 만들기)과 현대적인 보관법을 비교 분석합니다.', 0, '2025-11-26 05:23:18'),
+	(24, 43, 'field', 'ship', 'https://storage.googleapis.com/dwproject2/thumbnail/24%20hq720.jpg', '노지 열매채소(고추/가지)의 최적 수확 시기와 후속 관리', '고추, 가지 등 열매채소의 품질과 수확량을 극대화하는 수확 타이밍과, 수확 후 다음 수확까지 작물 관리를 이어가는 방법을 배웁니다.', 0, '2025-11-26 05:23:18'),
+	(25, 43, 'field', 'ship', 'https://storage.googleapis.com/dwproject2/thumbnail/25%20maxresdefault.jpg', '농업 부산물을 활용한 퇴비 생산 및 판매', '수확 후 남은 농업 부산물을 고품질 퇴비로 만들어 재판매하거나 다음 해 농사에 활용하는 자원 순환 노하우를 다룹니다.', 0, '2025-11-26 05:23:18'),
+	(26, 44, 'house', 'grow', 'https://storage.googleapis.com/dwproject2/thumbnail/26%20special-room-equipped-growing-plants-good-conditions.jpg', '스마트 하우스 환경: 온도, 습도, CO2 정밀 제어 심화', '전문적인 하우스 재배자를 위한 강의. 난방, 환기, 가습 시스템을 통합하여 작물 생육 최적의 조건을 유지하는 환경 제어 기술을 다룹니다.', 0, '2025-11-26 05:23:18'),
+	(27, 44, 'house', 'grow', 'https://storage.googleapis.com/dwproject2/thumbnail/27%209509.jpg', '수경재배 기초: NFT(박막 수경) 시스템 설치 및 관리', '하우스 또는 베란다 시설 재배를 위한 수경재배 시스템 설치 강의입니다. NFT(Nutrient Film Technique) 원리를 이해하고 양액 관리법을 배웁니다.', 0, '2025-11-26 05:23:18'),
+	(28, 44, 'house', 'grow', 'https://storage.googleapis.com/dwproject2/thumbnail/28%202015062323106147.jpg', '하우스 내 특수 작물(버섯, 새싹삼) 재배 기초', '일반적인 채소 외에 버섯, 새싹삼 등 높은 투자와 기술을 요하는 특수 작물을 하우스에서 재배하는 환경 조성 및 초기 관리법을 배웁니다.', 0, '2025-11-26 05:23:18'),
+	(29, 44, 'house', 'ship', 'https://storage.googleapis.com/dwproject2/thumbnail/29%20picking-strawberry.jpg', '하우스 고품질 딸기의 계절 외 출하 전략', '딸기 등 고수익 작물을 계절과 무관하게 재배하여 안정적으로 출하하는 기술입니다. 품종 선택부터 포장 및 판매 전략을 숙련자 관점에서 다룹니다.', 0, '2025-11-26 05:23:18'),
+	(30, 44, 'house', 'ship', 'https://storage.googleapis.com/dwproject2/thumbnail/30%202004.i121.064.isometric%20smart%20farm%20flowchart.jpg', '하우스 자동화 수확 시스템 효율 분석 및 도입 가이드', '대규모 하우스 운영자를 위한 강의. 자동화된 수확 및 선별 장비의 도입 비용, 효율, 유지보수 노하우 등을 비교 분석합니다.', 1, '2025-11-26 05:23:18'),
+	(31, 41, 'gardening', 'seed', 'https://storage.googleapis.com/dwproject2/thumbnail/31%201678864156654.jpg', '미니 텃밭 씨앗 파종 기초: 발아율 100% 도전', '아파트 베란다 텃밭을 위한 씨앗 파종의 정석. 어떤 흙을 써야 하는지, 물주기 타이밍, 발아 온도 관리 등 기초 중의 기초를 초보자 맞춤으로 설명합니다.', 1, '2025-11-26 05:23:18'),
+	(32, 42, 'field', 'seed', 'https://storage.googleapis.com/dwproject2/thumbnail/32%20643a9f5e92208eb26720dd02d43d175e.jpg', '퇴비와 석회를 이용한 노지 밭 토양 개량 실습', '노지 밭을 처음 시작하는 분들을 위한 필수 강의입니다. 토양 산도(pH) 측정법과, 퇴비 및 석회를 활용하여 토양을 개량하는 실제 노하우를 다룹니다.', 4, '2025-11-26 05:23:18');
 
 -- 테이블 farm.lecture_progress 구조 내보내기
 CREATE TABLE IF NOT EXISTS `lecture_progress` (
@@ -284,15 +268,15 @@ CREATE TABLE IF NOT EXISTS `lecture_progress` (
   CONSTRAINT `FK_lecture_progress_all_users` FOREIGN KEY (`user_id`) REFERENCES `all_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_lecture_progress_lecture` FOREIGN KEY (`lecture_id`) REFERENCES `lecture` (`lecture_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `chk_progress_range` CHECK (((`progress` >= 0.00) and (`progress` <= 1.00)))
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='구독 강의 진도';
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='구독 강의 진도';
 
--- 테이블 데이터 farm.lecture_progress:~4 rows (대략적) 내보내기
+-- 테이블 데이터 farm.lecture_progress:~6 rows (대략적) 내보내기
 INSERT INTO `lecture_progress` (`progress_id`, `lecture_id`, `user_id`, `valid_until`, `progress`, `updated_at`) VALUES
-	(7, 1, 27, NULL, 1.00, '2025-11-26 08:40:52'),
-	(8, 1, 16, NULL, 0.20, '2025-11-25 05:23:58'),
-	(9, 1, 1, NULL, 0.10, '2025-11-24 06:11:35'),
-	(10, 1, 2, NULL, 0.10, '2025-11-25 01:17:53'),
-	(11, 1, 25, NULL, 0.20, '2025-11-26 08:02:20');
+	(16, 31, 27, NULL, 0.00, '2025-11-28 03:03:33'),
+	(17, 1, 27, NULL, 0.20, '2025-12-01 00:53:35'),
+	(18, 2, 27, NULL, 1.00, '2025-11-28 03:28:03'),
+	(19, 32, 37, NULL, 1.00, '2025-11-28 05:07:05'),
+	(20, 1, 16, NULL, 0.10, '2025-11-28 05:41:13');
 
 -- 테이블 farm.lecture_qna 구조 내보내기
 CREATE TABLE IF NOT EXISTS `lecture_qna` (
@@ -309,20 +293,58 @@ CREATE TABLE IF NOT EXISTS `lecture_qna` (
   CONSTRAINT `FK_lecture_qna_all_users` FOREIGN KEY (`user_id`) REFERENCES `all_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_lecture_qna_lecture_board` FOREIGN KEY (`lecture_id`) REFERENCES `lecture` (`lecture_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_lecture_qna_lecture_qna` FOREIGN KEY (`p_qna_id`) REFERENCES `lecture_qna` (`qna_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='강의 QnA';
+) ENGINE=InnoDB AUTO_INCREMENT=190 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='강의 QnA';
 
--- 테이블 데이터 farm.lecture_qna:~7 rows (대략적) 내보내기
+-- 테이블 데이터 farm.lecture_qna:~48 rows (대략적) 내보내기
 INSERT INTO `lecture_qna` (`qna_id`, `lecture_id`, `user_id`, `p_qna_id`, `content`, `created_at`) VALUES
-	(1, 1, 1, NULL, '질문입니다', '2025-11-18 03:24:11'),
-	(39, 1, 25, NULL, '질문있다. 답변 가능하냐?', '2025-11-25 03:40:06'),
-	(40, 1, 2, 39, '반말 ㄴ ', '2025-11-25 03:43:40'),
-	(49, 1, 16, NULL, '강의가 진짜 재미없네여;;', '2025-11-25 06:09:53'),
-	(53, 1, 2, 49, 'ㄹㅇ?', '2025-11-26 01:26:40'),
-	(57, 1, 2, 49, '많이 재미없나요?', '2025-11-26 01:30:23'),
-	(60, 1, 25, NULL, '아녕하쎼요 방갑고', '2025-11-26 03:31:40'),
-	(61, 1, 2, 60, '방가워요 민우군', '2025-11-26 03:32:58'),
-	(62, 1, 2, 1, '뭔데요', '2025-11-26 03:33:21'),
-	(64, 17, 25, NULL, '와 재밌다 하하하', '2025-11-26 05:22:04');
+	(137, 9, 35, NULL, '타이머 설정할 때 하루에 몇 번, 몇 분 정도로 급수하는 것이 일반적인가요? 저희 집 베란다는 해가 잘 드는 편입니다.', '2025-11-28 03:18:33'),
+	(138, 9, 43, 137, '해가 잘 드는 환경이라면 하루 2회, 5~10분 정도로 시작해 보세요. 물을 너무 자주 주면 과습으로 뿌리가 상할 수 있으니 흙 마름을 보며 조절하는 것이 중요합니다.', '2025-11-28 03:18:33'),
+	(139, 9, 27, NULL, '강의에서 소개된 펌프는 옥상에서도 충분히 물을 끌어올릴 수 있는 출력을 가지고 있나요?', '2025-11-28 03:18:33'),
+	(140, 9, 43, 139, '네, 강의에서 소개한 펌프는 일반적으로 5~7m 정도의 양수 능력을 가집니다. 옥상 높이를 확인하신 후, 스펙을 비교해 보시는 것을 권장합니다.', '2025-11-28 03:18:33'),
+	(141, 8, 16, NULL, '베이킹소다 살충제를 만들 때 물과 희석 비율은 어떻게 되나요? 너무 강하면 작물이 상할까봐 걱정돼요.', '2025-11-28 03:18:33'),
+	(142, 8, 43, 141, '베이킹소다는 물 1리터당 4g(밥숟가락 1/3 정도) 정도가 안전합니다. 여기에 오일 한두 방울을 섞으면 접착력이 좋아져 방제 효과가 더 좋습니다.', '2025-11-28 03:18:33'),
+	(143, 8, 25, NULL, '진딧물이 심하게 생겼는데, 천연 살충제로도 확실히 방제가 될까요? 아니면 초기 단계에만 효과가 있나요?', '2025-11-28 03:18:33'),
+	(144, 8, 43, 143, '천연 살충제는 화학 농약처럼 즉각적인 효과는 없지만, 초기 및 중기 방제에 탁월합니다. 진딧물이 심하면 3일 간격으로 꾸준히 분사해야 효과를 볼 수 있습니다.', '2025-11-28 03:18:33'),
+	(145, 7, 37, NULL, '로즈마리 수확 후 영양제는 바로 줘야 하나요? 아니면 며칠 후에 주는 게 좋은가요?', '2025-11-28 03:18:33'),
+	(146, 7, 41, 145, '수확으로 스트레스를 받은 후에는 3~4일 정도 휴식기를 주는 것이 좋습니다. 이후 물주기 시 액체 비료를 희석하여 공급해 주세요. 바로 주면 오히려 스트레스가 될 수 있습니다.', '2025-11-28 03:18:33'),
+	(147, 6, 35, NULL, '곁순 제거 타이밍을 놓치면 열매 수확에 어떤 악영향이 있나요? 이미 많이 자란 곁순도 제거해야 할까요?', '2025-11-28 03:18:34'),
+	(148, 6, 43, 147, '곁순을 제거하지 않으면 영양분이 불필요한 줄기로 분산되어 열매가 작아집니다. 이미 많이 자랐다면, 아래쪽 잎이 적은 곁순 위주로 과감하게 잘라주세요.', '2025-11-28 03:18:34'),
+	(149, 5, 16, NULL, '마사토를 사용하는 이유가 궁금합니다. 꼭 넣어야 하는 재료인가요?', '2025-11-28 03:18:34'),
+	(150, 5, 41, 149, '마사토는 배수를 좋게 하고 통기성을 높여 뿌리 썩음을 방지하는 핵심 재료입니다. 작은 화분에 심을 때는 반드시 넣어야 안전합니다.', '2025-11-28 03:18:34'),
+	(151, 5, 27, NULL, '상토만 사용하면 안되는 특별한 이유가 있을까요? 초보라 흙 섞는 게 어렵게 느껴져서요.', '2025-11-28 03:18:34'),
+	(152, 5, 41, 151, '상토만 쓰시면 물이 잘 빠지지 않아 뿌리가 숨쉬기 어렵고 과습으로 곰팡이가 생기기 쉽습니다. 최소한 마사토를 20% 정도 섞어 사용하는 것을 추천합니다.', '2025-11-28 03:18:34'),
+	(153, 4, 25, NULL, '수직 텃밭을 벽에 고정할 때 바람에 쓰러지지 않도록 어떤 방법으로 고정해야 할까요?', '2025-11-28 03:18:34'),
+	(154, 4, 41, 153, '베란다에 설치 시에는 L자형 꺽쇠 등을 이용하여 벽에 단단히 고정하는 것이 필수입니다. 옥상의 경우, 무거운 벽돌을 하단에 두는 것도 좋습니다.', '2025-11-28 03:18:34'),
+	(155, 32, 37, NULL, '토양 산도를 측정할 때 강의에서 추천해 주신 간이 측정기가 정확도가 높은 편인가요?', '2025-11-28 03:18:34'),
+	(156, 32, 42, 155, '강의에서 소개한 간이 측정기는 참고용으로 충분합니다. 보다 정확한 측정을 위해서는 농업기술센터에 의뢰하여 정밀 토양 검사를 받는 것을 권장합니다.', '2025-11-28 03:18:34'),
+	(157, 32, 16, NULL, '석회는 밭갈이 전에 뿌려야 하나요, 아니면 퇴비와 같이 뿌려도 괜찮을까요?', '2025-11-28 03:18:34'),
+	(158, 32, 42, 157, '석회는 밭갈이 2~3주 전에 먼저 뿌려 토양과 충분히 반응하도록 해야 합니다. 이후 밭갈이 1주 전에 퇴비를 살포하는 것이 가장 이상적인 순서입니다.', '2025-11-28 03:18:34'),
+	(159, 31, 25, NULL, '씨앗을 물에 불려서 파종하는 것이 발아율에 정말 큰 도움이 되나요?', '2025-11-28 03:18:34'),
+	(160, 31, 41, 159, '네, 물에 불리는 과정은 씨앗의 딱딱한 껍질을 연하게 하여 수분 흡수를 촉진하고 발아 시간을 단축시켜 줍니다. 특히 발아가 어려운 씨앗에 효과가 좋습니다.', '2025-11-28 03:18:34'),
+	(161, 3, 27, NULL, '강낭콩 대신 방울토마토 씨앗으로 아이와 관찰해도 괜찮을까요?', '2025-11-28 03:18:34'),
+	(162, 3, 41, 161, '방울토마토도 좋습니다! 다만 생육 기간이 길고 지지대가 필요하므로, 관리가 조금 더 필요합니다. 강낭콩은 싹이 빨리 터 관찰이 쉽다는 장점이 있습니다.', '2025-11-28 03:18:34'),
+	(163, 29, 35, NULL, '계절 외 출하를 위해 난방비 부담이 큰데, 이를 최소화할 수 있는 노하우가 있을까요?', '2025-11-28 03:18:34'),
+	(164, 29, 44, 163, '난방비 최소화를 위해서는 이중 피복이나 보온 커튼 등의 단열 설비 투자가 핵심입니다. 또한 심야 전기를 활용하거나 히트펌프를 이용하는 것이 비용 절감에 도움이 됩니다.', '2025-11-28 03:18:34'),
+	(165, 27, 16, NULL, 'NFT 시스템의 양액 탱크 청소 주기는 어느 정도로 잡아야 하나요?', '2025-11-28 03:18:34'),
+	(166, 27, 44, 165, '양액 탱크 청소는 계절이나 작물 상태에 따라 다르지만, 보통 2~4주에 한 번씩 물을 완전히 교체하고 탱크 내부를 세척해 주는 것이 좋습니다.', '2025-11-28 03:18:34'),
+	(167, 26, 37, NULL, 'CO2 농도를 높게 유지하면 정말 수확량이 늘어나나요? 적정 수준이 궁금합니다.', '2025-11-28 03:18:34'),
+	(168, 26, 44, 167, '네, 광합성을 촉진하여 수확량이 늘어납니다. 보통 작물 생육에 최적인 CO2 농도는 1000~1500ppm 수준이며, 환기로 인해 외부 유출이 없도록 관리해야 합니다.', '2025-11-28 03:18:34'),
+	(169, 24, 25, NULL, '고추의 최적 수확 시기를 육안으로 구별하는 가장 쉬운 방법이 궁금해요.', '2025-11-28 03:18:34'),
+	(170, 24, 43, 169, '고추는 색깔이 완전히 붉어지고 표면에 윤기가 돌 때가 최적입니다. 가지는 열매 크기가 충분하고 표면이 광택이 나면서 부드러울 때 수확해야 가장 맛있습니다.', '2025-11-28 03:18:34'),
+	(171, 22, 16, NULL, '산지 직거래 포장 시 신선도를 위해 아이스팩을 어느 정도 넣어줘야 할까요?', '2025-11-28 03:18:34'),
+	(172, 22, 2, 171, '운송 시간에 따라 다르지만, 일반적으로 직거래 시 포장 무게 대비 10~15% 정도의 아이스팩을 넣어주는 것이 좋습니다. 에어캡 등으로 잘 감싸면 보냉 효과가 더 오래갑니다.', '2025-11-28 03:18:34'),
+	(173, 20, 27, NULL, '태양열 소독 시 비닐 피복 기간은 보통 며칠 정도가 적당한가요?', '2025-11-28 03:18:34'),
+	(174, 20, 42, 173, '태양열 소독은 보통 고온이 지속되는 여름철 4주에서 6주 정도 피복을 유지하는 것이 가장 효과적입니다. 토양 수분을 충분히 유지하는 것도 중요합니다.', '2025-11-28 03:18:34'),
+	(175, 19, 35, NULL, '검은색 비닐 멀칭이 흰색 비닐보다 잡초 억제에 더 효과적인가요?', '2025-11-28 03:18:34'),
+	(176, 19, 42, 175, '네, 검은색 비닐은 햇빛을 완전히 차단하여 광합성을 막기 때문에 잡초 억제 효과가 흰색 비닐보다 훨씬 우수합니다. 대신 지온 상승은 더 높습니다.', '2025-11-28 03:18:34'),
+	(177, 15, 37, NULL, '음식물 쓰레기(채소 껍질)를 퇴비 재료로 쓸 때 주의해야 할 점이 있나요?', '2025-11-28 03:18:34'),
+	(178, 15, 45, 177, '가장 주의할 점은 염분과 기름기입니다. 염분이 높으면 퇴비화 과정이 방해되고 발효가 잘 안됩니다. 반드시 물로 깨끗하게 헹궈서 사용하셔야 합니다.', '2025-11-28 03:18:34'),
+	(179, 11, 25, NULL, '쌈채소를 보관할 때 신문지로 싸는 것이 비닐봉지보다 더 나은가요?', '2025-11-28 03:18:35'),
+	(180, 11, 45, 179, '신문지는 수분을 흡수하고 증발을 막아주어 신선도 유지에 좋습니다. 비닐봉지에 넣을 경우 숨구멍을 뚫어 습기가 차지 않도록 해야 합니다.', '2025-11-28 03:18:35'),
+	(181, 1, 16, NULL, '튼튼한 모종을 고를 때, 잎 색깔 외에 가장 중요하게 봐야 할 부분이 무엇인가요?', '2025-11-28 03:18:35'),
+	(182, 1, 41, 181, '잎 색깔 외에 줄기가 굵고 마디가 짧은 모종이 튼튼합니다. 또한 포트 밑 구멍으로 흰색 잔뿌리가 살짝 보이는 것이 뿌리 활착이 잘 될 징조입니다.', '2025-11-28 03:18:35'),
+	(183, 1, 37, NULL, '모종을 심고 나서 바로 물을 흠뻑 줘야 하나요? 아니면 하루 정도 있다가 줘야 뿌리가 잘 내리나요?', '2025-11-28 03:18:35'),
+	(184, 1, 41, 183, '모종을 심은 직후에 물을 흠뻑 주어야 합니다. 흙 속의 공기를 빼내고 뿌리가 주변 흙과 밀착되어 활착을 시작하도록 돕기 때문입니다. 이것이 가장 중요합니다.', '2025-11-28 03:18:35');
 
 -- 테이블 farm.lecture_sub 구조 내보내기
 CREATE TABLE IF NOT EXISTS `lecture_sub` (
@@ -334,20 +356,30 @@ CREATE TABLE IF NOT EXISTS `lecture_sub` (
   KEY `FK_lecture_sub_lecture` (`lecture_id`),
   CONSTRAINT `FK_lecture_sub_all_users` FOREIGN KEY (`user_id`) REFERENCES `all_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_lecture_sub_lecture` FOREIGN KEY (`lecture_id`) REFERENCES `lecture` (`lecture_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='강의 구독';
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='강의 구독';
 
--- 테이블 데이터 farm.lecture_sub:~9 rows (대략적) 내보내기
+-- 테이블 데이터 farm.lecture_sub:~19 rows (대략적) 내보내기
 INSERT INTO `lecture_sub` (`sub_id`, `user_id`, `lecture_id`) VALUES
 	(1, 27, 1),
 	(2, 2, 1),
 	(3, 16, 1),
 	(4, 25, 1),
-	(13, 25, 17),
-	(14, 16, 32),
 	(16, 2, 22),
 	(17, 2, 30),
 	(24, 41, 19),
-	(25, 41, 1);
+	(25, 41, 1),
+	(29, 35, 31),
+	(30, 25, 32),
+	(31, 35, 1),
+	(34, 27, 30),
+	(35, 27, 19),
+	(36, 27, 31),
+	(37, 27, 4),
+	(43, 27, 2),
+	(44, 37, 32),
+	(45, 16, 32),
+	(48, 27, 32),
+	(49, 37, 4);
 
 -- 테이블 farm.lecture_video 구조 내보내기
 CREATE TABLE IF NOT EXISTS `lecture_video` (
@@ -359,20 +391,48 @@ CREATE TABLE IF NOT EXISTS `lecture_video` (
   PRIMARY KEY (`video_id`),
   KEY `FK_lecture_video_lecture` (`lecture_id`) USING BTREE,
   CONSTRAINT `FK_lecture_video_lecture` FOREIGN KEY (`lecture_id`) REFERENCES `lecture` (`lecture_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='강의 영상';
+) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='강의 영상';
 
--- 테이블 데이터 farm.lecture_video:~10 rows (대략적) 내보내기
+-- 테이블 데이터 farm.lecture_video:~29 rows (대략적) 내보내기
 INSERT INTO `lecture_video` (`video_id`, `lecture_id`, `video_title`, `video_url`, `video_time`) VALUES
-	(1, 1, '모종, 왜 중요할까요?', 'https://storage.googleapis.com/dwproject2/2758322-uhd_3840_2160_30fps.mp4', 34),
-	(2, 1, '튼튼한 모종 고르는 5가지 기준', 'https://storage.googleapis.com/dwproject2/3195351-uhd_3840_2160_25fps.mp4', 12),
-	(3, 1, '모종 심기 최적의 시기 및 환경 조건', NULL, 0),
-	(4, 1, '모종 심기 전, 흙 준비 마법: 상토/퇴비 배합', NULL, NULL),
-	(5, 1, '뿌리 활착을 돕는 \'물주기\' 기술', NULL, NULL),
-	(6, 1, '모종 포트 분리 & 정식 (뿌리 스트레스 최소화)', NULL, NULL),
-	(7, 1, '작물별 적정 \'심는 간격\' & 지지대 설치', NULL, NULL),
-	(8, 1, '정식 후 첫 3일: 초기 관리 골든 타임', NULL, NULL),
-	(9, 1, '웃거름 주기: 모종을 폭풍 성장시키는 영양 비법', NULL, NULL),
-	(10, 1, '모종 병충해 예방 및 초기 대처법', NULL, NULL);
+	(23, 4, '비용 절감형 쌈채소 수직 텃밭 설계 및 시공 가이드', 'https://storage.googleapis.com/dwproject2/videos/main.mp4', 15),
+	(24, 5, '화초 건강의 시작: 화분 분갈이 흙 배합의 정석', 'https://storage.googleapis.com/dwproject2/videos/main.mp4', 15),
+	(25, 6, '고수율 토마토 재배 심화: 곁순 관리와 열매 비대 기술', 'https://storage.googleapis.com/dwproject2/videos/main.mp4', 15),
+	(26, 7, '수확 후 실내 허브의 지속 성장을 위한 사계절 관리법', 'https://storage.googleapis.com/dwproject2/videos/main.mp4', 15),
+	(27, 8, '농약 없이 병충해 방제: 집에서 만드는 천연 살충제 총정리', 'https://storage.googleapis.com/dwproject2/videos/main.mp4', 15),
+	(28, 9, '중급자를 위한 수직 텃밭 자동 급수 시스템 구축 실습', 'https://storage.googleapis.com/dwproject2/videos/main.mp4', 15),
+	(29, 10, '뿌리 건강 극대화! 화분 식물별 비료 선택과 시비 전략', 'https://storage.googleapis.com/dwproject2/videos/main.mp4', 15),
+	(30, 11, '베란다 채소의 신선도 유지: 수확 시점과 장기 보관 기술', 'https://storage.googleapis.com/dwproject2/videos/main.mp4', 15),
+	(31, 12, '직접 키운 작물 활용: 건강한 홈메이드 피클과 잼 만들기', 'https://storage.googleapis.com/dwproject2/videos/main.mp4', 15),
+	(32, 13, '허브의 가치 상승: 건조 및 에센셜 오일 추출 완벽 가이드', 'https://storage.googleapis.com/dwproject2/videos/main.mp4', 15),
+	(33, 14, '이웃을 위한 정성: 텃밭 수확물 나눔 포장 디자인 실습', 'https://storage.googleapis.com/dwproject2/videos/main.mp4', 15),
+	(34, 15, '자원 순환 텃밭: 폐기물을 고품질 친환경 퇴비로 만드는 법', 'https://storage.googleapis.com/dwproject2/videos/main.mp4', 15),
+	(35, 16, '공동 텃밭 효율 100% 달성: 최적 구획 설계 및 윤작 전략', 'https://storage.googleapis.com/dwproject2/videos/main.mp4', 15),
+	(36, 19, '잡초 없는 밭 만들기: 멀칭 자재 선택 및 심화 관리 기법', 'https://storage.googleapis.com/dwproject2/videos/main.mp4', 15),
+	(37, 20, '지속 가능한 노지 재배: 태양열을 이용한 토양 소독법', 'https://storage.googleapis.com/dwproject2/videos/main.mp4', 15),
+	(38, 21, '성공적인 김장 준비: 배추 대량 수확 및 품질 등급 판정법', 'https://storage.googleapis.com/dwproject2/videos/main.mp4', 15),
+	(39, 22, '수익 극대화: 노지 작물 산지 직거래 포장 및 물류 전략', 'https://storage.googleapis.com/dwproject2/videos/main.mp4', 15),
+	(40, 23, '저온 저장고 대체 기술: 전통 땅속 저장고 구축 및 관리', 'https://storage.googleapis.com/dwproject2/videos/main.mp4', 15),
+	(41, 24, '고품질 고추/가지 수확: 최적의 수확 시점 포착과 밭 관리', 'https://storage.googleapis.com/dwproject2/videos/main.mp4', 15),
+	(42, 25, '농가 부수입 창출: 농업 부산물 활용 퇴비 생산 및 유통', 'https://storage.googleapis.com/dwproject2/videos/main.mp4', 15),
+	(43, 26, '스마트 팜 심화: 하우스 내부 온·습도 및 CO2 정밀 제어 기술', 'https://storage.googleapis.com/dwproject2/videos/main.mp4', 15),
+	(44, 27, '초보자를 위한 수경재배: NFT 시스템 설치부터 운영까지', 'https://storage.googleapis.com/dwproject2/videos/main.mp4', 15),
+	(45, 28, '고소득 특수 작물: 하우스 버섯 및 새싹삼 재배 입문', 'https://storage.googleapis.com/dwproject2/videos/main.mp4', 15),
+	(46, 29, '딸기 농가 수익 증대: 계절을 뛰어넘는 고품질 딸기 출하 노하우', 'https://storage.googleapis.com/dwproject2/videos/main.mp4', 15),
+	(47, 30, '미래 농업 대비: 하우스 자동 수확 시스템의 경제성 분석', 'https://storage.googleapis.com/dwproject2/videos/main.mp4', 15),
+	(48, 31, '왕초보를 위한 미니 텃밭: 씨앗 파종부터 높은 발아율 확보까지', 'https://storage.googleapis.com/dwproject2/videos/main.mp4', 15),
+	(49, 32, '과학 영농 실습: 노지 밭 퇴비와 석회 사용법으로 토양 되살리기', 'https://storage.googleapis.com/dwproject2/videos/main.mp4', 15),
+	(57, 3, '강의입니다.1', 'https://storage.googleapis.com/dwproject2/videos/main.mp4', 15),
+	(63, 1, '튼튼한 모종 구별법: 초보 농부의 모종 고르기 안목', 'https://storage.googleapis.com/dwproject2/videos/ses_111201.mp4', 343),
+	(64, 1, '내 텃밭 흙 진단: 모종을 위한 최적의 흙 만들기', 'https://storage.googleapis.com/dwproject2/videos/main.mp4', 15),
+	(65, 1, '뿌리 성장을 돕는 밭 준비: 이랑 만들기 & 흙 고르기', 'https://storage.googleapis.com/dwproject2/videos/3195351-uhd_3840_2160_25fps.mp4', 12),
+	(66, 1, '모종 정식 전 필수 준비: 물주기 & 포트 분리 요령', 'https://storage.googleapis.com/dwproject2/videos/2758322-uhd_3840_2160_30fps.mp4', 34),
+	(67, 1, '모종 심는 간격의 비밀: 작물별 적정 거리 유지', NULL, NULL),
+	(68, 1, '초보자도 성공하는 정식(定植)의 정석: 깊이와 각도', NULL, NULL),
+	(69, 1, '정식 직후 \'몸살\' 줄이기: 뿌리 활착 촉진 물주기', NULL, NULL),
+	(70, 1, '성공적인 텃밭 관리의 시작: 지지대 설치 및 유인', NULL, NULL),
+	(71, 1, '모종 초기 병충해 예방: 해충이 싫어하는 환경 만들기', NULL, NULL),
+	(72, 1, '모종 성장의 분수령: 정식 후 2주간의 특별 관리법', NULL, NULL);
 
 -- 테이블 farm.lecture_video_progress 구조 내보내기
 CREATE TABLE IF NOT EXISTS `lecture_video_progress` (
@@ -393,18 +453,15 @@ CREATE TABLE IF NOT EXISTS `lecture_video_progress` (
   CONSTRAINT `FK_video_progress_lecture_progress` FOREIGN KEY (`progress_id`) REFERENCES `lecture_progress` (`progress_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_video_progress_video` FOREIGN KEY (`video_id`) REFERENCES `lecture_video` (`video_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `chk_video_progress_range` CHECK (((`progress` >= 0.00) and (`progress` <= 1.00)))
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='개별 비디오 시청 진도';
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='개별 비디오 시청 진도';
 
--- 테이블 데이터 farm.lecture_video_progress:~6 rows (대략적) 내보내기
+-- 테이블 데이터 farm.lecture_video_progress:~3 rows (대략적) 내보내기
 INSERT INTO `lecture_video_progress` (`video_progress_id`, `progress_id`, `video_id`, `user_id`, `watched_time`, `last_position`, `watched_at`, `progress`, `completed_at`) VALUES
-	(10, 7, 1, 27, 21, 21, '2025-11-24 05:02:19', 0.62, NULL),
-	(11, 7, 2, 27, 12, 12, '2025-11-24 05:19:55', 1.00, '2025-11-25 04:59:38'),
-	(12, 8, 1, 16, 34, 34, '2025-11-24 05:28:13', 1.00, '2025-11-25 05:23:40'),
-	(13, 9, 1, 1, 34, 34, '2025-11-24 06:11:12', 1.00, '2025-11-24 06:11:41'),
-	(14, 10, 2, 2, 12, 12, '2025-11-25 01:17:40', 1.00, '2025-11-25 01:17:54'),
-	(15, 8, 2, 16, 12, 12, '2025-11-25 05:23:50', 1.00, '2025-11-25 05:23:59'),
-	(16, 11, 1, 25, 34, 34, '2025-11-26 07:39:11', 1.00, '2025-11-26 07:39:43'),
-	(17, 11, 2, 25, 12, 12, '2025-11-26 08:02:15', 1.00, '2025-11-26 08:02:21');
+	(23, 16, 48, 27, 8, 8, '2025-11-28 03:03:27', 0.53, NULL),
+	(28, 19, 49, 37, 15, 15, '2025-11-28 05:06:32', 1.00, '2025-11-28 05:07:05'),
+	(32, 17, 63, 27, 20, 20, '2025-12-01 00:50:10', 0.06, NULL),
+	(33, 17, 65, 27, 12, 12, '2025-12-01 00:50:18', 1.00, '2025-12-01 00:50:27'),
+	(34, 17, 64, 27, 15, 15, '2025-12-01 00:50:35', 1.00, '2025-12-01 00:52:07');
 
 -- 테이블 farm.notice 구조 내보내기
 CREATE TABLE IF NOT EXISTS `notice` (
@@ -420,14 +477,16 @@ CREATE TABLE IF NOT EXISTS `notice` (
   PRIMARY KEY (`notice_id`),
   KEY `FK_all_users` (`user_id`),
   CONSTRAINT `FK_all_users` FOREIGN KEY (`user_id`) REFERENCES `all_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='공지사항';
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='공지사항';
 
--- 테이블 데이터 farm.notice:~3 rows (대략적) 내보내기
+-- 테이블 데이터 farm.notice:~5 rows (대략적) 내보내기
 INSERT INTO `notice` (`notice_id`, `user_id`, `title`, `content`, `img_url`, `view_count`, `created_at`, `updated_at`, `is_pinned`) VALUES
-	(1, 1, 'd', 'xzzxc', '/uploads/notice/84478180ca6f492e8d1ff235d7024f9c.PNG', 141, '2025-11-17 00:13:22', '2025-11-26 08:33:51', 1),
-	(7, 1, '충격, 강백호 한화 방출', 'ㄹㅇ', '/uploads/notice/784b23b5dd614e28bea786cdce3e9513.jpg', 39, '2025-11-24 03:29:05', '2025-11-26 03:32:18', 0),
-	(11, 1, '김서현, "mlb 진출 고려중" 포부 밝혀...', 'ㄹㅇ', '/uploads/notice/93bf6c54458b436ba43d7e5e1fc37cc6.png', 16, '2025-11-24 05:20:09', '2025-11-26 03:33:37', 0),
-	(16, 1, 'UrbanGreen 박도재 대표, 소매치기범으로 오해받아..', 'ㄹㅇ', NULL, 5, '2025-11-26 03:35:26', '2025-11-26 23:55:33', 0);
+	(18, 1, '[필독] LMS 시스템 안정화 및 기능 개선 업데이트 안내', '안녕하세요, [LMS 이름] 관리팀입니다. \n사용자님들의 더 나은 학습 환경을 위해 시스템 정기 업데이트를 아래와 같이 진행합니다. \n\n1. **업데이트 내용:** 강의 재생 안정성 강화, 마이페이지 학습 진도율 표시 오류 수정, 퀴즈 채점 속도 개선 \n2. **점검 일시:** 2025년 11월 30일 (일) 01:00 ~ 04:00 (3시간 예정) \n3. **영향:** 해당 시간 동안 서비스 접속이 원활하지 않을 수 있습니다. \n\n너른 양해 부탁드리며, 업데이트 이후 더욱 편리한 서비스를 이용하실 수 있도록 최선을 다하겠습니다. 학습 계획에 참고하시기 바랍니다.', NULL, 27, '2025-11-28 01:30:00', '2025-11-28 04:57:19', 1),
+	(19, 1, '[공지] ❄️ 겨울철 노지 작물 관리 심화 특강 개설 안내', '깊어가는 겨울, 다음 시즌 농사를 준비하기 위한 전문 특강이 개설됩니다. \n\n본 특강에서는 동해 방지 기술, 토양 휴경 및 퇴비 관리법, 그리고 시설 채소의 난방 효율 극대화 방안을 심층적으로 다룹니다. \n\n* **주요 주제:** 동해 방지 멀칭법, 휴면기 토양 영양 관리, 하우스 가온 최적화 \n* **신청 기간:** 2025년 11월 28일 (금) ~ 12월 5일 (금) \n* **참여 대상:** 중급 이상의 수강생 및 영농 종사자 \n\n많은 관심과 참여 부탁드리며, 자세한 내용은 강의 페이지를 참고해주세요.', NULL, 95, '2025-11-27 06:45:00', '2025-12-01 02:41:26', 1),
+	(20, 1, '2025년 여름 영농 일지 표준 양식 배포 안내', '안녕하세요. 작물 생육 기록의 표준화를 위해 영농 일지 양식을 배포합니다. \r\n\r\n일지 작성을 통해 작물의 성장 단계별 변화, 병충해 발생 시점, 그리고 물 주기 및 시비량 기록을 체계적으로 관리할 수 있습니다. \r\n\r\n* **다운로드 위치:** 자료실 > 기타 문서함 \r\n* **포함 내용:** 주간 계획표, 일일 작업 기록, 재배 비용 산출표 \r\n\r\n지속적인 영농 기록은 다음 시즌 농사에 큰 도움이 됩니다. 적극 활용하시기 바랍니다. \r\n감사합니다.', '', 66, '2025-07-01 00:20:00', '2025-11-28 07:14:37', 0),
+	(21, 1, '커뮤니티 게시판 서비스 일시 점검 안내', '커뮤니티 게시판 서비스 품질 향상을 위한 서버 안정화 작업이 아래와 같이 예정되어 있습니다. \n\n* **점검 일시:** 2025년 05월 15일 (목) 00:00 ~ 02:00 \n* **영향:** 해당 시간 동안 커뮤니티 게시판 이용이 일시적으로 중단됩니다. \n\n질의응답(Q&A) 게시판은 정상적으로 이용 가능하오니, 학습 질문은 Q&A 게시판을 이용해 주시기 바랍니다. \n이용에 불편을 드려 죄송합니다.', NULL, 12, '2025-05-14 08:00:00', NULL, 0),
+	(22, 1, '초보자를 위한 LMS 이용 튜토리얼 영상 업데이트', 'LMS 이용에 어려움을 겪는 초보 학습자분들을 위해 튜토리얼 영상을 새롭게 제작하여 업로드했습니다. \n\n주요 업데이트 내용은 다음과 같습니다. \n\n1.  **강의 수강법:** 진도율 확인 및 강의 다운로드 방법 \n2.  **질문하기:** 교수자에게 1:1 질문하는 방법 \n3.  **자료실 활용:** 영농 자료 다운로드 방법 \n\n튜토리얼 영상은 메인 페이지 하단에서 확인하실 수 있습니다. \n궁금한 점은 언제든지 고객센터로 문의해주세요. 즐거운 학습 되세요!', NULL, 99, '2025-03-20 02:30:00', '2025-12-01 02:41:32', 0),
+	(26, 1, '공지입니다.', '공지입니다.', NULL, 0, '2025-12-01 02:51:08', NULL, 1);
 
 -- 테이블 farm.quiz 구조 내보내기
 CREATE TABLE IF NOT EXISTS `quiz` (
@@ -442,17 +501,105 @@ CREATE TABLE IF NOT EXISTS `quiz` (
   UNIQUE KEY `video_id_quiz_number` (`video_id`,`quiz_number`),
   KEY `FK_quiz_lecture_video` (`video_id`) USING BTREE,
   CONSTRAINT `FK_quiz_lecture_video` FOREIGN KEY (`video_id`) REFERENCES `lecture_video` (`video_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='퀴즈';
+) ENGINE=InnoDB AUTO_INCREMENT=179 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='퀴즈';
 
--- 테이블 데이터 farm.quiz:~4 rows (대략적) 내보내기
+-- 테이블 데이터 farm.quiz:~86 rows (대략적) 내보내기
 INSERT INTO `quiz` (`quiz_id`, `video_id`, `quiz_number`, `img_url`, `question`, `model_answer`, `pass_score`) VALUES
-	(7, 1, 1, NULL, '모종이 중요한 이유는?', '중요하니까', 60),
-	(8, 1, 2, NULL, '모종의 뜻은?', '답이 모죵?', 60),
-	(9, 1, 3, NULL, '모종의 형의 이름은?', '오종', 60),
-	(10, 1, 4, NULL, '내 나이는?', '28', 60),
-	(11, 1, 5, NULL, '내 몸무게는?', '2000', 60),
-	(12, 2, 1, NULL, '퀴즈입니다', '답', 60),
-	(13, 2, 2, NULL, '퀴즈2', '답2', 60);
+	(60, 23, 1, NULL, '저예산 수직 텃밭 설계 시, 페트병이나 목재를 재활용하는 가장 큰 이점은?', '재료비를 크게 절감하고 폐기물을 재활용하는 환경적 효과가 있다.', 60),
+	(61, 23, 2, NULL, '수직 텃밭의 가장 큰 장점은 무엇인가요?', '좁은 공간을 효율적으로 사용하여 단위 면적당 수확량을 늘릴 수 있다.', 60),
+	(62, 23, 3, NULL, '수직 텃밭에서 햇빛 요구량이 많은 쌈채소를 배치할 때 권장되는 위치는?', '상단.', 60),
+	(63, 24, 1, NULL, '분갈이 흙 믹스 시, 배수성을 높이기 위해 가장 흔하게 사용하는 재료는?', '마사토 또는 펄라이트.', 60),
+	(64, 24, 2, NULL, '화분 밑 배수 구멍으로 뿌리가 튀어나오는 것은 무엇을 의미하나요?', '분갈이 시기가 되었음을 알 수 있는 화초의 주요 징후이다.', 60),
+	(65, 24, 3, NULL, '상토, 마사토, 피트모스 중 수분 보유력을 높이는 데 가장 큰 역할을 하는 재료는?', '피트모스.', 60),
+	(66, 25, 1, NULL, '토마토 곁순 제거(순지르기)의 주된 목적은?', '영양분이 불필요한 줄기로 가는 것을 막고 열매를 키우는 데 집중시키기 위함이다.', 60),
+	(67, 25, 2, NULL, '토마토 열매가 맺힌 후, 비대를 위해 가장 집중적으로 공급해야 하는 핵심 영양소는?', '칼륨(K).', 60),
+	(68, 25, 3, NULL, '곁순 제거 시 너무 큰 곁순을 한 번에 제거하면 안 되는 이유는?', '식물에 큰 스트레스를 주어 생육에 지장을 줄 수 있다.', 60),
+	(69, 26, 1, NULL, '실내 허브 수확 후, 영양제 공급 전 반드시 지켜야 할 사항은?', '식물의 회복 여부와 뿌리 상태를 확인하고 며칠 간의 휴식기를 주는 것.', 60),
+	(70, 26, 2, NULL, '허브의 잎이 누렇게 변하는 가장 흔한 원인 두 가지는?', '과습 또는 영양 부족.', 60),
+	(71, 26, 3, NULL, '겨울철 실내 허브 월동 준비 시, 가장 중요한 환경 관리는?', '찬 바람을 피하고 10도 이상의 일정 온도를 유지하는 것.', 60),
+	(72, 27, 1, NULL, '천연 살충제 제조 시, 베이킹소다가 주로 방제하는 병은 무엇인가요?', '흰가루병.', 60),
+	(73, 27, 2, NULL, '천연 살충제를 작물에 분사하기 가장 적합한 시간대는?', '해가 진 저녁 시간대나 해뜨기 전 이른 아침.', 60),
+	(74, 27, 3, NULL, '진딧물 방제를 위해 가정에서 쉽게 만들 수 있는 천연 살충제 재료는?', '물에 희석한 주방세제나 우유.', 60),
+	(75, 28, 1, NULL, '자동 관수 시스템 구축 시, 펌프와 타이머 외에 물방울을 조절하는 데 핵심적인 부품은?', '드립퍼(Dripper) 또는 미세 호스.', 60),
+	(76, 28, 2, NULL, '수직 텃밭에서 자동 급수 시스템을 사용할 때 얻을 수 있는 주된 이점은?', '물을 균일하게 공급하여 특정 구역의 건조나 과습을 방지한다.', 60),
+	(77, 28, 3, NULL, '자동 급수 타이머 설정 시, 급수 시간을 결정하는 가장 중요한 기준은?', '흙의 건조 속도와 작물의 종류 및 크기.', 60),
+	(78, 29, 1, NULL, '식물이 뿌리 활착 단계에 있을 때 성장을 돕는 핵심 3대 영양소는?', '인산(P).', 60),
+	(79, 29, 2, NULL, '화분 식물에 비료를 과다하게 주었을 때 발생하는 대표적인 현상은?', '염류 집적으로 인한 뿌리 장애(비료 피해)나 잎 끝이 타는 현상.', 60),
+	(80, 29, 3, NULL, '비료를 물에 녹여 희석해서 주는 액비(액체 비료)의 장점은?', '작물이 영양소를 빠르게 흡수할 수 있으며 농도 조절이 쉽다.', 60),
+	(81, 30, 1, NULL, '쌈채소의 신선도를 가장 높게 유지할 수 있는 수확 시간대는?', '이른 아침 해가 뜨기 직전.', 60),
+	(82, 30, 2, NULL, '수확한 쌈채소를 냉장 보관할 때 가장 적절한 온도는?', '0도~5도 사이의 저온.', 60),
+	(83, 30, 3, NULL, '쌈채소의 신선도를 오래 유지하기 위한 포장 재료의 주된 역할은?', '수분 증발을 막고 호흡열을 조절한다.', 60),
+	(84, 31, 1, NULL, '텃밭 작물로 피클을 만들 때, 소금물에 절이는 주된 목적은 무엇인가요?', '작물의 조직을 단단하게 하고 불순물을 제거하기 위함이다.', 60),
+	(85, 31, 2, NULL, '홈메이드 잼을 만들 때, 보존성을 높이는 가장 중요한 재료는?', '설탕.', 60),
+	(86, 31, 3, NULL, '피클 제조 시 유리병을 반드시 소독해야 하는 이유는?', '잡균 번식을 막고 피클의 보관 기간을 늘리기 위해서이다.', 60),
+	(87, 32, 1, NULL, '허브를 건조할 때 가장 이상적인 환경 조건은?', '통풍이 잘되고 햇빛이 들지 않는 그늘진 곳.', 60),
+	(88, 32, 2, NULL, '허브 오일을 추출하는 방법 중, 열을 사용하지 않는 방식의 장점은?', '허브의 정유 성분이 열에 의해 파괴되는 것을 방지하여 순도를 유지할 수 있다.', 60),
+	(89, 32, 3, NULL, '건조된 허브를 보관할 때 사용하면 안 되는 용기는?', '투명하고 햇빛이 잘 드는 용기.', 60),
+	(90, 33, 1, NULL, '텃밭 수확물 나눔 포장 시, 포장 디자인보다 우선해야 할 실용적 요소는?', '포장재의 통풍성과 신선도 유지 능력.', 60),
+	(91, 33, 2, NULL, '수확물을 포장할 때 충격 완화를 위해 사용하는 재료는?', '에어캡(뽁뽁이) 또는 신문지.', 60),
+	(92, 33, 3, NULL, '수확물에 대한 정보를 받는 사람에게 전달하기 위해 포장에 포함하면 좋은 것은?', '작물명, 재배자 정보, 간단한 레시피 등.', 60),
+	(93, 34, 1, NULL, '텃밭 폐기물을 퇴비로 만들 때 \'탄소원\'과 \'질소원\'을 배합하는 주된 이유는?', '미생물의 활동을 촉진하고 퇴비 부숙을 균형있게 진행시키기 위함이다.', 60),
+	(94, 34, 2, NULL, '퇴비화 과정 중 \'악취\'가 발생하는 가장 흔한 원인은?', '산소가 부족하여 혐기성 분해가 진행되기 때문.', 60),
+	(95, 34, 3, NULL, '고품질 퇴비가 완성되었음을 판단하는 가장 확실한 기준은?', '원재료의 형태가 사라지고, 흙 냄새가 나며, 온도가 안정된 상태.', 60),
+	(96, 35, 1, NULL, '공동 텃밭에서 \'윤작(돌려짓기)\'을 하는 주된 이유는 무엇인가요?', '연작 장애를 방지하고 토양의 영양분 균형을 유지하기 위함이다.', 60),
+	(97, 35, 2, NULL, '구획 설계 시, 작물의 햇빛 요구량을 고려하여 높은 작물은 어느 방향에 배치해야 하나요?', '북쪽.', 60),
+	(98, 35, 3, NULL, '연작 장애를 일으키는 주된 원인은?', '특정 작물이 좋아하는 영양분만 소모되거나 특정 병충해가 토양에 누적되기 때문.', 60),
+	(99, 36, 1, NULL, '멀칭 작업의 잡초 억제 원리는 무엇인가요?', '햇빛을 차단하여 잡초의 광합성과 발아를 막기 위함이다.', 60),
+	(100, 36, 2, NULL, '비닐 멀칭 외에 지온 상승을 막고 유기물 공급 효과도 있는 멀칭 재료는?', '짚이나 풀 등의 유기물.', 60),
+	(101, 36, 3, NULL, '멀칭 비닐을 씌울 때 바람에 날리지 않도록 가장자리 처리를 어떻게 해야 하나요?', '흙으로 꼼꼼하게 덮어 고정한다.', 60),
+	(102, 37, 1, NULL, '태양열 소독 시 토양을 덮는 비닐은 어떤 색상이 적합한가요?', '투명 비닐.', 60),
+	(103, 37, 2, NULL, '태양열 소독의 가장 큰 장점은?', '화학 약품 없이 토양 내 병원균, 해충, 잡초 씨앗을 친환경적으로 살균할 수 있다.', 60),
+	(104, 37, 3, NULL, '태양열 소독의 효과를 높이기 위해 피복 전에 반드시 해야 할 조치는?', '토양에 충분한 물을 주어 수분을 유지하는 것.', 60),
+	(105, 38, 1, NULL, '김장 배추의 최적 수확 시기는 언제 결정되는가?', '속이 단단하게 차고, 기온이 영하로 떨어지기 직전.', 60),
+	(106, 38, 2, NULL, '상품성 높은 김장 배추를 판단하는 품질 검사 기준은?', '결구가 단단하고, 속이 노랗게 잘 찼으며, 겉잎이 깨끗한 배추.', 60),
+	(107, 38, 3, NULL, '배추를 대량 수확할 때 밑동을 잘라 수확하는 주된 이유는?', '겉잎의 흙이나 불순물이 속으로 들어가는 것을 막고 운반을 용이하게 하기 위함이다.', 60),
+	(108, 39, 1, NULL, '산지 직거래 시 농산물 포장에 반드시 포함되어야 할 정보는?', '생산자 이름, 연락처, 품목, 원산지.', 60),
+	(109, 39, 2, NULL, '운송 중 신선도 유지를 위해 가장 중요한 요소는?', '저온 환경 유지 및 충격 완화.', 60),
+	(110, 39, 3, NULL, '직거래를 할 때 소규모 마켓 판매보다 고객과의 관계 형성이 유리한 판매 방식은?', '꾸러미(정기 구독) 판매.', 60),
+	(111, 40, 1, NULL, '뿌리채소를 땅속에 저장하는 주된 이유는?', '겨울철에도 일정한 온도와 습도를 유지하여 장기간 신선하게 보관하기 위함이다.', 60),
+	(112, 40, 2, NULL, '땅속 저장고(움)를 만들 때 피해야 할 최악의 위치는?', '물 빠짐이 좋지 않고 지하수위가 높은 곳.', 60),
+	(113, 40, 3, NULL, '땅속 저장고에 저장하기 전, 작물을 건조시키는 주된 목적은?', '표면의 상처를 아물게 하고 곰팡이 발생을 예방하기 위함이다.', 60),
+	(114, 41, 1, NULL, '고추의 품질과 다음 수확량을 극대화하기 위한 수확 타이밍은?', '크기가 충분히 자라고 색이 선명하게 변했을 때.', 60),
+	(115, 41, 2, NULL, '가지를 수확할 때 너무 익도록 두면 안 되는 이유는?', '씨가 딱딱해지고 맛이 없어지며 다음 열매 생육에 영향을 주기 때문이다.', 60),
+	(116, 41, 3, NULL, '열매채소 수확 후 다음 열매를 위한 후속 관리 중 가장 중요한 것은?', '충분한 물과 웃거름(추비) 공급.', 60),
+	(117, 42, 1, NULL, '농업 부산물을 활용하여 퇴비를 생산하는 가장 큰 경제적 이점은?', '폐기물 처리 비용을 절감하고 고품질 퇴비를 판매하여 부수입을 창출할 수 있다.', 60),
+	(118, 42, 2, NULL, '부산물 퇴비를 판매할 때 농림축산식품부에서 요구하는 인증은?', '비료 생산 등록.', 60),
+	(119, 42, 3, NULL, '농업 부산물 퇴비의 품질을 높이기 위해 중요한 발효 방식은?', '호기성 발효를 유도하는 것.', 60),
+	(120, 43, 1, NULL, '스마트 하우스에서 CO2를 정밀 제어하는 주된 이유는?', '광합성 효율을 극대화하여 작물의 생육 속도와 수확량을 높이기 위함이다.', 60),
+	(121, 43, 2, NULL, '하우스 내부의 습도가 너무 높아지면 발생할 수 있는 문제점은?', '곰팡이나 병원균의 발생 위험이 높아진다.', 60),
+	(122, 43, 3, NULL, '온도, 습도, CO2 세 가지 요소를 통합하여 제어하는 시스템의 이름은?', '환경 제어 시스템.', 60),
+	(123, 44, 1, NULL, 'NFT 수경재배 시스템의 \'박막(Nutrient Film)\'이 의미하는 것은?', '뿌리 주변으로 영양액이 얇은 막처럼 흐르게 하는 재배 방식.', 60),
+	(124, 44, 2, NULL, '수경재배에서 양액의 pH를 조절하는 주된 목적은?', '작물이 영양분을 가장 잘 흡수할 수 있는 최적의 산도(pH)를 유지하기 위함이다.', 60),
+	(125, 44, 3, NULL, '수경재배 시 초보자가 가장 주의해야 할 양액 관리 요소는?', '양액의 농도(EC)와 pH.', 60),
+	(126, 45, 1, NULL, '버섯 재배 시 하우스 환경에서 가장 중요하게 관리해야 할 조건은?', '온도, 습도, 그리고 환기.', 60),
+	(127, 45, 2, NULL, '새싹삼을 하우스에서 재배할 때 필요한 환경 조건은?', '직사광선을 차단한 차광 환경과 서늘한 온도.', 60),
+	(128, 45, 3, NULL, '특수 작물을 하우스에서 재배할 때의 가장 큰 장점은?', '외부 환경의 영향 없이 재배 환경을 정밀하게 제어하여 품질을 높일 수 있다.', 60),
+	(129, 46, 1, NULL, '딸기의 계절 외 출하를 가능하게 하는 주요 기술은?', '촉성 재배 또는 억제 재배.', 60),
+	(130, 46, 2, NULL, '고품질 딸기 출하를 위해 수확 시기에 적절한 \'당도\'를 높이는 기술은?', '야간 온도를 낮추고 적절한 시기에 물을 조절하는 것.', 60),
+	(131, 46, 3, NULL, '딸기 출하 전략에서 가장 중요한 것은?', '시장 수요가 높을 때를 예측하여 수확 시기를 맞추는 것.', 60),
+	(132, 47, 1, NULL, '자동 수확 시스템 도입의 가장 큰 경제적 이점은?', '노동력 절감 및 인건비 감소.', 60),
+	(133, 47, 2, NULL, '자동 수확 시스템 도입을 고려할 때, 초기 도입 비용 외에 반드시 분석해야 할 비용은?', '유지보수 비용 및 운영 인력 교육 비용.', 60),
+	(134, 47, 3, NULL, '자동 수확 로봇이 작물의 수확 적정 시점을 판단하는 주요 기준은?', '이미지 센서 및 AI를 활용한 색상, 크기, 모양 분석.', 60),
+	(135, 48, 1, NULL, '씨앗 파종 후, 발아를 돕기 위해 가장 중요한 관리 방법은?', '겉흙이 마르지 않도록 꾸준히 물을 주고, 적정 온도를 유지하는 것.', 60),
+	(136, 48, 2, NULL, '씨앗을 너무 깊게 심으면 안 되는 이유는?', '싹이 흙 표면으로 나오기 어려워 발아율이 떨어지기 때문이다.', 60),
+	(137, 48, 3, NULL, '발아율이 높은 씨앗을 고르는 기준은?', '최근에 채취되었거나 유통기한이 충분히 남은 씨앗.', 60),
+	(138, 49, 1, NULL, '노지 밭 토양 개량 시, 석회(석회질 비료)를 사용하는 주된 목적은?', '산성화된 토양의 pH를 중성 쪽으로 교정하기 위함이다.', 60),
+	(139, 49, 2, NULL, '토양에 퇴비를 넣는 주된 목적은?', '유기물과 다양한 영양소를 공급하고 토양 구조를 개선하기 위함이다.', 60),
+	(140, 49, 3, NULL, '퇴비와 석회는 동시에 살포하면 안 되는 이유는?', '석회의 강한 알칼리 성분이 퇴비 속 미생물의 활동을 방해하거나 질소 성분 손실을 일으킬 수 있다.', 60),
+	(165, 64, 1, NULL, '모종을 사용하여 작물을 재배하는 가장 큰 이유가 아닌 것은 무엇인가요?', '초기 수확량을 줄이기 위함이다', 60),
+	(166, 64, 2, NULL, '직파(씨앗을 밭에 직접 뿌리는 것) 대신 모종을 이용할 경우 가장 안정적으로 기대할 수 있는 효과는 무엇인가요?', '초기 생육 환경에 유리하여 수확량이 안정된다', 60),
+	(167, 64, 3, NULL, '어린 모종을 밭이나 큰 화분으로 옮겨 심는 농업 용어는 무엇인가요?', '정식', 60),
+	(168, 64, 4, NULL, '모종의 초기 뿌리 활착이 중요한 가장 근본적인 이유는?', '활착에 실패하면 작물이 고사하거나 생육이 지연되어 수확량에 영향을 주기 때문이다', 60),
+	(169, 64, 5, NULL, '참깨 재배에서 일반적으로 권장하는 모종의 정식 적정 생육 기간은?', '3주', 60),
+	(170, 63, 1, NULL, '튼튼하고 건강한 모종을 고를 때, 강의에서 강조하는 줄기와 마디의 상태는?', '줄기가 굵고 마디 간격이 짧아야 한다.', 60),
+	(171, 63, 2, NULL, '모종 포트 밑 배수 구멍으로 흰 잔뿌리가 살짝 보이는 것이 의미하는 것은?', '뿌리 활착이 잘 될 징조이며, 포트 속 뿌리가 건강하게 자랐음을 뜻한다.', 60),
+	(172, 63, 3, NULL, '모종의 잎 색깔이 비정상적으로 짙은 녹색일 때, 정식 후 발생할 수 있는 잠재적인 문제는?', '질소 과잉일 가능성이 있어 정식 후 웃자랄 수 있다.', 60),
+	(173, 65, 1, NULL, '모종의 \'정식\' 시기를 결정할 때 반드시 고려해야 할 두 가지 중요한 환경 조건은?', '심을 곳의 늦서리 종료 시점과 작물별 최저 생육 온도를 고려하여 결정한다', 60),
+	(174, 65, 2, NULL, '온실에서 자란 모종을 밭이나 실외 환경에 적응시키기 위해 거치는 과정은 무엇인가요?', '순화', 60),
+	(175, 65, 3, NULL, '대다수 텃밭 채소 모종이 무리 없이 정상적으로 생육을 시작하는 최저 온도는 몇 도 정도인가요?', '10~15도', 60),
+	(176, 66, 1, NULL, '모종 심을 흙을 배합할 때, 초기 영양 공급 및 유기물 보충을 위해 사용하는 주된 재료는 무엇인가요?', '퇴비.', 60),
+	(177, 66, 2, NULL, '상토의 주된 역할은 씨앗 발아 및 모종 초기 성장을 위한 어떤 환경을 제공하는 것인가요?', '가볍고 균일한 환경과 수분 유지 능력을 제공한다.', 60),
+	(178, 66, 3, NULL, '흙 배합 시 퇴비를 적정량보다 너무 많이 넣었을 때 작물에 발생할 수 있는 가장 흔한 문제점은?', '염류 장애나 뿌리 부패를 유발할 수 있다.', 60);
 
 -- 테이블 farm.quiz_attempt 구조 내보내기
 CREATE TABLE IF NOT EXISTS `quiz_attempt` (
@@ -467,29 +614,16 @@ CREATE TABLE IF NOT EXISTS `quiz_attempt` (
   KEY `user_id` (`user_id`),
   CONSTRAINT `FK_quiz_attempt_all_users` FOREIGN KEY (`user_id`) REFERENCES `all_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_quiz_attempt_quiz` FOREIGN KEY (`quiz_id`) REFERENCES `quiz` (`quiz_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=86 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='퀴즈 참여기록';
+) ENGINE=InnoDB AUTO_INCREMENT=127 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='퀴즈 참여기록';
 
--- 테이블 데이터 farm.quiz_attempt:~48 rows (대략적) 내보내기
+-- 테이블 데이터 farm.quiz_attempt:~6 rows (대략적) 내보내기
 INSERT INTO `quiz_attempt` (`attempt_id`, `user_id`, `quiz_id`, `answer_text`, `earned_score`, `attempted_at`) VALUES
-	(67, 25, 7, '중요하니까', 20, '2025-11-26 07:45:07'),
-	(68, 25, 8, '답이 모죵', 0, '2025-11-26 07:45:07'),
-	(69, 25, 9, '오종', 20, '2025-11-26 07:45:07'),
-	(70, 25, 10, '28', 20, '2025-11-26 07:45:07'),
-	(71, 25, 11, '2000', 20, '2025-11-26 07:45:07'),
-	(72, 16, 7, 'z', 0, '2025-11-26 07:55:33'),
-	(73, 16, 8, 'z', 0, '2025-11-26 07:55:33'),
-	(74, 16, 9, 'z', 0, '2025-11-26 07:55:33'),
-	(75, 16, 10, 'z', 0, '2025-11-26 07:55:33'),
-	(76, 16, 11, 'z', 0, '2025-11-26 07:55:33'),
-	(77, 25, 12, 'd', 0, '2025-11-26 08:02:28'),
-	(78, 25, 13, 'd', 0, '2025-11-26 08:02:28'),
-	(79, 25, 12, '답', 20, '2025-11-26 08:02:55'),
-	(80, 25, 13, '답2', 20, '2025-11-26 08:02:55'),
-	(81, 25, 7, '중요해서', 0, '2025-11-26 08:05:10'),
-	(82, 25, 8, '답이모죵', 0, '2025-11-26 08:05:10'),
-	(83, 25, 9, '오종', 20, '2025-11-26 08:05:10'),
-	(84, 25, 10, '28', 20, '2025-11-26 08:05:10'),
-	(85, 25, 11, '2000', 20, '2025-11-26 08:05:10');
+	(109, 37, 138, '답', 0, '2025-11-28 05:08:20'),
+	(110, 37, 139, '답', 0, '2025-11-28 05:08:20'),
+	(111, 37, 140, '답', 0, '2025-11-28 05:08:20'),
+	(112, 37, 138, '산성화된 토양의 pH를 중성 쪽으로 교정', 0, '2025-11-28 05:08:59'),
+	(113, 37, 139, '답', 0, '2025-11-28 05:08:59'),
+	(114, 37, 140, '답', 0, '2025-11-28 05:08:59');
 
 -- 테이블 farm.quiz_score 구조 내보내기
 CREATE TABLE IF NOT EXISTS `quiz_score` (
@@ -504,15 +638,11 @@ CREATE TABLE IF NOT EXISTS `quiz_score` (
   KEY `video_id` (`video_id`),
   CONSTRAINT `FK_quiz_score_all_users` FOREIGN KEY (`user_id`) REFERENCES `all_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_quiz_score_lecture_video` FOREIGN KEY (`video_id`) REFERENCES `lecture_video` (`video_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='퀴즈 총점';
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='퀴즈 총점';
 
 -- 테이블 데이터 farm.quiz_score:~1 rows (대략적) 내보내기
 INSERT INTO `quiz_score` (`score_id`, `video_id`, `user_id`, `total_score`, `pass`) VALUES
-	(1, 2, 27, 60, 'pass'),
-	(12, 2, 16, 0, 'fail'),
-	(13, 1, 25, 60, 'pass'),
-	(17, 1, 16, 0, 'fail'),
-	(18, 2, 25, 40, 'fail');
+	(28, 49, 37, 0, 'fail');
 
 -- 프로시저 farm.sp_manual_grade_quiz 구조 내보내기
 DELIMITER //
@@ -521,6 +651,7 @@ CREATE PROCEDURE `sp_manual_grade_quiz`(
 	IN `p_teacher_id` INT,
 	IN `p_manual_score` INT
 )
+    SQL SECURITY INVOKER
 BEGIN
 	 -- 수동채점 프로시저
     DECLARE v_pass_status ENUM('pass', 'fail');
@@ -570,6 +701,7 @@ CREATE PROCEDURE `sp_submit_quiz_answer`(
 	OUT `p_auto_score` INT,
 	OUT `p_pass_status` VARCHAR(10)
 )
+    SQL SECURITY INVOKER
 BEGIN
 DECLARE v_model_answer TEXT;
     DECLARE v_pass_score INT;
@@ -621,6 +753,7 @@ CREATE PROCEDURE `sp_unsubscribe_lecture`(
 	IN `p_user_id` INT,
 	IN `p_lecture_id` INT
 )
+    SQL SECURITY INVOKER
 BEGIN
     DECLARE v_progress_id INT;
     
@@ -644,9 +777,10 @@ DELIMITER ;
 -- 프로시저 farm.sp_update_quiz_score 구조 내보내기
 DELIMITER //
 CREATE PROCEDURE `sp_update_quiz_score`(
-    IN `p_user_id` INT,
-    IN `p_video_id` INT
+	IN `p_user_id` INT,
+	IN `p_video_id` INT
 )
+    SQL SECURITY INVOKER
 BEGIN
     DECLARE v_total_quizzes INT;
     DECLARE v_total_score INT;
@@ -728,6 +862,7 @@ CREATE PROCEDURE `sp_update_video_progress`(
 	IN `p_user_id` INT,
 	IN `p_current_position` INT
 )
+    SQL SECURITY INVOKER
 BEGIN
     DECLARE v_video_time INT;
     
@@ -792,8 +927,8 @@ CREATE TABLE `v_lecture_subscribers` (
 -- 트리거 farm.trg_decrement_subs_count 구조 내보내기
 SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
-CREATE TRIGGER `trg_decrement_subs_count` AFTER DELETE ON `lecture_progress` FOR EACH ROW BEGIN
-    -- lecture_progress에서 항목이 삭제되면
+CREATE TRIGGER `trg_decrement_subs_count` AFTER DELETE ON `lecture_sub` FOR EACH ROW BEGIN
+    -- lecture_sub에서 항목이 삭제되면
     -- 해당 강의의 구독자 수를 1 감소 (단, 0 이하로는 내려가지 않음)
     UPDATE lecture
     SET subs_count = GREATEST(0, subs_count - 1)
@@ -805,8 +940,8 @@ SET SQL_MODE=@OLDTMP_SQL_MODE;
 -- 트리거 farm.trg_increment_subs_count 구조 내보내기
 SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
-CREATE TRIGGER `trg_increment_subs_count` AFTER INSERT ON `lecture_progress` FOR EACH ROW BEGIN
-    -- lecture_progress에 새로운 항목이 추가되면
+CREATE TRIGGER `trg_increment_subs_count` AFTER INSERT ON `lecture_sub` FOR EACH ROW BEGIN
+    -- lecture_sub에 새로운 항목이 추가되면
     -- 해당 강의의 구독자 수를 1 증가
     UPDATE lecture
     SET subs_count = subs_count + 1
