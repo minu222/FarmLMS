@@ -6,7 +6,7 @@
 ## 프로젝트 기간 : 2025.11 - 2025.12
 ## 프로젝트 형태 : 팀 프로젝트(7명)
 
-### 기술스택 
+## 기술스택 
 - Backend : Java, Spring Boot
 - Frontend : HTML, CSS, JavaScript, Thymeleaf
 - DB : MySql
@@ -15,9 +15,9 @@
 
 
 
-### 역할
+## 역할
 
- 이민우
+### 이민우
   
 - Java, Spring Boot 기반 백엔드 기능 구현
 - 세션 기반 로그인 및 회원가입 기능 개발
