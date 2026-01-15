@@ -13,8 +13,9 @@
 - Game : Unity
 - Collaboration : GitHub
 
-역할 : 
 
+
+역할 : 
 
 이민우
 - Java, Spring Boot 기반 백엔드 기능 구현
